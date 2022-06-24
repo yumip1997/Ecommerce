@@ -12,13 +12,13 @@ import com.plateer.ec1.claim.vo.ClaimDto;
 import com.plateer.ec1.claim.vo.ClaimInsertBase;
 import com.plateer.ec1.claim.vo.ClaimUpdateBase;
 import com.plateer.ec1.claim.vo.LogDto;
-import com.plateer.ec1.common.factory.FactoryTemplate;
+import com.plateer.ec1.common.factory.CustomFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor
 @Log4j2
-public abstract class ClaimProcessor implements FactoryTemplate<ClaimProcessorType> {
+public abstract class ClaimProcessor implements CustomFactory<ClaimProcessorType> {
 
    private final ClaimValidatorFactory claimValidatorFactory;
    protected final MonitoringLogHelper monitoringLogHelper;
@@ -42,7 +42,7 @@ public abstract class ClaimProcessor implements FactoryTemplate<ClaimProcessorTy
 
    protected void doValidationProcess(ClaimDto claimDto) throws Exception{
       ClaimValidatorType claimValidatorType = ClaimDefine.findClaimValidatorType(claimDto);
-      ClaimValidator claimValidator = claimValidatorFactory.getClaimValidator(claimValidatorType);
+      ClaimValidator claimValidator = claimValidatorFactory.get(claimValidatorType);
 
       claimValidator.isValid(claimDto);
    }
@@ -72,7 +72,7 @@ public abstract class ClaimProcessor implements FactoryTemplate<ClaimProcessorTy
 
    protected void verifyAmount(ClaimDto claimDto) throws Exception {
       ClaimValidatorType claimValidatorType = ClaimDefine.findClaimValidatorType(claimDto);
-      ClaimValidator claimValidator = claimValidatorFactory.getClaimValidator(claimValidatorType);
+      ClaimValidator claimValidator = claimValidatorFactory.get(claimValidatorType);
 
       claimValidator.verifyAmount(claimDto);
    }

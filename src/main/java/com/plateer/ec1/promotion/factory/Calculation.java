@@ -1,6 +1,6 @@
 package com.plateer.ec1.promotion.factory;
 
-import com.plateer.ec1.common.factory.FactoryTemplate;
+import com.plateer.ec1.common.factory.CustomFactory;
 import com.plateer.ec1.promotion.enums.DcCode;
 import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.vo.PromotionVO;
@@ -10,7 +10,7 @@ import com.plateer.ec1.promotion.vo.response.ResponseBaseVO;
 import java.util.Comparator;
 import java.util.List;
 
-public interface Calculation extends FactoryTemplate<PromotionType> {
+public interface Calculation extends CustomFactory<PromotionType> {
 
     ResponseBaseVO getCalculationData(PrmRequestBase prmRequestBase);
 

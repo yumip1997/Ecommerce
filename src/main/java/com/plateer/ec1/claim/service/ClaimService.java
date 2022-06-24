@@ -20,7 +20,7 @@ public class ClaimService {
 
         try{
             ClaimProcessorType claimProcessorType = ClaimDefine.findClaimProcessorType(claimDto);
-            ClaimProcessor claimProcessor = claimProcessorFactory.getClaimProcessor(claimProcessorType);
+            ClaimProcessor claimProcessor = claimProcessorFactory.get(claimProcessorType);
 
             claimProcessor.doProcess(claimDto);
         }catch (Exception e){

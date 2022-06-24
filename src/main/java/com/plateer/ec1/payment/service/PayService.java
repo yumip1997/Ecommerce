@@ -15,17 +15,17 @@ public class PayService {
     private final PaymentServiceFactory paymentServiceFactory;
 
     public ApproveRes approve(PayInfo payInfo){
-        PaymentService paymentService = paymentServiceFactory.getPaymentService(payInfo.getPaymentType());
+        PaymentService paymentService = paymentServiceFactory.get(payInfo.getPaymentType());
         return paymentService.approvePay(payInfo);
     }
 
     public void cancel(CancelReq cancelReq){
-        PaymentService paymentService = paymentServiceFactory.getPaymentService(cancelReq.getPaymentType());
+        PaymentService paymentService = paymentServiceFactory.get(cancelReq.getPaymentType());
         paymentService.cancelPay(cancelReq.getOriginOrder());
     }
 
     public void netCancel(NetCancelReq netCancelReq){
-        PaymentService paymentService = paymentServiceFactory.getPaymentService(netCancelReq.getPaymentType());
+        PaymentService paymentService = paymentServiceFactory.get(netCancelReq.getPaymentType());
         paymentService.netCancel(netCancelReq);
     }
 

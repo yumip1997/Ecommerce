@@ -15,7 +15,7 @@ public class PromotionService {
     private final CalculationFactory calculationFactory;
 
     public ResponseBaseVO getCalculationData(PrmRequestBase prmRequestBase){
-        Calculation calculation = calculationFactory.getCalculation(PromotionType.findPromotionType(prmRequestBase.getPrmTypeCode()));
+        Calculation calculation = calculationFactory.get(PromotionType.findPromotionType(prmRequestBase.getPrmTypeCode()));
         return calculation.getCalculationData(prmRequestBase);
     }
 

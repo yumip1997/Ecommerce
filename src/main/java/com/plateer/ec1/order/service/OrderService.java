@@ -25,10 +25,10 @@ public class OrderService {
 
     public void order(OrderRequest orderRequest) throws Exception {
         OrderType orderType = OrderType.findOrderType(orderRequest.getOrderType());
-        DataStrategy dataStrategy = dataStrategyFactory.getDataStrategy(orderType);
+        DataStrategy dataStrategy = dataStrategyFactory.get(orderType);
 
         SystemType systemType = SystemType.findSystemType(orderRequest.getSystemType());
-        AfterStrategy afterStrategy = afterStrategyFactory.getAfterStrategy(systemType);
+        AfterStrategy afterStrategy = afterStrategyFactory.get(systemType);
 
         OrderContext orderContext = new OrderContext(orderHistoryService, orderDao, payService);
         orderContext.execute(dataStrategy, afterStrategy, orderRequest);
