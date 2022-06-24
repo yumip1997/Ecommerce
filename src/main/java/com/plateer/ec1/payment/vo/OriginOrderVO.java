@@ -1,4 +1,4 @@
 package com.plateer.ec1.payment.vo;
 
-public class OriginOrder {
+public class OriginOrderVO {
 }

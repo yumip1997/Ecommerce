@@ -6,7 +6,7 @@ import com.plateer.ec1.promotion.factory.Calculation;
 import com.plateer.ec1.promotion.vo.ApplicablePromotionVO;
 import com.plateer.ec1.promotion.vo.ProductCouponVO;
 import com.plateer.ec1.promotion.vo.PromotionVO;
-import com.plateer.ec1.promotion.vo.request.PrmRequestBase;
+import com.plateer.ec1.promotion.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.vo.response.ProductCouponResponseVO;
 import com.plateer.ec1.promotion.vo.response.ResponseBaseVO;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +23,12 @@ import java.util.List;
 public class ProductCouponCalculation implements Calculation {
 
     @Override
-    public ResponseBaseVO getCalculationData(PrmRequestBase prmRequestBase) {
+    public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO) {
         log.info("상품쿠폰 할인금액 계산");
 
         ProductCouponResponseVO productCouponResponseVO = new ProductCouponResponseVO();
         
-        List<ApplicablePromotionVO> applicablePrmList = getApplicablePromotionList(prmRequestBase);
+        List<ApplicablePromotionVO> applicablePrmList = getApplicablePromotionList(prmRequestBaseVO);
         List<ProductCouponVO> productCouponVOList = new ArrayList<>();
 
         for (ApplicablePromotionVO applicablePromotionVO : applicablePrmList) {
@@ -49,7 +49,7 @@ public class ProductCouponCalculation implements Calculation {
             productCouponVOList.add(productCouponVO);
         }
 
-        productCouponResponseVO.setMemberNo(prmRequestBase.getMemberNo());
+        productCouponResponseVO.setMemberNo(prmRequestBaseVO.getMemberNo());
         productCouponResponseVO.setProductCouponVOList(productCouponVOList);
 
         return productCouponResponseVO;
@@ -61,7 +61,7 @@ public class ProductCouponCalculation implements Calculation {
     }
 
 
-    public List<ApplicablePromotionVO> getApplicablePromotionList(PrmRequestBase prmRequestBase) {
+    public List<ApplicablePromotionVO> getApplicablePromotionList(PrmRequestBaseVO prmRequestBaseVO) {
         //TODO prmDao.getApplicablePromotionList
         return new ArrayList<>();
     }

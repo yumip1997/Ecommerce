@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ClaimDto {
+public class ClaimVO {
     private OrderClaim orderClaim;
     //클레임 타입
     private String claimType;

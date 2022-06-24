@@ -1,10 +1,10 @@
 package com.plateer.ec1.payment.service;
 
 import com.plateer.ec1.payment.factory.PaymentServiceFactory;
-import com.plateer.ec1.payment.vo.ApproveRes;
-import com.plateer.ec1.payment.vo.CancelReq;
-import com.plateer.ec1.payment.vo.NetCancelReq;
-import com.plateer.ec1.payment.vo.PayInfo;
+import com.plateer.ec1.payment.vo.ApproveResVO;
+import com.plateer.ec1.payment.vo.CancelReqVO;
+import com.plateer.ec1.payment.vo.NetCancelReqVO;
+import com.plateer.ec1.payment.vo.PayInfoVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,19 +14,19 @@ public class PayService {
 
     private final PaymentServiceFactory paymentServiceFactory;
 
-    public ApproveRes approve(PayInfo payInfo){
-        PaymentService paymentService = paymentServiceFactory.get(payInfo.getPaymentType());
-        return paymentService.approvePay(payInfo);
+    public ApproveResVO approve(PayInfoVO payInfoVO){
+        PaymentService paymentService = paymentServiceFactory.get(payInfoVO.getPaymentType());
+        return paymentService.approvePay(payInfoVO);
     }
 
-    public void cancel(CancelReq cancelReq){
-        PaymentService paymentService = paymentServiceFactory.get(cancelReq.getPaymentType());
-        paymentService.cancelPay(cancelReq.getOriginOrder());
+    public void cancel(CancelReqVO cancelReqVO){
+        PaymentService paymentService = paymentServiceFactory.get(cancelReqVO.getPaymentType());
+        paymentService.cancelPay(cancelReqVO.getOriginOrderVO());
     }
 
-    public void netCancel(NetCancelReq netCancelReq){
-        PaymentService paymentService = paymentServiceFactory.get(netCancelReq.getPaymentType());
-        paymentService.netCancel(netCancelReq);
+    public void netCancel(NetCancelReqVO netCancelReqVO){
+        PaymentService paymentService = paymentServiceFactory.get(netCancelReqVO.getPaymentType());
+        paymentService.netCancel(netCancelReqVO);
     }
 
 }

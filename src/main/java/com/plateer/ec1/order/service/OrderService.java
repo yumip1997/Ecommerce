@@ -7,7 +7,7 @@ import com.plateer.ec1.order.factory.DataStrategyFactory;
 import com.plateer.ec1.order.mapper.OrderDao;
 import com.plateer.ec1.order.strategy.after.AfterStrategy;
 import com.plateer.ec1.order.strategy.data.DataStrategy;
-import com.plateer.ec1.order.vo.OrderRequest;
+import com.plateer.ec1.order.vo.OrderRequestVO;
 import com.plateer.ec1.payment.service.PayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,15 +23,15 @@ public class OrderService {
     private final OrderDao orderDao;
     private final PayService payService;
 
-    public void order(OrderRequest orderRequest) throws Exception {
-        OrderType orderType = OrderType.findOrderType(orderRequest.getOrderType());
+    public void order(OrderRequestVO orderRequestVO) throws Exception {
+        OrderType orderType = OrderType.findOrderType(orderRequestVO.getOrderType());
         DataStrategy dataStrategy = dataStrategyFactory.get(orderType);
 
-        SystemType systemType = SystemType.findSystemType(orderRequest.getSystemType());
+        SystemType systemType = SystemType.findSystemType(orderRequestVO.getSystemType());
         AfterStrategy afterStrategy = afterStrategyFactory.get(systemType);
 
         OrderContext orderContext = new OrderContext(orderHistoryService, orderDao, payService);
-        orderContext.execute(dataStrategy, afterStrategy, orderRequest);
+        orderContext.execute(dataStrategy, afterStrategy, orderRequestVO);
     }
 
 }

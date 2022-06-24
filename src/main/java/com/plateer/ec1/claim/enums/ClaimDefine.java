@@ -1,6 +1,6 @@
 package com.plateer.ec1.claim.enums;
 
-import com.plateer.ec1.claim.vo.ClaimDto;
+import com.plateer.ec1.claim.vo.ClaimVO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -31,42 +31,42 @@ public enum ClaimDefine {
     private final Boolean numFlag;
     private final OrderClaimBaseCode orderClaimBaseCode;
 
-    public static ClaimProcessorType findClaimProcessorType(ClaimDto ClaimDto) throws Exception {
+    public static ClaimProcessorType findClaimProcessorType(ClaimVO ClaimVO) throws Exception {
         try{
-            return ClaimDefine.valueOf(ClaimDto.getClaimType()).getClaimProcessorType();
+            return ClaimDefine.valueOf(ClaimVO.getClaimType()).getClaimProcessorType();
         }catch (Exception e){
             throw new Exception(ClaimException.INVALID_CLAIM_TYPE.EXCEPTION_MSG);
         }
     }
 
-    public static ClaimValidatorType findClaimValidatorType(ClaimDto ClaimDto) throws Exception {
+    public static ClaimValidatorType findClaimValidatorType(ClaimVO ClaimVO) throws Exception {
         try{
-            return ClaimDefine.valueOf(ClaimDto.getClaimType()).getClaimValidatorType();
+            return ClaimDefine.valueOf(ClaimVO.getClaimType()).getClaimValidatorType();
         }catch (Exception e){
             throw new Exception(ClaimException.INVALID_CLAIM_TYPE.EXCEPTION_MSG);
         }
     }
 
-    public static ClaimValidStatusCode findClaimValidStatusCode(ClaimDto ClaimDto) throws Exception {
+    public static ClaimValidStatusCode findClaimValidStatusCode(ClaimVO ClaimVO) throws Exception {
         try{
-            return ClaimDefine.valueOf(ClaimDto.getClaimType()).getClaimValidStatusCode();
+            return ClaimDefine.valueOf(ClaimVO.getClaimType()).getClaimValidStatusCode();
         }catch (Exception e){
             throw new Exception(ClaimException.INVALID_CLAIM_TYPE.EXCEPTION_MSG);
         }
     }
 
-    public static Boolean findNumFlag(ClaimDto ClaimDto) throws Exception{
+    public static Boolean findNumFlag(ClaimVO ClaimVO) throws Exception{
         try{
-            return ClaimDefine.valueOf(ClaimDto.getClaimType()).getNumFlag();
+            return ClaimDefine.valueOf(ClaimVO.getClaimType()).getNumFlag();
         }catch (Exception e){
             throw new Exception(ClaimException.INVALID_CLAIM_TYPE.EXCEPTION_MSG);
         }
 
     }
 
-    public static OrderClaimBaseCode findOrderClaimBaseCode(ClaimDto ClaimDto) throws Exception{
+    public static OrderClaimBaseCode findOrderClaimBaseCode(ClaimVO ClaimVO) throws Exception{
         try {
-            return ClaimDefine.valueOf(ClaimDto.getClaimType()).getOrderClaimBaseCode();
+            return ClaimDefine.valueOf(ClaimVO.getClaimType()).getOrderClaimBaseCode();
         }catch (Exception e){
             throw new Exception(ClaimException.INVALID_CLAIM_TYPE.EXCEPTION_MSG);
         }

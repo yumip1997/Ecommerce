@@ -1,6 +1,6 @@
 package com.plateer.ec1.promotion.service;
 
-import com.plateer.ec1.promotion.vo.request.PrmRequestBase;
+import com.plateer.ec1.promotion.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.vo.response.CartCouponResponseVO;
 import com.plateer.ec1.promotion.vo.response.PriceDiscountResponseVO;
 import com.plateer.ec1.promotion.vo.response.ProductCouponResponseVO;
@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class PromotionServiceTest {
 
@@ -22,9 +20,9 @@ class PromotionServiceTest {
     @Test
     @DisplayName("가격조정 프로모션 요청 시 PriceDiscountResponseVO 타입의 객체가 반환된다.")
     void price_distcount_test(){
-        PrmRequestBase prmRequestBase = PrmRequestBase.builder().prmTypeCode("PD").build();
+        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmTypeCode("PD").build();
 
-        ResponseBaseVO responseBaseVO = promotionService.getCalculationData(prmRequestBase);
+        ResponseBaseVO responseBaseVO = promotionService.getCalculationData(prmRequestBaseVO);
 
         Assertions.assertThat(responseBaseVO).isInstanceOf(PriceDiscountResponseVO.class);
     }
@@ -32,9 +30,9 @@ class PromotionServiceTest {
     @Test
     @DisplayName("상품쿠폰 프로모션 요청 시 ProductCouponResponseVO 타입의 객체가 반환된다.")
     void product_coupon_test(){
-        PrmRequestBase prmRequestBase = PrmRequestBase.builder().prmTypeCode("PC").build();
+        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmTypeCode("PC").build();
 
-        ResponseBaseVO responseBaseVO = promotionService.getCalculationData(prmRequestBase);
+        ResponseBaseVO responseBaseVO = promotionService.getCalculationData(prmRequestBaseVO);
 
         Assertions.assertThat(responseBaseVO).isInstanceOf(ProductCouponResponseVO.class);
     }
@@ -42,9 +40,9 @@ class PromotionServiceTest {
     @Test
     @DisplayName("장바구니 프로모션 요청 시 CartCouponResponseVO 타입의 객체가 반환된다.")
     void cart_coupon_test(){
-        PrmRequestBase prmRequestBase = PrmRequestBase.builder().prmTypeCode("CC").build();
+        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmTypeCode("CC").build();
 
-        ResponseBaseVO responseBaseVO = promotionService.getCalculationData(prmRequestBase);
+        ResponseBaseVO responseBaseVO = promotionService.getCalculationData(prmRequestBaseVO);
 
         Assertions.assertThat(responseBaseVO).isInstanceOf(CartCouponResponseVO.class);
     }

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class LogDto<T, U>{
+public class LogVO<T, U>{
 
     private T insertData;
     private U updateData;

@@ -2,7 +2,7 @@ package com.plateer.ec1.promotion.factory.impl;
 
 import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.factory.Calculation;
-import com.plateer.ec1.promotion.vo.request.PrmRequestBase;
+import com.plateer.ec1.promotion.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.vo.response.CartCouponResponseVO;
 import com.plateer.ec1.promotion.vo.response.ResponseBaseVO;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class CartCouponCalculation implements Calculation {
 
     @Override
-    public ResponseBaseVO getCalculationData(PrmRequestBase prmRequestBase) {
+    public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO) {
         log.info("장바구니 할인금액 계산");
         return new CartCouponResponseVO();
     }

@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class NetCancelReq {
+public class PayInfoVO {
 
     PaymentType paymentType;
 }

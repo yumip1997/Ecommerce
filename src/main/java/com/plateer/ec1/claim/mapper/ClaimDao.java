@@ -1,6 +1,6 @@
 package com.plateer.ec1.claim.mapper;
 
-import com.plateer.ec1.claim.vo.ClaimDto;
+import com.plateer.ec1.claim.vo.ClaimVO;
 import com.plateer.ec1.common.model.order.OrderBenefit;
 import com.plateer.ec1.common.model.order.OrderBenefitRelation;
 import com.plateer.ec1.common.model.order.OrderClaim;
@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper
 public interface ClaimDao {
 
-    OrderClaim selectClaim(ClaimDto claimDto);
+    OrderClaim selectClaim(ClaimVO claimVO);
 
     void insertOrderClaim(List<OrderClaim> orderClaimList);
     void insertOrderCost(List<OrderCost> orderCostList);

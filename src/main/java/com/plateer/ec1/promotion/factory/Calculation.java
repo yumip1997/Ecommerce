@@ -4,7 +4,7 @@ import com.plateer.ec1.common.factory.CustomFactory;
 import com.plateer.ec1.promotion.enums.DcCode;
 import com.plateer.ec1.promotion.enums.PromotionType;
 import com.plateer.ec1.promotion.vo.PromotionVO;
-import com.plateer.ec1.promotion.vo.request.PrmRequestBase;
+import com.plateer.ec1.promotion.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.vo.response.ResponseBaseVO;
 
 import java.util.Comparator;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface Calculation extends CustomFactory<PromotionType> {
 
-    ResponseBaseVO getCalculationData(PrmRequestBase prmRequestBase);
+    ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO);
 
     default PromotionVO getMaxBenefitPrm(List<PromotionVO> promotionVOList){
         return promotionVOList.stream()

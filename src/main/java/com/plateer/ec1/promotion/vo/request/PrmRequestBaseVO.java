@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class PrmRequestBase {
+public class PrmRequestBaseVO {
 
     private String memberNo;
     private List<Product> productList;

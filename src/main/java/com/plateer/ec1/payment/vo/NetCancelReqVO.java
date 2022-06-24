@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class CancelReq {
+public class NetCancelReqVO {
+
     PaymentType paymentType;
-    OriginOrder originOrder;
 }

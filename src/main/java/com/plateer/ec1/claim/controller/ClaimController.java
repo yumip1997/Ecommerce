@@ -1,7 +1,7 @@
 package com.plateer.ec1.claim.controller;
 
 import com.plateer.ec1.claim.service.ClaimService;
-import com.plateer.ec1.claim.vo.ClaimDto;
+import com.plateer.ec1.claim.vo.ClaimVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +14,7 @@ public class ClaimController {
     private final ClaimService claimService;
 
     @PostMapping("/claim")
-    public void claim(@RequestBody ClaimDto claimDto){
-        claimService.claim(claimDto);
+    public void claim(@RequestBody ClaimVO claimVO){
+        claimService.claim(claimVO);
     }
 }

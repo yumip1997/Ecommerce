@@ -1,4 +1,4 @@
 package com.plateer.ec1.order.vo;
 
-public class OrderProductView {
+public class OrderValidationVO {
 }

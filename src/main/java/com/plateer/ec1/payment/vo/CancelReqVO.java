@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class PayInfo {
-
+public class CancelReqVO {
     PaymentType paymentType;
+    OriginOrderVO originOrderVO;
 }

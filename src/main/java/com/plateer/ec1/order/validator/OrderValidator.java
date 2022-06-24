@@ -3,8 +3,8 @@ package com.plateer.ec1.order.validator;
 import com.plateer.ec1.order.enums.OrderException;
 import com.plateer.ec1.order.enums.OrderType;
 import com.plateer.ec1.order.enums.SystemType;
-import com.plateer.ec1.order.vo.OrderRequest;
-import com.plateer.ec1.order.vo.OrderValidationDto;
+import com.plateer.ec1.order.vo.OrderRequestVO;
+import com.plateer.ec1.order.vo.OrderValidationVO;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -44,21 +44,21 @@ public enum OrderValidator {
 
     private final String systemTypeCode;
     private final String orderTypeCode;
-    private final Predicate<OrderValidationDto> predicate;
+    private final Predicate<OrderValidationVO> predicate;
 
-    public boolean test(OrderValidationDto s) {
+    public boolean test(OrderValidationVO s) {
         return predicate.test(s);
     }
 
-    public static OrderValidator findOrderValidatory(OrderRequest orderRequest) throws Exception {
+    public static OrderValidator findOrderValidatory(OrderRequestVO orderRequestVO) throws Exception {
         return Arrays.stream(OrderValidator.values())
-                .filter(orderValidator -> isEqualsTypeCode(orderValidator, orderRequest))
+                .filter(orderValidator -> isEqualsTypeCode(orderValidator, orderRequestVO))
                 .findFirst()
                 .orElseThrow(() -> new Exception(OrderException.NOT_FIND_VALIDATOR.msg));
     }
 
-    private static boolean isEqualsTypeCode(OrderValidator orderValidator, OrderRequest orderRequest){
-        return orderValidator.systemTypeCode.equals(orderRequest.getSystemType()) && orderValidator.orderTypeCode.equals(orderRequest.getOrderType());
+    private static boolean isEqualsTypeCode(OrderValidator orderValidator, OrderRequestVO orderRequestVO){
+        return orderValidator.systemTypeCode.equals(orderRequestVO.getSystemType()) && orderValidator.orderTypeCode.equals(orderRequestVO.getOrderType());
     }
 
 }
