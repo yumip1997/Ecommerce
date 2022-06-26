@@ -1,4 +1,4 @@
-package com.plateer.ec1.promotion.service;
+package com.plateer.ec1.promotion.apply.service;
 
 import com.plateer.ec1.promotion.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.vo.response.CartCouponResponseVO;

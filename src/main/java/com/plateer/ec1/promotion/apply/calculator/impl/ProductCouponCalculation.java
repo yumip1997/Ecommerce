@@ -1,8 +1,8 @@
-package com.plateer.ec1.promotion.factory.impl;
+package com.plateer.ec1.promotion.apply.calculator.impl;
 
 import com.plateer.ec1.common.model.product.Product;
 import com.plateer.ec1.promotion.enums.PromotionType;
-import com.plateer.ec1.promotion.factory.Calculation;
+import com.plateer.ec1.promotion.apply.calculator.Calculation;
 import com.plateer.ec1.promotion.vo.ApplicablePromotionVO;
 import com.plateer.ec1.promotion.vo.ProductCouponVO;
 import com.plateer.ec1.promotion.vo.PromotionVO;

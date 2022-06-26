@@ -1,4 +1,4 @@
-package com.plateer.ec1.promotion.factory;
+package com.plateer.ec1.promotion.apply.calculator;
 
 import com.plateer.ec1.common.factory.CustomFactory;
 import com.plateer.ec1.promotion.enums.DcCode;

@@ -1,6 +1,6 @@
-package com.plateer.ec1.promotion.controller;
+package com.plateer.ec1.promotion.apply.controller;
 
-import com.plateer.ec1.promotion.service.PromotionService;
+import com.plateer.ec1.promotion.apply.service.PromotionService;
 import com.plateer.ec1.promotion.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.vo.response.ResponseBaseVO;
 import lombok.RequiredArgsConstructor;

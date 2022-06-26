@@ -1,7 +1,7 @@
-package com.plateer.ec1.promotion.factory.impl;
+package com.plateer.ec1.promotion.apply.calculator.impl;
 
 import com.plateer.ec1.promotion.enums.PromotionType;
-import com.plateer.ec1.promotion.factory.Calculation;
+import com.plateer.ec1.promotion.apply.calculator.Calculation;
 import com.plateer.ec1.promotion.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.vo.response.CartCouponResponseVO;
 import com.plateer.ec1.promotion.vo.response.ResponseBaseVO;
