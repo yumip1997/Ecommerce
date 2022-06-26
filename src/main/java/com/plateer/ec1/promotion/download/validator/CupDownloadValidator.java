@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 @Log4j2
@@ -24,37 +27,31 @@ public class CupDownloadValidator {
         isNotEmptyMbrNo(cupDwlRequestVO);
     }
 
-    //1. 프로모션 번호 체크
     private void isNotEmptyPrmNo(CupDwlRequestVO cupDwlRequestVO){
         log.info("프로모션 번호 체크");
     }
 
-    //2. 회원번호 체크
     private void isNotEmptyMbrNo(CupDwlRequestVO cupDwlRequestVO){
         log.info("회원번호 not null 체크");
     }
 
     private void checkValid(CupDwlRequestVO cupDwlRequestVO){
-//        CupDwlVO cupDwlVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO.getPrmNo());
-        CupDwlVO cupDwlVO = new CupDwlVO();
-        isValidPeriod(cupDwlRequestVO, cupDwlVO);
-        isValidCnt(cupDwlRequestVO, cupDwlVO);
-        isValidMember(cupDwlRequestVO, cupDwlVO);
+        CupDwlVO cupDwlVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
+
+        isValidPeriod(cupDwlVO);
+        isValidCnt(cupDwlVO);
     }
 
-    //3. 기간체크
-    private void isValidPeriod(CupDwlRequestVO cupDwlRequestVO, CupDwlVO cupDwlVO){
+    private void isValidPeriod(CupDwlVO cupDwlVO){
         log.info("기간 체크 유효성 검사 실행");
+        boolean isValid = Timestamp.valueOf(LocalDateTime.now()).before(cupDwlVO.getDwlEndDd());
+        if(isValid) return;
+
     }
 
-    //4. 수량체크
-    private void isValidCnt(CupDwlRequestVO cupDwlRequestVO, CupDwlVO cupDwlVO){
+    private void isValidCnt(CupDwlVO cupDwlVO){
         log.info("다운로드 가능 수량 유효성 검사 실행");
     }
 
-    //5. 가능한 등급인지 확인(임직원)
-    private void isValidMember(CupDwlRequestVO cupDwlRequestVO, CupDwlVO cupDwlVO){
-        log.info("가능 등급 유효성 검사 실행");
-    }
 
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.plateer.ec1.promotion.download.mapper.CupDwlMapper">
+    <select id="getCupDwlInfo" resultType="com.plateer.ec1.promotion.download.vo.CupDwlVO">
+        select
+            prm.prm_no as prmNo,
+            prm.prm_nm as prmNm,
+            prm.use_yn as useYn,
+            case when cup.dwl_priod_ccd = '10' then to_timestamp(cup.dwl_avl_end_dd, 'YYYYMMDD')
+                 else prm.sys_mod_dtime + cup.dwl_std_dd * interval '1 day'
+            end dwlEndDd,
+            cup.dwl_psb_cnt as dwlPsbCnt,
+            cup.psn_dwl_psb_cnt as psnDwlCnt,
+            (select count(*) from cc_cpn_issue where prm_no = #{prmNo}) as totalCnt,
+            (select count(*) from cc_cpn_issue where prm_no = #{prmNo} and mbr_no = #{mbrNo}) as mbrCnt
+        from cc_prm_base as prm inner join cc_cpn_base as cup on prm.prm_no = cup.prm_no
+        where prm.prm_no = #{prmNo}
+    </select>
+</mapper>
