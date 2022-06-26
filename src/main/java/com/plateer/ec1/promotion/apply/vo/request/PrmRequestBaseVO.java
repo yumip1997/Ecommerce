@@ -1,4 +1,4 @@
-package com.plateer.ec1.promotion.vo.request;
+package com.plateer.ec1.promotion.apply.vo.request;
 
 import com.plateer.ec1.common.model.product.Product;
 import lombok.Builder;

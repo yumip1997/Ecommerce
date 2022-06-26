@@ -1,12 +1,10 @@
 package com.plateer.ec1.promotion.download.service;
 
-import com.plateer.ec1.promotion.vo.request.CupDwlRequestVO;
+import com.plateer.ec1.promotion.apply.vo.request.CupDwlRequestVO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class DownloadServiceTest {

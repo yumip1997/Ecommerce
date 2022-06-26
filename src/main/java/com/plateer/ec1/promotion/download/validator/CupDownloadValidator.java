@@ -2,7 +2,7 @@ package com.plateer.ec1.promotion.download.validator;
 
 import com.plateer.ec1.promotion.download.mapper.CupDwlMapper;
 import com.plateer.ec1.promotion.download.vo.CupDwlVO;
-import com.plateer.ec1.promotion.vo.request.CupDwlRequestVO;
+import com.plateer.ec1.promotion.apply.vo.request.CupDwlRequestVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;

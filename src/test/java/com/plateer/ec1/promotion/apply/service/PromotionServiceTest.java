@@ -1,10 +1,10 @@
 package com.plateer.ec1.promotion.apply.service;
 
-import com.plateer.ec1.promotion.vo.request.PrmRequestBaseVO;
-import com.plateer.ec1.promotion.vo.response.CartCouponResponseVO;
-import com.plateer.ec1.promotion.vo.response.PriceDiscountResponseVO;
-import com.plateer.ec1.promotion.vo.response.ProductCouponResponseVO;
-import com.plateer.ec1.promotion.vo.response.ResponseBaseVO;
+import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
+import com.plateer.ec1.promotion.apply.vo.response.CartCouponResponseVO;
+import com.plateer.ec1.promotion.apply.vo.response.PriceDiscountResponseVO;
+import com.plateer.ec1.promotion.apply.vo.response.ProductCouponResponseVO;
+import com.plateer.ec1.promotion.apply.vo.response.ResponseBaseVO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

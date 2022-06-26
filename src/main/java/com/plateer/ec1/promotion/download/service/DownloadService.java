@@ -3,7 +3,7 @@ package com.plateer.ec1.promotion.download.service;
 import com.plateer.ec1.promotion.download.downloader.CupDownloader;
 import com.plateer.ec1.promotion.enums.DwlCupType;
 import com.plateer.ec1.promotion.factory.DownloaderFactory;
-import com.plateer.ec1.promotion.vo.request.CupDwlRequestVO;
+import com.plateer.ec1.promotion.apply.vo.request.CupDwlRequestVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

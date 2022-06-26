@@ -5,7 +5,7 @@ import com.plateer.ec1.promotion.download.downloader.CupDownloader;
 import com.plateer.ec1.promotion.download.mapper.CupDwlTrxMapper;
 import com.plateer.ec1.promotion.download.validator.CupDownloadValidator;
 import com.plateer.ec1.promotion.enums.DwlCupType;
-import com.plateer.ec1.promotion.vo.request.CupDwlRequestVO;
+import com.plateer.ec1.promotion.apply.vo.request.CupDwlRequestVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;

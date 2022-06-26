@@ -1,7 +1,7 @@
 package com.plateer.ec1.promotion.download.controller;
 
 import com.plateer.ec1.promotion.download.service.DownloadService;
-import com.plateer.ec1.promotion.vo.request.CupDwlRequestVO;
+import com.plateer.ec1.promotion.apply.vo.request.CupDwlRequestVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,4 +1,4 @@
-package com.plateer.ec1.promotion.vo;
+package com.plateer.ec1.promotion.apply.vo;
 
 import lombok.Builder;
 import lombok.Getter;

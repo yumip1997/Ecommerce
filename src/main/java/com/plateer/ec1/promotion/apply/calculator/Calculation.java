@@ -3,9 +3,9 @@ package com.plateer.ec1.promotion.apply.calculator;
 import com.plateer.ec1.common.factory.CustomFactory;
 import com.plateer.ec1.promotion.enums.DcCode;
 import com.plateer.ec1.promotion.enums.PromotionType;
-import com.plateer.ec1.promotion.vo.PromotionVO;
-import com.plateer.ec1.promotion.vo.request.PrmRequestBaseVO;
-import com.plateer.ec1.promotion.vo.response.ResponseBaseVO;
+import com.plateer.ec1.promotion.apply.vo.PromotionVO;
+import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
+import com.plateer.ec1.promotion.apply.vo.response.ResponseBaseVO;
 
 import java.util.Comparator;
 import java.util.List;
