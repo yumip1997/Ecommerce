@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class BaseVO {
 
-    String sysRegId;
-    String sysModrId;
+    String loginId;
 
 }

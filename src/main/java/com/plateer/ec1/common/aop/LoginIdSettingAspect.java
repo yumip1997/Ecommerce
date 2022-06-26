@@ -22,25 +22,20 @@ public class LoginIdSettingAspect {
             //TODO 수정 필요
             if(arg instanceof List){
                 for (Object o : (List) arg) {
-                    setSysIdOfArgs(o);
+                    setLoginIdOfArgs(o);
                 }
                 continue;
             }
 
-            setSysIdOfArgs(arg);
+            setLoginIdOfArgs(arg);
         }
     }
 
-    private void setSysIdOfArgs(Object arg){
+    private void setLoginIdOfArgs(Object arg){
         if(! (arg instanceof BaseVO) ) return;
 
-        setSysId((BaseVO) arg);
+        BaseVO baseVO = (BaseVO) arg;
+        baseVO.setLoginId("FO");
     }
-
-    private void setSysId(BaseVO baseVO){
-        baseVO.setSysRegId("fo");
-        baseVO.setSysModrId("fo");
-    }
-
 
 }
