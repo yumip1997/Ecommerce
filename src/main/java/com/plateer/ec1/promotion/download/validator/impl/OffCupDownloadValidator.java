@@ -22,7 +22,7 @@ public class OffCupDownloadValidator implements CupDownloadValidator {
     }
 
     @Override
-    public void isValid(CupDwlRequestVO cupDwlRequestVO) throws Exception {
+    public void isValid(CupDwlRequestVO cupDwlRequestVO){
         checkNotEmpty(cupDwlRequestVO);
 
         CupInfoVO offlineCupInfo = cupDwlMapper.getOfflineCupInfo(cupDwlRequestVO);
@@ -34,24 +34,24 @@ public class OffCupDownloadValidator implements CupDownloadValidator {
         checkValid(cupInfoVO);
     }
 
-    private void checkNotEmpty(CupDwlRequestVO cupDwlRequestVO) throws Exception {
+    private void checkNotEmpty(CupDwlRequestVO cupDwlRequestVO){
         isNotEmptyMbrNo(cupDwlRequestVO);
         isNotEmptyCpnCertNo(cupDwlRequestVO);
     }
 
-    private void isNotEmptyCpnCertNo(CupDwlRequestVO cupDwlRequestVO) throws Exception {
+    private void isNotEmptyCpnCertNo(CupDwlRequestVO cupDwlRequestVO){
         if(!ObjectUtils.isEmpty(cupDwlRequestVO.getCpnCertNo())) return;
 
-        throw new Exception(PromotionException.NULL_CPN_CERT_NO.getMSG());
+        throw new RuntimeException(PromotionException.NULL_CPN_CERT_NO.getMSG());
     }
 
-    private void isExistOffCup(CupInfoVO cupInfoVO) throws Exception {
+    private void isExistOffCup(CupInfoVO cupInfoVO){
         if(!ObjectUtils.isEmpty(cupInfoVO)) return;
 
-        throw new Exception(PromotionException.INVALID_CPN_CERT_NO.getMSG());
+        throw new RuntimeException(PromotionException.INVALID_CPN_CERT_NO.getMSG());
     }
 
-    private void checkValid(CupInfoVO cupInfoVO) throws Exception {
+    private void checkValid(CupInfoVO cupInfoVO){
         isValidPeriod(cupInfoVO);
         isValidCnt(cupInfoVO);
     }

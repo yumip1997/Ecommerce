@@ -16,6 +16,5 @@ class CupDwlMapperTest {
     void test(){
         CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).mbrNo("33").build();
         CupInfoVO cupInfoVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
-        System.out.println(cupInfoVO.toString());
     }
 }

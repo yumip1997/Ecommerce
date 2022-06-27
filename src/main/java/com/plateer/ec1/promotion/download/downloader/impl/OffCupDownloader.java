@@ -28,7 +28,7 @@ public class OffCupDownloader implements CupDownloader {
     @Override
     @LoginIdSetting
     @Transactional
-    public void download(CupDwlRequestVO cupDwlRequestVO) throws Exception {
+    public void download(CupDwlRequestVO cupDwlRequestVO){
         log.info("오프라인 쿠폰 다운로드");
         CupDownloadValidator cupDownloadValidator = cupDownloadValidatorFactory.get(getType());
         cupDownloadValidator.isValid(cupDwlRequestVO);

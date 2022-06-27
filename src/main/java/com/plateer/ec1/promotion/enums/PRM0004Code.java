@@ -21,6 +21,7 @@ public enum PRM0004Code {
     public static PRM0004Code findPromotionType(String code){
         return Arrays.stream(PRM0004Code.values())
                 .filter(promotionType -> promotionType.getCode().equals(code))
-                .findFirst().orElse(null);
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(PromotionException.INVALID_PROMOTION_TYPE.getMSG()));
     }
 }

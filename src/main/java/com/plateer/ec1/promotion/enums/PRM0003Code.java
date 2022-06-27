@@ -16,13 +16,12 @@ public enum PRM0003Code {
     private final String code;
     private final BiFunction<Long, Long, Long> discountFunction;
 
-    //TODO 해당 CODE 없으면 THROW 로직으로 변경하기
     public static BiFunction<Long, Long, Long> getDiscountFunction(String code){
         return Arrays.stream(PRM0003Code.values())
                 .filter(PRM0003Code -> PRM0003Code.getCode().equals(code))
                 .findFirst()
                 .map(PRM0003Code::getDiscountFunction)
-                .orElse(null);
+                .orElseThrow(() -> new IllegalArgumentException(PromotionException.INVALID_DC_TYPE.getMSG()));
     }
 
 }

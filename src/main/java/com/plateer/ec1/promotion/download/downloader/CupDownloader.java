@@ -6,6 +6,6 @@ import com.plateer.ec1.promotion.download.vo.request.CupDwlRequestVO;
 
 public interface CupDownloader extends CustomFactory<PRM0009Code> {
 
-    void download(CupDwlRequestVO cupDwlRequestVO) throws Exception;
+    void download(CupDwlRequestVO cupDwlRequestVO);
 
 }

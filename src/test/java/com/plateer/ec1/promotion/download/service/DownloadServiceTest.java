@@ -15,7 +15,7 @@ class DownloadServiceTest {
     @Test
     @DisplayName("다운로드 흐름")
     void test(){
-        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).mbrNo("user2").dwlCupType("GC").build();
+        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).mbrNo("user2").dwlCupType("10").build();
         downloadService.download(cupDwlRequestVO);
     }
 }

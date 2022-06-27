@@ -9,6 +9,7 @@ public enum PromotionException {
 
     INVALID_PROMOTION_TYPE("프로모션 유형이 올바르지 않습니다!"),
     INVALID_CUP_DWL_TYPE("다운로드 쿠폰 유형이 올바르지 않습니다!"),
+    INVALID_DC_TYPE("할인 구분 유형이 올바르지 않습니다!"),
     NULL_CPN_CERT_NO("오프라인 쿠폰 다운로드시 인증코드는 필수입니다!"),
     NULL_CUP_MBR_NO("쿠폰 다운로드 시 회원 번호는 필수입니다!"),
     NULL_CUP_PRM_NO("쿠폰 다운로드시 시 프로모션 번호는 필수입니다!"),
