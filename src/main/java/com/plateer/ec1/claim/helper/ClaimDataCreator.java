@@ -11,8 +11,8 @@ import java.util.List;
 @Log4j2
 public class ClaimDataCreator {
 
-    public static ClaimInsertBase makeClaimInsertBase(ClaimVO claimVO){
-        List<OrderClaim> insertOrderClaimList= claimVO.getOrderClaim().getInsertOrderClaim();
+    public static ClaimInsertBase makeClaimInsertBase(ClaimVO claimVO) {
+        List<OrderClaim> insertOrderClaimList= claimVO.getOrderClaim().getInsertOrderClaim(1);
 
 
         return ClaimInsertBase.builder().orderClaimList(insertOrderClaimList).build();
