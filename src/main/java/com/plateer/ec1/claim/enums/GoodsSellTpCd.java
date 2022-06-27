@@ -1,13 +1,15 @@
 package com.plateer.ec1.claim.enums;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum ProductTypeCode {
+@Getter
+public enum GoodsSellTpCd {
 
     GENERAL("G"),
     ECOUPON("EC");
 
-    public final String code;
+    private final String code;
 
 }

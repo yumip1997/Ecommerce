@@ -1,9 +1,7 @@
 package com.plateer.ec1.promotion.enums;
 
-import com.plateer.ec1.common.model.order.OrderClaim;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.BeanUtils;
 
 class PRM0003CodeTest {
 

@@ -1,14 +1,14 @@
 package com.plateer.ec1.claim.processor;
 
-import com.plateer.ec1.claim.enums.ClaimDefine;
-import com.plateer.ec1.claim.enums.ClaimProcessorType;
-import com.plateer.ec1.claim.enums.ClaimValidatorType;
+import com.plateer.ec1.claim.enums.define.ClaimDefine;
+import com.plateer.ec1.claim.enums.ProcessorType;
+import com.plateer.ec1.claim.enums.ValidatorType;
 import com.plateer.ec1.claim.factory.ClaimValidatorFactory;
 import com.plateer.ec1.claim.helper.ClaimDataCreator;
 import com.plateer.ec1.claim.helper.ClaimDataManipulateHelper;
 import com.plateer.ec1.claim.helper.MonitoringLogHelper;
 import com.plateer.ec1.claim.validator.ClaimValidator;
-import com.plateer.ec1.claim.vo.ClaimVO;
+import com.plateer.ec1.claim.vo.ClaimBaseVO;
 import com.plateer.ec1.claim.vo.ClaimInsertBase;
 import com.plateer.ec1.claim.vo.ClaimUpdateBase;
 import com.plateer.ec1.claim.vo.LogVO;
@@ -18,38 +18,38 @@ import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor
 @Log4j2
-public abstract class ClaimProcessor implements CustomFactory<ClaimProcessorType> {
+public abstract class ClaimProcessor implements CustomFactory<ProcessorType> {
 
    private final ClaimValidatorFactory claimValidatorFactory;
    protected final MonitoringLogHelper monitoringLogHelper;
    protected final ClaimDataManipulateHelper claimDataManipulateHelper;
 
-   public abstract void doProcess(ClaimVO claimVO);
+   public abstract void doProcess(ClaimBaseVO claimBaseVO);
 
-   protected void setUpClaimNum(ClaimVO claimVO) throws Exception {
+   protected void setUpClaimNum(ClaimBaseVO claimBaseVO) throws Exception {
       log.info("클레임 채번 로직을 진행한다.");
 
-      boolean flag = ClaimDefine.findNumFlag(claimVO);
+      boolean flag = ClaimDefine.findNumFlag(claimBaseVO);
       if(!flag) return;
 
       String claimNum = getClaimNumber();
-      claimVO.setClaimNo(claimNum);
+      claimBaseVO.setClmNo(claimNum);
    }
 
    private String getClaimNumber(){
       return "";
    }
 
-   protected void doValidationProcess(ClaimVO claimVO) throws Exception{
-      ClaimValidatorType claimValidatorType = ClaimDefine.findClaimValidatorType(claimVO);
-      ClaimValidator claimValidator = claimValidatorFactory.get(claimValidatorType);
+   protected void doValidationProcess(ClaimBaseVO claimBaseVO) throws Exception{
+      ValidatorType validatorType = ClaimDefine.findClaimValidatorType(claimBaseVO);
+      ClaimValidator claimValidator = claimValidatorFactory.get(validatorType);
 
-      claimValidator.isValid(claimVO);
+      claimValidator.isValid(claimBaseVO);
    }
 
-   protected LogVO doClaimDataManipulationProcess(ClaimVO claimVO){
-      ClaimInsertBase claimInsertBase = ClaimDataCreator.makeClaimInsertBase(claimVO);
-      ClaimUpdateBase claimUpdateBase = ClaimDataCreator.makeClaimUpadateBase(claimVO);
+   protected LogVO doClaimDataManipulationProcess(ClaimBaseVO claimBaseVO){
+      ClaimInsertBase claimInsertBase = ClaimDataCreator.makeClaimInsertBase(claimBaseVO);
+      ClaimUpdateBase claimUpdateBase = ClaimDataCreator.makeClaimUpadateBase(claimBaseVO);
 
       insertClaim(claimInsertBase);
       updateClaim(claimUpdateBase);
@@ -70,11 +70,11 @@ public abstract class ClaimProcessor implements CustomFactory<ClaimProcessorType
       return claimUpdateBase;
    }
 
-   protected void verifyAmount(ClaimVO claimVO) throws Exception {
-      ClaimValidatorType claimValidatorType = ClaimDefine.findClaimValidatorType(claimVO);
-      ClaimValidator claimValidator = claimValidatorFactory.get(claimValidatorType);
+   protected void verifyAmount(ClaimBaseVO claimBaseVO) throws Exception {
+      ValidatorType validatorType = ClaimDefine.findClaimValidatorType(claimBaseVO);
+      ClaimValidator claimValidator = claimValidatorFactory.get(validatorType);
 
-      claimValidator.verifyAmount(claimVO);
+      claimValidator.verifyAmount(claimBaseVO);
    }
 
 }

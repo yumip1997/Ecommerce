@@ -1,8 +1,8 @@
 package com.plateer.ec1.claim.vo;
 
-import com.plateer.ec1.common.model.order.OrderBenefitRelation;
-import com.plateer.ec1.common.model.order.OrderClaim;
-import com.plateer.ec1.common.model.order.OrderCost;
+import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
+import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,10 +14,10 @@ import java.util.List;
 @Builder
 public class ClaimInsertBase {
 
-    List<OrderClaim> orderClaimList;
+    List<OpClmInfo> opClmInfoList;
 
-    List<OrderCost> orderCostList;
+    List<OpOrdCostInfo> opOrdCostInfoList;
 
-    OrderBenefitRelation orderBenefitRelation;
+    OpOrdBnfRelInfo opOrdBnfRelInfo;
 
 }

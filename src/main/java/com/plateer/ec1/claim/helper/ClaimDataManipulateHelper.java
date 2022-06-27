@@ -3,10 +3,10 @@ package com.plateer.ec1.claim.helper;
 import com.plateer.ec1.claim.mapper.ClaimDao;
 import com.plateer.ec1.claim.vo.ClaimInsertBase;
 import com.plateer.ec1.claim.vo.ClaimUpdateBase;
-import com.plateer.ec1.common.model.order.OrderBenefit;
-import com.plateer.ec1.common.model.order.OrderBenefitRelation;
-import com.plateer.ec1.common.model.order.OrderClaim;
-import com.plateer.ec1.common.model.order.OrderCost;
+import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
+import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
+import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,49 +24,49 @@ public class ClaimDataManipulateHelper {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void insertClaimData(ClaimInsertBase claimInsertBase){
-        insertOrderClaim(claimInsertBase.getOrderClaimList());
-        insertOrderCost(claimInsertBase.getOrderCostList());
-        insertOrderBenefitRelation(claimInsertBase.getOrderBenefitRelation());
+        insertOrderClaim(claimInsertBase.getOpClmInfoList());
+        insertOrderCost(claimInsertBase.getOpOrdCostInfoList());
+        insertOrderBenefitRelation(claimInsertBase.getOpOrdBnfRelInfo());
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateClaimData(ClaimUpdateBase claimUpdateBase){
-        updateOrderClaim(claimUpdateBase.getOrderClaim());
-        updateOrgOrderCnt(claimUpdateBase.getOrderClaim());
+        updateOrderClaim(claimUpdateBase.getOpClmInfo());
+        updateOrgOrderCnt(claimUpdateBase.getOpClmInfo());
         updateOrderBenefit(claimUpdateBase.getOrderBenefit());
     }
 
-    private void insertOrderClaim(List<OrderClaim> orderClaimList){
-        if(CollectionUtils.isEmpty(orderClaimList)) return;
+    private void insertOrderClaim(List<OpClmInfo> opClmInfoList){
+        if(CollectionUtils.isEmpty(opClmInfoList)) return;
 
-        claimDao.insertOrderClaim(orderClaimList);
+        claimDao.insertOrderClaim(opClmInfoList);
     }
 
-    private void insertOrderCost(List<OrderCost> orderCostList){
-        if(CollectionUtils.isEmpty(orderCostList)) return;
+    private void insertOrderCost(List<OpOrdCostInfo> opOrdCostInfoList){
+        if(CollectionUtils.isEmpty(opOrdCostInfoList)) return;
 
-        claimDao.insertOrderCost(orderCostList);
+        claimDao.insertOrderCost(opOrdCostInfoList);
     }
 
-    private void insertOrderBenefitRelation(OrderBenefitRelation orderBenefitRelation){
-        if(ObjectUtils.isEmpty(orderBenefitRelation)) return;
+    private void insertOrderBenefitRelation(OpOrdBnfRelInfo opOrdBnfRelInfo){
+        if(ObjectUtils.isEmpty(opOrdBnfRelInfo)) return;
 
-        claimDao.insertOrderBenefitRelation(orderBenefitRelation);
+        claimDao.insertOrderBenefitRelation(opOrdBnfRelInfo);
     }
 
-    private void updateOrderClaim(OrderClaim orderClaim){
-        if(ObjectUtils.isEmpty(orderClaim)) return;
+    private void updateOrderClaim(OpClmInfo opClmInfo){
+        if(ObjectUtils.isEmpty(opClmInfo)) return;
 
-        claimDao.updateOrderClaim(orderClaim);
+        claimDao.updateOrderClaim(opClmInfo);
     }
 
-    private void updateOrgOrderCnt(OrderClaim orderClaim){
-        if(ObjectUtils.isEmpty(orderClaim)) return;
+    private void updateOrgOrderCnt(OpClmInfo opClmInfo){
+        if(ObjectUtils.isEmpty(opClmInfo)) return;
 
-        claimDao.updateOrgOrderCnt(orderClaim);
+        claimDao.updateOrgOrderCnt(opClmInfo);
     }
 
-    private void updateOrderBenefit(OrderBenefit orderBenefit){
+    private void updateOrderBenefit(OpOrdBnfInfo orderBenefit){
         if(ObjectUtils.isEmpty(orderBenefit)) return;
 
         claimDao.updateOrderBenefit(orderBenefit);

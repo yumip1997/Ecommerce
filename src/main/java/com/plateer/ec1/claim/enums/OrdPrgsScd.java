@@ -1,9 +1,11 @@
 package com.plateer.ec1.claim.enums;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum OrdPrgsScdCode {
+@Getter
+public enum OrdPrgsScd {
 
     //주문대기
     ORDER_WAITING("10"),

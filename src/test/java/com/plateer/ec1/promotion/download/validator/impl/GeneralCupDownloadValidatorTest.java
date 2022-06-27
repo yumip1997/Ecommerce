@@ -40,14 +40,6 @@ class GeneralCupDownloadValidatorTest {
     }
 
     @Test
-    @DisplayName("발급횟수 초과 시 예외가 발생한다.")
-    void over_cnt(){
-        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).mbrNo("user1").build();
-
-        Assertions.assertThrows(Exception.class, () -> generalCupDownloadValidator.isValid(cupDwlRequestVO));
-    }
-
-    @Test
     @DisplayName("유효한 프로모션")
     void valid_prm() throws Exception {
         CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).mbrNo("m1").build();

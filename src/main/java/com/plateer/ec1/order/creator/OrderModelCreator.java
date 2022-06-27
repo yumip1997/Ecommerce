@@ -1,8 +1,8 @@
 package com.plateer.ec1.order.creator;
 
+import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.common.model.order.OpGoodsInfo;
 import com.plateer.ec1.common.model.order.OrderBase;
-import com.plateer.ec1.common.model.order.OrderClaim;
-import com.plateer.ec1.common.model.order.OrderProduct;
 import com.plateer.ec1.order.vo.OrderProductViewVO;
 import com.plateer.ec1.order.vo.OrderRequestVO;
 
@@ -12,11 +12,11 @@ public class OrderModelCreator {
         return null;
     }
 
-    public static OrderProduct commonOrderProduct(OrderRequestVO orderRequestVO, OrderProductViewVO orderProductViewVO){
+    public static OpGoodsInfo commonOrderProduct(OrderRequestVO orderRequestVO, OrderProductViewVO orderProductViewVO){
         return null;
     }
 
-    public static OrderClaim commonOrderClaim(OrderRequestVO orderRequestVO, OrderProductViewVO orderProductViewVO){
+    public static OpClmInfo commonOrderClaim(OrderRequestVO orderRequestVO, OrderProductViewVO orderProductViewVO){
         return null;
     }
 }

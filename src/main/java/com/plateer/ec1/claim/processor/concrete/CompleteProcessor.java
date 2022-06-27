@@ -1,12 +1,12 @@
 package com.plateer.ec1.claim.processor.concrete;
 
-import com.plateer.ec1.claim.enums.ClaimProcessorType;
+import com.plateer.ec1.claim.enums.ProcessorType;
 import com.plateer.ec1.claim.factory.ClaimValidatorFactory;
 import com.plateer.ec1.claim.helper.ClaimDataManipulateHelper;
 import com.plateer.ec1.claim.helper.IFCallHelper;
 import com.plateer.ec1.claim.helper.MonitoringLogHelper;
 import com.plateer.ec1.claim.processor.ClaimProcessor;
-import com.plateer.ec1.claim.vo.ClaimVO;
+import com.plateer.ec1.claim.vo.ClaimBaseVO;
 import com.plateer.ec1.claim.vo.ClaimInsertBase;
 import com.plateer.ec1.claim.vo.ClaimUpdateBase;
 import com.plateer.ec1.claim.vo.LogVO;
@@ -28,7 +28,7 @@ public class CompleteProcessor extends ClaimProcessor {
     }
 
     @Override
-    public void doProcess(ClaimVO claimVO) {
+    public void doProcess(ClaimBaseVO claimBaseVO) {
         log.info("완료 프로세스를 진행한다.");
 
         Long logKey = null;
@@ -36,19 +36,19 @@ public class CompleteProcessor extends ClaimProcessor {
 
         try {
             //클레임 채번
-            setUpClaimNum(claimVO);
+            setUpClaimNum(claimBaseVO);
 
             //모니터링 로그 insert
-            logKey = monitoringLogHelper.insertMonitoringLog(claimVO.toString());
+            logKey = monitoringLogHelper.insertMonitoringLog(claimBaseVO.toString());
 
             //validation check
-            doValidationProcess(claimVO);
+            doValidationProcess(claimBaseVO);
 
             //데이터 생성 후 조작
-            logVO = doClaimDataManipulationProcess(claimVO);
+            logVO = doClaimDataManipulationProcess(claimBaseVO);
 
             //금액검증
-            verifyAmount(claimVO);
+            verifyAmount(claimBaseVO);
 
             //결제인터페이스호출
             ifCallHelper.callPaymentIF();
@@ -63,7 +63,7 @@ public class CompleteProcessor extends ClaimProcessor {
     }
 
     @Override
-    public ClaimProcessorType getType() {
-        return ClaimProcessorType.COMPLETE;
+    public ProcessorType getType() {
+        return ProcessorType.COMPLETE;
     }
 }

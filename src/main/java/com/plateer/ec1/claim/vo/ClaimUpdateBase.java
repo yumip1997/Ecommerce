@@ -1,7 +1,7 @@
 package com.plateer.ec1.claim.vo;
 
-import com.plateer.ec1.common.model.order.OrderBenefit;
-import com.plateer.ec1.common.model.order.OrderClaim;
+import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
+import com.plateer.ec1.common.model.order.OpClmInfo;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,7 +9,7 @@ import lombok.Getter;
 @Builder
 public class ClaimUpdateBase {
 
-    OrderClaim orgOrderClaim;
-    OrderClaim orderClaim;
-    OrderBenefit orderBenefit;
+    OpClmInfo orgOpClmInfo;
+    OpClmInfo opClmInfo;
+    OpOrdBnfInfo orderBenefit;
 }

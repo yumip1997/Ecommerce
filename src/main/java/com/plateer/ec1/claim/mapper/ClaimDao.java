@@ -1,10 +1,10 @@
 package com.plateer.ec1.claim.mapper;
 
-import com.plateer.ec1.claim.vo.ClaimVO;
-import com.plateer.ec1.common.model.order.OrderBenefit;
-import com.plateer.ec1.common.model.order.OrderBenefitRelation;
-import com.plateer.ec1.common.model.order.OrderClaim;
-import com.plateer.ec1.common.model.order.OrderCost;
+import com.plateer.ec1.claim.vo.ClaimBaseVO;
+import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
+import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
+import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,15 +12,15 @@ import java.util.List;
 @Mapper
 public interface ClaimDao {
 
-    OrderClaim selectClaim(ClaimVO claimVO);
+    OpClmInfo selectClaim(ClaimBaseVO claimBaseVO);
 
-    void insertOrderClaim(List<OrderClaim> orderClaimList);
-    void insertOrderCost(List<OrderCost> orderCostList);
-    void insertOrderBenefitRelation(OrderBenefitRelation orderBenefitRelation);
+    void insertOrderClaim(List<OpClmInfo> opClmInfoList);
+    void insertOrderCost(List<OpOrdCostInfo> opOrdCostInfoList);
+    void insertOrderBenefitRelation(OpOrdBnfRelInfo opOrdBnfRelInfo);
 
-    void updateOrderClaim(OrderClaim orderClaim);
-    void updateOrgOrderCnt(OrderClaim orderClaim);
-    void updateOrderBenefit(OrderBenefit orderBenefit);
+    void updateOrderClaim(OpClmInfo opClmInfo);
+    void updateOrgOrderCnt(OpClmInfo opClmInfo);
+    void updateOrderBenefit(OpOrdBnfInfo orderBenefit);
 
 
 }
