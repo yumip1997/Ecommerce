@@ -1,7 +1,7 @@
 package com.plateer.ec1.promotion.apply.calculator.impl;
 
 import com.plateer.ec1.common.model.product.Product;
-import com.plateer.ec1.promotion.enums.PromotionType;
+import com.plateer.ec1.promotion.enums.PRM0004Code;
 import com.plateer.ec1.promotion.apply.calculator.Calculation;
 import com.plateer.ec1.promotion.apply.vo.ApplicablePromotionVO;
 import com.plateer.ec1.promotion.apply.vo.ProductCouponVO;
@@ -56,8 +56,8 @@ public class ProductCouponCalculation implements Calculation {
     }
 
     @Override
-    public PromotionType getType() {
-        return PromotionType.PROUDCT_COUPON;
+    public PRM0004Code getType() {
+        return PRM0004Code.PROUDCT_COUPON;
     }
 
 

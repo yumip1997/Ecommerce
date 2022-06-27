@@ -7,16 +7,17 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-public class CupDwlVO {
+public class CupInfoVO {
 
-    long prmNo;
+    Long prmNo;
+    Long cpnIssNo;
     String prmNm;
     String useYn;
     //TODO 확인하기
     Timestamp dwlEndDd;
-    long dwlPsbCnt;
-    long psnDwlCnt;
-    long totalCnt;
-    long mbrCnt;
+    Long dwlPsbCnt;
+    Long psnDwlPsbCnt;
+    Long totalCnt;
+    Long mbrCnt;
 
 }

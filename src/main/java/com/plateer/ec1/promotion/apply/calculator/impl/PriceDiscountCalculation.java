@@ -1,7 +1,7 @@
 package com.plateer.ec1.promotion.apply.calculator.impl;
 
 import com.plateer.ec1.common.model.product.Product;
-import com.plateer.ec1.promotion.enums.PromotionType;
+import com.plateer.ec1.promotion.enums.PRM0004Code;
 import com.plateer.ec1.promotion.apply.calculator.Calculation;
 import com.plateer.ec1.promotion.apply.vo.ApplicablePromotionVO;
 import com.plateer.ec1.promotion.apply.vo.PromotionVO;
@@ -41,8 +41,8 @@ public class PriceDiscountCalculation implements Calculation {
     }
 
     @Override
-    public PromotionType getType() {
-        return PromotionType.PRICE_DISCOUNT;
+    public PRM0004Code getType() {
+        return PRM0004Code.PRICE_DISCOUNT;
     }
 
     private Product setUpMaxBnfDiscountPrice(ApplicablePromotionVO applicablePromotionVO){

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.plateer.ec1.promotion.download.mapper.CupDwlTrxMapper">
+    <insert id="insertCup">
+        INSERT INTO cc_cpn_issue
+        (mbr_no,
+         sys_reg_dtime,
+         sys_regr_id,
+         sys_mod_dtime,
+         sys_modr_id,
+         prm_no)
+        VALUES     (#{mbrNo},
+                    now(),
+                    #{loginId},
+                    now(),
+                    #{loginId},
+                    #{prmNo})
+    </insert>
+
+    <update id="updateCup">
+        UPDATE cc_cpn_issue
+        SET    mbr_no = #{mbrNo},
+               sys_mod_dtime = now(),
+               sys_modr_id = #{loginId}
+        WHERE  cpn_iss_no = #{cupIssNo}
+    </update>
+</mapper>

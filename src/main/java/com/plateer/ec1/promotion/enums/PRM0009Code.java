@@ -7,17 +7,17 @@ import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Getter
-public enum DwlCupType {
+public enum PRM0009Code {
 
-    //일반쿠폰
-    General_Cup("GC"),
-    //오프라인쿠폰
-    Offline_CUP("OC");
+    //일반쿠폰다운로드
+    General_Cup("10"),
+    //오프라인쿠폰다운로드
+    Offline_CUP("40");
 
     private final String code;
 
-    public static DwlCupType findDwlCupType(String code){
-        return Arrays.stream(DwlCupType.values())
+    public static PRM0009Code findDwlCupType(String code){
+        return Arrays.stream(PRM0009Code.values())
                 .filter(dwlCupType -> dwlCupType.getCode().equals(code))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(PromotionException.INVALID_CUP_DWL_TYPE.getMSG()));

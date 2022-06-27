@@ -1,57 +1,44 @@
 package com.plateer.ec1.promotion.download.validator;
 
-import com.plateer.ec1.promotion.download.mapper.CupDwlMapper;
-import com.plateer.ec1.promotion.download.vo.CupDwlVO;
-import com.plateer.ec1.promotion.apply.vo.request.CupDwlRequestVO;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Component;
+import com.plateer.ec1.common.factory.CustomFactory;
+import com.plateer.ec1.promotion.download.vo.CupInfoVO;
+import com.plateer.ec1.promotion.download.vo.request.CupDwlRequestVO;
+import com.plateer.ec1.promotion.enums.PRM0009Code;
+import com.plateer.ec1.promotion.enums.PromotionException;
+import org.springframework.util.ObjectUtils;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-@Component
-@RequiredArgsConstructor
-@Log4j2
-public class CupDownloadValidator {
+public interface CupDownloadValidator extends CustomFactory<PRM0009Code> {
 
-    private final CupDwlMapper cupDwlMapper;
+    void isValid(CupDwlRequestVO cupDwlRequestVO) throws Exception;
+    
+    default void isNotEmptyMbrNo(CupDwlRequestVO cupDwlRequestVO) throws Exception {
+        if(!ObjectUtils.isEmpty(cupDwlRequestVO.getMbrNo())) return;
 
-    public void isValid(CupDwlRequestVO cupDwlRequestVO){
-        checkNotEmpty(cupDwlRequestVO);
-        checkValid(cupDwlRequestVO);
+        throw new Exception(PromotionException.NULL_CUP_MBR_NO.getMSG());
     }
-
-    private void checkNotEmpty(CupDwlRequestVO cupDwlRequestVO){
-        isNotEmptyPrmNo(cupDwlRequestVO);
-        isNotEmptyMbrNo(cupDwlRequestVO);
+    
+    default void isExistCupInfo(CupInfoVO cupInfoVO) throws Exception{
+        if(!ObjectUtils.isEmpty(cupInfoVO)) return;
+        
+        throw new Exception(PromotionException.NOT_FIND_PRM.getMSG());
     }
-
-    private void isNotEmptyPrmNo(CupDwlRequestVO cupDwlRequestVO){
-        log.info("프로모션 번호 체크");
-    }
-
-    private void isNotEmptyMbrNo(CupDwlRequestVO cupDwlRequestVO){
-        log.info("회원번호 not null 체크");
-    }
-
-    private void checkValid(CupDwlRequestVO cupDwlRequestVO){
-        CupDwlVO cupDwlVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
-
-        isValidPeriod(cupDwlVO);
-        isValidCnt(cupDwlVO);
-    }
-
-    private void isValidPeriod(CupDwlVO cupDwlVO){
-        log.info("기간 체크 유효성 검사 실행");
-        boolean isValid = Timestamp.valueOf(LocalDateTime.now()).before(cupDwlVO.getDwlEndDd());
+    
+    default void isValidPeriod(CupInfoVO cupInfoVO) throws Exception {
+        boolean isValid = Timestamp.valueOf(LocalDateTime.now()).before(cupInfoVO.getDwlEndDd());
         if(isValid) return;
 
+        throw new Exception(PromotionException.INVALID_CUP_DWL_PERIOD.getMSG());
     }
 
-    private void isValidCnt(CupDwlVO cupDwlVO){
-        log.info("다운로드 가능 수량 유효성 검사 실행");
-    }
+    default void isValidCnt(CupInfoVO cupInfoVO) throws Exception {
+        boolean isValid =  cupInfoVO.getDwlPsbCnt() > cupInfoVO.getTotalCnt()
+                && cupInfoVO.getPsnDwlPsbCnt() > cupInfoVO.getMbrCnt();
+        if(isValid) return;
 
+        throw new Exception(PromotionException.INVALID_CUP_DWL_CNT.getMSG());
+    }
 
 }

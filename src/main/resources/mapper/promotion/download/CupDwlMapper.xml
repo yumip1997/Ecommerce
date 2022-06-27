@@ -1,19 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.promotion.download.mapper.CupDwlMapper">
-    <select id="getCupDwlInfo" resultType="com.plateer.ec1.promotion.download.vo.CupDwlVO">
+    <sql id="sql_getCupIssBasicInfo">
         select
             prm.prm_no as prmNo,
             prm.prm_nm as prmNm,
             prm.use_yn as useYn,
             case when cup.dwl_priod_ccd = '10' then to_timestamp(cup.dwl_avl_end_dd, 'YYYYMMDD')
                  else prm.sys_mod_dtime + cup.dwl_std_dd * interval '1 day'
-            end dwlEndDd,
+        end dwlEndDd,
             cup.dwl_psb_cnt as dwlPsbCnt,
-            cup.psn_dwl_psb_cnt as psnDwlCnt,
+            cup.psn_dwl_psb_cnt as psnDwlPsbCnt,
             (select count(*) from cc_cpn_issue where prm_no = #{prmNo}) as totalCnt,
-            (select count(*) from cc_cpn_issue where prm_no = #{prmNo} and mbr_no = #{mbrNo}) as mbrCnt
+        (select count(*) from cc_cpn_issue where prm_no = #{prmNo} and mbr_no = #{mbrNo}) as mbrCnt
         from cc_prm_base as prm inner join cc_cpn_base as cup on prm.prm_no = cup.prm_no
+    </sql>
+
+    <select id="getCupDwlInfo" resultType="com.plateer.ec1.promotion.download.vo.CupInfoVO">
+        <include refid="sql_getCupIssBasicInfo"></include>
         where prm.prm_no = #{prmNo}
+    </select>
+
+    <select id="getOfflineCupInfo" resultType="com.plateer.ec1.promotion.download.vo.CupInfoVO">
+        select basic.*,
+               iss.cup_iss_no,
+        from (
+            <include refid="sql_getCupIssBasicInfo"></include> as basic
+            inner join cc_cpn_issue as iss on basic.prm_no = iss.prm_no
+        )
+        where iss.cpn_cert_no = #{cpnCertNo}
     </select>
 </mapper>

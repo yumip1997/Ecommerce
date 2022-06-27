@@ -1,6 +1,6 @@
 package com.plateer.ec1.promotion.apply.calculator.impl;
 
-import com.plateer.ec1.promotion.enums.PromotionType;
+import com.plateer.ec1.promotion.enums.PRM0004Code;
 import com.plateer.ec1.promotion.apply.calculator.Calculation;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.CartCouponResponseVO;
@@ -21,8 +21,8 @@ public class CartCouponCalculation implements Calculation {
     }
 
     @Override
-    public PromotionType getType() {
-        return PromotionType.CART_COUPON;
+    public PRM0004Code getType() {
+        return PRM0004Code.CART_COUPON;
     }
 
 }

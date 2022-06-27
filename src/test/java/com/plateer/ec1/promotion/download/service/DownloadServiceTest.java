@@ -1,6 +1,6 @@
 package com.plateer.ec1.promotion.download.service;
 
-import com.plateer.ec1.promotion.apply.vo.request.CupDwlRequestVO;
+import com.plateer.ec1.promotion.download.vo.request.CupDwlRequestVO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,10 @@ class DownloadServiceTest {
     @Autowired
     private DownloadService downloadService;
 
-
     @Test
     @DisplayName("다운로드 흐름")
     void test(){
-        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().dwlCupType("GC").build();
+        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).mbrNo("user2").dwlCupType("GC").build();
         downloadService.download(cupDwlRequestVO);
     }
 }
