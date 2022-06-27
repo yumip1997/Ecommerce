@@ -1,7 +1,7 @@
 package com.plateer.ec1.promotion.apply.calculator;
 
 import com.plateer.ec1.common.factory.CustomFactory;
-import com.plateer.ec1.promotion.enums.DcCode;
+import com.plateer.ec1.promotion.enums.PRM0003Code;
 import com.plateer.ec1.promotion.enums.PRM0004Code;
 import com.plateer.ec1.promotion.apply.vo.PromotionVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
@@ -31,7 +31,7 @@ public interface Calculation extends CustomFactory<PRM0004Code> {
         String code = promotionVO.getDcCode();
         Long discountValue = promotionVO.getDiscountValue();
 
-        return DcCode.getDiscountFunction(code).apply(productPrice, discountValue);
+        return PRM0003Code.getDiscountFunction(code).apply(productPrice, discountValue);
     }
 
 }
