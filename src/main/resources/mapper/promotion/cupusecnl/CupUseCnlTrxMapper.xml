@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.plateer.ec1.promotion.cupusecnl.mapper.CupUseCnlTrxMapper">
+    <update id="updateCupUsed">
+        UPDATE cc_cpn_issue
+        SET    cpn_use_dt = Now(),
+               ord_no = # {ordNo},
+               sys_mod_dtime = Now(),
+               sys_modr_id = # {loginId}
+        WHERE  cpn_iss_no = # {cupIssNo}
+    </update>
+
+    <insert id="insertOrgCup"></insert>
+</mapper>
