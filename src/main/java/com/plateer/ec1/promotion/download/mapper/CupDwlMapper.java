@@ -9,6 +9,4 @@ public interface CupDwlMapper {
 
     CupInfoVO getCupDwlInfo(CupDwlRequestVO cupDwlRequestVO);
 
-    CupInfoVO getOfflineCupInfo(CupDwlRequestVO cupDwlRequestVO);
-
 }
