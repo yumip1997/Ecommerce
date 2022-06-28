@@ -8,4 +8,5 @@ public interface CupUseCnlTrxMapper {
 
     void updateCupUsed(CcCpnIssueModel ccCpnIssueModel);
     Long insertOrgCup(CcCpnIssueModel ccCpnIssueModel);
+
 }

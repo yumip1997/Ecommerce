@@ -2,13 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.promotion.cupusecnl.mapper.CupUseCnlTrxMapper">
     <update id="updateCupUsed">
-        UPDATE cc_cpn_issue
-        SET    cpn_use_dt = Now(),
-               ord_no = # {ordNo},
-               sys_mod_dtime = Now(),
+        update cc_cpn_issue
+        set    cpn_use_dt = now(),
+               ord_no = #{ordNo},
+               sys_mod_dtime = now(),
                sys_modr_id = # {loginId}
-        WHERE  cpn_iss_no = # {cupIssNo}
+        where  cpn_iss_no = # {cupIssNo}
     </update>
 
-    <insert id="insertOrgCup"></insert>
+    <select id="insertOrgCup" resultType="Long">
+        insert into cc_cpn_issue
+            (mbr_no,
+             org_cpn_iss_no,
+             sys_reg_dtime,
+             sys_regr_id,
+             sys_mod_dtime,
+             sys_modr_id,
+             prm_no
+            )
+        select iss.mbr_no,
+               iss.cpn_iss_no,
+               now(),
+               #{loginId},
+               now(),
+               #{loginId},
+               iss.prm_no,
+               case when cp.prm_priod_ccd = '10' then cp.prm_end_dt + interval '1 day'
+                    else iss.sys_mod_dtime + cp.prm_std_dd * interval '1 day'
+                end prm_end_dt
+        from cc_prm_base cp inner join cc_cpn_issue iss on cp.prm_no = iss.prm_no
+        where 1 = 1
+          and iss.cpn_iss_no = #{cpnIssNo}
+          and iss.mbr_no = #{mbrNo}
+          and now() at time zone 'utc' <![CDATA[<]]> prm_end_dt
+          and iss.cpn_use_dt is not null
+        returning cpn_iss_no
+    </select>
 </mapper>
