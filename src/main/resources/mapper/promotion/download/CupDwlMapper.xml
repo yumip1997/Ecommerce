@@ -3,16 +3,16 @@
 <mapper namespace="com.plateer.ec1.promotion.download.mapper.CupDwlMapper">
     <sql id="sql_getCupIssBasicInfo">
         select
-            prm.prm_no as prmNo,
-            prm.prm_nm as prmNm,
-            prm.use_yn as useYn,
+            prm.prm_no,
+            prm.prm_nm,
+            prm.use_yn,
             case when cup.dwl_priod_ccd = '10' then to_timestamp(cup.dwl_avl_end_dd, 'YYYYMMDD')
                  else prm.sys_mod_dtime + cup.dwl_std_dd * interval '1 day'
         end dwlEndDd,
-            cup.dwl_psb_cnt as dwlPsbCnt,
-            cup.psn_dwl_psb_cnt as psnDwlPsbCnt,
-            (select count(*) from cc_cpn_issue where prm_no = #{prmNo}) as totalCnt,
-            (select count(*) from cc_cpn_issue where prm_no = #{prmNo} and mbr_no = #{mbrNo}) as mbrCnt
+            cup.dwl_psb_cnt,
+            cup.psn_dwl_psb_cnt,
+            (select count(*) from cc_cpn_issue where prm_no = #{prmNo}) as total_cnt,
+            (select count(*) from cc_cpn_issue where prm_no = #{prmNo} and mbr_no = #{mbrNo}) as mbr_cnt
         from cc_prm_base as prm inner join cc_cpn_base as cup on prm.prm_no = cup.prm_no
     </sql>
 

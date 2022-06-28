@@ -1,6 +1,7 @@
 package com.plateer.ec1.promotion.download.downloader.impl;
 
 import com.plateer.ec1.common.aop.LoginIdSetting;
+import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.promotion.download.downloader.CupDownloader;
 import com.plateer.ec1.promotion.download.factory.CupDownloadValidatorFactory;
 import com.plateer.ec1.promotion.download.mapper.CupDwlTrxMapper;
@@ -9,6 +10,7 @@ import com.plateer.ec1.promotion.download.vo.request.CupDwlRequestVO;
 import com.plateer.ec1.promotion.enums.PRM0009Code;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +35,9 @@ public class GeneralCupDownloader implements CupDownloader {
         CupDownloadValidator cupDownloadValidator = cupDownloadValidatorFactory.get(getType());
         cupDownloadValidator.isValid(cupDwlRequestVO);
 
-        cupDwlTrxMapper.insertCup(cupDwlRequestVO);
+        CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.builder().build();
+        BeanUtils.copyProperties(cupDwlRequestVO, ccCpnIssueModel);
+        cupDwlTrxMapper.insertCup(ccCpnIssueModel);
     }
 
 }

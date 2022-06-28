@@ -1,5 +1,7 @@
 package com.plateer.ec1.common.model.promotion;
 
+import com.plateer.ec1.common.model.BaseModel;
+import com.plateer.ec1.common.vo.BaseVO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class CcCpnIssueModel {
+public class CcCpnIssueModel extends BaseModel {
 
     private Long cpnIssNo;
     private String mbrNo;
