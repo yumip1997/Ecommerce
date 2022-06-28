@@ -1,9 +1,9 @@
 package com.plateer.ec1.promotion.download.service;
 
 import com.plateer.ec1.promotion.download.downloader.CupDownloader;
-import com.plateer.ec1.promotion.enums.PRM0009Code;
 import com.plateer.ec1.promotion.download.factory.CupDownloaderFactory;
 import com.plateer.ec1.promotion.download.vo.request.CupDwlRequestVO;
+import com.plateer.ec1.promotion.enums.PRM0009Code;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;

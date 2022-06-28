@@ -41,7 +41,7 @@ class GeneralCupDownloadValidatorTest {
 
     @Test
     @DisplayName("유효한 프로모션")
-    void valid_prm() throws Exception {
+    void valid_prm(){
         CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).mbrNo("m1").build();
 
         generalCupDownloadValidator.isValid(cupDwlRequestVO);

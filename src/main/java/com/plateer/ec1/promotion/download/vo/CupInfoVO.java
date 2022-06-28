@@ -14,7 +14,7 @@ public class CupInfoVO {
     String prmNm;
     String useYn;
     //TODO 확인하기
-    Timestamp dwlEndDd;
+    Timestamp dwlAvlEndDd;
     Long dwlPsbCnt;
     Long psnDwlPsbCnt;
     Long totalCnt;
