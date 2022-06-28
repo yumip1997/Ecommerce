@@ -29,7 +29,7 @@ public class GeneralCupDownloadValidator implements CupDownloadValidator {
     }
 
     private void checkValid(CupInfoVO cupInfoVO){
-        isValidPeriod(cupInfoVO);
+        isValidCupDwlPeriod(cupInfoVO);
         isValidCnt(cupInfoVO);
     }
 

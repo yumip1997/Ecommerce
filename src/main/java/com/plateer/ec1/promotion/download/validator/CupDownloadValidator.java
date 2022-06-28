@@ -21,7 +21,7 @@ public interface CupDownloadValidator extends CustomFactory<PRM0009Code> {
         }
     }
     
-    default void isValidPeriod(CupInfoVO cupInfoVO){
+    default void isValidCupDwlPeriod(CupInfoVO cupInfoVO){
         boolean isValid = Timestamp.valueOf(LocalDateTime.now()).before(cupInfoVO.getDwlAvlEndDd());
         if(!isValid){
             throw new RuntimeException(PromotionException.INVALID_CUP_DWL_PERIOD.getMSG());
