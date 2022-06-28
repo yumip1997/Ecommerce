@@ -2,23 +2,27 @@ package com.plateer.ec1.promotion.download.downloader.impl;
 
 import com.plateer.ec1.common.aop.LoginIdSetting;
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
+import com.plateer.ec1.promotion.com.validator.CupInfoValidator;
+import com.plateer.ec1.promotion.com.vo.CupInfoVO;
 import com.plateer.ec1.promotion.download.downloader.CupDownloader;
-import com.plateer.ec1.promotion.download.factory.CupDownloadValidatorFactory;
+import com.plateer.ec1.promotion.download.mapper.CupDwlMapper;
 import com.plateer.ec1.promotion.download.mapper.CupDwlTrxMapper;
-import com.plateer.ec1.promotion.download.validator.CupDownloadValidator;
 import com.plateer.ec1.promotion.download.vo.request.CupDwlRequestVO;
 import com.plateer.ec1.promotion.enums.PRM0009Code;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 @Component
 @RequiredArgsConstructor
 @Log4j2
+@Validated
 public class GeneralCupDownloader implements CupDownloader {
-
-    private final CupDownloadValidatorFactory cupDownloadValidatorFactory;
+    
+    private final CupDwlMapper cupDwlMapper;
     private final CupDwlTrxMapper cupDwlTrxMapper;
 
     @Override
@@ -27,16 +31,19 @@ public class GeneralCupDownloader implements CupDownloader {
     }
 
     @Override
-    @LoginIdSetting
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void download(CupDwlRequestVO cupDwlRequestVO){
-        log.info("일반 쿠폰 다운로드");
-        CupDownloadValidator cupDownloadValidator = cupDownloadValidatorFactory.get(getType());
-        cupDownloadValidator.isValid(cupDwlRequestVO);
-
-        CcCpnIssueModel ccCpnIssueModel = copyModel(cupDwlRequestVO);
-
+        isValid(cupDwlRequestVO);
+        CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupDwlRequestVO);
         cupDwlTrxMapper.insertCup(ccCpnIssueModel);
+    }
+
+    private void isValid(CupDwlRequestVO cupDwlRequestVO){
+        CupInfoVO cupInfoVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
+
+        CupInfoValidator.isExistCupInfo(cupInfoVO);
+        CupInfoValidator.isValidCupDwlPeriod(cupInfoVO);
+        CupInfoValidator.isValidCnt(cupInfoVO);
     }
 
 }

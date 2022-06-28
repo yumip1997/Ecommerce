@@ -16,7 +16,8 @@ public enum PromotionException {
     NOT_FIND_PRM("해당 프로모션을 조회할 수 없습니다!"),
     INVALID_CUP_DWL_CNT("다운로드 가능 수량을 초과하였습니다!"),
     INVALID_CUP_DWL_PERIOD("쿠폰 다운로드 가능 기간이 아닙니다!"),
-    INVALID_CPN_CERT_NO("오프라인 쿠폰 인증코드가 올바르지 않습니다!");
+    INVALID_CPN_CERT_NO("오프라인 쿠폰 인증코드가 올바르지 않습니다!"),
+    INVALID_PRM_PERIOD("유효한 프로모션 기간이 아닙니다!");
 
     private final String MSG;
 }

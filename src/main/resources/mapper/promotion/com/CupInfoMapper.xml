@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.plateer.ec1.promotion.com.mapper.CupInfoMapper">
+    <sql id="sql_cupInfo">
+        with cup_info as (
+            select
+                prm.prm_no,
+                prm.prm_nm,
+                prm.use_yn,
+                prm.prm_priod_ccd,
+                prm.prm_end_dt,
+                prm.prm_std_dd,
+                to_timestamp(cup.dwl_avl_end_dd, 'YYYYMMDD') as dwl_avl_end_dd,
+                cup.dwl_psb_cnt,
+                cup.psn_dwl_psb_cnt
+            from cc_prm_base as prm inner join cc_cpn_base as cup on prm.prm_no = cup.prm_no
+        )
+    </sql>
+
+    <select id="getCupInfo" resultType="com.plateer.ec1.promotion.com.vo.CupInfoVO">
+        <include refid="sql_cupInfo"/>
+        select ci.*
+        from cup_info as ci
+        where ci.prm_no = #{prmNo}
+    </select>
+
+</mapper>

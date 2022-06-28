@@ -6,13 +6,14 @@
         set    cpn_use_dt = now(),
                ord_no = #{ordNo},
                sys_mod_dtime = now(),
-               sys_modr_id = # {loginId}
-        where  cpn_iss_no = # {cupIssNo}
+               sys_modr_id = #{loginId}
+        where  cpn_iss_no = #{cpnIssNo}
     </update>
 
-    <select id="insertOrgCup" resultType="Long">
+    <select id="insertOrgCup">
         insert into cc_cpn_issue
-            (mbr_no,
+            (
+             mbr_no,
              org_cpn_iss_no,
              sys_reg_dtime,
              sys_regr_id,
@@ -20,22 +21,14 @@
              sys_modr_id,
              prm_no
             )
-        select iss.mbr_no,
-               iss.cpn_iss_no,
-               now(),
-               #{loginId},
-               now(),
-               #{loginId},
-               iss.prm_no,
-               case when cp.prm_priod_ccd = '10' then cp.prm_end_dt + interval '1 day'
-                    else iss.sys_mod_dtime + cp.prm_std_dd * interval '1 day'
-                end prm_end_dt
-        from cc_prm_base cp inner join cc_cpn_issue iss on cp.prm_no = iss.prm_no
-        where 1 = 1
-          and iss.cpn_iss_no = #{cpnIssNo}
-          and iss.mbr_no = #{mbrNo}
-          and now() at time zone 'utc' <![CDATA[<]]> prm_end_dt
-          and iss.cpn_use_dt is not null
-        returning cpn_iss_no
+        values (
+                #{mbrNo},
+                #{cpnIssNo},
+                now(),
+                #{loginId},
+                now(),
+                #{loginId},
+                #{prmNo}
+               )
     </select>
 </mapper>
