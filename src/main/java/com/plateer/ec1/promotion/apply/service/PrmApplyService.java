@@ -7,14 +7,18 @@ import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.ResponseBaseVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class PrmApplyService {
 
     private final CalculationFactory calculationFactory;
 
-    public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO){
+    public ResponseBaseVO getCalculationData(@Valid PrmRequestBaseVO prmRequestBaseVO){
         Calculator calculator = calculationFactory.get(PRM0004Code.findPromotionType(prmRequestBaseVO.getPrmTypeCode()));
         return calculator.getCalculationData(prmRequestBaseVO);
     }
