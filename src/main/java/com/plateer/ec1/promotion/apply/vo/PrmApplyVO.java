@@ -14,6 +14,8 @@ public class PrmApplyVO {
     private String dcCcd;
     private Long dcVal;
     private Long bnfVal;    //혜택금액
+    private Long minPurAmt;
+    private Long maxDcAmt;
     private Long cpnIssNo;
     private String maxBenefitYn;
 

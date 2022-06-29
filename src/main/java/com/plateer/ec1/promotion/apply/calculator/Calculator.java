@@ -30,12 +30,13 @@ public interface Calculator extends CustomFactory<PRM0004Code> {
             Long bnfVal = getBnfVal(productPrice, prmApplyVO);
             prmApplyVO.setBnfVal(bnfVal);
         }
-
     }
 
     default Long getBnfVal(Long productPrice, PrmApplyVO prmApplyVO){
-        return PRM0003Code.getDiscountFunction(prmApplyVO.getDcCcd())
+        Long bnfVal = PRM0003Code.getBnfValFunction(prmApplyVO.getDcCcd())
                 .apply(productPrice, prmApplyVO.getDcVal());
+
+        return Long.min(bnfVal, prmApplyVO.getMaxDcAmt());
     }
 
 
