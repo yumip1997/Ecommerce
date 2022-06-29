@@ -12,17 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PromotionServiceTest {
+class PrmApplyServiceTest {
 
     @Autowired
-    private PromotionService promotionService;
+    private PrmApplyService prmApplyService;
 
     @Test
     @DisplayName("가격조정 프로모션 요청 시 PriceDiscountResponseVO 타입의 객체가 반환된다.")
     void price_distcount_test(){
         PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmTypeCode("10").build();
 
-        ResponseBaseVO responseBaseVO = promotionService.getCalculationData(prmRequestBaseVO);
+        ResponseBaseVO responseBaseVO = prmApplyService.getCalculationData(prmRequestBaseVO);
 
         Assertions.assertThat(responseBaseVO).isInstanceOf(PriceDiscountResponseVO.class);
     }
@@ -32,7 +32,7 @@ class PromotionServiceTest {
     void product_coupon_test(){
         PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmTypeCode("20").build();
 
-        ResponseBaseVO responseBaseVO = promotionService.getCalculationData(prmRequestBaseVO);
+        ResponseBaseVO responseBaseVO = prmApplyService.getCalculationData(prmRequestBaseVO);
 
         Assertions.assertThat(responseBaseVO).isInstanceOf(ProductCouponResponseVO.class);
     }
@@ -42,7 +42,7 @@ class PromotionServiceTest {
     void cart_coupon_test(){
         PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmTypeCode("30").build();
 
-        ResponseBaseVO responseBaseVO = promotionService.getCalculationData(prmRequestBaseVO);
+        ResponseBaseVO responseBaseVO = prmApplyService.getCalculationData(prmRequestBaseVO);
 
         Assertions.assertThat(responseBaseVO).isInstanceOf(CartCouponResponseVO.class);
     }

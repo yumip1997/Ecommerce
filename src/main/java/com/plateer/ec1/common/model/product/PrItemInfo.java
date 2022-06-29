@@ -4,17 +4,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
-public class Product {
+public class PrItemInfo {
 
     private String goodsNo;
-    private String goodsNm;
     private String itemNo;
     private String itemNm;
-    private String goodsTpCd;
-    private Long salePrc;
-    private Long prmPrc;
+    private LocalDateTime sysRegDtime;
+    private LocalDateTime sysModDtime;
+    private String sysRegrId;
+    private String sysModrId;
 
 }

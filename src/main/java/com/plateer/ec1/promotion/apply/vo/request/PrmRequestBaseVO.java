@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -12,7 +13,9 @@ import java.util.List;
 @Builder
 public class PrmRequestBaseVO {
 
-    private String memberNo;
+    @NotNull(message = "회원 번호는 필수입니다!")
+    private String mbrNo;
     private List<Product> productList;
+    @NotNull(message = "적용 구분 코드는 필수입니다!")
     private String prmTypeCode;
 }

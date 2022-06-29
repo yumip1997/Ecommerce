@@ -1,4 +1,4 @@
 package com.plateer.ec1.promotion.apply.vo;
 
-public class CartCouponVO {
+public class ApplicableCrtCupVO {
 }

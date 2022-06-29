@@ -1,6 +1,6 @@
 package com.plateer.ec1.promotion.apply.controller;
 
-import com.plateer.ec1.promotion.apply.service.PromotionService;
+import com.plateer.ec1.promotion.apply.service.PrmApplyService;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.ResponseBaseVO;
 import lombok.RequiredArgsConstructor;
@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class PromotionController {
+public class PrmApplyController {
 
-    private final PromotionService promotionService;
+    private final PrmApplyService prmApplyService;
 
     @PostMapping("/promotion")
     public ResponseBaseVO getPromotion(@RequestBody PrmRequestBaseVO prmRequestBaseVO){
-        return promotionService.getCalculationData(prmRequestBaseVO);
+        return prmApplyService.getCalculationData(prmRequestBaseVO);
     }
 
 }

@@ -10,9 +10,9 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class ProductCouponVO {
+public class ApplicablePdCupVO {
 
     private Product product;
-    private List<PromotionVO> promotionVOList;
+    private List<PrmApplyVO> prmApplyVOList;
 
 }
