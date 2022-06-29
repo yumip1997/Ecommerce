@@ -10,10 +10,31 @@
                 prm.prm_priod_ccd,
                 prm.prm_end_dt,
                 prm.prm_std_dd,
+                prm.prm_kind_cd,
+                prm.dc_ccd,
+                prm.dc_val,
+                prm.min_pur_amt,
+                prm.max_dc_amt,
+                cup.cpn_kind_cd,
+                cup.degr_ccd,
                 to_date(cup.dwl_avl_end_dd, 'YYYYMMDD') as dwl_avl_end_dd,
                 cup.dwl_psb_cnt,
                 cup.psn_dwl_psb_cnt
-            from cc_prm_base as prm inner join cc_cpn_base as cup on prm.prm_no = cup.prm_no
+            from cc_prm_base as prm left join cc_cpn_base as cup on prm.prm_no = cup.prm_no
+        )
+    </sql>
+
+    <sql id="sql_cup_iss_info">
+        with cup_iss_info as(
+            select
+                iss.prm_no,
+                iss.cpn_iss_no,
+                iss.mbr_no,
+                case when prm.prm_priod_ccd = '10' then prm.prm_end_dt
+                     else iss.sys_mod_dtime + prm.prm_std_dd * interval '1 day'
+                end prm_end_dt,
+                iss.cpn_use_dt
+            from cc_prm_base as prm inner join cc_cpn_issue as iss on prm.prm_no = iss.prm_no
         )
     </sql>
 
@@ -22,6 +43,7 @@
         select ci.*
         from cup_info as ci
         where 1 = 1
+            and ci.prm_kind_cd = '20'
             and ci.use_yn = 'Y'
             and ci.prm_no = #{prmNo}
     </select>
@@ -32,7 +54,7 @@
             iss.cpn_iss_no,
             iss.mbr_no,
             case when prm.prm_priod_ccd = '10' then prm.prm_end_dt
-                 else iss.sys_mod_dtime + prm.prm_std_dd * interval '1 day'
+                else iss.sys_mod_dtime + prm.prm_std_dd * interval '1 day'
             end prm_end_dt,
             iss.cpn_use_dt
         from cc_prm_base as prm inner join cc_cpn_issue as iss on prm.prm_no = iss.prm_no

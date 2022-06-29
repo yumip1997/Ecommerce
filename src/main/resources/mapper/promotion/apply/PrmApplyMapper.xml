@@ -2,6 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.promotion.apply.mapper.PrmApplyMapper">
     <select id="getApplicablePdCupList" resultType="com.plateer.ec1.promotion.apply.vo.ApplicablePdCupVO">
-
+        <include refid="com.plateer.ec1.promotion.com.mapper.CupInfoMapper.sql_cupInfo" />
+        , prd as(
+            <foreach collection="list" item="product" separator="union all">
+                select  #{product.goods_no},
+                        #{product.item_no},
+                        #{product.orr_at}
+            </foreach>
+        ), aply as (
+            select
+                prd.*,
+                apy.prm_no
+            from cc_prm_aply_tgt apy inner join prd on apy.aply_tgt_no = prd.goods_no
+        )
+        select aply.*,
+               ci.*,
+               iss.cpn_iss_no,
+               iss.cpn_use_dt,
+               case when ci.prm_priod_ccd = '10' then ci.prm_end_dt
+                    else iss.sys_mod_dtime + ci.prm_std_dd * interval '1 day'
+                end prm_end_dt
+        from cup_info ci inner join aply on ci.prm_no = aply.prm_no
+        inner join cc_cpn_issu iss on aply.prm_no = iss.prm_no and iss.mbr_no #{mbrNo}
+        where 1 = 1
+            and ci.prm.use_yn = 'Y'
+            and now() <![CDATA[<]]> prm_end_dt
+            and iss.cpn_use_dt is null
+            and ci.prm_kind_cd = #{prmKindCd}
+            <if test="org.springframework.util.ObjectUtils@isEmpty(cpnKindCd)">
+                and ci.cpn_kind_cd =  #{cpnKindCd}
+            </if>
+            and ci.min_pur_amt <![CDATA[<]]> aply.orr_at
     </select>
 </mapper>
