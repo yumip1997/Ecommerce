@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,13 +16,13 @@ public class CupInfoVO extends BaseVO {
     private Long cpnIssNo;
     private String prmNm;
     private String useYn;
-    private Timestamp dwlAvlEndDd;
-    private Timestamp prmEndDt;
+    private LocalDate dwlAvlEndDd;
+    private LocalDateTime prmEndDt;
     private Long dwlPsbCnt;
     private Long psnDwlPsbCnt;
     private Long totalCnt;
     private Long mbrCnt;
     private String mbrNo;
-    private Timestamp cpnUseDt;
+    private LocalDateTime cpnUseDt;
 
 }

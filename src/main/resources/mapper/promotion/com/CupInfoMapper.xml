@@ -10,7 +10,7 @@
                 prm.prm_priod_ccd,
                 prm.prm_end_dt,
                 prm.prm_std_dd,
-                to_timestamp(cup.dwl_avl_end_dd, 'YYYYMMDD') as dwl_avl_end_dd,
+                to_date(cup.dwl_avl_end_dd, 'YYYYMMDD') as dwl_avl_end_dd,
                 cup.dwl_psb_cnt,
                 cup.psn_dwl_psb_cnt
             from cc_prm_base as prm inner join cc_cpn_base as cup on prm.prm_no = cup.prm_no

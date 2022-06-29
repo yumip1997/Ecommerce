@@ -5,6 +5,7 @@ import com.plateer.ec1.promotion.enums.PromotionException;
 import org.springframework.util.ObjectUtils;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 //TODO CupInfoVO 안으로
@@ -17,14 +18,14 @@ public class CupInfoValidator {
     }
 
     public static void isValidPrmPeriod(CupInfoVO cupInfoVO) {
-        boolean isValid = Timestamp.valueOf(LocalDateTime.now()).before(cupInfoVO.getPrmEndDt());
+        boolean isValid = LocalDateTime.now().isBefore(cupInfoVO.getPrmEndDt());
         if (!isValid) {
             throw new RuntimeException(PromotionException.INVALID_PRM_PERIOD.getMSG());
         }
     }
 
     public static void isValidCupDwlPeriod(CupInfoVO cupInfoVO) {
-        boolean isValid = Timestamp.valueOf(LocalDateTime.now()).before(cupInfoVO.getDwlAvlEndDd());
+        boolean isValid = LocalDate.now().isBefore(cupInfoVO.getDwlAvlEndDd());
         if (!isValid) {
             throw new RuntimeException(PromotionException.INVALID_CUP_DWL_PERIOD.getMSG());
         }
