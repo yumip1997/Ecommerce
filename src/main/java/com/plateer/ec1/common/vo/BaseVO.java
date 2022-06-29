@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class BaseVO {
 
-    String loginId;
+    private String loginId;
 
 }
