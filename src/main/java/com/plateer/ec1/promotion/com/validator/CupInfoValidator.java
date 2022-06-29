@@ -7,6 +7,7 @@ import org.springframework.util.ObjectUtils;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+//TODO CupInfoVO 안으로
 public class CupInfoValidator {
 
     public static void isExistCupInfo(CupInfoVO cupInfoVO) {
@@ -48,5 +49,17 @@ public class CupInfoValidator {
             throw new RuntimeException(PromotionException.INVALID_CUP_DWL_CNT.getMSG());
         }
 
+    }
+
+    public static void isNotUsed(CupInfoVO cupInfoVO){
+        if(!ObjectUtils.isEmpty(cupInfoVO.getCpnUseDt())){
+            throw new RuntimeException(PromotionException.ALREADY_USED_CUP.getMSG());
+        }
+    }
+
+    public static void isUsed(CupInfoVO cupInfoVO){
+        if(ObjectUtils.isEmpty(cupInfoVO.getCpnUseDt())){
+            throw new RuntimeException(PromotionException.NOT_USED_CUP.getMSG());
+        }
     }
 }

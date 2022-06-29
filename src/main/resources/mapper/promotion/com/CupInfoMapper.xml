@@ -24,4 +24,17 @@
         where ci.prm_no = #{prmNo}
     </select>
 
+    <select id="getIssuedCupInfo" resultType="com.plateer.ec1.promotion.com.vo.CupInfoVO">
+        select
+            iss.prm_no,
+            iss.cpn_iss_no,
+            iss.mbr_no,
+            case when prm.prm_priod_ccd = '10' then prm.prm_end_dt
+                 else iss.sys_mod_dtime + prm.prm_std_dd * interval '1 day'
+            end prm_end_dt,
+            iss.cpn_use_dt
+        from cc_prm_base as prm inner join cc_cpn_issue as iss on prm.prm_no = iss.prm_no
+        where iss.cpn_iss_no = #{cpnIssNo}
+    </select>
+
 </mapper>

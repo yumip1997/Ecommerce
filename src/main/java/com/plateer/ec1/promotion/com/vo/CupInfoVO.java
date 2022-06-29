@@ -21,5 +21,6 @@ public class CupInfoVO extends BaseVO {
     private Long totalCnt;
     private Long mbrCnt;
     private String mbrNo;
+    private Timestamp cpnUseDt;
 
 }

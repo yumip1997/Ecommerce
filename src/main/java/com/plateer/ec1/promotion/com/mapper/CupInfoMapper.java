@@ -8,4 +8,6 @@ public interface CupInfoMapper {
 
     CupInfoVO getCupInfo(Long prmNo);
 
+    CupInfoVO getIssuedCupInfo(Long cpnIssNo);
+
 }
