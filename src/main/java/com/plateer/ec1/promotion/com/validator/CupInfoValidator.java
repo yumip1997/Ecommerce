@@ -18,38 +18,27 @@ public class CupInfoValidator {
     }
 
     public static void isValidPrmPeriod(CupInfoVO cupInfoVO) {
-        boolean isValid = LocalDateTime.now().isBefore(cupInfoVO.getPrmEndDt());
-        if (!isValid) {
+        if (LocalDateTime.now().isAfter(cupInfoVO.getPrmEndDt())) {
             throw new RuntimeException(PromotionException.INVALID_PRM_PERIOD.getMSG());
         }
     }
 
     public static void isValidCupDwlPeriod(CupInfoVO cupInfoVO) {
-        boolean isValid = LocalDate.now().isBefore(cupInfoVO.getDwlAvlEndDd());
-        if (!isValid) {
+        if (LocalDate.now().isAfter(cupInfoVO.getDwlAvlEndDd())) {
             throw new RuntimeException(PromotionException.INVALID_CUP_DWL_PERIOD.getMSG());
         }
     }
 
     public static void isValidCnt(CupInfoVO cupInfoVO) {
-        Long INFINITE_CNT = 0L;
-        Long dwlPsbCnt = cupInfoVO.getDwlPsbCnt();
-        Long psnDwlPsbCnt = cupInfoVO.getPsnDwlPsbCnt();
+        final Long INFINITE_CNT = 0L;
+        Long dwlPsbCnt = INFINITE_CNT.equals(cupInfoVO.getDwlPsbCnt()) ? Long.MAX_VALUE : cupInfoVO.getDwlPsbCnt();
+        Long psnDwlPsbCnt = INFINITE_CNT.equals(cupInfoVO.getPsnDwlPsbCnt()) ? Long.MAX_VALUE : cupInfoVO.getPsnDwlPsbCnt();
 
-        boolean isValid;
-
-        if (INFINITE_CNT.equals(dwlPsbCnt) && INFINITE_CNT.equals(psnDwlPsbCnt)) {
-            isValid = true;
-        } else if (INFINITE_CNT.equals(dwlPsbCnt)) {
-            isValid = psnDwlPsbCnt > cupInfoVO.getMbrCnt();
-        } else {
-            isValid = dwlPsbCnt > cupInfoVO.getTotalCnt() && psnDwlPsbCnt > cupInfoVO.getMbrCnt();
-        }
+        boolean isValid = dwlPsbCnt > cupInfoVO.getTotalCnt() && psnDwlPsbCnt > cupInfoVO.getMbrCnt();
 
         if (!isValid) {
             throw new RuntimeException(PromotionException.INVALID_CUP_DWL_CNT.getMSG());
         }
-
     }
 
     public static void isNotUsed(CupInfoVO cupInfoVO){
