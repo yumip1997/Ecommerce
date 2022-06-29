@@ -21,7 +21,9 @@
         <include refid="sql_cupInfo"/>
         select ci.*
         from cup_info as ci
-        where ci.prm_no = #{prmNo}
+        where 1 = 1
+            and ci.use_yn = 'Y'
+            and ci.prm_no = #{prmNo}
     </select>
 
     <select id="getIssuedCupInfo" resultType="com.plateer.ec1.promotion.com.vo.CupInfoVO">

@@ -11,7 +11,9 @@
         select ci.*,
             <include refid="cup_iss_cnt" />
         from cup_info as ci
-        where ci.prm_no = #{prmNo}
+        where 1 = 1
+            and ci.use_yn = 'Y'
+            and ci.prm_no = #{prmNo}
     </select>
 
     <select id="getOfflineCupInfo" resultType="com.plateer.ec1.promotion.com.vo.CupInfoVO">
@@ -20,7 +22,9 @@
                iss.cup_iss_no
         <include refid="cup_iss_cnt" />
         from cup_info as ci inner join cc_cpn_issue as iss on ci.prm_no = iss.prm_no
-        where iss.cpn_cert_no = #{cpnCertNo}
+        where 1 = 1
+            and ci.use_yn = 'Y'
+            and iss.cpn_cert_no = #{cpnCertNo}
     </select>
 
 </mapper>
