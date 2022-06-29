@@ -35,20 +35,14 @@ public class OffCupDownloader implements CupDownloader {
     public void download(CupDwlRequestVO cupDwlRequestVO){
         setCupIssInfo(cupDwlRequestVO);
 
-        isValid(cupDwlRequestVO);
+        CupInfoVO cupInfoVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
+        cupInfoVO.dwlValidate();
+
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupDwlRequestVO);
 
         cupDwlTrxMapper.updateCup(ccCpnIssueModel);
     }
-    
-    private void isValid(CupDwlRequestVO cupDwlRequestVO){
-        CupInfoVO cupInfoVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
 
-        CupInfoValidator.isExistCupInfo(cupInfoVO);
-        CupInfoValidator.isValidCupDwlPeriod(cupInfoVO);
-        CupInfoValidator.isValidCnt(cupInfoVO);
-    }
-    
     private void setCupIssInfo(CupDwlRequestVO cupDwlRequestVO){
         CupInfoVO cupInfoVO = cupDwlMapper.getOfflineCupInfo(cupDwlRequestVO);
 

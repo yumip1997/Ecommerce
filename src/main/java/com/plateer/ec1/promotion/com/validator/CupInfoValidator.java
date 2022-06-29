@@ -4,11 +4,10 @@ import com.plateer.ec1.promotion.com.vo.CupInfoVO;
 import com.plateer.ec1.promotion.enums.PromotionException;
 import org.springframework.util.ObjectUtils;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-//TODO CupInfoVO 안으로
+//TODO 삭제예정
 public class CupInfoValidator {
 
     public static void isExistCupInfo(CupInfoVO cupInfoVO) {

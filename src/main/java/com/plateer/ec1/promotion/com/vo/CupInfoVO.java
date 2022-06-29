@@ -1,8 +1,11 @@
 package com.plateer.ec1.promotion.com.vo;
 
 import com.plateer.ec1.common.vo.BaseVO;
+import com.plateer.ec1.promotion.com.validator.CupInfoValidator;
+import com.plateer.ec1.promotion.enums.PromotionException;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.ObjectUtils;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -24,5 +27,65 @@ public class CupInfoVO extends BaseVO {
     private Long mbrCnt;
     private String mbrNo;
     private LocalDateTime cpnUseDt;
+
+    public void isExistCupInfo() {
+        if (ObjectUtils.isEmpty(this)) {
+            throw new RuntimeException(PromotionException.NOT_FIND_PRM.getMSG());
+        }
+    }
+
+    public void isValidPrmPeriod() {
+        if (LocalDateTime.now().isAfter(this.getPrmEndDt())) {
+            throw new RuntimeException(PromotionException.INVALID_PRM_PERIOD.getMSG());
+        }
+    }
+
+    public void isValidCupDwlPeriod() {
+        if (LocalDate.now().isAfter(this.getDwlAvlEndDd())) {
+            throw new RuntimeException(PromotionException.INVALID_CUP_DWL_PERIOD.getMSG());
+        }
+    }
+
+    public void isValidCnt() {
+        final Long INFINITE_CNT = 0L;
+        Long dwlPsbCnt = INFINITE_CNT.equals(this.getDwlPsbCnt()) ? Long.MAX_VALUE : this.getDwlPsbCnt();
+        Long psnDwlPsbCnt = INFINITE_CNT.equals(this.getPsnDwlPsbCnt()) ? Long.MAX_VALUE : this.getPsnDwlPsbCnt();
+
+        boolean isValid = dwlPsbCnt > this.getTotalCnt() && psnDwlPsbCnt > this.getMbrCnt();
+
+        if (!isValid) {
+            throw new RuntimeException(PromotionException.INVALID_CUP_DWL_CNT.getMSG());
+        }
+    }
+
+    public void isNotUsed(){
+        if(!ObjectUtils.isEmpty(this.getCpnUseDt())){
+            throw new RuntimeException(PromotionException.ALREADY_USED_CUP.getMSG());
+        }
+    }
+
+    public void isUsed(){
+        if(ObjectUtils.isEmpty(this.getCpnUseDt())){
+            throw new RuntimeException(PromotionException.NOT_USED_CUP.getMSG());
+        }
+    }
+
+    public void dwlValidate(){
+        isExistCupInfo();
+        isValidCupDwlPeriod();
+        isValidCnt();
+    }
+
+    public void cupUseValidate(){
+        isExistCupInfo();
+        isNotUsed();
+        isValidPrmPeriod();
+    }
+
+    public void restoreCupValidate(){
+        isExistCupInfo();
+        isUsed();
+        isValidPrmPeriod();
+    }
 
 }

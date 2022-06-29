@@ -28,31 +28,19 @@ public class CupUseCnlService {
     @Transactional
     public void useCup(@Valid CupUseRequestVO cupUseRequestVO){
         CupInfoVO cupInfoVO = cupInfoMapper.getIssuedCupInfo(cupUseRequestVO.getCpnIssNo());
-        validateUseCup(cupInfoVO);
+        cupInfoVO.cupUseValidate();
 
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupUseRequestVO);
         cupUseCnlTrxMapper.updateCupUsed(ccCpnIssueModel);
     }
 
-    private void validateUseCup(CupInfoVO cupInfoVO){
-        CupInfoValidator.isExistCupInfo(cupInfoVO);
-        CupInfoValidator.isNotUsed(cupInfoVO);
-        CupInfoValidator.isValidPrmPeriod(cupInfoVO);
-    }
-
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void restoreCup(@Valid CupRestoreRequestVO cupRestoreRequestVO){
         CupInfoVO cupInfoVO = cupInfoMapper.getIssuedCupInfo(cupRestoreRequestVO.getCpnIssNo());
-        validateRestoreCup(cupInfoVO);
+        cupInfoVO.restoreCupValidate();
         
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupInfoVO);
         cupUseCnlTrxMapper.insertOrgCup(ccCpnIssueModel);
-    }
-
-    private void validateRestoreCup(CupInfoVO cupInfoVO){
-        CupInfoValidator.isExistCupInfo(cupInfoVO);
-        CupInfoValidator.isUsed(cupInfoVO);
-        CupInfoValidator.isValidPrmPeriod(cupInfoVO);
     }
 
 }

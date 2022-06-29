@@ -33,17 +33,11 @@ public class GeneralCupDownloader implements CupDownloader {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void download(CupDwlRequestVO cupDwlRequestVO){
-        isValid(cupDwlRequestVO);
+        CupInfoVO cupInfoVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
+        cupInfoVO.dwlValidate();
+
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupDwlRequestVO);
         cupDwlTrxMapper.insertCup(ccCpnIssueModel);
-    }
-
-    private void isValid(CupDwlRequestVO cupDwlRequestVO){
-        CupInfoVO cupInfoVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
-
-        CupInfoValidator.isExistCupInfo(cupInfoVO);
-        CupInfoValidator.isValidCupDwlPeriod(cupInfoVO);
-        CupInfoValidator.isValidCnt(cupInfoVO);
     }
 
 }
