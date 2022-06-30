@@ -26,7 +26,8 @@ class PrmApplyMapperTest {
         productList.add(product2);
         productList.add(product3);
         PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder()
-                .prmKindCd("10")
+                .prmKindCd("20")
+                .cpnKindCd("10")
                 .mbrNo("user1")
                 .productList(productList).build();
 

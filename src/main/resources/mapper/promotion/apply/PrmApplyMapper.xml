@@ -38,6 +38,9 @@
             ci.dc_val,
             ci.min_pur_amt,
             ci.max_dc_amt,
+            <if test = "@com.plateer.ec1.promotion.enums.PRM0001Code@COUPON.getCode().equals(cpnKindCd)">
+                iss.cpn_iss_no,
+            </if>
             <choose>
                 <when test ="@com.plateer.ec1.promotion.enums.PRM0001Code@COUPON.getCode().equals(cpnKindCd)">
                     case when ci.prm_priod_ccd = '10' then ci.prm_end_dt
