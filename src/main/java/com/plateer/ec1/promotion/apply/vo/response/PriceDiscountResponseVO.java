@@ -1,6 +1,6 @@
 package com.plateer.ec1.promotion.apply.vo.response;
 
-import com.plateer.ec1.common.model.product.Product;
+import com.plateer.ec1.product.vo.ProductInfoVO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,11 +11,11 @@ import java.util.List;
 @Setter
 public class PriceDiscountResponseVO extends ResponseBaseVO {
 
-    private List<Product> productList;
+    private List<ProductInfoVO> productInfoVOList;
 
     @Builder
-    public PriceDiscountResponseVO(String mbrNo, List<Product> productList) {
+    public PriceDiscountResponseVO(String mbrNo, List<ProductInfoVO> productInfoVOList) {
         super(mbrNo);
-        this.productList = productList;
+        this.productInfoVOList = productInfoVOList;
     }
 }

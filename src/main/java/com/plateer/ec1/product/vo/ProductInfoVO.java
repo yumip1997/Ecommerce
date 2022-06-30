@@ -1,4 +1,4 @@
-package com.plateer.ec1.common.model.product;
+package com.plateer.ec1.product.vo;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class ProductInfoVO {
 
     private String goodsNo;
     private String goodsNm;
@@ -17,11 +17,5 @@ public class Product {
     private Long salePrc;
     private Long prmPrc;
     private Long orrAt;
-
-    public Product(String goodsNo, String itemNo){
-        this.goodsNo = goodsNo;
-        this.itemNo = itemNo;
-    }
-
 
 }

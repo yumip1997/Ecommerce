@@ -1,6 +1,6 @@
 package com.plateer.ec1.promotion.apply.vo.request;
 
-import com.plateer.ec1.common.model.product.Product;
+import com.plateer.ec1.product.vo.ProductInfoVO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,7 @@ public class PrmRequestBaseVO {
 
     @NotNull(message = "회원 번호는 필수입니다!")
     private String mbrNo;
-    private List<Product> productList;
+    private List<ProductInfoVO> productInfoVOList;
     @NotNull(message = "쿠폰 종류 코드는 필수입니다!")
     private String cpnKindCd;
     @NotNull(message = "프로모션 종류 코드는 필수입니다!")

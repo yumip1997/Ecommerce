@@ -1,6 +1,6 @@
 package com.plateer.ec1.promotion.apply.calculator.impl;
 
-import com.plateer.ec1.common.model.product.Product;
+import com.plateer.ec1.product.vo.ProductInfoVO;
 import com.plateer.ec1.promotion.apply.mapper.PrmApplyMapper;
 import com.plateer.ec1.promotion.enums.PRM0004Code;
 import com.plateer.ec1.promotion.apply.calculator.Calculator;
@@ -32,13 +32,13 @@ public class PriceDiscountCalculator implements Calculator {
             calculate(applicablePdCupList);
         }
 
-        List<Product> productList = applicablePdCupList.stream()
-                .map(PrmAplyVO::getProduct)
+        List<ProductInfoVO> productInfoVOList = applicablePdCupList.stream()
+                .map(PrmAplyVO::getProductInfoVO)
                 .collect(Collectors.toList());
 
         return PriceDiscountResponseVO.builder()
                 .mbrNo(prmRequestBaseVO.getMbrNo())
-                .productList(productList)
+                .productInfoVOList(productInfoVOList)
                 .build();
     }
 
@@ -50,9 +50,9 @@ public class PriceDiscountCalculator implements Calculator {
 
             //최대혜택 셋팅 후 최대혜택 가격으로 가격조정 적용
             ApplicableCupVO maxBnfPrm = getMaxBenefitPrm(prmAplyVO.getApplicableCupVOList());
-            Product product = prmAplyVO.getProduct();
+            ProductInfoVO productInfoVO = prmAplyVO.getProductInfoVO();
 
-            product.setPrmPrc(product.getSalePrc() - maxBnfPrm.getBnfVal());
+            productInfoVO.setPrmPrc(productInfoVO.getSalePrc() - maxBnfPrm.getBnfVal());
         }
 
     }

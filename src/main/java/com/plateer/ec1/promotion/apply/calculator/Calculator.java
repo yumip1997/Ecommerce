@@ -1,7 +1,7 @@
 package com.plateer.ec1.promotion.apply.calculator;
 
 import com.plateer.ec1.common.factory.CustomFactory;
-import com.plateer.ec1.common.model.product.Product;
+import com.plateer.ec1.product.vo.ProductInfoVO;
 import com.plateer.ec1.promotion.apply.vo.PrmAplyVO;
 import com.plateer.ec1.promotion.enums.PRM0003Code;
 import com.plateer.ec1.promotion.enums.PRM0004Code;
@@ -26,8 +26,8 @@ public interface Calculator extends CustomFactory<PRM0004Code> {
 
     default void setBnfVal(PrmAplyVO prmAplyVO){
         for (ApplicableCupVO applicableCupVO : prmAplyVO.getApplicableCupVOList()) {
-            Product product = prmAplyVO.getProduct();
-            Long productPrice =  Long.min(product.getSalePrc(), product.getPrmPrc());
+            ProductInfoVO productInfoVO = prmAplyVO.getProductInfoVO();
+            Long productPrice =  Long.min(productInfoVO.getSalePrc(), productInfoVO.getPrmPrc());
 
             Long bnfVal = getBnfVal(productPrice, applicableCupVO);
             applicableCupVO.setBnfVal(bnfVal);

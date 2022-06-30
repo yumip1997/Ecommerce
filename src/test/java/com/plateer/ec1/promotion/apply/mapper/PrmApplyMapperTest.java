@@ -1,6 +1,6 @@
 package com.plateer.ec1.promotion.apply.mapper;
 
-import com.plateer.ec1.common.model.product.Product;
+import com.plateer.ec1.product.vo.ProductInfoVO;
 import com.plateer.ec1.promotion.apply.vo.PrmAplyVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import org.junit.jupiter.api.Test;
@@ -18,18 +18,18 @@ class PrmApplyMapperTest {
 
     @Test
     void test(){
-        List<Product> productList = new ArrayList<>();
-        Product product1 = Product.builder().goodsNo("P001").itemNo("1").orrAt(1000L).build();
-        Product product2 = Product.builder().goodsNo("P001").itemNo("2").orrAt(1000L).build();
-        Product product3 = Product.builder().goodsNo("P003").itemNo("2").orrAt(1000L).build();
-        productList.add(product1);
-        productList.add(product2);
-        productList.add(product3);
+        List<ProductInfoVO> productInfoVOList = new ArrayList<>();
+        ProductInfoVO productInfoVO1 = ProductInfoVO.builder().goodsNo("P001").itemNo("1").orrAt(1000L).build();
+        ProductInfoVO productInfoVO2 = ProductInfoVO.builder().goodsNo("P001").itemNo("2").orrAt(1000L).build();
+        ProductInfoVO productInfoVO3 = ProductInfoVO.builder().goodsNo("P003").itemNo("2").orrAt(1000L).build();
+        productInfoVOList.add(productInfoVO1);
+        productInfoVOList.add(productInfoVO2);
+        productInfoVOList.add(productInfoVO3);
         PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder()
                 .prmKindCd("20")
                 .cpnKindCd("10")
                 .mbrNo("user1")
-                .productList(productList).build();
+                .productInfoVOList(productInfoVOList).build();
 
         List<PrmAplyVO> applicablePrmList = prmApplyMapper.getApplicablePrmList(prmRequestBaseVO);
         System.out.println(applicablePrmList);
