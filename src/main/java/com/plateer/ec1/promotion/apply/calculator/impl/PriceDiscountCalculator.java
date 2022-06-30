@@ -27,10 +27,7 @@ public class PriceDiscountCalculator implements Calculator {
     @Override
     public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO) {
         List<PrmAplyVO> applicablePdCupList = prmApplyMapper.getApplicablePrmList(prmRequestBaseVO);
-
-        if(!CollectionUtils.isEmpty(applicablePdCupList)){
-            calculate(applicablePdCupList);
-        }
+        calculate(applicablePdCupList);
 
         List<ProductInfoVO> productInfoVOList = applicablePdCupList.stream()
                 .map(PrmAplyVO::getProductInfoVO)
@@ -45,11 +42,12 @@ public class PriceDiscountCalculator implements Calculator {
     @Override
     public void calculate(List<PrmAplyVO> prmAplyVOList){
         for (PrmAplyVO prmAplyVO : prmAplyVOList) {
+            List<ApplicableCupVO> applicableCupVOList = prmAplyVO.getApplicableCupVOList();
             //혜택금액 셋팅
             setBnfVal(prmAplyVO);
 
             //최대혜택 셋팅 후 최대혜택 가격으로 가격조정 적용
-            ApplicableCupVO maxBnfPrm = getMaxBenefitPrm(prmAplyVO.getApplicableCupVOList());
+            ApplicableCupVO maxBnfPrm = getMaxBenefitPrm(applicableCupVOList);
             ProductInfoVO productInfoVO = prmAplyVO.getProductInfoVO();
 
             productInfoVO.setPrmPrc(productInfoVO.getSalePrc() - maxBnfPrm.getBnfVal());

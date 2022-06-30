@@ -25,10 +25,7 @@ public class ProductCouponCalculator implements Calculator {
     @Override
     public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO) {
         List<PrmAplyVO> prmAplyVOList = prmApplyMapper.getApplicablePrmList(prmRequestBaseVO);
-
-        if(!CollectionUtils.isEmpty(prmAplyVOList)){
-            calculate(prmAplyVOList);
-        }
+        calculate(prmAplyVOList);
 
         return ProductCouponResponseVO.builder()
                 .mbrNo(prmRequestBaseVO.getMbrNo())
@@ -39,11 +36,12 @@ public class ProductCouponCalculator implements Calculator {
     @Override
     public void calculate(List<PrmAplyVO> prmAplyVOList){
         for (PrmAplyVO prmAplyVO : prmAplyVOList) {
+            List<ApplicableCupVO> applicableCupVOList = prmAplyVO.getApplicableCupVOList();
             //혜택금액 셋팅
             setBnfVal(prmAplyVO);
 
             //최대혜택 쿠폰 "Y"로 셋팅
-            ApplicableCupVO maxBnfPrm = getMaxBenefitPrm(prmAplyVO.getApplicableCupVOList());
+            ApplicableCupVO maxBnfPrm = getMaxBenefitPrm(applicableCupVOList);
             maxBnfPrm.setMaxBenefitYn("Y");
         }
 
