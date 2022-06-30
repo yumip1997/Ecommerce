@@ -49,7 +49,7 @@
         where 1 = 1
             and now() <![CDATA[<]]> ci.prm_end_dt
             and ci.prm_kind_cd = #{prmKindCd}
-            and ci.min_pur_amt <![CDATA[<]]> aply.orr_at
+            and ci.min_pur_amt <![CDATA[<]]> coalesce(aply.orr_at, 0)
             and ci.cpn_kind_cd =  #{cpnKindCd}
             and iss.cpn_use_dt is null
     </select>
