@@ -17,7 +17,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-@Log4j2
 public class ProductCouponCalculator implements Calculator {
 
     private final PrmApplyMapper prmApplyMapper;
@@ -37,10 +36,10 @@ public class ProductCouponCalculator implements Calculator {
     public void calculate(List<PrmAplyVO> prmAplyVOList){
         for (PrmAplyVO prmAplyVO : prmAplyVOList) {
             List<ApplicableCupVO> applicableCupVOList = prmAplyVO.getApplicableCupVOList();
-            //혜택금액 셋팅
+            if(CollectionUtils.isEmpty(applicableCupVOList)) continue;
+
             setBnfVal(prmAplyVO);
 
-            //최대혜택 쿠폰 "Y"로 셋팅
             ApplicableCupVO maxBnfPrm = getMaxBenefitPrm(applicableCupVOList);
             maxBnfPrm.setMaxBenefitYn("Y");
         }
