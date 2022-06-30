@@ -42,7 +42,7 @@ class GeneralCupDownloaderTest {
     @Test
     @DisplayName("쿠폰 다운 완료")
     void dwl(){
-        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).mbrNo("user2").dwlCupType("10").build();
+        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).mbrNo("user1").dwlCupType("10").build();
 
         generalCupDownloader.download(cupDwlRequestVO);
     }
