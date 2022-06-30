@@ -13,7 +13,6 @@
 
     <sql id="prm_apy_info">
         <include refid="com.plateer.ec1.promotion.com.mapper.CupInfoMapper.sql_cupInfo" />
-        <!-- 상품정보 쿼리를 타야하는지 이렇게 하는지 여쭤보기 -->
         , prd as(
         <foreach collection="productInfoVOList" item="productInfoVO" separator="union all">
             select
@@ -34,6 +33,7 @@
         select
             aply.goods_no,
             aply.item_no,
+            aply.orr_at,
             ci.prm_no,
             ci.prm_nm,
             ci.dc_ccd,
