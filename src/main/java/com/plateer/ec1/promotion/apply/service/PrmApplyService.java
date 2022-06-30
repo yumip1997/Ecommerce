@@ -19,7 +19,7 @@ public class PrmApplyService {
     private final CalculationFactory calculationFactory;
 
     public ResponseBaseVO getCalculationData(@Valid PrmRequestBaseVO prmRequestBaseVO){
-        Calculator calculator = calculationFactory.get(PRM0004Code.findPromotionType(prmRequestBaseVO.getPrmTypeCode()));
+        Calculator calculator = calculationFactory.get(PRM0004Code.findPromotionType(prmRequestBaseVO.getCpnKindCd()));
         return calculator.getCalculationData(prmRequestBaseVO);
     }
 

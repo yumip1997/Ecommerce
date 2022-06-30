@@ -2,8 +2,8 @@ package com.plateer.ec1.promotion.apply.calculator.impl;
 
 import com.plateer.ec1.promotion.apply.calculator.Calculator;
 import com.plateer.ec1.promotion.apply.mapper.PrmApplyMapper;
-import com.plateer.ec1.promotion.apply.vo.ApplicablePdCupVO;
-import com.plateer.ec1.promotion.apply.vo.PrmApplyVO;
+import com.plateer.ec1.promotion.apply.vo.PrmAplyVO;
+import com.plateer.ec1.promotion.apply.vo.ApplicableCupVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.ProductCouponResponseVO;
 import com.plateer.ec1.promotion.apply.vo.response.ResponseBaseVO;
@@ -24,25 +24,26 @@ public class ProductCouponCalculator implements Calculator {
 
     @Override
     public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO) {
-        List<ApplicablePdCupVO> applicablePdCupVOList = prmApplyMapper.getApplicablePdCupList(prmRequestBaseVO);
+        List<PrmAplyVO> prmAplyVOList = prmApplyMapper.getApplicablePrmList(prmRequestBaseVO);
 
-        if(!CollectionUtils.isEmpty(applicablePdCupVOList)){
-            calculate(applicablePdCupVOList);
+        if(!CollectionUtils.isEmpty(prmAplyVOList)){
+            calculate(prmAplyVOList);
         }
 
         return ProductCouponResponseVO.builder()
                 .mbrNo(prmRequestBaseVO.getMbrNo())
-                .applicablePdCupVOList(applicablePdCupVOList)
+                .prmAplyVOList(prmAplyVOList)
                 .build();
     }
 
-    private void calculate(List<ApplicablePdCupVO> applicablePdCupVOList){
-        for (ApplicablePdCupVO applicablePdCupVO : applicablePdCupVOList) {
+    @Override
+    public void calculate(List<PrmAplyVO> prmAplyVOList){
+        for (PrmAplyVO prmAplyVO : prmAplyVOList) {
             //혜택금액 셋팅
-            setBnfVal(applicablePdCupVO);
+            setBnfVal(prmAplyVO);
 
             //최대혜택 쿠폰 "Y"로 셋팅
-            PrmApplyVO maxBnfPrm = getMaxBenefitPrm(applicablePdCupVO.getPrmApplyVOList());
+            ApplicableCupVO maxBnfPrm = getMaxBenefitPrm(prmAplyVO.getApplicableCupVOList());
             maxBnfPrm.setMaxBenefitYn("Y");
         }
 

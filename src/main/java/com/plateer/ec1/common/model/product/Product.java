@@ -1,12 +1,12 @@
 package com.plateer.ec1.common.model.product;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
     private String goodsNo;
@@ -16,5 +16,12 @@ public class Product {
     private String goodsTpCd;
     private Long salePrc;
     private Long prmPrc;
+    private Long orrAt;
+
+    public Product(String goodsNo, String itemNo){
+        this.goodsNo = goodsNo;
+        this.itemNo = itemNo;
+    }
+
 
 }

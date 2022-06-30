@@ -1,13 +1,15 @@
 package com.plateer.ec1.promotion.apply.vo;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class PrmApplyVO {
+public class ApplicableCupVO {
 
     private Long prmNo;
     private String prmNm;

@@ -1,18 +1,19 @@
 package com.plateer.ec1.promotion.apply.vo;
 
 import com.plateer.ec1.common.model.product.Product;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @Builder
-public class ApplicablePdCupVO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class PrmAplyVO {
 
+    private String goodsItemNo;
     private Product product;
-    private List<PrmApplyVO> prmApplyVOList;
+    private List<ApplicableCupVO> applicableCupVOList;
 
 }
