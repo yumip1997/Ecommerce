@@ -9,6 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 public class ProductInfoVO {
 
+    private String goodsItemNo;
+    private String prmCpnIssNo;
     private String goodsNo;
     private String goodsNm;
     private String itemNo;
@@ -17,5 +19,6 @@ public class ProductInfoVO {
     private Long salePrc;
     private Long prmPrc;
     private Long orrAt;
+    private Long orrCnt;
 
 }

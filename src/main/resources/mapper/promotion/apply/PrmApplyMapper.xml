@@ -30,7 +30,7 @@
     <select id="getApplicablePrmList" resultMap="ApplicableCupMap">
         <include refid="prm_apy_info" />
         select
-            concat (aply.goods_no, '', aply.item_no) as goods_item_no,
+            concat(aply.goods_no, '', aply.item_no) as goods_item_no,
             concat(ci.prm_no, '', iss.cpn_iss_no) as prm_cpn_iss_no,
             aply.*,
             ci.prm_no,
