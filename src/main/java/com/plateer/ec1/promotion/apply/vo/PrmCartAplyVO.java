@@ -8,9 +8,12 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class PrmAplyVO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class PrmCartAplyVO {
 
-    private ProductInfoVO productInfoVO;
-    private List<ApplicablePrmVO> applicablePrmVOList;
+    private ApplicablePrmVO applicablePrmVO;
+    private List<ProductInfoVO> productInfoVOList;
 
 }
+
