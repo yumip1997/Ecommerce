@@ -2,13 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.promotion.apply.mapper.PrmApplyMapper">
 
-    <resultMap id="ApplicableCupMap" type="com.plateer.ec1.promotion.apply.vo.PrmAplyVO">
-        <id column ="goods_no"/>
-        <id column ="item_no"/>
+    <resultMap id="ApplicableCupMap" type="com.plateer.ec1.promotion.apply.vo.PdPrmVO" autoMapping="true">
         <association property="productInfoVO" autoMapping="true"/>
-        <collection property="applicableCupVOList" autoMapping="true" notNullColumn="cpn_iss_no" ofType="com.plateer.ec1.promotion.apply.vo.ApplicableCupVO">
-            <id property="cpnIssNo" column="cpn_iss_no"/>
-        </collection>
+        <association property="applicablePrmVO" autoMapping="true"/>
     </resultMap>
 
     <sql id="prm_apy_info">
@@ -18,6 +14,7 @@
             select
                 #{productInfoVO.goodsNo} as goods_no,
                 #{productInfoVO.itemNo} as item_no,
+                #{productInfoVO.orrCnt} as orr_cnt,
                 #{productInfoVO.orrAt} as orr_at,
                 #{productInfoVO.salePrc} as sale_prc,
                 #{productInfoVO.prmPrc} as prm_prc
@@ -33,6 +30,8 @@
     <select id="getApplicablePrmList" resultMap="ApplicableCupMap">
         <include refid="prm_apy_info" />
         select
+            concat (aply.goods_no, '', aply.item_no) as goods_item_no,
+            concat(ci.prm_no, '', iss.cpn_iss_no) as prm_cpn_iss_no,
             aply.*,
             ci.prm_no,
             ci.prm_nm,
@@ -49,9 +48,11 @@
         where 1 = 1
             and now() <![CDATA[<]]> ci.prm_end_dt
             and ci.prm_kind_cd = #{prmKindCd}
-            and ci.min_pur_amt <![CDATA[<=]]> coalesce(aply.orr_at, 0)
             and ci.cpn_kind_cd =  #{cpnKindCd}
             and iss.cpn_use_dt is null
+            <if test = "!@com.plateer.ec1.promotion.enums.PRM0004Code@CART_COUPON.getCode().equals(cpnKindCd)">
+                and ci.min_pur_amt <![CDATA[<=]]> coalesce(aply.orr_at, coalesce(aply.sale_prc, 0))
+            </if>
     </select>
 
 </mapper>
