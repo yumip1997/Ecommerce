@@ -6,7 +6,7 @@
         <id column ="goods_no"/>
         <id column ="item_no"/>
         <association property="productInfoVO" autoMapping="true"/>
-        <collection property="applicableCupVOList" autoMapping="true" notNullColumn="cpn_iss_no">
+        <collection property="applicableCupVOList" autoMapping="true" notNullColumn="cpn_iss_no " ofType="com.plateer.ec1.promotion.apply.vo.ApplicableCupVO">
             <id property="cpnIssNo" column="cpn_iss_no"/>
         </collection>
     </resultMap>
