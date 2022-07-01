@@ -20,7 +20,7 @@ public interface Calculator extends CustomFactory<PRM0004Code> {
 
     default ApplicableCupVO getMaxBenefitPrm(List<ApplicableCupVO> applicableCupVOList){
         return applicableCupVOList.stream()
-                .max(Comparator.comparingLong(ApplicableCupVO::getBnfVal))
+                .max(ApplicableCupVO::compareTo)
                 .orElse(ApplicableCupVO.builder().build());
     }
 
