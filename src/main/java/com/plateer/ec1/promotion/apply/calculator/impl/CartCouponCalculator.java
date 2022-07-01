@@ -39,7 +39,7 @@ public class CartCouponCalculator implements Calculator {
 
     //프로모션발급번호로 그룹핑한다 (프로모션1 - 상품N)
     public List<PrmCartAplyVO> groupByApplicableCup(List<PdPrmVO> pdPrmVOList){
-        Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingBy(PdPrmVO::getGoodsItemNo));
+        Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingBy(PdPrmVO::getPrmCupIssNo));
         return collect.entrySet().stream()
                 .map(this::convertPrmCartAplyVO)
                 .filter(this::filterByPriceWithCnt)
