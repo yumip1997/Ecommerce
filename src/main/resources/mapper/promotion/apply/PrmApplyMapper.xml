@@ -2,9 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.promotion.apply.mapper.PrmApplyMapper">
 
-    <resultMap id="ApplicableCupMap" type="com.plateer.ec1.promotion.apply.vo.PdPrmVO" autoMapping="true">
-        <association property="productInfoVO" autoMapping="true"/>
-        <association property="applicablePrmVO" autoMapping="true"/>
+    <resultMap id="ApplicableCupMap" type="pdPrmVO">
+        <id property="goodsItemNo" column="goods_item_no" />
+        <id property="prmCupIssNo" column="prm_cpn_iss_no" />
+        <association property="productInfoVO" autoMapping="true" />
+        <association property="applicablePrmVO" notNullColumn="cpn_iss_no" autoMapping="true" />
     </resultMap>
 
     <sql id="prm_apy_info">
@@ -12,12 +14,12 @@
         , prd as(
         <foreach collection="productInfoVOList" item="productInfoVO" separator="union all">
             select
-                #{productInfoVO.goodsNo} as goods_no,
-                #{productInfoVO.itemNo} as item_no,
-                #{productInfoVO.orrCnt} as orr_cnt,
-                #{productInfoVO.orrAt} as orr_at,
-                #{productInfoVO.salePrc} as sale_prc,
-                #{productInfoVO.prmPrc} as prm_prc
+                #{productInfoVO.goodsNo, jdbcType=VARCHAR} as goods_no,
+                #{productInfoVO.itemNo, jdbcType=VARCHAR} as item_no,
+                #{productInfoVO.orrCnt, jdbcType=INTEGER} as orr_cnt,
+                #{productInfoVO.orrAt, jdbcType=INTEGER} as orr_at,
+                #{productInfoVO.salePrc, jdbcType=INTEGER} as sale_prc,
+                #{productInfoVO.prmPrc, jdbcType=INTEGER} as prm_prc
         </foreach>
         ), aply as (
             select
@@ -32,7 +34,12 @@
         select
             concat(aply.goods_no, '', aply.item_no) as goods_item_no,
             concat(ci.prm_no, '', iss.cpn_iss_no) as prm_cpn_iss_no,
-            aply.*,
+            aply.goods_no,
+            aply.item_no,
+            aply.orr_cnt,
+            aply.orr_at,
+            aply.sale_prc,
+            aply.prm_prc,
             ci.prm_no,
             ci.prm_nm,
             ci.dc_ccd,

@@ -24,7 +24,7 @@
         )
     </sql>
 
-    <select id="getCupInfo" resultType="com.plateer.ec1.promotion.com.vo.CupInfoVO">
+    <select id="getCupInfo" resultType="cupInfoVO">
         <include refid="sql_cupInfo"/>
         select ci.*
         from cup_info as ci
@@ -33,7 +33,7 @@
             and ci.prm_no = #{prmNo}
     </select>
 
-    <select id="getIssuedCupInfo" resultType="com.plateer.ec1.promotion.com.vo.CupInfoVO">
+    <select id="getIssuedCupInfo" resultType="cupInfoVO">
         select
             iss.prm_no,
             iss.cpn_iss_no,

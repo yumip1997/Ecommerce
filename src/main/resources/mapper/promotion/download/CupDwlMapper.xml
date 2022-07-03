@@ -6,7 +6,7 @@
         (select count(*) from cc_cpn_issue where prm_no = #{prmNo} and mbr_no = #{mbrNo} and org_cpn_iss_no is null) as mbr_cnt
     </sql>
 
-    <select id="getCupDwlInfo" resultType="com.plateer.ec1.promotion.com.vo.CupInfoVO">
+    <select id="getCupDwlInfo" resultType="cupInfoVO">
         <include refid="com.plateer.ec1.promotion.com.mapper.CupInfoMapper.sql_cupInfo" />
         select ci.*,
             <include refid="cup_iss_cnt" />
@@ -16,7 +16,7 @@
             and ci.prm_no = #{prmNo}
     </select>
 
-    <select id="getOfflineCupInfo" resultType="com.plateer.ec1.promotion.com.vo.CupInfoVO">
+    <select id="getOfflineCupInfo" resultType="cupInfoVO">
         <include refid="com.plateer.ec1.promotion.com.mapper.CupInfoMapper.sql_cupInfo" />
         select ci.*,
                iss.cup_iss_no
