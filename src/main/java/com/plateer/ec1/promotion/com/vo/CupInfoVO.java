@@ -28,12 +28,6 @@ public class CupInfoVO extends BaseVO {
     private String mbrNo;
     private LocalDateTime cpnUseDt;
 
-    public void isExistCupInfo() {
-        if (ObjectUtils.isEmpty(this)) {
-            throw new RuntimeException(PromotionException.NOT_FIND_PRM.getMSG());
-        }
-    }
-
     public void isValidPrmPeriod() {
         if (LocalDateTime.now().isAfter(this.getPrmEndDt())) {
             throw new RuntimeException(PromotionException.INVALID_PRM_PERIOD.getMSG());
@@ -71,19 +65,16 @@ public class CupInfoVO extends BaseVO {
     }
 
     public void dwlValidate(){
-        isExistCupInfo();
         isValidCupDwlPeriod();
         isValidCnt();
     }
 
     public void cupUseValidate(){
-        isExistCupInfo();
         isNotUsed();
         isValidPrmPeriod();
     }
 
     public void restoreCupValidate(){
-        isExistCupInfo();
         isUsed();
         isValidPrmPeriod();
     }
