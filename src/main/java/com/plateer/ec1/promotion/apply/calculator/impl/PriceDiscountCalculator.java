@@ -9,7 +9,7 @@ import com.plateer.ec1.promotion.apply.vo.PrmAplyVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.PrmResponseVO;
 import com.plateer.ec1.promotion.apply.vo.response.ResponseBaseVO;
-import com.plateer.ec1.promotion.enums.PRM0004Code;
+import com.plateer.ec1.promotion.enums.PrmTypeCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -69,8 +69,8 @@ public class PriceDiscountCalculator implements Calculator {
     }
 
     @Override
-    public PRM0004Code getType() {
-        return PRM0004Code.PRICE_DISCOUNT;
+    public PrmTypeCode getType() {
+        return PrmTypeCode.PRICE_DISCOUNT;
     }
 
 

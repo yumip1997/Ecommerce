@@ -9,9 +9,10 @@ import com.plateer.ec1.promotion.apply.vo.PrmCartAplyVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.PrmResponseVO;
 import com.plateer.ec1.promotion.apply.vo.response.ResponseBaseVO;
-import com.plateer.ec1.promotion.enums.PRM0004Code;
+import com.plateer.ec1.promotion.enums.PrmTypeCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ public class CartCouponCalculator implements Calculator {
 
     @Override
     public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO) {
+        //상품-단품-프로모션-발급번호 단위로 row가 형성됨
         List<PdPrmVO> pdPrmVOList = prmApplyMapper.getApplicablePrmList(prmRequestBaseVO);
         List<PrmCartAplyVO> prmCartAplyVOList = groupByApplicableCup(pdPrmVOList);
         calculate((prmCartAplyVOList));
@@ -37,6 +39,7 @@ public class CartCouponCalculator implements Calculator {
                 .build();
     }
 
+    //TODO RETURN 값 조작 방식 고민해보기
     //프로모션발급번호로 그룹핑한다 (프로모션1 - 상품N)
     public List<PrmCartAplyVO> groupByApplicableCup(List<PdPrmVO> pdPrmVOList){
         Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingBy(PdPrmVO::getPrmCupIssNo));
@@ -49,6 +52,7 @@ public class CartCouponCalculator implements Calculator {
     private PrmCartAplyVO convertPrmCartAplyVO(Map.Entry<String, List<PdPrmVO>> entry){
         ApplicablePrmVO applicablePrmVO = entry.getValue().stream().map(PdPrmVO::getApplicablePrmVO).findFirst().orElse(ApplicablePrmVO.builder().build());
         List<ProductInfoVO> productInfoVOList = entry.getValue().stream().map(PdPrmVO::getProductInfoVO).collect(Collectors.toList());
+
         return PrmCartAplyVO.builder().applicablePrmVO(applicablePrmVO).productInfoVOList(productInfoVOList).build();
     }
 
@@ -65,7 +69,7 @@ public class CartCouponCalculator implements Calculator {
                 .sum();
     }
 
-    public void calculate(List<PrmCartAplyVO> prmCartAplyVOList) {
+    private void calculate(List<PrmCartAplyVO> prmCartAplyVOList) {
         for (PrmCartAplyVO prmCartAplyVO : prmCartAplyVOList) {
             ApplicablePrmVO applicablePrmVO = prmCartAplyVO.getApplicablePrmVO();
             Long prdTotalPrice = applicablePrdTotalPriceWithCnt(prmCartAplyVO.getProductInfoVOList());
@@ -73,6 +77,12 @@ public class CartCouponCalculator implements Calculator {
             Long bnfVal = getBnfVal(prdTotalPrice, applicablePrmVO);
             applicablePrmVO.setBnfVal(bnfVal);
         }
+
+        setMaxBenefitOfPrmCartAplyVO(prmCartAplyVOList);
+    }
+
+    private void setMaxBenefitOfPrmCartAplyVO(List<PrmCartAplyVO> prmCartAplyVOList){
+        if(CollectionUtils.isEmpty(prmCartAplyVOList)) return;
 
         ApplicablePrmVO applicablePrmVO = getMaxBenefitPrm(extractApplicableCupVOList(prmCartAplyVOList));
         applicablePrmVO.setMaxBenefitYn("Y");
@@ -85,8 +95,8 @@ public class CartCouponCalculator implements Calculator {
     }
 
     @Override
-    public PRM0004Code getType() {
-        return PRM0004Code.CART_COUPON;
+    public PrmTypeCode getType() {
+        return PrmTypeCode.CART_COUPON;
     }
 
 }

@@ -15,9 +15,9 @@ public class PrmRequestBaseVO {
 
     @NotNull(message = "회원 번호는 필수입니다!")
     private String mbrNo;
-    private List<ProductInfoVO> productInfoVOList;
-    @NotNull(message = "쿠폰 종류 코드는 필수입니다!")
-    private String cpnKindCd;
     @NotNull(message = "프로모션 종류 코드는 필수입니다!")
     private String prmKindCd;
+    private List<ProductInfoVO> productInfoVOList;
+    private String cpnKindCd;
+
 }

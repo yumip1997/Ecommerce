@@ -2,22 +2,27 @@ package com.plateer.ec1.promotion.apply.vo;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApplicablePrmVO implements Comparable<ApplicablePrmVO>{
 
+    private Long cpnIssNo;
     private Long prmNo;
     private String prmNm;
     private String dcCcd;
     private Long dcVal;
-    private Long bnfVal;
     private Long minPurAmt;
     private Long maxDcAmt;
-    private Long cpnIssNo;
+    private LocalDateTime prmEndDt;
+
     private String maxBenefitYn;
+    private Long bnfVal;
 
     @Override
     public int compareTo(ApplicablePrmVO o) {

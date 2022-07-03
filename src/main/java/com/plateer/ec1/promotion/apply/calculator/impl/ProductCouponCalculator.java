@@ -9,13 +9,12 @@ import com.plateer.ec1.promotion.apply.vo.ApplicablePrmVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.PrmResponseVO;
 import com.plateer.ec1.promotion.apply.vo.response.ResponseBaseVO;
-import com.plateer.ec1.promotion.enums.PRM0004Code;
+import com.plateer.ec1.promotion.enums.PrmTypeCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -53,21 +52,24 @@ public class ProductCouponCalculator implements Calculator {
     }
 
     public void calculate(List<PrmAplyVO> prmAplyVOList){
+        Set<Long> maxBnfSet = new HashSet<>();
+
         for (PrmAplyVO prmAplyVO : prmAplyVOList) {
             List<ApplicablePrmVO> applicablePrmVOList = prmAplyVO.getApplicablePrmVOList();
             if(CollectionUtils.isEmpty(applicablePrmVOList)) continue;
 
             setBnfVal(applicablePrmVOList, prmAplyVO.getProductInfoVO().getOrrAt());
 
-            ApplicablePrmVO maxBnfPrm = getMaxBenefitPrm(applicablePrmVOList);
+            ApplicablePrmVO maxBnfPrm = getMaxBenfitPrm(applicablePrmVOList, maxBnfSet);
+            maxBnfSet.add(maxBnfPrm.getCpnIssNo());
             maxBnfPrm.setMaxBenefitYn("Y");
         }
 
     }
 
     @Override
-    public PRM0004Code getType() {
-        return PRM0004Code.PROUDCT_COUPON;
+    public PrmTypeCode getType() {
+        return PrmTypeCode.PROUDCT_COUPON;
     }
 
 }
