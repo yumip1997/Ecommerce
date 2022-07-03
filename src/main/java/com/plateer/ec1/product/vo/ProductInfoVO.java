@@ -5,12 +5,8 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ProductInfoVO {
 
-    private String goodsItemNo;
-    private String prmCpnIssNo;
     private String goodsNo;
     private String goodsNm;
     private String itemNo;
