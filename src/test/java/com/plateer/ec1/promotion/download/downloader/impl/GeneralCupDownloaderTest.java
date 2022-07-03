@@ -40,10 +40,17 @@ class GeneralCupDownloaderTest {
     }
 
     @Test
+    @DisplayName("다운로드 가능 기간이 아닌 경우 예외가 발생한다.")
+    void not_dwl_period(){
+        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(4L).mbrNo("m1").build();
+
+        Assertions.assertThrows(RuntimeException.class, () -> generalCupDownloader.download(cupDwlRequestVO));
+    }
+
+    @Test
     @DisplayName("쿠폰 다운 완료")
     void dwl(){
-        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).mbrNo("user1").dwlCupType("10").build();
-
+        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(8L).mbrNo("user1").dwlCupType("10").build();
         generalCupDownloader.download(cupDwlRequestVO);
     }
 }

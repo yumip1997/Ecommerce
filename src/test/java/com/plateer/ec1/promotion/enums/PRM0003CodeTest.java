@@ -13,8 +13,8 @@ class PRM0003CodeTest {
 
     @Test
     void rate_function_test(){
-        Long discount = PRM0003Code.getBnfValFunction("20").apply(1500L, 11L);
-        Assertions.assertThat(discount).isEqualTo(165L);
+        Long discount = PRM0003Code.getBnfValFunction("20").apply(10250L, 7L);
+        Assertions.assertThat(discount).isEqualTo(717L);
     }
 
 }
