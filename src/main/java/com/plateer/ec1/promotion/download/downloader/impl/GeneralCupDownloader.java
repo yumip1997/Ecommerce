@@ -34,6 +34,7 @@ public class GeneralCupDownloader implements CupDownloader {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void download(CupDwlRequestVO cupDwlRequestVO){
         CupInfoVO cupInfoVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
+        //TODO 없을 경우 NULL POINTER EXCEPTION
         cupInfoVO.dwlValidate();
 
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupDwlRequestVO);
