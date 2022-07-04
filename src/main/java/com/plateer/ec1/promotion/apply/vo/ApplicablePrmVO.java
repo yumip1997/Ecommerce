@@ -19,9 +19,11 @@ public class ApplicablePrmVO implements Comparable<ApplicablePrmVO>{
     private Long dcVal;
     private Long minPurAmt;
     private Long maxDcAmt;
+    private String cpnKindCd;
+    private String degrCcd;
     private LocalDateTime prmEndDt;
 
-    private String maxBenefitYn;
+    private String maxBenefitYn = "N";
     private Long bnfVal;
 
     @Override
