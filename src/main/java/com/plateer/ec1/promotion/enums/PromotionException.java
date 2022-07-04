@@ -19,7 +19,8 @@ public enum PromotionException {
     INVALID_CPN_CERT_NO("오프라인 쿠폰 인증코드가 올바르지 않습니다!"),
     INVALID_PRM_PERIOD("유효한 프로모션 기간이 아닙니다!"),
     ALREADY_USED_CUP("이미 사용한 쿠폰입니다!"),
-    NOT_USED_CUP("복원 대상 쿠폰이 아닙니다!");
+    NOT_USED_CUP("복원 대상 쿠폰이 아닙니다!"),
+    NOT_SAME_MBR_NO("쿠폰을 실제 발급받은 회원과 쿠폰사용취소 요청 회원이 일치하지 않습니다!");
 
     private final String MSG;
 }

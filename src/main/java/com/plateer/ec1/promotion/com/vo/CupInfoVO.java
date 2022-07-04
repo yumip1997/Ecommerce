@@ -1,13 +1,12 @@
 package com.plateer.ec1.promotion.com.vo;
 
 import com.plateer.ec1.common.vo.BaseVO;
-import com.plateer.ec1.promotion.com.validator.CupInfoValidator;
 import com.plateer.ec1.promotion.enums.PromotionException;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.ObjectUtils;
 
-import java.sql.Timestamp;
+import javax.print.attribute.standard.PrinterMakeAndModel;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -66,19 +65,29 @@ public class CupInfoVO extends BaseVO {
         }
     }
 
+    public void isEqualMbrNo(String mbrNo){
+        if(!this.mbrNo.equals(mbrNo)){
+            throw new RuntimeException(PromotionException.NOT_SAME_MBR_NO.getMSG());
+        }
+    }
+
     public void dwlValidate(){
         isValidCupDwlPeriod();
         isValidCnt();
     }
 
-    public void cupUseValidate(){
+    public void cupUseValidate(String mbrNo){
+        isEqualMbrNo(mbrNo);
         isNotUsed();
         isValidPrmPeriod();
     }
 
-    public void restoreCupValidate(){
+    public void restoreCupValidate(String mbrNo){
+        isEqualMbrNo(mbrNo);
         isUsed();
         isValidPrmPeriod();
     }
+
+
 
 }

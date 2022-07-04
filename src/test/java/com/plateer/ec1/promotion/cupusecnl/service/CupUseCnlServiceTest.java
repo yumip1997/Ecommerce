@@ -34,6 +34,22 @@ class CupUseCnlServiceTest {
     }
 
     @Test
+    @DisplayName("쿠폰 사용 처리 시 회원번호가 없을 경우 예외 발생")
+    void null_use_mbr_no(){
+        CupUseRequestVO vo = CupUseRequestVO.builder().cpnIssNo(2L).build();
+
+        assertThrows(ConstraintViolationException.class, () -> cupUseCnlService.useCup(vo));
+    }
+
+    @Test
+    @DisplayName("쿠폰 사용 처리 시 발급 회원과 사용 요청 회원이 다를 경우 예외 발생")
+    void not_same_mbr_no(){
+        CupUseRequestVO vo = CupUseRequestVO.builder().cpnIssNo(2L).ordNo("111").mbrNo("user2").build();
+
+        assertThrows(RuntimeException.class, () -> cupUseCnlService.useCup(vo));
+    }
+
+    @Test
     @DisplayName("쿠폰 사용 처리 성공")
     void use_cup_pass(){
         CupUseRequestVO vo = CupUseRequestVO.builder().ordNo("111").cpnIssNo(2L).build();
@@ -47,6 +63,22 @@ class CupUseCnlServiceTest {
         CupRestoreRequestVO vo = CupRestoreRequestVO.builder().build();
 
         assertThrows(ConstraintViolationException.class, () -> cupUseCnlService.restoreCup(vo));
+    }
+
+    @Test
+    @DisplayName("쿠폰 복원 시 회원번호가 없을 경우 예외 발생")
+    void null_mbr_no_cup_iss(){
+        CupRestoreRequestVO vo = CupRestoreRequestVO.builder().cpnIssNo(2L).build();
+
+        assertThrows(ConstraintViolationException.class, () -> cupUseCnlService.restoreCup(vo));
+    }
+
+    @Test
+    @DisplayName("쿠폰 복원 시 복원 쿠폰을 발급받은 회원과 발급 요청을 한 회원이 다를 경우 예외 발생")
+    void not_same_cup_iss_mbr(){
+        CupRestoreRequestVO vo = CupRestoreRequestVO.builder().cpnIssNo(2L).mbrNo("user2").build();
+
+        assertThrows(RuntimeException.class, () -> cupUseCnlService.restoreCup(vo));
     }
 
     @Test

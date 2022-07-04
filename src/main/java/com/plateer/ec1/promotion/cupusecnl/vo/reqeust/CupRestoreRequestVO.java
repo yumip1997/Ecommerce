@@ -13,4 +13,7 @@ public class CupRestoreRequestVO {
 
     @NotNull(message = "쿠폰 복원 시 복원할 쿠폰의 발급번호는 필수입니다.")
     private Long cpnIssNo;
+    @NotNull(message = "쿠폰 복원 시 회원번호는 필수입니다.")
+    private String mbrNo;
+
 }

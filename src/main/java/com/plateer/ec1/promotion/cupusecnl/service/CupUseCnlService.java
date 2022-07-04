@@ -31,7 +31,7 @@ public class CupUseCnlService {
     public void useCup(@Valid CupUseRequestVO cupUseRequestVO){
         Optional<CupInfoVO> optCupInfoVO = cupInfoMapper.getIssuedCupInfo(cupUseRequestVO.getCpnIssNo());
         CupInfoVO cupInfoVO = optCupInfoVO.orElseThrow(() -> new RuntimeException(PromotionException.NOT_FIND_PRM.getMSG()));
-        cupInfoVO.cupUseValidate();
+        cupInfoVO.cupUseValidate(cupUseRequestVO.getMbrNo());
 
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupUseRequestVO);
         cupUseCnlTrxMapper.updateCupUsed(ccCpnIssueModel);
@@ -41,7 +41,7 @@ public class CupUseCnlService {
     public void restoreCup(@Valid CupRestoreRequestVO cupRestoreRequestVO){
         Optional<CupInfoVO> optCupInfoVO = cupInfoMapper.getIssuedCupInfo(cupRestoreRequestVO.getCpnIssNo());
         CupInfoVO cupInfoVO = optCupInfoVO.orElseThrow(() -> new RuntimeException(PromotionException.NOT_FIND_PRM.getMSG()));
-        cupInfoVO.restoreCupValidate();
+        cupInfoVO.restoreCupValidate(cupRestoreRequestVO.getMbrNo());
         
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupInfoVO);
         cupUseCnlTrxMapper.insertOrgCup(ccCpnIssueModel);

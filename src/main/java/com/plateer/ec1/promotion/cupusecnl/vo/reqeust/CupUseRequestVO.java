@@ -15,5 +15,7 @@ public class CupUseRequestVO{
     private Long cpnIssNo;
     @NotNull(message = "쿠폰 사용 시 주문 번호는 필수입니다.")
     private String ordNo;
+    @NotNull(message = "쿠폰 사용 시 회원 번호는 필수입니다.")
+    private String mbrNo;
 
 }
