@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.groupingByConcurrent;
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +28,6 @@ public class CartCouponCalculator implements Calculator {
 
     @Override
     public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO) {
-        //상품-단품-프로모션-발급번호 단위로 row가 형성됨
         List<PdPrmVO> pdPrmVOList = prmApplyMapper.getApplicablePrmList(prmRequestBaseVO);
         List<PrmCartAplyVO> prmCartAplyVOList = groupByApplicableCup(pdPrmVOList);
         calculate((prmCartAplyVOList));
@@ -39,10 +38,9 @@ public class CartCouponCalculator implements Calculator {
                 .build();
     }
 
-    //TODO RETURN 값 조작 방식 고민해보기
     //프로모션발급번호로 그룹핑한다 (프로모션1 - 상품N)
-    public List<PrmCartAplyVO> groupByApplicableCup(List<PdPrmVO> pdPrmVOList){
-        Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingBy(PdPrmVO::getPrmCupIssNo));
+    private List<PrmCartAplyVO> groupByApplicableCup(List<PdPrmVO> pdPrmVOList){
+        Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingByConcurrent(PdPrmVO::getPrmCupIssNo));
         return collect.entrySet().stream()
                 .map(this::convertPrmCartAplyVO)
                 .filter(this::filterByPriceWithCnt)

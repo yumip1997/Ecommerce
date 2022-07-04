@@ -3,9 +3,9 @@ package com.plateer.ec1.promotion.apply.calculator.impl;
 import com.plateer.ec1.product.vo.ProductInfoVO;
 import com.plateer.ec1.promotion.apply.calculator.Calculator;
 import com.plateer.ec1.promotion.apply.mapper.PrmApplyMapper;
+import com.plateer.ec1.promotion.apply.vo.ApplicablePrmVO;
 import com.plateer.ec1.promotion.apply.vo.PdPrmVO;
 import com.plateer.ec1.promotion.apply.vo.PrmAplyVO;
-import com.plateer.ec1.promotion.apply.vo.ApplicablePrmVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.PrmResponseVO;
 import com.plateer.ec1.promotion.apply.vo.response.ResponseBaseVO;
@@ -14,10 +14,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.groupingByConcurrent;
 
 @RequiredArgsConstructor
 @Component
@@ -38,8 +41,8 @@ public class ProductCouponCalculator implements Calculator {
     }
 
     //상품단품 번호로 그룹핑한다 (상품1 - 프로모션N)
-    public List<PrmAplyVO> groupByProductInfo(List<PdPrmVO> pdPrmVOList){
-        Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingBy(PdPrmVO::getGoodsItemNo));
+    private List<PrmAplyVO> groupByProductInfo(List<PdPrmVO> pdPrmVOList){
+        Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingByConcurrent(PdPrmVO::getGoodsItemNo));
         return collect.entrySet().stream()
                 .map(this::convertPrmAplyVO)
                 .collect(Collectors.toList());

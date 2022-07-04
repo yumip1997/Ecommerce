@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.groupingByConcurrent;
 
 @RequiredArgsConstructor
 @Component
@@ -42,8 +42,8 @@ public class PriceDiscountCalculator implements Calculator {
                 .build();
     }
 
-    public List<PrmAplyVO> groupByProductInfo(List<PdPrmVO> pdPrmVOList){
-        Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingBy(PdPrmVO::getGoodsItemNo));
+    private List<PrmAplyVO> groupByProductInfo(List<PdPrmVO> pdPrmVOList){
+        Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingByConcurrent(PdPrmVO::getGoodsItemNo));
         return collect.entrySet().stream().map(this::convertPrmAplyVO).collect(Collectors.toList());
     }
 
