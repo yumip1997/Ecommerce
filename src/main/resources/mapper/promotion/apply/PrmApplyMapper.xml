@@ -58,7 +58,10 @@
             and now() <![CDATA[<]]> ci.prm_end_dt
             and ci.prm_kind_cd = #{prmKindCd}
             and ci.cpn_kind_cd =  #{cpnKindCd}
-            and iss.cpn_use_dt is null
+            <if test = "!@com.plateer.ec1.promotion.enums.PrmTypeCode@PRICE_DISCOUNT.getCode().equals(prmKindCd)">
+                and iss.cpn_iss_no is not null
+                and iss.cpn_use_dt is null
+            </if>
             <if test = "!@com.plateer.ec1.promotion.enums.PRM0004Code@CART_COUPON.getCode().equals(cpnKindCd)">
                 and ci.min_pur_amt <![CDATA[<=]]> coalesce(aply.orr_at, coalesce(aply.sale_prc, 0))
             </if>
