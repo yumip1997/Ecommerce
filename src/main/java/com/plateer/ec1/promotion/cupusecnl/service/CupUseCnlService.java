@@ -7,6 +7,7 @@ import com.plateer.ec1.promotion.com.vo.CupInfoVO;
 import com.plateer.ec1.promotion.cupusecnl.mapper.CupUseCnlTrxMapper;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupRestoreRequestVO;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupUseRequestVO;
+import com.plateer.ec1.promotion.enums.PromotionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +29,8 @@ public class CupUseCnlService {
 
     @Transactional
     public void useCup(@Valid CupUseRequestVO cupUseRequestVO){
-        CupInfoVO cupInfoVO = cupInfoMapper.getIssuedCupInfo(cupUseRequestVO.getCpnIssNo());
+        Optional<CupInfoVO> optCupInfoVO = cupInfoMapper.getIssuedCupInfo(cupUseRequestVO.getCpnIssNo());
+        CupInfoVO cupInfoVO = optCupInfoVO.orElseThrow(() -> new RuntimeException(PromotionException.NOT_FIND_PRM.getMSG()));
         cupInfoVO.cupUseValidate();
 
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupUseRequestVO);
@@ -36,11 +39,11 @@ public class CupUseCnlService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void restoreCup(@Valid CupRestoreRequestVO cupRestoreRequestVO){
-        CupInfoVO cupInfoVO = cupInfoMapper.getIssuedCupInfo(cupRestoreRequestVO.getCpnIssNo());
+        Optional<CupInfoVO> optCupInfoVO = cupInfoMapper.getIssuedCupInfo(cupRestoreRequestVO.getCpnIssNo());
+        CupInfoVO cupInfoVO = optCupInfoVO.orElseThrow(() -> new RuntimeException(PromotionException.NOT_FIND_PRM.getMSG()));
         cupInfoVO.restoreCupValidate();
         
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupInfoVO);
         cupUseCnlTrxMapper.insertOrgCup(ccCpnIssueModel);
     }
-
 }

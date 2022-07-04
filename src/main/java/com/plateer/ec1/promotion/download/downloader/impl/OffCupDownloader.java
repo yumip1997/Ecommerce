@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 @Log4j2
@@ -35,7 +37,8 @@ public class OffCupDownloader implements CupDownloader {
     public void download(CupDwlRequestVO cupDwlRequestVO){
         setCupIssInfo(cupDwlRequestVO);
 
-        CupInfoVO cupInfoVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
+        Optional<CupInfoVO> optCupInfoVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
+        CupInfoVO cupInfoVO = optCupInfoVO.orElseThrow(() -> new RuntimeException(PromotionException.NOT_FIND_PRM.getMSG()));
         cupInfoVO.dwlValidate();
 
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupDwlRequestVO);
@@ -44,11 +47,8 @@ public class OffCupDownloader implements CupDownloader {
     }
 
     private void setCupIssInfo(CupDwlRequestVO cupDwlRequestVO){
-        CupInfoVO cupInfoVO = cupDwlMapper.getOfflineCupInfo(cupDwlRequestVO);
-
-        if(ObjectUtils.isEmpty(cupInfoVO)) {
-            throw new RuntimeException(PromotionException.INVALID_CPN_CERT_NO.getMSG());
-        }
+        Optional<CupInfoVO> optCupInfoVO = cupDwlMapper.getOfflineCupInfo(cupDwlRequestVO);
+        CupInfoVO cupInfoVO = optCupInfoVO.orElseThrow(() -> new RuntimeException(PromotionException.INVALID_CPN_CERT_NO.getMSG()));
 
         cupDwlRequestVO.setPrmNo(cupInfoVO.getPrmNo());
         cupDwlRequestVO.setCpnIssNo(cupInfoVO.getCpnIssNo());

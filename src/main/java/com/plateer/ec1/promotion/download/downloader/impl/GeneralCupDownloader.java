@@ -9,12 +9,15 @@ import com.plateer.ec1.promotion.download.mapper.CupDwlMapper;
 import com.plateer.ec1.promotion.download.mapper.CupDwlTrxMapper;
 import com.plateer.ec1.promotion.download.vo.request.CupDwlRequestVO;
 import com.plateer.ec1.promotion.enums.PRM0009Code;
+import com.plateer.ec1.promotion.enums.PromotionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -33,8 +36,8 @@ public class GeneralCupDownloader implements CupDownloader {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void download(CupDwlRequestVO cupDwlRequestVO){
-        CupInfoVO cupInfoVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
-        //TODO 없을 경우 NULL POINTER EXCEPTION
+        Optional<CupInfoVO> optCupInfoVO = cupDwlMapper.getCupDwlInfo(cupDwlRequestVO);
+        CupInfoVO cupInfoVO = optCupInfoVO.orElseThrow(() -> new RuntimeException(PromotionException.NOT_FIND_PRM.getMSG()));
         cupInfoVO.dwlValidate();
 
         CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupDwlRequestVO);
