@@ -18,6 +18,8 @@ public class CupInfoVO extends BaseVO {
     private Long prmNo;
     private Long cpnIssNo;
     private String prmNm;
+    private String cpnKindCd;
+    private String degrCcd;
     private String useYn;
     private LocalDate dwlAvlEndDd;
     private LocalDateTime prmEndDt;

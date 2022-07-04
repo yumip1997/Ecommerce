@@ -17,4 +17,6 @@ public class ProductInfoVO {
     private Long orrAt;
     private Long orrCnt;
 
+    private Long cpnIssNo;
+
 }

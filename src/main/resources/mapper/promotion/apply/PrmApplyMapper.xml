@@ -46,6 +46,8 @@
             ci.dc_val,
             ci.min_pur_amt,
             ci.max_dc_amt,
+            ci.cpn_kind_cd,
+            ci.degr_ccd,
             iss.cpn_iss_no,
             case when ci.prm_priod_ccd = '10' or ci.prm_kind_cd = '10' then ci.prm_end_dt
             else iss.sys_mod_dtime + ci.prm_std_dd * interval '1 day'
