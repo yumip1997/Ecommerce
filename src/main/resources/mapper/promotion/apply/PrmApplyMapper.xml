@@ -6,7 +6,7 @@
         <id property="goodsItemNo" column="goods_item_no" />
         <id property="prmCupIssNo" column="prm_cpn_iss_no" />
         <association property="productInfoVO" autoMapping="true" />
-        <association property="applicablePrmVO" notNullColumn="cpn_iss_no" autoMapping="true" />
+        <association property="applicablePrmVO" autoMapping="true" />
     </resultMap>
 
     <sql id="prm_apy_info">
