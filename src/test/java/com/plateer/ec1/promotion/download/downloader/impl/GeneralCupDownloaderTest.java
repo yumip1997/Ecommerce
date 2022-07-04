@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.validation.ConstraintViolationException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -20,7 +22,7 @@ class GeneralCupDownloaderTest {
     void null_prm(){
         CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().mbrNo("m1").build();
 
-        Assertions.assertThrows(RuntimeException.class, () -> generalCupDownloader.download(cupDwlRequestVO));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> generalCupDownloader.download(cupDwlRequestVO));
     }
 
     @Test
@@ -28,7 +30,7 @@ class GeneralCupDownloaderTest {
     void null_mbr(){
         CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).build();
 
-        Assertions.assertThrows(RuntimeException.class, () -> generalCupDownloader.download(cupDwlRequestVO));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> generalCupDownloader.download(cupDwlRequestVO));
     }
 
     @Test
@@ -48,9 +50,17 @@ class GeneralCupDownloaderTest {
     }
 
     @Test
+    @DisplayName("발급 횟수 초과 시 예외가 발생한다.")
+    void not_psn_cnt(){
+        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(6L).mbrNo("m1").build();
+
+        Assertions.assertThrows(RuntimeException.class, () -> generalCupDownloader.download(cupDwlRequestVO));
+    }
+
+    @Test
     @DisplayName("쿠폰 다운 완료")
     void dwl(){
-        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(8L).mbrNo("user1").dwlCupType("10").build();
+        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(1L).mbrNo("user1").dwlCupType("10").build();
         generalCupDownloader.download(cupDwlRequestVO);
     }
 }
