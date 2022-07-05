@@ -1,6 +1,5 @@
 package com.plateer.ec1.promotion.apply.mapper;
 
-import com.plateer.ec1.promotion.apply.vo.PdPrmVO;
 import com.plateer.ec1.promotion.apply.vo.PrmAplyVO;
 import com.plateer.ec1.promotion.apply.vo.PrmCartAplyVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
