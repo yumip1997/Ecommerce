@@ -6,13 +6,13 @@
         <id column="goods_no" />
         <id column="item_no" />
         <association property="productInfoVO" autoMapping="true" />
-        <collection property="applicablePrmVOList" autoMapping="true" />
+        <collection property="applicablePrmVOList" autoMapping="true" ofType="applicablePrmVO"/>
     </resultMap>
 
-    <resultMap id="CarCupMap" type="prmCartAplyVO">
+    <resultMap id="CartCupMap" type="prmCartAplyVO">
         <id column="cpn_iss_no" />
         <association property="applicablePrmVO" autoMapping="true" />
-        <collection property="productInfoVOList" autoMapping="true" />
+        <collection property="productInfoVOList" autoMapping="true" ofType="productInfoVO" />
     </resultMap>
 
     <sql id="prm_apy_info">
@@ -35,7 +35,7 @@
         )
     </sql>
 
-    <sql id="getApplicablePrmList">
+    <sql id="sql_getApplicablePrmList">
         <include refid="prm_apy_info" />
         select
             aply.goods_no,
@@ -66,17 +66,15 @@
                 and iss.cpn_iss_no is not null
                 and iss.cpn_use_dt is null
             </if>
-            <if test = "!@com.plateer.ec1.promotion.enums.PRM0004Code@CART_COUPON.getCode().equals(cpnKindCd)">
-                and ci.min_pur_amt <![CDATA[<=]]> coalesce(aply.orr_at, coalesce(aply.sale_prc, 0))
-            </if>
     </sql>
 
     <select id="getApplicablePdCupList" resultMap="PdCupMap" >
-        <include refid="getApplicablePrmList" />
+        <include refid="sql_getApplicablePrmList" />
+        and ci.min_pur_amt <![CDATA[<=]]> coalesce(aply.orr_at, 0))
     </select>
 
-    <select id="getApplicableCartCupList" resultMap="CarCupMap">
-        <include refid="getApplicablePrmList" />
+    <select id="getApplicableCartCupList" resultMap="CartCupMap">
+        <include refid="sql_getApplicablePrmList" />
     </select>
 
 </mapper>
