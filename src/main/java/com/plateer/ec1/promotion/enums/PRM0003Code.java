@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 
 @RequiredArgsConstructor
 @Getter
@@ -14,9 +15,9 @@ public enum PRM0003Code {
     RATE("20", (productPrice, rate) -> productPrice * rate/100);
 
     private final String code;
-    private final BiFunction<Long, Long, Long> discountFunction;
+    private final BinaryOperator<Long> discountFunction;
 
-    public static BiFunction<Long, Long, Long> getBnfValFunction(String code){
+    public static BinaryOperator<Long> getBnfValFunction(String code){
         return Arrays.stream(PRM0003Code.values())
                 .filter(PRM0003Code -> PRM0003Code.getCode().equals(code))
                 .findFirst()
