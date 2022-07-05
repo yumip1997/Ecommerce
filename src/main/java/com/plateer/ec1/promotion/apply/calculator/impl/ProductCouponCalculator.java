@@ -1,10 +1,9 @@
 package com.plateer.ec1.promotion.apply.calculator.impl;
 
-import com.plateer.ec1.product.vo.ProductInfoVO;
+import com.plateer.ec1.common.enums.CommonConstants;
 import com.plateer.ec1.promotion.apply.calculator.Calculator;
 import com.plateer.ec1.promotion.apply.mapper.PrmApplyMapper;
 import com.plateer.ec1.promotion.apply.vo.ApplicablePrmVO;
-import com.plateer.ec1.promotion.apply.vo.PdPrmVO;
 import com.plateer.ec1.promotion.apply.vo.PrmAplyVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.PrmResponseVO;
@@ -16,11 +15,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.*;
 
 @RequiredArgsConstructor
 @Component
@@ -54,7 +49,7 @@ public class ProductCouponCalculator implements Calculator {
     private void setupMaxBenefitWithSet(List<ApplicablePrmVO> applicablePrmVOList, Set<Long> maxBnfSet){
         ApplicablePrmVO maxBnfPrm = getMaxBenfitPrm(applicablePrmVOList, maxBnfSet);
         maxBnfSet.add(maxBnfPrm.getCpnIssNo());
-        maxBnfPrm.setMaxBenefitYn("Y");
+        maxBnfPrm.setMaxBenefitYn(CommonConstants.Y.getCode());
     }
 
     @Override

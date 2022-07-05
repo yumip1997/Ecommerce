@@ -1,5 +1,6 @@
 package com.plateer.ec1.promotion.apply.vo;
 
+import com.plateer.ec1.common.enums.CommonConstants;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ public class ApplicablePrmVO implements Comparable<ApplicablePrmVO>{
     private String degrCcd;
     private LocalDateTime prmEndDt;
 
-    private String maxBenefitYn = "N";
+    private String maxBenefitYn = CommonConstants.N.getCode();
     private Long bnfVal;
 
     @Override

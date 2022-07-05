@@ -4,7 +4,6 @@ import com.plateer.ec1.product.vo.ProductInfoVO;
 import com.plateer.ec1.promotion.apply.calculator.Calculator;
 import com.plateer.ec1.promotion.apply.mapper.PrmApplyMapper;
 import com.plateer.ec1.promotion.apply.vo.ApplicablePrmVO;
-import com.plateer.ec1.promotion.apply.vo.PdPrmVO;
 import com.plateer.ec1.promotion.apply.vo.PrmAplyVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.PrmResponseVO;
@@ -16,9 +15,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.groupingByConcurrent;
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Component
