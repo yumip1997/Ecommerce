@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.groupingByConcurrent;
+import static java.util.stream.Collectors.*;
 
 @RequiredArgsConstructor
 @Component
@@ -30,8 +30,7 @@ public class ProductCouponCalculator implements Calculator {
 
     @Override
     public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO) {
-        List<PdPrmVO> pdPrmVOList = prmApplyMapper.getApplicablePrmList(prmRequestBaseVO);
-        List<PrmAplyVO> prmAplyVOList = groupByProductInfo(pdPrmVOList);
+        List<PrmAplyVO> prmAplyVOList = prmApplyMapper.getApplicablePdCupList(prmRequestBaseVO);
         calculate(prmAplyVOList);
 
         return PrmResponseVO.<PrmAplyVO>builder()
@@ -40,21 +39,7 @@ public class ProductCouponCalculator implements Calculator {
                 .build();
     }
 
-    //상품단품 번호로 그룹핑한다 (상품1 - 프로모션N)
-    private List<PrmAplyVO> groupByProductInfo(List<PdPrmVO> pdPrmVOList){
-        Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingByConcurrent(PdPrmVO::getGoodsItemNo));
-        return collect.entrySet().stream()
-                .map(this::convertPrmAplyVO)
-                .collect(Collectors.toList());
-    }
-
-    private PrmAplyVO convertPrmAplyVO(Map.Entry<String, List<PdPrmVO>> entry){
-        ProductInfoVO productInfoVO = entry.getValue().stream().map(PdPrmVO::getProductInfoVO).findFirst().orElse(ProductInfoVO.builder().build());
-        List<ApplicablePrmVO> applicablePrmVOList = entry.getValue().stream().map(PdPrmVO::getApplicablePrmVO).collect(Collectors.toList());
-        return PrmAplyVO.builder().productInfoVO(productInfoVO).applicablePrmVOList(applicablePrmVOList).build();
-    }
-
-    public void calculate(List<PrmAplyVO> prmAplyVOList){
+    private void calculate(List<PrmAplyVO> prmAplyVOList){
         Set<Long> maxBnfSet = new HashSet<>();
 
         for (PrmAplyVO prmAplyVO : prmAplyVOList) {
@@ -62,12 +47,14 @@ public class ProductCouponCalculator implements Calculator {
             if(CollectionUtils.isEmpty(applicablePrmVOList)) continue;
 
             setBnfVal(applicablePrmVOList, prmAplyVO.getProductInfoVO().getOrrAt());
-
-            ApplicablePrmVO maxBnfPrm = getMaxBenfitPrm(applicablePrmVOList, maxBnfSet);
-            maxBnfSet.add(maxBnfPrm.getCpnIssNo());
-            maxBnfPrm.setMaxBenefitYn("Y");
+            setupMaxBenefitWithSet(applicablePrmVOList, maxBnfSet);
         }
+    }
 
+    private void setupMaxBenefitWithSet(List<ApplicablePrmVO> applicablePrmVOList, Set<Long> maxBnfSet){
+        ApplicablePrmVO maxBnfPrm = getMaxBenfitPrm(applicablePrmVOList, maxBnfSet);
+        maxBnfSet.add(maxBnfPrm.getCpnIssNo());
+        maxBnfPrm.setMaxBenefitYn("Y");
     }
 
     @Override

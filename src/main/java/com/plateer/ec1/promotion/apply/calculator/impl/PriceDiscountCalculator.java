@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingByConcurrent;
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Component
@@ -28,8 +28,7 @@ public class PriceDiscountCalculator implements Calculator {
 
     @Override
     public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO) {
-        List<PdPrmVO> pdPrmVOList = prmApplyMapper.getApplicablePrmList(prmRequestBaseVO);
-        List<PrmAplyVO> prmAplyVOList = groupByProductInfo(pdPrmVOList);
+        List<PrmAplyVO> prmAplyVOList = prmApplyMapper.getApplicablePdCupList(prmRequestBaseVO);
         calculate(prmAplyVOList);
 
         List<ProductInfoVO> productInfoVOList = prmAplyVOList.stream()
@@ -42,37 +41,28 @@ public class PriceDiscountCalculator implements Calculator {
                 .build();
     }
 
-    private List<PrmAplyVO> groupByProductInfo(List<PdPrmVO> pdPrmVOList){
-        Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingByConcurrent(PdPrmVO::getGoodsItemNo));
-        return collect.entrySet().stream().map(this::convertPrmAplyVO).collect(Collectors.toList());
-    }
 
-    private PrmAplyVO convertPrmAplyVO(Map.Entry<String, List<PdPrmVO>> entry){
-        ProductInfoVO productInfoVO = entry.getValue().stream().map(PdPrmVO::getProductInfoVO).findFirst().orElse(ProductInfoVO.builder().build());
-        List<ApplicablePrmVO> applicablePrmVOList = entry.getValue().stream().map(PdPrmVO::getApplicablePrmVO).collect(Collectors.toList());
-        return PrmAplyVO.builder().productInfoVO(productInfoVO).applicablePrmVOList(applicablePrmVOList).build();
-    }
-
-    public void calculate(List<PrmAplyVO> prmAplyVOList){
+    private void calculate(List<PrmAplyVO> prmAplyVOList) {
         for (PrmAplyVO prmAplyVO : prmAplyVOList) {
             List<ApplicablePrmVO> applicablePrmVOList = prmAplyVO.getApplicablePrmVOList();
-            if(CollectionUtils.isEmpty(applicablePrmVOList)) continue;
+            if (CollectionUtils.isEmpty(applicablePrmVOList)) continue;
 
             setBnfVal(applicablePrmVOList, prmAplyVO.getProductInfoVO().getSalePrc());
-
-            ApplicablePrmVO maxBnfPrm = getMaxBenefitPrm(applicablePrmVOList);
-            ProductInfoVO productInfoVO = prmAplyVO.getProductInfoVO();
-
-            productInfoVO.setPrmPrc(productInfoVO.getSalePrc() - maxBnfPrm.getBnfVal());
+            setUpPrmPrc(prmAplyVO);
         }
+    }
 
+    private void setUpPrmPrc(PrmAplyVO prmAplyVO){
+        ApplicablePrmVO maxBnfPrm = getMaxBenefitPrm(prmAplyVO.getApplicablePrmVOList());
+
+        ProductInfoVO productInfoVO = prmAplyVO.getProductInfoVO();
+        productInfoVO.setPrmPrc(productInfoVO.getSalePrc() - maxBnfPrm.getBnfVal());
     }
 
     @Override
     public PrmTypeCode getType() {
         return PrmTypeCode.PRICE_DISCOUNT;
     }
-
 
 
 }

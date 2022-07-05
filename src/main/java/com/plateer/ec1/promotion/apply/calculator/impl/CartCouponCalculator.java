@@ -28,8 +28,7 @@ public class CartCouponCalculator implements Calculator {
 
     @Override
     public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO) {
-        List<PdPrmVO> pdPrmVOList = prmApplyMapper.getApplicablePrmList(prmRequestBaseVO);
-        List<PrmCartAplyVO> prmCartAplyVOList = groupByApplicableCup(pdPrmVOList);
+        List<PrmCartAplyVO> prmCartAplyVOList = getPrmCartAplyVOList(prmRequestBaseVO);
         calculate((prmCartAplyVOList));
 
         return PrmResponseVO.<PrmCartAplyVO>builder()
@@ -37,21 +36,11 @@ public class CartCouponCalculator implements Calculator {
                 .list(prmCartAplyVOList)
                 .build();
     }
-
-    //프로모션발급번호로 그룹핑한다 (프로모션1 - 상품N)
-    private List<PrmCartAplyVO> groupByApplicableCup(List<PdPrmVO> pdPrmVOList){
-        Map<String, List<PdPrmVO>> collect = pdPrmVOList.stream().collect(groupingByConcurrent(PdPrmVO::getPrmCupIssNo));
-        return collect.entrySet().stream()
-                .map(this::convertPrmCartAplyVO)
+    private List<PrmCartAplyVO> getPrmCartAplyVOList(PrmRequestBaseVO prmRequestBaseVO){
+        List<PrmCartAplyVO> prmCartAplyVOList = prmApplyMapper.getApplicableCartCupList(prmRequestBaseVO);
+        return prmCartAplyVOList.stream()
                 .filter(this::filterByPriceWithCnt)
                 .collect(Collectors.toList());
-    }
-
-    private PrmCartAplyVO convertPrmCartAplyVO(Map.Entry<String, List<PdPrmVO>> entry){
-        ApplicablePrmVO applicablePrmVO = entry.getValue().stream().map(PdPrmVO::getApplicablePrmVO).findFirst().orElse(ApplicablePrmVO.builder().build());
-        List<ProductInfoVO> productInfoVOList = entry.getValue().stream().map(PdPrmVO::getProductInfoVO).collect(Collectors.toList());
-
-        return PrmCartAplyVO.builder().applicablePrmVO(applicablePrmVO).productInfoVOList(productInfoVOList).build();
     }
 
     private boolean filterByPriceWithCnt(PrmCartAplyVO prmCartAplyVO){

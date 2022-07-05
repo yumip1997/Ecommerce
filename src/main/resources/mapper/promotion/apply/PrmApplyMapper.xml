@@ -2,11 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.promotion.apply.mapper.PrmApplyMapper">
 
-    <resultMap id="ApplicableCupMap" type="pdPrmVO">
-        <id property="goodsItemNo" column="goods_item_no" />
-        <id property="prmCupIssNo" column="prm_cpn_iss_no" />
+    <resultMap id="PdCupMap" type="prmAplyVO">
+        <id column="goods_no" />
+        <id column="item_no" />
         <association property="productInfoVO" autoMapping="true" />
+        <collection property="applicablePrmVOList" autoMapping="true" />
+    </resultMap>
+
+    <resultMap id="CarCupMap" type="prmCartAplyVO">
+        <id column="cpn_iss_no" />
         <association property="applicablePrmVO" autoMapping="true" />
+        <collection property="productInfoVOList" autoMapping="true" />
     </resultMap>
 
     <sql id="prm_apy_info">
@@ -29,11 +35,9 @@
         )
     </sql>
 
-    <select id="getApplicablePrmList" resultMap="ApplicableCupMap">
+    <sql id="getApplicablePrmList">
         <include refid="prm_apy_info" />
         select
-            concat(aply.goods_no, '', aply.item_no) as goods_item_no,
-            concat(ci.prm_no, '', iss.cpn_iss_no) as prm_cpn_iss_no,
             aply.goods_no,
             aply.item_no,
             aply.orr_cnt,
@@ -65,6 +69,14 @@
             <if test = "!@com.plateer.ec1.promotion.enums.PRM0004Code@CART_COUPON.getCode().equals(cpnKindCd)">
                 and ci.min_pur_amt <![CDATA[<=]]> coalesce(aply.orr_at, coalesce(aply.sale_prc, 0))
             </if>
+    </sql>
+
+    <select id="getApplicablePdCupList" resultMap="PdCupMap" >
+        <include refid="getApplicablePrmList" />
+    </select>
+
+    <select id="getApplicableCartCupList" resultMap="CarCupMap">
+        <include refid="getApplicablePrmList" />
     </select>
 
 </mapper>
