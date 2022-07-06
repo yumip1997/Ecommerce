@@ -25,11 +25,13 @@ public class ApplicablePrmVO implements Comparable<ApplicablePrmVO>{
     private LocalDateTime prmEndDt;
 
     private String maxBenefitYn = CommonConstants.N.getCode();
+    private String applyingYn = CommonConstants.N.getCode();
     private Long bnfVal;
 
     @Override
     public int compareTo(ApplicablePrmVO o) {
         return Comparator.comparingLong(ApplicablePrmVO::getBnfVal)
+                .thenComparing(ApplicablePrmVO::getApplyingYn)
                 .thenComparing(Comparator.comparingLong(ApplicablePrmVO::getPrmNo).reversed())
                 .thenComparing(Comparator.comparingLong(ApplicablePrmVO::getCpnIssNo).reversed())
                 .compare(this, o);

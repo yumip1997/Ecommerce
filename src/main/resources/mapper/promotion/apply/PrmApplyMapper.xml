@@ -25,13 +25,14 @@
                 #{productInfoVO.orrCnt, jdbcType=INTEGER} as orr_cnt,
                 #{productInfoVO.orrAt, jdbcType=INTEGER} as orr_at,
                 #{productInfoVO.salePrc, jdbcType=INTEGER} as sale_prc,
-                #{productInfoVO.prmPrc, jdbcType=INTEGER} as prm_prc
+                #{productInfoVO.prmPrc, jdbcType=INTEGER} as prm_prc,
+                #{productInfoVO.appliedCpnIssNo, jdbcType=INTEGER} as applied_cpn_iss_no
         </foreach>
         ), aply as (
             select
                 prd.*,
                 apy.prm_no
-            from cc_prm_aply_tgt apy inner join prd on apy.aply_tgt_no = prd.goods_no
+            from cc_prm_aply_tgt apy inner join prd on apy.aply_tgt_no = prd.goods_no and apy.aply_tgt_ccd = '10'
         )
     </sql>
 
@@ -44,6 +45,7 @@
             aply.orr_at,
             aply.sale_prc,
             aply.prm_prc,
+            aply.applied_cpn_iss_no,
             ci.prm_no,
             ci.prm_nm,
             ci.dc_ccd,
@@ -55,7 +57,10 @@
             iss.cpn_iss_no,
             case when ci.prm_priod_ccd = '10' or ci.prm_kind_cd = '10' then ci.prm_end_dt
             else iss.sys_mod_dtime + ci.prm_std_dd * interval '1 day'
-            end prm_end_dt
+            end prm_end_dt,
+            case when aply.applied_cpn_iss_no = iss.cpn_iss_no then 'Y'
+            else 'N'
+            end applying_yn
         from cup_info ci inner join aply on ci.prm_no = aply.prm_no
                          left join cc_cpn_issue iss on aply.prm_no = iss.prm_no and iss.mbr_no = #{mbrNo}
         where 1 = 1
@@ -70,7 +75,7 @@
 
     <select id="getApplicablePdCupList" resultMap="PdCupMap" >
         <include refid="sql_getApplicablePrmList" />
-        and ci.min_pur_amt <![CDATA[<=]]> coalesce(aply.orr_at, 0))
+        and ci.min_pur_amt <![CDATA[<=]]> coalesce(aply.orr_at, 0)
     </select>
 
     <select id="getApplicableCartCupList" resultMap="CartCupMap">
