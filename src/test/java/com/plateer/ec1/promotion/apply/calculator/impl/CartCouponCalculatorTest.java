@@ -35,8 +35,8 @@ class CartCouponCalculatorTest {
     }
 
 
-    ////test01이 P001 - 1, P002 - 1 을 주문
-    //P001-1에는 상품쿠폰 1000원을 적용 -> 주문금액은 29000-1000 = 28000
+    //test01이 P001 - 1, P002 - 1 을 주문
+    //최대혜택 상품 쿠폰을 적용
     @Test
     @DisplayName("test01이 P001 - 1, P002 - 1 을 주문")
     public void test01_test(){
@@ -55,6 +55,33 @@ class CartCouponCalculatorTest {
         Assertions.assertThat(applicablePrmVO.getCpnIssNo()).isEqualTo(2L);
     }
 
+    //최대혜택 상품 쿠폰을 적용
+    @Test
+    @DisplayName("test02가 P001-1, P001-2, P002-1, P002-2, P005-1, P005-2, P005-3, P006-0, P007-1, P007-1, P070-2, P007-3을 주문")
+    public void test2_test() {
+        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmKindCd("20").cpnKindCd("30").mbrNo("test02").build();
+        List<ProductInfoVO> productInfoVOList = new ArrayList<>(Arrays.asList(
+                getPrd("P001", "1", 24650L, 1L),
+                getPrd("P001", "2", 24650L, 2L),
+                getPrd("P002", "1", 8713L, 2L),
+                getPrd("P002", "2", 10250L, 1L),
+                getPrd("P005", "1", 9000L, 1L),
+                getPrd("P005", "2", 9000L, 1L),
+                getPrd("P005", "3", 9000L, 3L),
+                getPrd("P006", "0", 137000L, 1L),
+                getPrd("P007", "1", 21000L, 1L),
+                getPrd("P007", "2", 24000L, 2L),
+                getPrd("P007", "3", 24000L, 1L)));
+
+        prmRequestBaseVO.setProductInfoVOList(productInfoVOList);
+        PrmResponseVO<PrmCartAplyVO> calculationData = (PrmResponseVO<PrmCartAplyVO>) cartCouponCalculator.getCalculationData(prmRequestBaseVO);
+        List<ApplicablePrmVO> collect = calculationData.getList().stream().map(PrmCartAplyVO::getApplicablePrmVO).collect(Collectors.toList());
+
+        ApplicablePrmVO maxBnfPrm = getMaxBnfPrm(collect);
+        Assertions.assertThat(maxBnfPrm.getPrmNo()).isEqualTo(6L);
+        Assertions.assertThat(maxBnfPrm.getCpnIssNo()).isEqualTo(12L);
+        Assertions.assertThat(maxBnfPrm.getBnfVal()).isEqualTo(22000L);
+    }
 
     @Test
     @DisplayName("적용가능 장바구니 쿠폰 없을 경우")
