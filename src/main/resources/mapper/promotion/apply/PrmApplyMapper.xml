@@ -76,6 +76,7 @@
     <select id="getApplicablePdCupList" resultMap="PdCupMap" >
         <include refid="sql_getApplicablePrmList" />
         and ci.min_pur_amt <![CDATA[<=]]> coalesce(aply.orr_at, 0)
+        order by aply.applied_cpn_iss_no nulls last, aply.goods_no, aply.item_no
     </select>
 
     <select id="getApplicableCartCupList" resultMap="CartCupMap">
