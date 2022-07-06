@@ -52,7 +52,7 @@ class GeneralCupDownloaderTest {
     @Test
     @DisplayName("발급 횟수 초과 시 예외가 발생한다.")
     void not_psn_cnt(){
-        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(6L).mbrNo("m1").build();
+        CupDwlRequestVO cupDwlRequestVO = CupDwlRequestVO.builder().prmNo(6L).mbrNo("test02").build();
 
         Assertions.assertThrows(RuntimeException.class, () -> generalCupDownloader.download(cupDwlRequestVO));
     }
