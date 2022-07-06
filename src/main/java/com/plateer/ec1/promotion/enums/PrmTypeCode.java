@@ -25,7 +25,7 @@ public enum PrmTypeCode {
     public static PrmTypeCode findPromotionType(PrmRequestBaseVO prmRequestBaseVO){
         return Arrays.stream(PrmTypeCode.values())
                 .filter(prmTypeCode -> prmTypeCode.getPrmKindCd().getCode().equals(prmRequestBaseVO.getPrmKindCd()))
-                .filter(prmTypeCode -> prmRequestBaseVO.getCpnKindCd() == null || prmTypeCode.getCpnKindCd().getCode().equals(prmRequestBaseVO.getCpnKindCd()))
+                .filter(prmTypeCode -> prmRequestBaseVO.getCpnKindCd() == null || prmRequestBaseVO.getCpnKindCd().equals(prmTypeCode.getCpnKindCd().getCode()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(PromotionException.INVALID_PROMOTION_TYPE.getMSG()));
     }
