@@ -55,16 +55,15 @@
             ci.cpn_kind_cd,
             ci.degr_ccd,
             iss.cpn_iss_no,
-            case when ci.prm_priod_ccd = '10' or ci.prm_kind_cd = '10' then ci.prm_end_dt
-            else iss.sys_mod_dtime + ci.prm_std_dd * interval '1 day'
-            end prm_end_dt,
             case when aply.applied_cpn_iss_no = iss.cpn_iss_no then 'Y'
             else 'N'
             end applying_yn
         from cup_info ci inner join aply on ci.prm_no = aply.prm_no
                          left join cc_cpn_issue iss on aply.prm_no = iss.prm_no and iss.mbr_no = #{mbrNo}
         where 1 = 1
-            and now() <![CDATA[<]]> ci.prm_end_dt
+            and ((ci.prm_priod_ccd = '10' and ci.prm_end_dt <![CDATA[>]]> now()) or
+                 (ci.prm_priod_ccd = '20' and iss.sys_mod_dtime + ci.prm_std_dd * interval '1 day' <![CDATA[>]]> now())
+                )
             and ci.prm_kind_cd = #{prmKindCd}
             and ci.cpn_kind_cd =  #{cpnKindCd}
             <if test = "!@com.plateer.ec1.promotion.enums.PrmTypeCode@PRICE_DISCOUNT.getCode().equals(prmKindCd)">
