@@ -1,9 +1,6 @@
 package com.plateer.ec1.product.vo;
 
-import com.plateer.ec1.promotion.apply.vo.ApplicablePrmVO;
 import lombok.*;
-
-import java.util.Comparator;
 
 @Getter
 @Setter
