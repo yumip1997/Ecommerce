@@ -25,100 +25,134 @@ class ProductCouponCalculatorTest {
         return applicablePrmVOList.stream()
                 .filter(e -> "Y".equals(e.getMaxBenefitYn()))
                 .findFirst()
-                .orElse(ApplicablePrmVO.builder().build());
+                .orElse(null);
     }
 
-    public ProductInfoVO getPrd(String goodsNo, String itemNo){
-        return ProductInfoVO.builder().goodsNo(goodsNo).itemNo(itemNo).orrAt(5000L).build();
+    public PrmAplyVO findPrmAply(List<PrmAplyVO> prmAplyVOList, String goodsNo, String itemNo){
+        return prmAplyVOList.stream()
+                .filter(e -> e.getProductInfoVO().getGoodsNo().equals(goodsNo)
+                        && e.getProductInfoVO().getItemNo().equals(itemNo))
+                .findFirst()
+                .orElse(null);
     }
 
-    //상품 P001에 적용가능한 쿠폰 (6개)
-    //쿠폰번호 1 -> 2번 발급받음(2장)- 발급번호 1, 발급번호2 - 최대혜택 (1000원)
-    //쿠폰번호 3 -> 2번 발급받음(2장)- 발급번호 3, 발급번호4 - 혜택 (750원)
-    //쿠폰번호 9 -> 2번 발급받음(2장) - 발급번호 5, 발급번호6 - 최대혜택 (1000원)
+    public ProductInfoVO getPrd(String goodsNo, String itemNo, Long orrAt){
+        return ProductInfoVO.builder().goodsNo(goodsNo).itemNo(itemNo).orrAt(orrAt).build();
+    }
 
-    //상품 P001 - 단품1
+    //test01이 P001 - 1, P002 - 1 을 주문
     @Test
-    @DisplayName("상품 P001의 단품1에 적용가능한 상품쿠폰, 최대혜택 쿠폰 & 적용가능 발급번호")
-    public void p001_1_test() {
-        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmKindCd("20").cpnKindCd("10").mbrNo("user1").build();
-        List<ProductInfoVO> productInfoVOList = new ArrayList<>(Arrays.asList(getPrd("P001", "1")));
+    @DisplayName("상품 P001의 단품1, P002의 단품1의 적용가능 상품 쿠폰, 최대혜택 쿠폰의 발급번호 테스트")
+    void test01_TEST(){
+        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmKindCd("20").cpnKindCd("10").mbrNo("test01").build();
+        List<ProductInfoVO> productInfoVOList = new ArrayList<>(Arrays.asList(
+                getPrd("P001", "1", 29900L),
+                getPrd("P002", "1", 10250L))
+        );
         prmRequestBaseVO.setProductInfoVOList(productInfoVOList);
 
         PrmResponseVO<PrmAplyVO> calculationData = (PrmResponseVO<PrmAplyVO>) productCouponCalculator.getCalculationData(prmRequestBaseVO);
         List<PrmAplyVO> prmAplyVOList = calculationData.getList();
 
-        for (PrmAplyVO prmAplyVO : prmAplyVOList) {
-            List<ApplicablePrmVO> applicablePrmVOList = prmAplyVO.getApplicablePrmVOList();
+        List<ApplicablePrmVO> applicablePrmVOList = prmAplyVOList.get(0).getApplicablePrmVOList();
+        Assertions.assertThat(applicablePrmVOList.size()).isEqualTo(1);
 
-            ApplicablePrmVO maxBnf = getMaxBnfPrm(applicablePrmVOList);
-
-            //최대혜택 쿠폰은 쿠폰1, 쿠폰9 -> 쿠폰1이 우선
-            //user1은 쿠폰1을 2번(발급번호1, 발급번호2) 다운받음 -> 먼저 발급받은 쿠폰을 우선
-            Assertions.assertThat(maxBnf.getCpnIssNo()).isEqualTo(1L);
-            Assertions.assertThat(maxBnf.getPrmNo()).isEqualTo(1L);
-        }
-    }
-
-
-    @Test
-    @DisplayName("P001상품의 단품1, 단품2에 적용가능한 상품쿠폰, 최대혜택 쿠폰 & 적용가능 발급번호")
-    public void p001_1_2test() {
-        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmKindCd("20").cpnKindCd("10").mbrNo("user1").build();
-        List<ProductInfoVO> productInfoVOList = new ArrayList<>(Arrays.asList(getPrd("P001", "1"), getPrd("P001", "2")));
-        prmRequestBaseVO.setProductInfoVOList(productInfoVOList);
-
-        PrmResponseVO<PrmAplyVO> calculationData = (PrmResponseVO<PrmAplyVO>) productCouponCalculator.getCalculationData(prmRequestBaseVO);
-        List<PrmAplyVO> prmAplyVOList = calculationData.getList();
-
-        List<ApplicablePrmVO> applicablePrmVOList1 = prmAplyVOList.get(0).getApplicablePrmVOList();
-        ApplicablePrmVO maxBnf = getMaxBnfPrm(applicablePrmVOList1);
-        Assertions.assertThat(applicablePrmVOList1.size()).isEqualTo(6);
-        Assertions.assertThat(maxBnf.getPrmNo()).isEqualTo(1L);
+        ApplicablePrmVO maxBnf = getMaxBnfPrm(applicablePrmVOList);
         Assertions.assertThat(maxBnf.getCpnIssNo()).isEqualTo(1L);
+        Assertions.assertThat(maxBnf.getPrmNo()).isEqualTo(1L);
 
-        List<ApplicablePrmVO> applicablePrmVOList2 = prmAplyVOList.get(1).getApplicablePrmVOList();
-        ApplicablePrmVO maxBnf2 = getMaxBnfPrm(applicablePrmVOList2);
-        Assertions.assertThat(applicablePrmVOList1.size()).isEqualTo(6);
-        Assertions.assertThat(maxBnf2.getPrmNo()).isEqualTo(1L);
-        Assertions.assertThat(maxBnf2.getCpnIssNo()).isEqualTo(2L);
     }
 
+    //test02 P001-1, P001-2, P002-1, P002, P005-1, P005-2, P005-3, P006-0, P007-1, P007-1, P00-2, P00-3을 주문
+
     @Test
-    @DisplayName("P001상품의 단품1, 단품, 단품3에 상품쿠폰, 최대혜택 쿠폰 & 적용가능 발급번호")
-    public void p001_1_2_3test() {
-        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmKindCd("20").cpnKindCd("10").mbrNo("user1").build();
-        List<ProductInfoVO> productInfoVOList = new ArrayList<>(Arrays.asList(getPrd("P001", "1"),
-                getPrd("P001", "2"),
-                getPrd("P001", "3")));
+    @DisplayName("test02가 P001-1, P001-2, P002-1, P002-2, P005-1, P005-2, P005-3, P006-0, P007-1, P007-1, P070-2, P007-3을 주문")
+    public void test2_test(){
+        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmKindCd("20").cpnKindCd("10").mbrNo("test02").build();
+        List<ProductInfoVO> productInfoVOList = new ArrayList<>(Arrays.asList(
+                getPrd("P001", "1", 29000L),
+                getPrd("P001", "2", 29000L),
+                getPrd("P002", "1", 10250L),
+                getPrd("P002", "2", 10250L),
+                getPrd("P005", "1", 9000L),
+                getPrd("P005", "2", 9000L),
+                getPrd("P005", "3", 9000L),
+                getPrd("P006", "0", 140000L),
+                getPrd("P007", "1", 24000L),
+                getPrd("P007", "2", 24000L),
+                getPrd("P007", "3", 24000L)));
+
         prmRequestBaseVO.setProductInfoVOList(productInfoVOList);
 
         PrmResponseVO<PrmAplyVO> calculationData = (PrmResponseVO<PrmAplyVO>) productCouponCalculator.getCalculationData(prmRequestBaseVO);
         List<PrmAplyVO> prmAplyVOList = calculationData.getList();
 
-        List<ApplicablePrmVO> applicablePrmVOList1 = prmAplyVOList.get(0).getApplicablePrmVOList();
-        ApplicablePrmVO maxBnf = getMaxBnfPrm(applicablePrmVOList1);
-        Assertions.assertThat(applicablePrmVOList1.size()).isEqualTo(6);
-        Assertions.assertThat(maxBnf.getPrmNo()).isEqualTo(1L);
-        Assertions.assertThat(maxBnf.getCpnIssNo()).isEqualTo(1L);
+        //상품 P001 단품 1의 최대할인쿠폰 프로모션번호 3 / 쿠폰발급번호 7
+        PrmAplyVO p001_1 = findPrmAply(prmAplyVOList, "P001", "1");
+        ApplicablePrmVO maxBnfPrmOfp001_1 = getMaxBnfPrm(p001_1.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrmOfp001_1.getPrmNo()).isEqualTo(3L);
+        Assertions.assertThat(maxBnfPrmOfp001_1.getCpnIssNo()).isEqualTo(7L);
 
-        List<ApplicablePrmVO> applicablePrmVOList2 = prmAplyVOList.get(1).getApplicablePrmVOList();
-        ApplicablePrmVO maxBnf2 = getMaxBnfPrm(applicablePrmVOList2);
-        Assertions.assertThat(applicablePrmVOList2.size()).isEqualTo(6);
-        Assertions.assertThat(maxBnf2.getPrmNo()).isEqualTo(1L);
-        Assertions.assertThat(maxBnf2.getCpnIssNo()).isEqualTo(2L);
+        //상품 P001 단품 2의 최대할인쿠폰 프로모션번호 3 / 쿠폰발급번호 8
+        PrmAplyVO p001_2 = findPrmAply(prmAplyVOList, "P001", "2");
+        ApplicablePrmVO maxBnfPrmOfp001_2 = getMaxBnfPrm(p001_2.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrmOfp001_2.getPrmNo()).isEqualTo(3L);
+        Assertions.assertThat(maxBnfPrmOfp001_2.getCpnIssNo()).isEqualTo(8L);
 
-        List<ApplicablePrmVO> applicablePrmVOList3 = prmAplyVOList.get(2).getApplicablePrmVOList();
-        ApplicablePrmVO maxBnf3 = getMaxBnfPrm(applicablePrmVOList3);
-        Assertions.assertThat(applicablePrmVOList3.size()).isEqualTo(6);
-        Assertions.assertThat(maxBnf3.getPrmNo()).isEqualTo(9L);
-        Assertions.assertThat(maxBnf3.getCpnIssNo()).isEqualTo(5L);
+        //상품 P002 단품 1의 최대할인쿠폰 프로모션번호 3 / 쿠폰발급번호 9
+        PrmAplyVO p002_1 = findPrmAply(prmAplyVOList, "P002", "1");
+        ApplicablePrmVO maxBnfPrmOfpp002_1 = getMaxBnfPrm(p002_1.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrmOfpp002_1.getPrmNo()).isEqualTo(3L);
+        Assertions.assertThat(maxBnfPrmOfpp002_1.getCpnIssNo()).isEqualTo(9L);
+
+        //상품 P002 단품 2의 최대할인쿠폰 - 없음 (프로모션번호 3에 대해 가능한데 앞의 상품에서 다 사용함)
+        PrmAplyVO p002_2 = findPrmAply(prmAplyVOList, "P002", "2");
+        ApplicablePrmVO maxBnfPrmOfpp002_2 = getMaxBnfPrm(p002_2.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrmOfpp002_2).isNull();
+
+        //상품 P005 단품 1의 최대할인쿠폰 - 없음 (프로모션번호 3에 대해 가능한데 앞의 상품에서 다 사용함)
+        PrmAplyVO p005_1 = findPrmAply(prmAplyVOList, "P005", "1");
+        ApplicablePrmVO maxBnfPrmOfp005_1 = getMaxBnfPrm(p005_1.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrmOfp005_1).isNull();
+
+        //상품 P005 단품 2의 최대할인쿠폰 - 없음 (프로모션번호 3에 대해 가능한데 앞의 상품에서 다 사용함)
+        PrmAplyVO p005_2 = findPrmAply(prmAplyVOList, "P005", "2");
+        ApplicablePrmVO maxBnfPrmOfp005_2 = getMaxBnfPrm(p005_2.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrmOfp005_2).isNull();
+
+        //상품 P005 단품 3의 최대할인쿠폰 - 없음 (프로모션번호 3에 대해 가능한데 앞의 상품에서 다 사용함)
+        PrmAplyVO p005_3 = findPrmAply(prmAplyVOList, "P005", "3");
+        ApplicablePrmVO maxBnfPrmOfp005_3 = getMaxBnfPrm(p005_3.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrmOfp005_3).isNull();
+
+        //상품 P006 단품 0의 최대할인쿠폰 프로모션번호 4 / 쿠폰발급번호 10
+        PrmAplyVO p006_0 = findPrmAply(prmAplyVOList, "P006", "0");
+        ApplicablePrmVO maxBnfPrmOfp006_0 = getMaxBnfPrm(p006_0.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrmOfp006_0.getPrmNo()).isEqualTo(4L);
+        Assertions.assertThat(maxBnfPrmOfp006_0.getCpnIssNo()).isEqualTo(10L);
+
+        //상품 P007 단품 1의 최대할인쿠폰 프로모션번호 5 / 쿠폰발급번호 11
+        PrmAplyVO p007_1 = findPrmAply(prmAplyVOList, "P007", "1");
+        ApplicablePrmVO maxBnfPrmOfp007_1 = getMaxBnfPrm(p007_1.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrmOfp007_1.getPrmNo()).isEqualTo(5L);
+        Assertions.assertThat(maxBnfPrmOfp007_1.getCpnIssNo()).isEqualTo(11L);
+
+        //상품 P007 단품 2의 최대할인쿠폰 - 없음 (프로모션번호 5에 대해 가능한데 앞의 상품에서 다 사용함)
+        PrmAplyVO p007_2 = findPrmAply(prmAplyVOList, "P007", "2");
+        ApplicablePrmVO maxBnfPrmOfp007_2 = getMaxBnfPrm(p007_2.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrmOfp007_2).isNull();
+
+        //상품 P007 단품 3의 최대할인쿠폰 - 없음 (프로모션번호 5에 대해 가능한데 앞의 상품에서 다 사용함)
+        PrmAplyVO p007_3 = findPrmAply(prmAplyVOList, "P007", "3");
+        ApplicablePrmVO maxBnfPrmOfp007_3 = getMaxBnfPrm(p007_3.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrmOfp007_3).isNull();
     }
+
 
     @Test
     @DisplayName("P100상품의 단품1에 적용가능한 상품쿠폰 - 없음")
     public void empty_test() {
-        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmKindCd("20").cpnKindCd("10").mbrNo("user1").build();
+        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmKindCd("20").cpnKindCd("10").mbrNo("test01").build();
         List<ProductInfoVO> productInfoVOList = new ArrayList<>();
         ProductInfoVO productInfoVO1 = ProductInfoVO.builder().goodsNo("P100").itemNo("1").orrAt(5000L).build();
         productInfoVOList.add(productInfoVO1);
