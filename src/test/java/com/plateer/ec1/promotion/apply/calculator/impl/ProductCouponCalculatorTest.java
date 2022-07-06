@@ -40,6 +40,10 @@ class ProductCouponCalculatorTest {
         return ProductInfoVO.builder().goodsNo(goodsNo).itemNo(itemNo).orrAt(orrAt).build();
     }
 
+    public ProductInfoVO getPrd(String goodsNo, String itemNo, Long orrAt, Long appliedCpnIssNo){
+        return ProductInfoVO.builder().goodsNo(goodsNo).itemNo(itemNo).orrAt(orrAt).appliedCpnIssNo(appliedCpnIssNo).build();
+    }
+
     //test01이 P001 - 1, P002 - 1 을 주문
     @Test
     @DisplayName("상품 P001의 단품1, P002의 단품1의 적용가능 상품 쿠폰, 최대혜택 쿠폰의 발급번호 테스트")
@@ -162,6 +166,34 @@ class ProductCouponCalculatorTest {
         List<PrmAplyVO> prmAplyVOList = calculationData.getList();
 
         Assertions.assertThat(prmAplyVOList).isEmpty();
+    }
+
+    @Test
+    @DisplayName("적용되어 있는 쿠폰이 있을 경우 적용가능한 상품쿠폰, 최대혜택 테스트")
+    public void applied_test(){
+        PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmKindCd("20").cpnKindCd("10").mbrNo("test02").build();
+        List<ProductInfoVO> productInfoVOList = new ArrayList<>(Arrays.asList(
+                getPrd("P001", "1", 1000L, null),
+                getPrd("P001", "2", 1000L, null),
+                getPrd("P001", "3", 1000L, 3L))
+        );
+        prmRequestBaseVO.setProductInfoVOList(productInfoVOList);
+
+        PrmResponseVO<PrmAplyVO> calculationData = (PrmResponseVO<PrmAplyVO>) productCouponCalculator.getCalculationData(prmRequestBaseVO);
+        List<PrmAplyVO> prmAplyVOList = calculationData.getList();
+
+        PrmAplyVO p001 = findPrmAply(prmAplyVOList, "P001", "1");
+        ApplicablePrmVO maxBnfPrm1 = getMaxBnfPrm(p001.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrm1.getCpnIssNo()).isEqualTo(4L);
+
+        PrmAplyVO p002 = findPrmAply(prmAplyVOList, "P001", "2");
+        ApplicablePrmVO maxBnfPrm2 = getMaxBnfPrm(p002.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrm2).isNull();
+
+        PrmAplyVO p003 = findPrmAply(prmAplyVOList, "P001", "3");
+        ApplicablePrmVO maxBnfPrm3 = getMaxBnfPrm(p003.getApplicablePrmVOList());
+        Assertions.assertThat(maxBnfPrm3.getCpnIssNo()).isEqualTo(3L);
+
     }
 
 
