@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -59,7 +60,7 @@ public class CartCouponCalculator implements Calculator {
             ApplicablePrmVO applicablePrmVO = prmCartAplyVO.getApplicablePrmVO();
             Long prdTotalPrice = applicablePrdTotalPriceWithCnt(prmCartAplyVO.getProductInfoVOList());
 
-            Long bnfVal = getBnfVal(prdTotalPrice, applicablePrmVO);
+            Long bnfVal = getBnfVal(applicablePrmVO, prdTotalPrice);
             applicablePrmVO.setBnfVal(bnfVal);
         }
 
@@ -69,8 +70,12 @@ public class CartCouponCalculator implements Calculator {
     private void setMaxBenefitOfPrmCartAplyVO(List<PrmCartAplyVO> prmCartAplyVOList){
         if(CollectionUtils.isEmpty(prmCartAplyVOList)) return;
 
-        ApplicablePrmVO applicablePrmVO = getMaxBenefitPrm(extractApplicableCupVOList(prmCartAplyVOList));
-        applicablePrmVO.setMaxBenefitYn(CommonConstants.Y.getCode());
+        List<ApplicablePrmVO> applicablePrmVOList = extractApplicableCupVOList(prmCartAplyVOList);
+        Optional<ApplicablePrmVO> maxBnfPrmOpt = getMaxBenefitPrm(applicablePrmVOList);
+
+        maxBnfPrmOpt.ifPresent(applicablePrmVO -> {
+            applicablePrmVO.setMaxBenefitYn(CommonConstants.Y.getCode());
+        });
     }
 
     private List<ApplicablePrmVO> extractApplicableCupVOList(List<PrmCartAplyVO> prmCartAplyVOList){

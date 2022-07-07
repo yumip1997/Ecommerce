@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -49,10 +50,12 @@ public class PriceDiscountCalculator implements Calculator {
     }
 
     private void setUpPrmPrc(PrmAplyVO prmAplyVO){
-        ApplicablePrmVO maxBnfPrm = getMaxBenefitPrm(prmAplyVO.getApplicablePrmVOList());
+        Optional<ApplicablePrmVO> maxBnfPrmOpt = getMaxBenefitPrm(prmAplyVO.getApplicablePrmVOList());
 
-        ProductInfoVO productInfoVO = prmAplyVO.getProductInfoVO();
-        productInfoVO.setPrmPrc(productInfoVO.getSalePrc() - maxBnfPrm.getBnfVal());
+        maxBnfPrmOpt.ifPresent(maxBnfPrm -> {
+            ProductInfoVO productInfoVO = prmAplyVO.getProductInfoVO();
+            productInfoVO.setPrmPrc(productInfoVO.getSalePrc() - maxBnfPrm.getBnfVal());
+        });
     }
 
     @Override

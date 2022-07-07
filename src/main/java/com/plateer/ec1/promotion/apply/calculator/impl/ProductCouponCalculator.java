@@ -12,9 +12,11 @@ import com.plateer.ec1.promotion.enums.PrmTypeCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -47,9 +49,12 @@ public class ProductCouponCalculator implements Calculator {
     }
 
     private void setupMaxBenefitWithSet(List<ApplicablePrmVO> applicablePrmVOList, Set<Long> maxBnfSet){
-        ApplicablePrmVO maxBnfPrm = getMaxBenfitPrm(applicablePrmVOList, maxBnfSet);
-        maxBnfSet.add(maxBnfPrm.getCpnIssNo());
-        maxBnfPrm.setMaxBenefitYn(CommonConstants.Y.getCode());
+        Optional<ApplicablePrmVO> maxBnfPrmOpt = getMaxBenfitPrm(applicablePrmVOList, maxBnfSet);
+
+        maxBnfPrmOpt.ifPresent(maxBnfPrm -> {
+                maxBnfSet.add(maxBnfPrm.getCpnIssNo());
+                maxBnfPrm.setMaxBenefitYn(CommonConstants.Y.getCode());
+        });
     }
 
     @Override
