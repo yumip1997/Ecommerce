@@ -2,7 +2,6 @@ package com.plateer.ec1.promotion.apply.calculator.impl;
 
 import com.plateer.ec1.product.vo.ProductInfoVO;
 import com.plateer.ec1.promotion.apply.vo.ApplicablePrmVO;
-import com.plateer.ec1.promotion.apply.vo.PrmAplyVO;
 import com.plateer.ec1.promotion.apply.vo.PrmCartAplyVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.PrmResponseVO;
@@ -34,11 +33,15 @@ class CartCouponCalculatorTest {
         return ProductInfoVO.builder().goodsNo(goodsNo).itemNo(itemNo).orrAt(orrAt).orrCnt(orrCnt).build();
     }
 
+    public boolean isApplicableCpnIssNo(List<ApplicablePrmVO> applicablePrmVOList, List<Long> cpnIssNoList){
+        return applicablePrmVOList.stream()
+                .map(ApplicablePrmVO::getCpnIssNo)
+                .allMatch(e -> cpnIssNoList.contains(e));
+    }
 
-    //test01이 P001 - 1, P002 - 1 을 주문
-    //최대혜택 상품 쿠폰을 적용
+
     @Test
-    @DisplayName("test01이 P001 - 1, P002 - 1 을 주문")
+    @DisplayName("적용가능 장바구니 쿠폰, 최대혜택 쿠폰 테스트 (test01이 P001 - 1, P002 - 1 을 주문)")
     public void test01_test(){
         PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmKindCd("20").cpnKindCd("30").mbrNo("test01").build();
         List<ProductInfoVO> productInfoVOList = new ArrayList<>(Arrays.asList(
@@ -48,16 +51,20 @@ class CartCouponCalculatorTest {
         prmRequestBaseVO.setProductInfoVOList(productInfoVOList);
 
         PrmResponseVO<PrmCartAplyVO> calculationData = (PrmResponseVO) cartCouponCalculator.getCalculationData(prmRequestBaseVO);
+        List<ApplicablePrmVO> collect = calculationData.getList().stream().map(PrmCartAplyVO::getApplicablePrmVO).collect(Collectors.toList());
 
-        List<PrmCartAplyVO> list = calculationData.getList();
-        ApplicablePrmVO applicablePrmVO = list.get(0).getApplicablePrmVO();
+        //적용가능 장바구니 발급번호 2
+        isApplicableCpnIssNo(collect, Arrays.asList(2L));
+
+        //최대할인쿠폰 프로모션번호 2 / 쿠폰발급번호 2 - 1000원 할인
+        ApplicablePrmVO applicablePrmVO = getMaxBnfPrm(collect);
         Assertions.assertThat(applicablePrmVO.getPrmNo()).isEqualTo(2L);
         Assertions.assertThat(applicablePrmVO.getCpnIssNo()).isEqualTo(2L);
+        Assertions.assertThat(applicablePrmVO.getBnfVal()).isEqualTo(1000L);
     }
 
-    //최대혜택 상품 쿠폰을 적용
     @Test
-    @DisplayName("test02가 P001-1, P001-2, P002-1, P002-2, P005-1, P005-2, P005-3, P006-0, P007-1, P007-1, P070-2, P007-3을 주문")
+    @DisplayName("적용가능 장바구니 쿠폰, 최대혜택 쿠폰 테스트 (test02가 P001-1, P001-2, P002-1, P002-2, P005-1, P005-2, P005-3, P006-0, P007-1, P007-1, P070-2, P007-3을 주문)")
     public void test2_test() {
         PrmRequestBaseVO prmRequestBaseVO = PrmRequestBaseVO.builder().prmKindCd("20").cpnKindCd("30").mbrNo("test02").build();
         List<ProductInfoVO> productInfoVOList = new ArrayList<>(Arrays.asList(
@@ -74,13 +81,19 @@ class CartCouponCalculatorTest {
                 getPrd("P007", "3", 24000L, 1L)));
 
         prmRequestBaseVO.setProductInfoVOList(productInfoVOList);
-        PrmResponseVO<PrmCartAplyVO> calculationData = (PrmResponseVO<PrmCartAplyVO>) cartCouponCalculator.getCalculationData(prmRequestBaseVO);
+
+        PrmResponseVO<PrmCartAplyVO> calculationData = (PrmResponseVO) cartCouponCalculator.getCalculationData(prmRequestBaseVO);
         List<ApplicablePrmVO> collect = calculationData.getList().stream().map(PrmCartAplyVO::getApplicablePrmVO).collect(Collectors.toList());
 
-        ApplicablePrmVO maxBnfPrm = getMaxBnfPrm(collect);
-        Assertions.assertThat(maxBnfPrm.getPrmNo()).isEqualTo(6L);
-        Assertions.assertThat(maxBnfPrm.getCpnIssNo()).isEqualTo(12L);
-        Assertions.assertThat(maxBnfPrm.getBnfVal()).isEqualTo(22000L);
+
+        //적용가능 장바구니 발급번호 5,6,12,13,14,15
+        isApplicableCpnIssNo(collect, Arrays.asList(5L,6L,12L,13L,14L,15L));
+
+        //최대할인쿠폰 프로모션번호 6 / 쿠폰발급번호 12 - 22000원 할인
+        ApplicablePrmVO applicablePrmVO = getMaxBnfPrm(collect);
+        Assertions.assertThat(applicablePrmVO.getPrmNo()).isEqualTo(6L);
+        Assertions.assertThat(applicablePrmVO.getCpnIssNo()).isEqualTo(12L);
+        Assertions.assertThat(applicablePrmVO.getBnfVal()).isEqualTo(22000L);
     }
 
     @Test
