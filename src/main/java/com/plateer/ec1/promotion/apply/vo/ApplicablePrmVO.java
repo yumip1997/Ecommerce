@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.function.ToLongFunction;
 
 @Getter
 @Setter
@@ -32,8 +33,8 @@ public class ApplicablePrmVO implements Comparable<ApplicablePrmVO>{
     public int compareTo(ApplicablePrmVO o) {
         return Comparator.comparingLong(ApplicablePrmVO::getBnfVal)
                 .thenComparing(ApplicablePrmVO::getApplyingYn)
-                .thenComparing(Comparator.comparingLong(ApplicablePrmVO::getPrmNo).reversed())
-                .thenComparing(Comparator.comparingLong(ApplicablePrmVO::getCpnIssNo).reversed())
+                .thenComparing(ApplicablePrmVO::getPrmNo).reversed()
+                .thenComparing(ApplicablePrmVO::getCpnIssNo).reversed()
                 .compare(this, o);
     }
 }
