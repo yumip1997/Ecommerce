@@ -2,7 +2,6 @@ package com.plateer.ec1.promotion.cupusecnl.service;
 
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupRestoreRequestVO;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupUseRequestVO;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,8 +73,6 @@ class CupUseCnlServiceTest {
         CupRestoreRequestVO vo = CupRestoreRequestVO.builder().cpnIssNo(2L).build();
 
         cupUseCnlService.restoreCup(vo);
-
-        System.out.println("쿠폰 복원 시 예외 발생");
     }
 
     @Test
