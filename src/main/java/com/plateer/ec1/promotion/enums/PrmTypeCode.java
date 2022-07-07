@@ -4,8 +4,6 @@ import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
-
 @RequiredArgsConstructor
 @Getter
 public enum PrmTypeCode {
@@ -21,12 +19,22 @@ public enum PrmTypeCode {
     private final PRM0001Code prmKindCd;
     private final PRM0004Code cpnKindCd;
 
-    //TODO NULL 비교?
     public static PrmTypeCode findPromotionType(PrmRequestBaseVO prmRequestBaseVO){
-        return Arrays.stream(PrmTypeCode.values())
-                .filter(prmTypeCode -> prmTypeCode.getPrmKindCd().getCode().equals(prmRequestBaseVO.getPrmKindCd()))
-                .filter(prmTypeCode -> prmRequestBaseVO.getCpnKindCd() == null || prmRequestBaseVO.getCpnKindCd().equals(prmTypeCode.getCpnKindCd().getCode()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(PromotionException.INVALID_PROMOTION_TYPE.getMSG()));
+        String prmKindCd = prmRequestBaseVO.getPrmKindCd();
+        String cpnKindCd = prmRequestBaseVO.getCpnKindCd();
+
+        if(PRICE_DISCOUNT.prmKindCd.getCode().equals(prmKindCd)){
+            return PRICE_DISCOUNT;
+        }
+
+        if(PROUDCT_COUPON.prmKindCd.getCode().equals(prmKindCd) && PROUDCT_COUPON.cpnKindCd.getCode().equals(cpnKindCd)){
+            return PROUDCT_COUPON;
+        }
+
+        if(CART_COUPON.prmKindCd.getCode().equals(prmKindCd) && CART_COUPON.cpnKindCd.getCode().equals(cpnKindCd)){
+            return CART_COUPON;
+        }
+
+        throw new IllegalArgumentException(PromotionException.INVALID_PROMOTION_TYPE.getMSG());
     }
 }

@@ -3,8 +3,6 @@ package com.plateer.ec1.promotion.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
-
 @RequiredArgsConstructor
 @Getter
 public enum PRM0009Code {
@@ -17,9 +15,14 @@ public enum PRM0009Code {
     private final String code;
 
     public static PRM0009Code findDwlCupType(String code){
-        return Arrays.stream(PRM0009Code.values())
-                .filter(dwlCupType -> dwlCupType.getCode().equals(code))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(PromotionException.INVALID_CUP_DWL_TYPE.getMSG()));
+        if(General_Cup.code.equals(code)){
+            return General_Cup;
+        }
+
+        if(Offline_CUP.code.equals(code)){
+            return Offline_CUP;
+        }
+
+        throw new IllegalArgumentException(PromotionException.INVALID_CUP_DWL_TYPE.getMSG());
     }
 }
