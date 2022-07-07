@@ -10,6 +10,32 @@ import java.time.LocalDateTime;
 //TODO 삭제예정
 public class CupInfoValidator {
 
+    public static void cupUseValidate(CupInfoVO cupInfoVO, String mbrNo){
+        isExistCupInfo(cupInfoVO);
+        isEqualMbrNo(cupInfoVO, mbrNo);
+        isNotUsed(cupInfoVO);
+        isValidPrmPeriod(cupInfoVO);
+    }
+
+    public static void restoreCupValidate(CupInfoVO cupInfoVO, String mbrNo){
+        isExistCupInfo(cupInfoVO);
+        isEqualMbrNo(cupInfoVO, mbrNo);
+        isUsed(cupInfoVO);
+        isValidPrmPeriod(cupInfoVO);
+    }
+
+    public static void dwlValidate(CupInfoVO cupInfoVO){
+        isExistCupInfo(cupInfoVO);
+        isValidCupDwlPeriod(cupInfoVO);
+        isValidCnt(cupInfoVO);
+    }
+
+    private static void isEqualMbrNo(CupInfoVO cupInfoVO, String mbrNo) {
+        if(!mbrNo.equals(cupInfoVO.getMbrNo())){
+            throw new RuntimeException(PromotionException.NOT_SAME_MBR_NO.getMSG());
+        }
+    }
+
     public static void isExistCupInfo(CupInfoVO cupInfoVO) {
         if (ObjectUtils.isEmpty(cupInfoVO)) {
             throw new RuntimeException(PromotionException.NOT_FIND_PRM.getMSG());
