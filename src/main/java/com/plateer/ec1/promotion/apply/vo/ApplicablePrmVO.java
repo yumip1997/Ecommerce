@@ -24,7 +24,9 @@ public class ApplicablePrmVO implements Comparable<ApplicablePrmVO>{
     private String degrCcd;
     private LocalDateTime prmEndDt;
 
+    @Builder.Default
     private String maxBenefitYn = CommonConstants.N.getCode();
+    @Builder.Default
     private String applyingYn = CommonConstants.N.getCode();
     private Long bnfVal;
 
