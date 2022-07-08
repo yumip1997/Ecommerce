@@ -51,7 +51,7 @@ public class CartCouponCalculator implements Calculator {
 
     private Long applicablePrdTotalPriceWithCnt(List<ProductInfoVO> productInfoVOList){
         return productInfoVOList.stream()
-                .mapToLong(e -> e.getOrrAt() * e.getOrrCnt())
+                .mapToLong(ProductInfoVO::getTotalPriceWithCnt)
                 .sum();
     }
 
@@ -73,9 +73,7 @@ public class CartCouponCalculator implements Calculator {
         List<ApplicablePrmVO> applicablePrmVOList = extractApplicableCupVOList(prmCartAplyVOList);
         Optional<ApplicablePrmVO> maxBnfPrmOpt = getMaxBenefitPrm(applicablePrmVOList);
 
-        maxBnfPrmOpt.ifPresent(applicablePrmVO -> {
-            applicablePrmVO.setMaxBenefitYn(CommonConstants.Y.getCode());
-        });
+        maxBnfPrmOpt.ifPresent(applicablePrmVO -> applicablePrmVO.setMaxBenefitYn(CommonConstants.Y.getCode()));
     }
 
     private List<ApplicablePrmVO> extractApplicableCupVOList(List<PrmCartAplyVO> prmCartAplyVOList){
