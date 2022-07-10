@@ -13,6 +13,7 @@ import java.util.List;
 public class PrmCartAplyVO {
 
     private ApplicablePrmVO applicablePrmVO;
+    private Long ordAmt;
     private List<ProductInfoVO> productInfoVOList;
 
 }

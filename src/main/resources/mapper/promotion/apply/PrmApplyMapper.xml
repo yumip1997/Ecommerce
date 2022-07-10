@@ -3,20 +3,21 @@
 <mapper namespace="com.plateer.ec1.promotion.apply.mapper.PrmApplyMapper">
 
     <resultMap id="PdCupMap" type="prmAplyVO">
-        <id column="goods_no" />
-        <id column="item_no" />
-        <association property="productInfoVO" autoMapping="true" />
+        <id column="goods_no"/>
+        <id column="item_no"/>
+        <association property="productInfoVO" autoMapping="true"/>
         <collection property="applicablePrmVOList" autoMapping="true" ofType="applicablePrmVO"/>
     </resultMap>
 
     <resultMap id="CartCupMap" type="prmCartAplyVO">
-        <id column="cpn_iss_no" />
-        <association property="applicablePrmVO" autoMapping="true" />
-        <collection property="productInfoVOList" autoMapping="true" ofType="productInfoVO" />
+        <id column="cpn_iss_no"/>
+        <result column="ord_amt" property="ordAmt" />
+        <association property="applicablePrmVO" autoMapping="true"/>
+        <collection property="productInfoVOList" autoMapping="true" ofType="productInfoVO"/>
     </resultMap>
 
     <sql id="prm_apy_info">
-        <include refid="com.plateer.ec1.promotion.com.mapper.CupInfoMapper.sql_cupInfo" />
+        <include refid="com.plateer.ec1.promotion.com.mapper.CupInfoMapper.sql_cupInfo"/>
         , prd as(
         <foreach collection="productInfoVOList" item="productInfoVO" separator="union all">
             select
@@ -33,53 +34,47 @@
                 prd.*,
                 apy.prm_no
             from cc_prm_aply_tgt apy inner join prd on apy.aply_tgt_no = prd.goods_no and apy.aply_tgt_ccd = '10'
+        ), prm_aply as (
+            select
+                ci.*,
+                aply.*,
+                iss.cpn_iss_no,
+                iss.cpn_use_dt
+            from cup_info ci inner join aply on ci.prm_no = aply.prm_no
+                             left join cc_cpn_issue iss on aply.prm_no = iss.prm_no and iss.mbr_no = #{mbrNo}
+            where 1 = 1
+                and ((ci.prm_priod_ccd = '10' and ci.prm_end_dt <![CDATA[>]]> now()) or
+                        (ci.prm_priod_ccd = '20' and iss.sys_mod_dtime + ci.prm_std_dd * interval '1 day' <![CDATA[>]]> now()))
+                and ci.prm_kind_cd = #{prmKindCd}
+                and ci.cpn_kind_cd = #{cpnKindCd}
         )
     </sql>
 
-    <sql id="sql_getApplicablePrmList">
-        <include refid="prm_apy_info" />
-        select
-            aply.goods_no,
-            aply.item_no,
-            aply.orr_cnt,
-            aply.orr_at,
-            aply.sale_prc,
-            aply.prm_prc,
-            aply.applied_cpn_iss_no,
-            ci.prm_no,
-            ci.prm_nm,
-            ci.dc_ccd,
-            ci.dc_val,
-            ci.min_pur_amt,
-            ci.max_dc_amt,
-            ci.cpn_kind_cd,
-            ci.degr_ccd,
-            iss.cpn_iss_no,
-            case when aply.applied_cpn_iss_no = iss.cpn_iss_no then 'Y'
-            else 'N'
-            end applying_yn
-        from cup_info ci inner join aply on ci.prm_no = aply.prm_no
-                         left join cc_cpn_issue iss on aply.prm_no = iss.prm_no and iss.mbr_no = #{mbrNo}
+    <select id="getApplicablePdCupList" resultMap="PdCupMap">
+        <include refid="prm_apy_info"/>
+        select p.*,
+                case when applied_cpn_iss_no = cpn_iss_no then 'Y'
+                else 'N'
+                end applying_yn
+        from prm_aply p
         where 1 = 1
-            and ((ci.prm_priod_ccd = '10' and ci.prm_end_dt <![CDATA[>]]> now()) or
-                 (ci.prm_priod_ccd = '20' and iss.sys_mod_dtime + ci.prm_std_dd * interval '1 day' <![CDATA[>]]> now())
-                )
-            and ci.prm_kind_cd = #{prmKindCd}
-            and ci.cpn_kind_cd =  #{cpnKindCd}
-            <if test = "!@com.plateer.ec1.promotion.enums.PrmTypeCode@PRICE_DISCOUNT.getCode().equals(prmKindCd)">
-                and iss.cpn_iss_no is not null
-                and iss.cpn_use_dt is null
-            </if>
-    </sql>
-
-    <select id="getApplicablePdCupList" resultMap="PdCupMap" >
-        <include refid="sql_getApplicablePrmList" />
-        and ci.min_pur_amt <![CDATA[<=]]> coalesce(aply.orr_at, 0)
-        order by aply.applied_cpn_iss_no nulls last, aply.orr_at desc, aply.goods_no, aply.item_no
+            and min_pur_amt <![CDATA[<=]]> coalesce(orr_at, 0)
+            and cpn_iss_no is not null
+            and cpn_use_dt is null
+        order by applied_cpn_iss_no nulls last, orr_at desc, goods_no, item_no
     </select>
 
     <select id="getApplicableCartCupList" resultMap="CartCupMap">
-        <include refid="sql_getApplicablePrmList" />
+        <include refid="prm_apy_info"/>
+        select c.*
+        from (
+            select *,
+                    sum(orr_at * orr_cnt) over(partition by cpn_iss_no) ord_amt
+            from prm_aply) c
+        where 1 = 1
+                and min_pur_amt <![CDATA[<=]]> ord_amt
+                and cpn_iss_no is not null
+                and cpn_use_dt is null
     </select>
 
 </mapper>

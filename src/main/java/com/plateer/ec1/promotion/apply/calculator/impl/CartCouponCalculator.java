@@ -1,7 +1,6 @@
 package com.plateer.ec1.promotion.apply.calculator.impl;
 
 import com.plateer.ec1.common.enums.CommonConstants;
-import com.plateer.ec1.product.vo.ProductInfoVO;
 import com.plateer.ec1.promotion.apply.calculator.Calculator;
 import com.plateer.ec1.promotion.apply.mapper.PrmApplyMapper;
 import com.plateer.ec1.promotion.apply.vo.ApplicablePrmVO;
@@ -26,7 +25,7 @@ public class CartCouponCalculator implements Calculator {
 
     @Override
     public ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO) {
-        List<PrmCartAplyVO> prmCartAplyVOList = getPrmCartAplyVOList(prmRequestBaseVO);
+        List<PrmCartAplyVO> prmCartAplyVOList = prmApplyMapper.getApplicableCartCupList(prmRequestBaseVO);
         calculate((prmCartAplyVOList));
 
         return PrmResponseVO.<PrmCartAplyVO>builder()
@@ -35,32 +34,11 @@ public class CartCouponCalculator implements Calculator {
                 .build();
     }
 
-    private List<PrmCartAplyVO> getPrmCartAplyVOList(PrmRequestBaseVO prmRequestBaseVO){
-        List<PrmCartAplyVO> prmCartAplyVOList = prmApplyMapper.getApplicableCartCupList(prmRequestBaseVO);
-        return prmCartAplyVOList.stream()
-                .filter(this::filterByPriceWithCnt)
-                .collect(Collectors.toList());
-    }
-
-    private boolean filterByPriceWithCnt(PrmCartAplyVO prmCartAplyVO){
-        Long prdTotalPrice = applicablePrdTotalPriceWithCnt(prmCartAplyVO.getProductInfoVOList());
-        Long minPrice = prmCartAplyVO.getApplicablePrmVO().getMinPurAmt();
-
-        return minPrice <= prdTotalPrice;
-    }
-
-    private Long applicablePrdTotalPriceWithCnt(List<ProductInfoVO> productInfoVOList){
-        return productInfoVOList.stream()
-                .mapToLong(ProductInfoVO::getTotalPriceWithCnt)
-                .sum();
-    }
-
     private void calculate(List<PrmCartAplyVO> prmCartAplyVOList) {
         for (PrmCartAplyVO prmCartAplyVO : prmCartAplyVOList) {
             ApplicablePrmVO applicablePrmVO = prmCartAplyVO.getApplicablePrmVO();
-            Long prdTotalPrice = applicablePrdTotalPriceWithCnt(prmCartAplyVO.getProductInfoVOList());
 
-            Long bnfVal = getBnfVal(applicablePrmVO, prdTotalPrice);
+            Long bnfVal = getBnfVal(applicablePrmVO, prmCartAplyVO.getOrdAmt());
             applicablePrmVO.setBnfVal(bnfVal);
         }
 
@@ -70,13 +48,13 @@ public class CartCouponCalculator implements Calculator {
     private void setMaxBenefitOfPrmCartAplyVO(List<PrmCartAplyVO> prmCartAplyVOList){
         if(CollectionUtils.isEmpty(prmCartAplyVOList)) return;
 
-        List<ApplicablePrmVO> applicablePrmVOList = extractApplicableCupVOList(prmCartAplyVOList);
+        List<ApplicablePrmVO> applicablePrmVOList = extractApplicablePrmVOList(prmCartAplyVOList);
         Optional<ApplicablePrmVO> maxBnfPrmOpt = getMaxBenefitPrm(applicablePrmVOList);
 
         maxBnfPrmOpt.ifPresent(applicablePrmVO -> applicablePrmVO.setMaxBenefitYn(CommonConstants.Y.getCode()));
     }
 
-    private List<ApplicablePrmVO> extractApplicableCupVOList(List<PrmCartAplyVO> prmCartAplyVOList){
+    private List<ApplicablePrmVO> extractApplicablePrmVOList(List<PrmCartAplyVO> prmCartAplyVOList){
         return prmCartAplyVOList.stream()
                 .map(PrmCartAplyVO::getApplicablePrmVO)
                 .collect(Collectors.toList());
