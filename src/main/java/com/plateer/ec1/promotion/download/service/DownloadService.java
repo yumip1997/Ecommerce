@@ -3,7 +3,7 @@ package com.plateer.ec1.promotion.download.service;
 import com.plateer.ec1.promotion.download.downloader.CupDownloader;
 import com.plateer.ec1.promotion.download.factory.CupDownloaderFactory;
 import com.plateer.ec1.promotion.download.vo.request.CupDwlRequestVO;
-import com.plateer.ec1.promotion.enums.PRM0009Code;
+import com.plateer.ec1.promotion.enums.CupDwlTypeCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class DownloadService {
     }
 
     private CupDownloader getCupDownloader(CupDwlRequestVO cupDwlRequestVO){
-        PRM0009Code pRM0009Code = PRM0009Code.findDwlCupType(cupDwlRequestVO.getDwlCupType());
+        CupDwlTypeCode pRM0009Code = CupDwlTypeCode.of(cupDwlRequestVO.getDwlCupType());
         return cupDownloaderFactory.get(pRM0009Code);
     }
 }

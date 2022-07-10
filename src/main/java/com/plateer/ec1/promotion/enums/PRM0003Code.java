@@ -1,8 +1,10 @@
 package com.plateer.ec1.promotion.enums;
 
+import com.plateer.ec1.common.excpetion.ExceptionMessage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
 import java.util.function.BinaryOperator;
 
 @RequiredArgsConstructor
@@ -15,15 +17,10 @@ public enum PRM0003Code {
     private final String code;
     private final BinaryOperator<Long> discountFunction;
 
-    public static BinaryOperator<Long> getBnfValFunction(String code){
-        if(FIXED.getCode().equals(code)){
-            return FIXED.getDiscountFunction();
-        }
-
-        if(RATE.getCode().equals(code)){
-            return RATE.getDiscountFunction();
-        }
-
-        throw new IllegalArgumentException(PromotionException.INVALID_DC_TYPE.getMSG());
+    public static PRM0003Code of(String code){
+        return Arrays.stream(PRM0003Code.values())
+                .filter(prm0003Code -> prm0003Code.getCode().equals(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessage.NOT_VALID_CODE.getMsg()));
     }
 }
