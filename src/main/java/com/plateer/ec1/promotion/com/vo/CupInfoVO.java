@@ -1,5 +1,6 @@
 package com.plateer.ec1.promotion.com.vo;
 
+import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.common.vo.BaseVO;
 import com.plateer.ec1.promotion.enums.PromotionException;
 import lombok.Getter;
@@ -31,13 +32,13 @@ public class CupInfoVO extends BaseVO {
 
     public void isValidPrmPeriod() {
         if (LocalDateTime.now().isAfter(this.getPrmEndDt())) {
-            throw new RuntimeException(PromotionException.INVALID_PRM_PERIOD.getMSG());
+            throw new BusinessException(PromotionException.INVALID_PRM_PERIOD.getMSG());
         }
     }
 
     public void isValidCupDwlPeriod() {
         if (LocalDate.now().isAfter(this.getDwlAvlEndDd())) {
-            throw new RuntimeException(PromotionException.INVALID_CUP_DWL_PERIOD.getMSG());
+            throw new BusinessException(PromotionException.INVALID_CUP_DWL_PERIOD.getMSG());
         }
     }
 
@@ -49,25 +50,25 @@ public class CupInfoVO extends BaseVO {
         boolean isValid = dwlPsbCnt > this.getTotalCnt() && psnDwlPsbCnt > this.getMbrCnt();
 
         if (!isValid) {
-            throw new RuntimeException(PromotionException.INVALID_CUP_DWL_CNT.getMSG());
+            throw new BusinessException(PromotionException.INVALID_CUP_DWL_CNT.getMSG());
         }
     }
 
     public void isNotUsed(){
         if(!ObjectUtils.isEmpty(this.getCpnUseDt())){
-            throw new RuntimeException(PromotionException.ALREADY_USED_CUP.getMSG());
+            throw new BusinessException(PromotionException.ALREADY_USED_CUP.getMSG());
         }
     }
 
     public void isUsed(){
         if(ObjectUtils.isEmpty(this.getCpnUseDt())){
-            throw new RuntimeException(PromotionException.NOT_USED_CUP.getMSG());
+            throw new BusinessException(PromotionException.NOT_USED_CUP.getMSG());
         }
     }
 
     public void isEqualMbrNo(String mbrNo){
         if(!this.mbrNo.equals(mbrNo)){
-            throw new RuntimeException(PromotionException.NOT_SAME_MBR_NO.getMSG());
+            throw new BusinessException(PromotionException.NOT_SAME_MBR_NO.getMSG());
         }
     }
 
