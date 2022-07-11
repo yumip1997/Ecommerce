@@ -1,33 +1,31 @@
 package com.plateer.ec1.payment.utils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.plateer.ec1.common.utils.ObjectMapperUtil;
+import com.plateer.ec1.common.utils.RestTemplateUtil;
+import com.plateer.ec1.common.vo.RestTemplateReqVO;
 import com.plateer.ec1.payment.vo.req.VirtualAccountReqVO;
 import com.plateer.ec1.payment.vo.res.VirtualAccountResVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
+import org.springframework.util.MultiValueMap;
 
 @RequiredArgsConstructor
 @Component
 public class InicisApiCallHelper {
 
-    private final RestTemplate restTemplate;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final RestTemplateUtil restTemplateUtil;
 
-    public VirtualAccountResVO callVirtualAccountNum(VirtualAccountReqVO virtualAccountReqVO){
-        Map<String, String> stringStringMap = objectMapper.convertValue(virtualAccountReqVO, new TypeReference<Map<String, String>>() {});
+    public VirtualAccountResVO callVirtualAccountSeq(VirtualAccountReqVO virtualAccountReqVO) {
 
-        ResponseEntity<VirtualAccountResVO> virtualAccountResVOResponseEntity =
-                restTemplate
-                        .postForEntity(InicisApiConstants.VIRTUAL_ACCOUNT_NUM_REQEUST_URL, stringStringMap, VirtualAccountResVO.class);
+        RestTemplateReqVO<MultiValueMap<String, String>> restTemplateReqVO = RestTemplateReqVO.<MultiValueMap<String, String>>builder()
+                .url(InicisApiConstants.VIRTUAL_ACCOUNT_SEQ_URL)
+                .mediaType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(ObjectMapperUtil.convertMultiValueMap(virtualAccountReqVO)).build();
 
-        return null;
+        VirtualAccountResVO virtualAccountResVO = restTemplateUtil.callApiByPost(restTemplateReqVO, VirtualAccountResVO.class);
+
+        return virtualAccountResVO;
     }
 
 

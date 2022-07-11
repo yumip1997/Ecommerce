@@ -1,6 +1,8 @@
 package com.plateer.ec1.payment.utils;
 
 import com.plateer.ec1.payment.vo.req.VirtualAccountReqVO;
+import com.plateer.ec1.payment.vo.res.VirtualAccountResVO;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,12 +33,16 @@ class InicisApiCallHelperTest {
                         .buyerEmail("youmi321@naver.com")
                         .buyerName("박유미")
                         .currency(InicisConstants.CURRENCY_WON)
+                        .price("10000")
                         .bankCode("10")
                         .nmInput("박유미")
                         .build();
 
         virtualAccountReqVO.setUpVirtualAccountReqVO(api_key);
 
-        inicisApiCallHelper.callVirtualAccountNum(virtualAccountReqVO);
+        VirtualAccountResVO virtualAccountResVO = inicisApiCallHelper.callVirtualAccountSeq(virtualAccountReqVO);
+
+        Assertions.assertThat(virtualAccountResVO.getResultCode()).isEqualTo("01");
+
     }
 }

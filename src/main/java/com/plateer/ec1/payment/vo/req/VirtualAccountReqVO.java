@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.common.utils.EncryptUtil;
 import com.plateer.ec1.payment.utils.InicisConstants;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -16,6 +14,8 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class VirtualAccountReqVO{
 
     @Builder.Default
