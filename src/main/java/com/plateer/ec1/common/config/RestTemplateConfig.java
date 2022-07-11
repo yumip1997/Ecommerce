@@ -10,7 +10,7 @@ public class RestTemplateConfig {
 
     @Bean
     RestTemplate restTemplate(){
-        //TODO 설정 정보 셋팅해주기
+        //TODO 설정 정보 셋팅해주기(timeout 등)
         return new RestTemplate();
     }
 }
