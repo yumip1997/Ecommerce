@@ -10,5 +10,8 @@ import lombok.Setter;
 @Builder
 public class PayInfoVO {
 
+    long payAmount;
+    String bankCode;
+    String depositorName;
     PaymentType paymentType;
 }

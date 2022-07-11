@@ -26,3 +26,7 @@ logging:
         transaction:
           interceptor: trace
 
+payment :
+  inicis :
+    api-key : ItEQKi3rY7uvDS8l
+    mid : INIpayTest

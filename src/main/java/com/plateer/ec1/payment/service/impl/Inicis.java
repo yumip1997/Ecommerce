@@ -2,8 +2,8 @@ package com.plateer.ec1.payment.service.impl;
 
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.service.PaymentService;
-import com.plateer.ec1.payment.vo.ApproveResVO;
-import com.plateer.ec1.payment.vo.NetCancelReqVO;
+import com.plateer.ec1.payment.vo.res.ApproveResVO;
+import com.plateer.ec1.payment.vo.req.NetCancelReqVO;
 import com.plateer.ec1.payment.vo.OriginOrderVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import lombok.extern.log4j.Log4j2;

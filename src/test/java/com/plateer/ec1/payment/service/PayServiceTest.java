@@ -1,8 +1,8 @@
 package com.plateer.ec1.payment.service;
 
 import com.plateer.ec1.payment.enums.PaymentType;
-import com.plateer.ec1.payment.vo.CancelReqVO;
-import com.plateer.ec1.payment.vo.NetCancelReqVO;
+import com.plateer.ec1.payment.vo.req.CancelReqVO;
+import com.plateer.ec1.payment.vo.req.NetCancelReqVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
