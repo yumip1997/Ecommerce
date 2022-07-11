@@ -2,7 +2,7 @@ package com.plateer.ec1.payment.vo.req;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plateer.ec1.common.excpetion.custom.BusinessException;
-import com.plateer.ec1.common.utils.EncryptUtil;
+import com.plateer.ec1.common.utils.CipherUtil;
 import com.plateer.ec1.payment.utils.InicisConstants;
 import lombok.*;
 
@@ -86,7 +86,7 @@ public class VirtualAccountReqVO{
                 .append(this.getMoid())
                 .append(this.getPrice());
 
-        return EncryptUtil.encryptSha521(input.toString());
+        return CipherUtil.encrypt(input.toString());
     }
 
 }

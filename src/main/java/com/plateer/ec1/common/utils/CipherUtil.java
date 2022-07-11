@@ -7,13 +7,15 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 @Slf4j
-public class EncryptUtil {
+public class CipherUtil {
 
-    public static String encryptSha521(String input){
+    private static final String ALGORITHM = "SHA-512";
+
+    public static String encrypt(String input){
         String encryptedStr = null;
 
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-512");
+            MessageDigest digest = MessageDigest.getInstance(ALGORITHM);
             digest.reset();
             digest.update(input.getBytes(StandardCharsets.UTF_8));
             encryptedStr = String.format("%0128x", new BigInteger(1, digest.digest()));
