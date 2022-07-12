@@ -3,7 +3,6 @@ package com.plateer.ec1.payment.vo.req;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.common.utils.CipherUtil;
-import com.plateer.ec1.payment.utils.InicisConstants;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import lombok.*;
@@ -20,10 +19,13 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class VacctSeqReqVO {
 
+    private static final String PAYMENT_TYPE ="Pay";
+    private static final String PAYMENT_VACCT ="Vacct";
+
     @Builder.Default
-    private String type = InicisConstants.PAYMENT_TYPE;
+    private String type = PAYMENT_TYPE;
     @Builder.Default
-    private String paymethod = InicisConstants.PAYMENT_VACCT;
+    private String paymethod = PAYMENT_VACCT;
     private String timestamp;
     private String clientIp;
     private String mid;
