@@ -1,7 +1,7 @@
-package com.plateer.ec1.payment.service.impl;
+package com.plateer.ec1.payment.processor.impl;
 
 import com.plateer.ec1.payment.enums.PaymentType;
-import com.plateer.ec1.payment.service.PaymentService;
+import com.plateer.ec1.payment.processor.PaymentProcessor;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
 import com.plateer.ec1.payment.vo.req.NetCancelReqVO;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
-public class PointService implements PaymentService {
+public class PointProcessor implements PaymentProcessor {
 
     @Override
     public ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {

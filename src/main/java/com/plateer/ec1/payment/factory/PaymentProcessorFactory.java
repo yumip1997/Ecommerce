@@ -2,17 +2,15 @@ package com.plateer.ec1.payment.factory;
 
 import com.plateer.ec1.common.factory.FactoryTemplate;
 import com.plateer.ec1.payment.enums.PaymentType;
-import com.plateer.ec1.payment.service.PaymentService;
+import com.plateer.ec1.payment.processor.PaymentProcessor;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
-public class PaymentServiceFactory extends FactoryTemplate<PaymentType, PaymentService> {
+public class PaymentProcessorFactory extends FactoryTemplate<PaymentType, PaymentProcessor> {
 
-    public PaymentServiceFactory(List<PaymentService> list) {
+    public PaymentProcessorFactory(List<PaymentProcessor> list) {
         super(list);
     }
 }

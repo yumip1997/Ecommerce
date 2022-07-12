@@ -17,13 +17,15 @@ public class InicisApiCallHelper {
     private final RestTemplateUtil restTemplateUtil;
 
     public VacctSeqResVO callVacctSeq(VacctSeqReqVO vacctSeqReqVO) {
-
         RestTemplateReqVO<MultiValueMap<String, String>> restTemplateReqVO = RestTemplateReqVO.<MultiValueMap<String, String>>builder()
                 .url(InicisApiConstants.VIRTUAL_ACCOUNT_SEQ_URL)
                 .mediaType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(ObjectMapperUtil.convertMultiValueMap(vacctSeqReqVO)).build();
 
-        return restTemplateUtil.callApiByPost(restTemplateReqVO, VacctSeqResVO.class);
+        VacctSeqResVO resVO = restTemplateUtil.callApiByPost(restTemplateReqVO, VacctSeqResVO.class);
+        resVO.isValidCode();
+
+        return resVO;
     }
 
 

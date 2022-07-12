@@ -1,6 +1,7 @@
 package com.plateer.ec1.payment.service;
 
-import com.plateer.ec1.payment.factory.PaymentServiceFactory;
+import com.plateer.ec1.payment.factory.PaymentProcessorFactory;
+import com.plateer.ec1.payment.processor.PaymentProcessor;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
 import com.plateer.ec1.payment.vo.req.CancelReqVO;
@@ -16,14 +17,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PayService {
 
-    private final PaymentServiceFactory paymentServiceFactory;
+    private final PaymentProcessorFactory paymentProcessorFactory;
 
     public List<ApproveResVO> approve(OrderInfoVO orderInfoVO, List<PayInfoVO> payInfoVOList){
         List<ApproveResVO> approveResVOList = new ArrayList<>();
 
         for (PayInfoVO payInfoVO : payInfoVOList) {
-            PaymentService paymentService = paymentServiceFactory.get(payInfoVO.getPaymentType());
-            ApproveResVO approveResVO = paymentService.approvePay(orderInfoVO, payInfoVO);
+            PaymentProcessor paymentProcessor = paymentProcessorFactory.get(payInfoVO.getPaymentType());
+            ApproveResVO approveResVO = paymentProcessor.approvePay(orderInfoVO, payInfoVO);
             approveResVOList.add(approveResVO);
         }
 
@@ -31,13 +32,13 @@ public class PayService {
     }
 
     public void cancel(CancelReqVO cancelReqVO){
-        PaymentService paymentService = paymentServiceFactory.get(cancelReqVO.getPaymentType());
-        paymentService.cancelPay(cancelReqVO.getOriginOrderVO());
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.get(cancelReqVO.getPaymentType());
+        paymentProcessor.cancelPay(cancelReqVO.getOriginOrderVO());
     }
 
     public void netCancel(NetCancelReqVO netCancelReqVO){
-        PaymentService paymentService = paymentServiceFactory.get(netCancelReqVO.getPaymentType());
-        paymentService.netCancel(netCancelReqVO);
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.get(netCancelReqVO.getPaymentType());
+        paymentProcessor.netCancel(netCancelReqVO);
     }
 
 }

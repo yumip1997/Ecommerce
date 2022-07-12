@@ -1,13 +1,13 @@
 package com.plateer.ec1.payment.vo.res;
 
 import com.plateer.ec1.payment.enums.PaymentType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ApproveResVO {
 
     private PaymentType paymentType;

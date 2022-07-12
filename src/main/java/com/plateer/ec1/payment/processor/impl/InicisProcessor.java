@@ -1,9 +1,9 @@
-package com.plateer.ec1.payment.service.impl;
+package com.plateer.ec1.payment.processor.impl;
 
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
-import com.plateer.ec1.payment.service.PaymentService;
+import com.plateer.ec1.payment.processor.PaymentProcessor;
 import com.plateer.ec1.payment.utils.InicisApiCallHelper;
 import com.plateer.ec1.payment.utils.InicisApiReqMaker;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class InicisService implements PaymentService {
+public class InicisProcessor implements PaymentProcessor {
 
     private final InicisApiReqMaker inicisApiReqMaker;
     private final InicisApiCallHelper inicisApiCallHelper;
@@ -29,20 +29,12 @@ public class InicisService implements PaymentService {
 
     @Override
     public ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {
-        //전문생성
         VacctSeqReqVO reqVO = inicisApiReqMaker.makeVacctSeqReqVO(orderInfoVO, payInfoVO);
-        //호출
         VacctSeqResVO resVO = inicisApiCallHelper.callVacctSeq(reqVO);
-        //응답검증
-        resVO.isValidCode();
-        //주문결제테이블 insert
-        OpPayInfoModel insertData = OpPayInfoModel.getInsertData(reqVO, resVO);
-        paymentTrxMapper.insertOrderPayment(insertData);
 
-        return ApproveResVO.builder()
-                .ablePartialCancelYn(resVO.getAblePartialCancelYn())
-                .paymentType(payInfoVO.getPaymentType())
-                .build();
+        paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getInsertData(reqVO, resVO));
+
+        return new ApproveResVO(payInfoVO.getPaymentType(), resVO.getAblePartialCancelYn());
     }
 
     @Override
