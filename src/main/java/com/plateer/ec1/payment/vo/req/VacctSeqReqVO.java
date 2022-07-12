@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.common.utils.CipherUtil;
 import com.plateer.ec1.payment.utils.InicisConstants;
+import com.plateer.ec1.payment.vo.OrderInfoVO;
+import com.plateer.ec1.payment.vo.PayInfoVO;
 import lombok.*;
 
 import java.net.InetAddress;
@@ -16,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VirtualAccountReqVO{
+public class VacctSeqReqVO {
 
     @Builder.Default
     private String type = InicisConstants.PAYMENT_TYPE;
@@ -46,13 +48,27 @@ public class VirtualAccountReqVO{
     @JsonIgnore
     private LocalDateTime now;
 
-    public void setUpVirtualAccountReqVO(String INIAPI_KEY){
+    public static VacctSeqReqVO of(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO){
+        return VacctSeqReqVO
+                .builder()
+                .moid(orderInfoVO.getOrdNo())
+                .goodName(orderInfoVO.getGoodName())
+                .buyerName(orderInfoVO.getBuyerName())
+                .buyerEmail(orderInfoVO.getBuyerEmail())
+                .price(String.valueOf(payInfoVO.getPayAmount()))
+                .bankCode(payInfoVO.getBankCode())
+                .nmInput(payInfoVO.getDepositorName())
+                .build();
+    }
+
+    public void setUpVirtualAccountReqVO(String API_KEY, String MID){
+        this.setMid(MID);
         this.setNow(LocalDateTime.now());
         this.setTimestamp(makeTimestamp());
         this.setClientIp(makeClientIp());
         this.setDtInput(makeDtInput());
         this.setTmInput(makeTmInput());
-        this.setHashData(makeHashData(INIAPI_KEY));
+        this.setHashData(makeHashData(API_KEY));
     }
 
     public String makeTimestamp(){
@@ -75,9 +91,9 @@ public class VirtualAccountReqVO{
         return now.plusDays(1).format(DateTimeFormatter.ofPattern("hhmm"));
     }
 
-    public String makeHashData(String INIAPI_KEY){
+    public String makeHashData(String API_KEY){
         StringBuilder input = new StringBuilder();
-        input.append(INIAPI_KEY)
+        input.append(API_KEY)
                 .append(this.getType())
                 .append(this.getPaymethod())
                 .append(this.getTimestamp())
@@ -88,5 +104,4 @@ public class VirtualAccountReqVO{
 
         return CipherUtil.encrypt(input.toString());
     }
-
 }

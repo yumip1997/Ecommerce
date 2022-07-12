@@ -14,7 +14,6 @@ public class ClaimDataCreator {
     public static ClaimInsertBase makeClaimInsertBase(ClaimBaseVO claimBaseVO) {
         List<OpClmInfo> insertOpClmInfoList = claimBaseVO.getInsertOrderClaim();
 
-
         return ClaimInsertBase.builder().opClmInfoList(insertOpClmInfoList).build();
     }
 

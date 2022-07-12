@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class VirtualAccountReqVOTest {
+class VacctSeqReqVOTest {
 
     @Test
     void test() throws UnknownHostException {

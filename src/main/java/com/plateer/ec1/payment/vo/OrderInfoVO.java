@@ -9,6 +9,7 @@ import lombok.Setter;
 @Builder
 public class OrderInfoVO {
 
+    //주문번호
     private String ordNo;
     private String goodName;
     private String buyerName;

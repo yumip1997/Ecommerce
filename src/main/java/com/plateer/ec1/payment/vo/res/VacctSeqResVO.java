@@ -1,6 +1,9 @@
 package com.plateer.ec1.payment.vo.res;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.plateer.ec1.common.excpetion.custom.BusinessException;
+import com.plateer.ec1.payment.enums.PaymentBusiness;
+import com.plateer.ec1.payment.enums.PaymentException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VirtualAccountResVO {
+public class VacctSeqResVO {
 
     private String resultCode;
     private String resultMsg;
@@ -24,4 +27,11 @@ public class VirtualAccountResVO {
     private String validDate;
     private String validTime;
     private String price;
+    private String ablePartialCancelYn;
+
+    public void isValidCode(){
+        if(!PaymentBusiness.VACCT_APV.getSucessCode().equals(this.resultCode)){
+            throw new BusinessException(PaymentException.FAIL_APPROVE.MSG);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.plateer.ec1.payment.vo;
 
+import com.plateer.ec1.payment.enums.PaymentBusiness;
 import com.plateer.ec1.payment.enums.PaymentType;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +11,9 @@ import lombok.Setter;
 @Builder
 public class PayInfoVO {
 
-    long payAmount;
-    String bankCode;
-    String depositorName;
-    PaymentType paymentType;
+    private long payAmount;
+    private String bankCode;
+    private String depositorName;
+    private PaymentType paymentType;
+    private PaymentBusiness paymentBusiness;
 }

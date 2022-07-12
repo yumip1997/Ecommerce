@@ -2,6 +2,7 @@ package com.plateer.ec1.payment.service.impl;
 
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.service.PaymentService;
+import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
 import com.plateer.ec1.payment.vo.req.NetCancelReqVO;
 import com.plateer.ec1.payment.vo.OriginOrderVO;
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
-public class Point implements PaymentService {
+public class PointService implements PaymentService {
 
     @Override
-    public ApproveResVO approvePay(PayInfoVO payInfoVO) {
+    public ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {
         log.info("포인트 승인 요청 로직을 진행한다.");
         return null;
     }

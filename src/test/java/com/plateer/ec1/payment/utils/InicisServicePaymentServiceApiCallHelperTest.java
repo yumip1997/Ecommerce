@@ -1,17 +1,15 @@
 package com.plateer.ec1.payment.utils;
 
-import com.plateer.ec1.payment.vo.req.VirtualAccountReqVO;
-import com.plateer.ec1.payment.vo.res.VirtualAccountResVO;
+import com.plateer.ec1.payment.vo.req.VacctSeqReqVO;
+import com.plateer.ec1.payment.vo.res.VacctSeqResVO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
-class InicisApiCallHelperTest {
+class InicisServicePaymentServiceApiCallHelperTest {
 
     @Value("${payment.inicis.mid}")
     private String mid;
@@ -24,9 +22,8 @@ class InicisApiCallHelperTest {
 
     @Test
     void test(){
-        VirtualAccountReqVO virtualAccountReqVO =
-                VirtualAccountReqVO.builder()
-                        .mid(mid)
+        VacctSeqReqVO vacctSeqReqVO =
+                VacctSeqReqVO.builder()
                         .url("aa")
                         .moid("ORDER123")
                         .goodName("상품1")
@@ -34,15 +31,15 @@ class InicisApiCallHelperTest {
                         .buyerName("박유미")
                         .currency(InicisConstants.CURRENCY_WON)
                         .price("10000")
-                        .bankCode("10")
+                        .bankCode("03")
                         .nmInput("박유미")
                         .build();
 
-        virtualAccountReqVO.setUpVirtualAccountReqVO(api_key);
+        vacctSeqReqVO.setUpVirtualAccountReqVO(api_key, mid);
 
-        VirtualAccountResVO virtualAccountResVO = inicisApiCallHelper.callVirtualAccountSeq(virtualAccountReqVO);
+        VacctSeqResVO vacctSeqResVO = inicisApiCallHelper.callVacctSeq(vacctSeqReqVO);
 
-        Assertions.assertThat(virtualAccountResVO.getResultCode()).isEqualTo("01");
+        Assertions.assertThat(vacctSeqResVO.getResultCode()).isEqualTo("00");
 
     }
 }

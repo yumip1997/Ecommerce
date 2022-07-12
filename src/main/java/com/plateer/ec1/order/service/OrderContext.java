@@ -39,8 +39,7 @@ public class OrderContext {
             //주문데이터생성
             OrderVO orderVO = dataStrategy.create(orderRequestVO, productView);
 
-            //결제호출
-            payService.approve(orderRequestVO.getPayInfoVO());
+            //결제호출예정 - order , list<pay>
 
             //주문데이터등록
             insertOrderData(orderVO);

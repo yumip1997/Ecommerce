@@ -1,5 +1,6 @@
 package com.plateer.ec1.common.aop;
 
+import com.plateer.ec1.common.model.BaseModel;
 import com.plateer.ec1.common.vo.BaseVO;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -28,10 +29,23 @@ public class LoginIdSettingAspect {
     }
 
     private void setLoginIdOfArgs(Object arg){
-        if(! (arg instanceof BaseVO) ) return;
+        if(arg instanceof BaseVO){
+            setBaseVO(arg);
+        }
 
+        if(arg instanceof BaseModel){
+            setBaseModel(arg);
+        }
+    }
+
+    private void setBaseVO(Object arg){
         BaseVO baseVO = (BaseVO) arg;
         baseVO.setLoginId("FO");
+    }
+
+    private void setBaseModel(Object arg){
+        BaseModel baseModel = (BaseModel) arg;
+        baseModel.setLoginId("FO");
     }
 
 }
