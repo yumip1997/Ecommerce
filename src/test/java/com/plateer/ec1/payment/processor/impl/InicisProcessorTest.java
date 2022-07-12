@@ -13,14 +13,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@SpringBootTest
+@SpringBootTest
 class InicisProcessorTest {
 
-//    @Autowired
+    @Autowired
     private InicisProcessor inicisProcessor;
 
     @Test
     void approve_test(){
+        //TODO JSON 호출 방식으로 변경 예정
         OrderInfoVO orderInfoVO = OrderInfoVO.builder()
                 .ordNo("020220712001")
                 .goodName("상품1")
@@ -35,11 +36,7 @@ class InicisProcessorTest {
                 .paymentBusiness(PaymentBusiness.VACCT_APV)
                 .build();
 
-        Gson gson = new Gson();
-
-        System.out.println(gson.toJson(orderInfoVO));
-        System.out.println(gson.toJson(payInfoVO));
-//        ApproveResVO approveResVO = inicisProcessor.approvePay(orderInfoVO, payInfoVO);
-//        Assertions.assertThat(approveResVO.getPaymentType()).isEqualTo(PaymentType.INICIS);
+        ApproveResVO approveResVO = inicisProcessor.approvePay(orderInfoVO, payInfoVO);
+        Assertions.assertThat(approveResVO.getPaymentType()).isEqualTo(PaymentType.INICIS);
     }
 }
