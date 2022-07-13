@@ -1,0 +1,20 @@
+{
+  "no_tid": "ININPGVBNKINIpayTest20220713170935633150",
+  "no_oid": "020220712001",
+  "cd_bank": "00000003",
+  "cd_deal": "00000003",
+  "dt_trans": "20220713",
+  "tm_trans": "170935",
+  "no_vacct": "07500501797301",
+  "amt_input": "10000",
+  "flg_close": "0",
+  "cl_close": "0",
+  "type_msg": "0200",
+  "nm_inputbank": "__�׽�Ʈ__",
+  "nm_input": "ȫ�浿",
+  "dt_inputstd": "20220713",
+  "dt_calculstd": "20220713",
+  "dt_transbase": "20220713",
+  "cl_trans": "1100",
+  "cl_kor": "2"
+}

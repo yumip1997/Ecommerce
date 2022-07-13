@@ -23,5 +23,7 @@ class JsonReaderUtilTest {
 
         PayInfoVO payInfoVO = jsonReaderUtil.getObject("payment/PayInfo.json", PayInfoVO.class);
         log.info("payInfoVO : {} ", payInfoVO);
+
+
     }
 }

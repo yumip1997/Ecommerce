@@ -6,13 +6,13 @@ import com.plateer.ec1.payment.enums.OPT0009Code;
 import com.plateer.ec1.payment.enums.OPT0010Code;
 import com.plateer.ec1.payment.enums.OPT0011Code;
 import com.plateer.ec1.payment.vo.req.VacctSeqReqVO;
+import com.plateer.ec1.payment.vo.res.VacctDpstCmtResVO;
 import com.plateer.ec1.payment.vo.res.VacctSeqResVO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -51,7 +51,6 @@ public class OpPayInfoModel extends BaseModel {
                 .cnclAmt(0L)
                 .rfndAvlAmt(Long.parseLong(reqVO.getPrice()))
                 .trsnId(resVO.getTid())
-                .payCmtDtime(LocalDateTimeUtil.fromStringYearToSeconds(resVO.getAuthDate() + resVO.getAuthTime()))
                 .vrAcct(resVO.getVacct())
                 .vrBnkCd(resVO.getVacctBankCode())
                 .vrAcctNm(resVO.getVacctName())
@@ -60,5 +59,14 @@ public class OpPayInfoModel extends BaseModel {
                 .vrValTt(resVO.getValidTime())
                 .build();
     }
+
+    public static OpPayInfoModel getPayCmpUpdateData(VacctDpstCmtResVO resVO){
+        return OpPayInfoModel.builder()
+                .payCmtDtime(LocalDateTimeUtil.fromStringYearToSeconds(resVO.getDt_trans() + resVO.getTm_trans()))
+                .payPrgsScd(OPT0011Code.PAY_COMPLETE.getCode())
+                .vrAcct(resVO.getNo_vacct())
+                .build();
+    }
+
 
 }

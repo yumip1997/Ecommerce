@@ -1,6 +1,8 @@
 package com.plateer.ec1.payment.processor.impl;
 
+import com.google.gson.Gson;
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
+import com.plateer.ec1.common.utils.ObjectMapperUtil;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
 import com.plateer.ec1.payment.processor.PaymentProcessor;
@@ -12,15 +14,15 @@ import com.plateer.ec1.payment.vo.res.ApproveResVO;
 import com.plateer.ec1.payment.vo.req.NetCancelReqVO;
 import com.plateer.ec1.payment.vo.OriginOrderVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
+import com.plateer.ec1.payment.vo.res.VacctDpstCmtResVO;
 import com.plateer.ec1.payment.vo.res.VacctSeqResVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-//TODO 가상계좌 PAYMENTSERVICE로 분리?
 @Component
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class InicisProcessor implements PaymentProcessor {
 
     private final InicisApiReqMaker inicisApiReqMaker;
@@ -33,8 +35,12 @@ public class InicisProcessor implements PaymentProcessor {
         VacctSeqResVO resVO = inicisApiCallHelper.callVacctSeq(reqVO);
 
         paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getInsertData(reqVO, resVO));
-
         return new ApproveResVO(payInfoVO.getPaymentType(), resVO.getAblePartialCancelYn());
+    }
+
+    public void completeVacctDeposit(VacctDpstCmtResVO resVO){
+        resVO.isValid();
+        paymentTrxMapper.updateOrderPayment(OpPayInfoModel.getPayCmpUpdateData(resVO));
     }
 
     @Override

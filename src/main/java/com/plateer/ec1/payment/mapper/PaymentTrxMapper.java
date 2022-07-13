@@ -8,4 +8,6 @@ public interface PaymentTrxMapper {
 
     void insertOrderPayment(OpPayInfoModel opPayInfoModel);
 
+    void updateOrderPayment(OpPayInfoModel opPayInfoModel);
+
 }

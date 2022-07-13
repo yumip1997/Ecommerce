@@ -10,7 +10,7 @@ import java.util.Arrays;
 public enum PaymentBusiness {
 
     VACCT_APV("VA", "00"),
-    VACCT_APV_CMP("VAC", "00"),
+    VACCT_DPST_CMT("VAC", "0200"),
     VACCT_CNL("VC", "00"),
     POINT_APV("PA", ""),
     POINT_CNL("PC", "");
