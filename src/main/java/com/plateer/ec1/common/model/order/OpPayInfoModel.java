@@ -1,6 +1,7 @@
 package com.plateer.ec1.common.model.order;
 
 import com.plateer.ec1.common.model.BaseModel;
+import com.plateer.ec1.common.utils.LocalDateTimeUtil;
 import com.plateer.ec1.payment.enums.OPT0009Code;
 import com.plateer.ec1.payment.enums.OPT0010Code;
 import com.plateer.ec1.payment.enums.OPT0011Code;
@@ -50,7 +51,7 @@ public class OpPayInfoModel extends BaseModel {
                 .cnclAmt(0L)
                 .rfndAvlAmt(Long.parseLong(reqVO.getPrice()))
                 .trsnId(resVO.getTid())
-                .payCmtDtime(LocalDateTime.parse(resVO.getAuthDate() + resVO.getAuthTime(), DateTimeFormatter.ofPattern("yyyyMMddHHmmss")))
+                .payCmtDtime(LocalDateTimeUtil.fromStringYearToSeconds(resVO.getAuthDate() + resVO.getAuthTime()))
                 .vrAcct(resVO.getVacct())
                 .vrBnkCd(resVO.getVacctBankCode())
                 .vrAcctNm(resVO.getVacctName())
