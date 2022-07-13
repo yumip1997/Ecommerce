@@ -23,12 +23,10 @@ public class JsonReaderUtil {
 
     public <T> T getObject(String fileName, Class<T> type) {
         Path currentFile = Paths.get(FILE_PATH + fileName);
-        T t = null;
         try {
-            t = objectMapper.readValue(currentFile.toFile(), type);
+            return objectMapper.readValue(currentFile.toFile(), type);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return t;
     }
 }
