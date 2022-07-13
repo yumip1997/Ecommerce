@@ -3,6 +3,7 @@ package com.plateer.ec1.payment.vo.req;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.common.utils.CipherUtil;
+import com.plateer.ec1.common.utils.LocalDateTimeUtil;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import lombok.*;
@@ -74,7 +75,7 @@ public class VacctSeqReqVO {
     }
 
     public String makeTimestamp(){
-        return now.format(DateTimeFormatter.ofPattern("yyyyMMddhhmmss"));
+        return LocalDateTimeUtil.toStringYearToSeconds(now);
     }
 
     public String makeClientIp(){
@@ -86,24 +87,25 @@ public class VacctSeqReqVO {
     }
 
     public String makeDtInput(){
-        return now.plusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        return LocalDateTimeUtil.toStringYearToDate(now.plusDays(1));
     }
 
     public String makeTmInput(){
-        return now.plusDays(1).format(DateTimeFormatter.ofPattern("hhmm"));
+        return LocalDateTimeUtil.toStringHourToSeconds(now.plusDays(1));
     }
 
     public String makeHashData(String API_KEY){
-        StringBuilder input = new StringBuilder();
-        input.append(API_KEY)
+        String input = new StringBuilder()
+                .append(API_KEY)
                 .append(this.getType())
                 .append(this.getPaymethod())
                 .append(this.getTimestamp())
                 .append(this.getClientIp())
                 .append(this.getMid())
                 .append(this.getMoid())
-                .append(this.getPrice());
+                .append(this.getPrice())
+                .toString();
 
-        return CipherUtil.encrypt(input.toString());
+        return CipherUtil.encrypt(input);
     }
 }
