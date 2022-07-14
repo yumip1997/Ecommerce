@@ -1,19 +1,16 @@
 package com.plateer.ec1.payment.processor.impl;
 
-import com.google.gson.Gson;
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
-import com.plateer.ec1.common.utils.ObjectMapperUtil;
+import com.plateer.ec1.payment.enums.OPT0011Code;
 import com.plateer.ec1.payment.enums.PaymentType;
-import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
 import com.plateer.ec1.payment.processor.PaymentProcessor;
 import com.plateer.ec1.payment.utils.InicisApiCallHelper;
-import com.plateer.ec1.payment.utils.InicisApiReqMaker;
+import com.plateer.ec1.payment.utils.PaymentDataManipulator;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
-import com.plateer.ec1.payment.vo.req.VacctSeqReqVO;
-import com.plateer.ec1.payment.vo.res.ApproveResVO;
-import com.plateer.ec1.payment.vo.req.NetCancelReqVO;
 import com.plateer.ec1.payment.vo.OriginOrderVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
+import com.plateer.ec1.payment.vo.res.ApproveResVO;
+import com.plateer.ec1.payment.vo.res.VacctCnlResVO;
 import com.plateer.ec1.payment.vo.res.VacctDpstCmtResVO;
 import com.plateer.ec1.payment.vo.res.VacctSeqResVO;
 import lombok.RequiredArgsConstructor;
@@ -25,35 +22,39 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class InicisProcessor implements PaymentProcessor {
 
-    private final InicisApiReqMaker inicisApiReqMaker;
     private final InicisApiCallHelper inicisApiCallHelper;
-    private final PaymentTrxMapper paymentTrxMapper;
+    private final PaymentDataManipulator paymentDataManipulator;
 
     @Override
     public ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {
-        VacctSeqReqVO reqVO = inicisApiReqMaker.makeVacctSeqReqVO(orderInfoVO, payInfoVO);
-        VacctSeqResVO resVO = inicisApiCallHelper.callVacctSeq(reqVO);
+        VacctSeqResVO resVO = inicisApiCallHelper.callVacctSeq(orderInfoVO, payInfoVO);
 
-        paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getInsertData(reqVO, resVO));
+        paymentDataManipulator.insertVacctApprove(orderInfoVO.getOrdNo(), resVO);
         return new ApproveResVO(payInfoVO.getPaymentType(), resVO.getAblePartialCancelYn());
     }
 
     public void completeVacctDeposit(VacctDpstCmtResVO resVO){
-        resVO.isValid();
-        paymentTrxMapper.updateOrderPayment(OpPayInfoModel.getPayCmpUpdateData(resVO));
+        paymentDataManipulator.updateVacctApprove(resVO);
     }
 
     @Override
     public void cancelPay(OriginOrderVO originOrderVO) {
-        log.info("이니시스 결제취소 로직을 진행한다.");
-        //1. 원 주문결제 데이터를 조회한다.
-        //2. 요청으로 받은 취소 금액과 - 실제 쿼리로 조회한 취소 금액(주문금액 - 혜택금액 - 배송비)이 일치하는지 확인한다.
-        //3. 주문 결제 테이블의 취소 금액, 환불 가능 금액을 업데이트 한다.
+        OpPayInfoModel payInfoModel = OpPayInfoModel.builder().build();
+        verifyAmount();
+
+        VacctCnlResVO vacctCnlResVO = inicisApiCallHelper.callVacctCnl();
+
+        if(OPT0011Code.PAY_REQUEST.getCode().equals(payInfoModel.getPayPrgsScd())){
+            paymentDataManipulator.insertCnl();
+        }
+
+        if(OPT0011Code.PAY_COMPLETE.getCode().equals(payInfoModel.getPayPrgsScd())){
+            paymentDataManipulator.updateCnl();
+        }
     }
 
-    @Override
-    public void netCancel(NetCancelReqVO netCancelReqVO) {
-        log.info("이니시스 망취소 로직을 진행한다.");
+    private void verifyAmount(){
+
     }
 
     @Override

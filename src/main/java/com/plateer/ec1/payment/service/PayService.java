@@ -36,9 +36,4 @@ public class PayService {
         paymentProcessor.cancelPay(cancelReqVO.getOriginOrderVO());
     }
 
-    public void netCancel(NetCancelReqVO netCancelReqVO){
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.get(netCancelReqVO.getPaymentType());
-        paymentProcessor.netCancel(netCancelReqVO);
-    }
-
 }

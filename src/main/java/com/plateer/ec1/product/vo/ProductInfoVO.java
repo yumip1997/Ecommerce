@@ -20,8 +20,4 @@ public class ProductInfoVO {
     private Long orrCnt;
     private Long appliedCpnIssNo;
 
-    public Long getTotalPriceWithCnt(){
-        return this.getOrrAt() * this.getOrrCnt();
-    }
-
 }

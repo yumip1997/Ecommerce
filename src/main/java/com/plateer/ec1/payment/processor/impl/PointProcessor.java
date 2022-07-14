@@ -26,11 +26,6 @@ public class PointProcessor implements PaymentProcessor {
     }
 
     @Override
-    public void netCancel(NetCancelReqVO netCancelReqVO) {
-        log.info("포인트 망취소 로직을 진행한다.");
-    }
-
-    @Override
     public PaymentType getType() {
         return PaymentType.POINT;
     }

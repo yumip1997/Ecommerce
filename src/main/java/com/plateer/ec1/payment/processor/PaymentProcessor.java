@@ -12,6 +12,5 @@ public interface PaymentProcessor extends CustomFactory<PaymentType> {
 
     ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO);
     void cancelPay(OriginOrderVO originOrderVO);
-    void netCancel(NetCancelReqVO netCancelReqVO);
 
 }

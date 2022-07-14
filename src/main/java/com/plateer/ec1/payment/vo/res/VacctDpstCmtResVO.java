@@ -1,6 +1,7 @@
 package com.plateer.ec1.payment.vo.res;
 
 import com.plateer.ec1.common.excpetion.custom.BusinessException;
+import com.plateer.ec1.common.vo.ValidResVO;
 import com.plateer.ec1.payment.enums.PaymentBusiness;
 import com.plateer.ec1.payment.enums.PaymentException;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class VacctDpstCmtResVO {
+public class VacctDpstCmtResVO implements ValidResVO {
 
     private String no_tid;
     private String no_oid;
@@ -37,7 +38,8 @@ public class VacctDpstCmtResVO {
     private String no_cshr_appl;
     private String no_cshr_tid;
 
-    public void isValid(){
+    @Override
+    public void isValidRes(){
         if(!PaymentBusiness.VACCT_DPST_CMT.getCode().equals(this.getType_msg())){
             throw new BusinessException(PaymentException.FAIL_VACCT_DEPOSIT.MSG);
         }

@@ -11,5 +11,7 @@ public class InicisApiConstants {
 
     public static final String VIRTUAL_ACCOUNT_SEQ_URL = BASE_URL + "/formpay";
 
+    public static final String VIRTUAL_ACCOUNT_REFUND = BASE_URL + "/refund";
+
 
 }

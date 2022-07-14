@@ -1,8 +1,6 @@
 package com.plateer.ec1.payment.processor.impl;
 
-import com.google.gson.Gson;
 import com.plateer.ec1.common.utils.JsonReaderUtil;
-import com.plateer.ec1.payment.enums.PaymentBusiness;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
@@ -12,8 +10,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class InicisProcessorTest {

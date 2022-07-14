@@ -3,7 +3,7 @@ package com.plateer.ec1.payment.controller;
 import com.plateer.ec1.common.utils.HttpServletRequestUtil;
 import com.plateer.ec1.payment.processor.impl.InicisProcessor;
 import com.plateer.ec1.payment.utils.InicisApiConstants;
-import com.plateer.ec1.payment.vo.res.VacctDpstCmtResResVO;
+import com.plateer.ec1.payment.vo.res.VacctDpstCmtResVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +19,7 @@ public class InicisController {
     private final InicisProcessor inicisProcessor;
 
     @PostMapping("/vcaatDeposit")
-    public void completeVacctDeposit(VacctDpstCmtResResVO data, HttpServletRequest req){
+    public void completeVacctDeposit(VacctDpstCmtResVO data, HttpServletRequest req){
         String clientIp = HttpServletRequestUtil.getClientIP(req);
         if(!InicisApiConstants.VACCT_DPST_NTC_LIST.contains(clientIp)) return;
 

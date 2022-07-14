@@ -5,7 +5,6 @@ import com.plateer.ec1.common.utils.LocalDateTimeUtil;
 import com.plateer.ec1.payment.enums.OPT0009Code;
 import com.plateer.ec1.payment.enums.OPT0010Code;
 import com.plateer.ec1.payment.enums.OPT0011Code;
-import com.plateer.ec1.payment.vo.req.VacctSeqReqVO;
 import com.plateer.ec1.payment.vo.res.VacctDpstCmtResVO;
 import com.plateer.ec1.payment.vo.res.VacctSeqResVO;
 import lombok.Builder;
@@ -41,15 +40,15 @@ public class OpPayInfoModel extends BaseModel {
     private String vrValDt;
     private String vrValTt;
 
-    public static OpPayInfoModel getInsertData(VacctSeqReqVO reqVO, VacctSeqResVO resVO){
+    public static OpPayInfoModel getInsertData(String ordNo, VacctSeqResVO resVO){
         return OpPayInfoModel.builder()
-                .ordNo(reqVO.getMoid())
+                .ordNo(ordNo)
                 .payMnCd(OPT0009Code.VIRTUAL_ACCOUNT.getCode())
                 .payCcd(OPT0010Code.PAY.getCode())
                 .payPrgsScd(OPT0011Code.PAY_REQUEST.getCode())
-                .payAmt(Long.parseLong(reqVO.getPrice()))
+                .payAmt(Long.parseLong(resVO.getPrice()))
                 .cnclAmt(0L)
-                .rfndAvlAmt(Long.parseLong(reqVO.getPrice()))
+                .rfndAvlAmt(Long.parseLong(resVO.getPrice()))
                 .trsnId(resVO.getTid())
                 .vrAcct(resVO.getVacct())
                 .vrBnkCd(resVO.getVacctBankCode())

@@ -2,6 +2,7 @@ package com.plateer.ec1.payment.utils;
 
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
+import com.plateer.ec1.payment.vo.req.VacctCnlReqVO;
 import com.plateer.ec1.payment.vo.req.VacctSeqReqVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,5 +20,9 @@ public class InicisApiReqMaker {
         VacctSeqReqVO req = VacctSeqReqVO.of(orderInfoVO, payInfoVO);
         req.setUpVirtualAccountReqVO(API_KEY, MID);
         return req;
+    }
+
+    public VacctCnlReqVO makeVacctCnlReqVO(){
+        return new VacctCnlReqVO();
     }
 }
