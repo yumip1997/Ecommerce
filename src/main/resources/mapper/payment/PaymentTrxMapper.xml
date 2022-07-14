@@ -63,7 +63,7 @@
             <if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(payPrgsScd)">pay_prgs_scd= #{payPrgsScd},</if>
             <if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(cnclAmt)">cncl_amt=#{cnclAmt}, </if>
             <if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(rfndAvlAmt)">rfnd_avl_amt=#{rfndAvlAmt}, </if>
-            <if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(payCmtDtime)">pay_cmt_dtime=#{payCmtDtime}</if>
+            <if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(payCmtDtime)">pay_cmt_dtime=#{payCmtDtime},</if>
             sys_mod_dtime = now(),
             sys_modr_id = #{loginId}
         where vr_acct= #{vrAcct}

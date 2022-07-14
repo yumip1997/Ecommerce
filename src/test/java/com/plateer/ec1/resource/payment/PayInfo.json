@@ -1,6 +1,6 @@
-{"payAmount":10000,
+{"payAmount":1,
   "bankCode":"03",
-  "depositorName":"박유미",
+  "depositorName":"test",
   "paymentType":"inicis",
   "paymentBusiness":"VA"
 }
