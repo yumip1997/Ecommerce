@@ -45,11 +45,11 @@ public class InicisProcessor implements PaymentProcessor {
         VacctCnlResVO vacctCnlResVO = inicisApiCallHelper.callVacctCnl();
 
         if(OPT0011Code.PAY_REQUEST.getCode().equals(payInfoModel.getPayPrgsScd())){
-            paymentDataManipulator.insertCnl();
+            paymentDataManipulator.insertCnl(vacctCnlResVO);
         }
 
         if(OPT0011Code.PAY_COMPLETE.getCode().equals(payInfoModel.getPayPrgsScd())){
-            paymentDataManipulator.updateCnl();
+            paymentDataManipulator.updateCnl(vacctCnlResVO);
         }
     }
 

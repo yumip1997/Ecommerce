@@ -3,6 +3,7 @@ package com.plateer.ec1.payment.utils;
 import com.plateer.ec1.common.aop.ResValid;
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
+import com.plateer.ec1.payment.vo.res.VacctCnlResVO;
 import com.plateer.ec1.payment.vo.res.VacctDpstCmtResVO;
 import com.plateer.ec1.payment.vo.res.VacctSeqResVO;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,14 @@ public class PaymentDataManipulator {
         paymentTrxMapper.updateOrderPayment(payCmpUpdateData);
     }
 
-    public void insertCnl(){
+    @ResValid
+    public void insertCnl(VacctCnlResVO resVO){
         OpPayInfoModel opPayInfoModel = OpPayInfoModel.builder().build();
         paymentTrxMapper.insertOrderPayment(opPayInfoModel);
     }
-    public void updateCnl(){
+
+    @ResValid
+    public void updateCnl(VacctCnlResVO resVO){
         OpPayInfoModel opPayInfoModel = OpPayInfoModel.builder().build();
         paymentTrxMapper.updateOrderPayment(opPayInfoModel);
     }
