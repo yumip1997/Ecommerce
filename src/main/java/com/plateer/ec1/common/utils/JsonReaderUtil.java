@@ -1,13 +1,9 @@
 package com.plateer.ec1.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
