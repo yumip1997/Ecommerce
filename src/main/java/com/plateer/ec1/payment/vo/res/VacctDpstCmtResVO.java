@@ -40,7 +40,7 @@ public class VacctDpstCmtResVO implements ValidResVO {
 
     @Override
     public void isValidRes(){
-        if(!PaymentBusiness.VACCT_DPST_CMT.getCode().equals(this.getType_msg())){
+        if(!PaymentBusiness.VACCT_DPST_CMT.getSucessCode().equals(this.getType_msg())){
             throw new BusinessException(PaymentException.FAIL_VACCT_DEPOSIT.MSG);
         }
     }
