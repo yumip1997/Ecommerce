@@ -1,5 +1,6 @@
 package com.plateer.ec1.payment.controller;
 
+import com.plateer.ec1.common.enums.CommonConstants;
 import com.plateer.ec1.common.utils.HttpServletRequestUtil;
 import com.plateer.ec1.payment.processor.impl.InicisProcessor;
 import com.plateer.ec1.payment.utils.InicisApiConstants;
@@ -21,10 +22,10 @@ public class InicisController {
     private final InicisProcessor inicisProcessor;
 
     @PostMapping("/vcaatDeposit")
-    public void completeVacctDeposit(VacctDpstCmtResVO data, HttpServletRequest req){
+    public String completeVacctDeposit(VacctDpstCmtResVO data, HttpServletRequest req){
         String clientIp = HttpServletRequestUtil.getClientIP(req);
-        if(!InicisApiConstants.VACCT_DPST_NTC_LIST.contains(clientIp)) return;
+        if(!InicisApiConstants.VACCT_DPST_NTC_LIST.contains(clientIp)) return CommonConstants.FAIL.getCode();
 
-        inicisProcessor.completeVacctDeposit(data);
+        return inicisProcessor.completeVacctDeposit(data);
     }
 }

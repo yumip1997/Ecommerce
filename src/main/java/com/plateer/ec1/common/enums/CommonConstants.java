@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 public enum CommonConstants {
 
     Y("Y"),
-    N("N");
+    N("N"),
+    OK("OK"),
+    FAIL("FAIL");
 
     private final String code;
 

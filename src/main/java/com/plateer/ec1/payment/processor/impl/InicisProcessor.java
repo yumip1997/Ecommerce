@@ -1,5 +1,6 @@
 package com.plateer.ec1.payment.processor.impl;
 
+import com.plateer.ec1.common.enums.CommonConstants;
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.payment.enums.OPT0011Code;
 import com.plateer.ec1.payment.enums.PaymentType;
@@ -28,13 +29,14 @@ public class InicisProcessor implements PaymentProcessor {
     @Override
     public ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {
         VacctSeqResVO resVO = inicisApiCallHelper.callVacctSeq(orderInfoVO, payInfoVO);
-
         paymentDataManipulator.insertVacctApprove(orderInfoVO.getOrdNo(), resVO);
+
         return new ApproveResVO(payInfoVO.getPaymentType(), resVO.getAblePartialCancelYn());
     }
 
-    public void completeVacctDeposit(VacctDpstCmtResVO resVO){
+    public String completeVacctDeposit(VacctDpstCmtResVO resVO){
         paymentDataManipulator.updateVacctApprove(resVO);
+        return CommonConstants.OK.getCode();
     }
 
     @Override
