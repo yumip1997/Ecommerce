@@ -2,6 +2,8 @@ package com.plateer.ec1.payment.vo;
 
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @Builder
@@ -9,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 public class OrderInfoVO {
 
-    //주문번호
+    @NotNull
     private String ordNo;
     private String goodName;
     private String buyerName;

@@ -66,6 +66,6 @@
             <if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(payCmtDtime)">pay_cmt_dtime=#{payCmtDtime},</if>
             sys_mod_dtime = now(),
             sys_modr_id = #{loginId}
-        where vr_acct= #{vrAcct}
+        where trsn_id= #{trsnId}
     </update>
 </mapper>

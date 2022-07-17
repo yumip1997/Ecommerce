@@ -37,6 +37,7 @@ public class VacctDpstCmtResVO implements ValidResVO {
     private String tm_cshr;
     private String no_cshr_appl;
     private String no_cshr_tid;
+    private String no_req_tid;
 
     @Override
     public void isValidRes(){

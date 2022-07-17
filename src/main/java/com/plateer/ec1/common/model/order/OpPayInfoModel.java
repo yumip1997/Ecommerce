@@ -24,9 +24,9 @@ public class OpPayInfoModel extends BaseModel {
     private String payMnCd;
     private String payCcd;
     private String payPrgsScd;
-    private Long payAmt;
-    private Long cnclAmt;
-    private Long rfndAvlAmt;
+    private long payAmt;
+    private long cnclAmt;
+    private long rfndAvlAmt;
     private String trsnId;
     private LocalDateTime payCmtDtime;
     private LocalDateTime sysRegDtime;
@@ -47,7 +47,7 @@ public class OpPayInfoModel extends BaseModel {
                 .payCcd(OPT0010Code.PAY.getCode())
                 .payPrgsScd(OPT0011Code.PAY_REQUEST.getCode())
                 .payAmt(Long.parseLong(resVO.getPrice()))
-                .cnclAmt(0L)
+                .cnclAmt(0)
                 .rfndAvlAmt(Long.parseLong(resVO.getPrice()))
                 .trsnId(resVO.getTid())
                 .vrAcct(resVO.getVacct())
@@ -61,8 +61,10 @@ public class OpPayInfoModel extends BaseModel {
 
     public static OpPayInfoModel getPayCmpUpdateData(VacctDpstCmtResVO resVO){
         return OpPayInfoModel.builder()
+                .trsnId(resVO.getNo_req_tid())
                 .payCmtDtime(LocalDateTimeUtil.fromStringYearToSeconds(resVO.getDt_trans() + resVO.getTm_trans()))
                 .payPrgsScd(OPT0011Code.PAY_COMPLETE.getCode())
+                .rfndAvlAmt(Long.parseLong(resVO.getAmt_input()))
                 .vrAcct(resVO.getNo_vacct())
                 .build();
     }
