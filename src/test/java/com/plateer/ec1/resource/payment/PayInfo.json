@@ -1,6 +1,5 @@
 {"payAmount":1,
   "bankCode":"03",
   "depositorName":"test",
-  "paymentType":"inicis",
-  "paymentBusiness":"VA"
+  "paymentType":"inicis"
 }

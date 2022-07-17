@@ -1,6 +1,6 @@
 package com.plateer.ec1.payment.vo;
 
-import com.plateer.ec1.payment.enums.PaymentBusiness;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.plateer.ec1.payment.enums.PaymentType;
 import lombok.*;
 
@@ -14,13 +14,9 @@ import javax.validation.constraints.NotNull;
 public class PayInfoVO {
 
     @NotNull
-    private long payAmount;
-    @NotNull
+    private Long payAmount;
     private String bankCode;
-    @NotNull
     private String depositorName;
     @NotNull
     private PaymentType paymentType;
-    @NotNull
-    private PaymentBusiness paymentBusiness;
 }

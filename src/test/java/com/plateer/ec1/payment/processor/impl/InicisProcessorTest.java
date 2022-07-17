@@ -28,6 +28,7 @@ class InicisProcessorTest {
     void init(){
         jsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "payment");
     }
+
     @Test
     void approve_test(){
         OrderInfoVO orderInfoVO = jsonReaderUtil.getObject("/OrderInfo.json", OrderInfoVO.class);
