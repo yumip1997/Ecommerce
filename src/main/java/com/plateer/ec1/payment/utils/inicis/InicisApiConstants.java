@@ -1,4 +1,4 @@
-package com.plateer.ec1.payment.utils;
+package com.plateer.ec1.payment.utils.inicis;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +12,10 @@ public class InicisApiConstants {
     public static final String VIRTUAL_ACCOUNT_SEQ_URL = BASE_URL + "/formpay";
 
     public static final String VIRTUAL_ACCOUNT_REFUND = BASE_URL + "/refund";
+
+    public static final String TYPE_PAY = "Pay";
+
+    public static final String PAYMETHOD_VACCT = "Vacct";
 
 
 }

@@ -1,4 +1,4 @@
-package com.plateer.ec1.payment.vo.res;
+package com.plateer.ec1.payment.vo.inicis.res;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.plateer.ec1.common.excpetion.custom.BusinessException;

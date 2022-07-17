@@ -2,10 +2,11 @@ package com.plateer.ec1.payment.utils;
 
 import com.plateer.ec1.common.aop.ResValid;
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
+import com.plateer.ec1.payment.mapper.PaymentMapper;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
-import com.plateer.ec1.payment.vo.res.VacctCnlResVO;
-import com.plateer.ec1.payment.vo.res.VacctDpstCmtResVO;
-import com.plateer.ec1.payment.vo.res.VacctSeqResVO;
+import com.plateer.ec1.payment.vo.inicis.res.VacctCnlResVO;
+import com.plateer.ec1.payment.vo.inicis.res.VacctDpstCmtResVO;
+import com.plateer.ec1.payment.vo.inicis.res.VacctSeqResVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class PaymentDataManipulator {
 
+    private final PaymentMapper paymentMapper;
     private final PaymentTrxMapper paymentTrxMapper;
+
+    public OpPayInfoModel getOpPayInfoModelByOrdNo(String ordNo){
+        return paymentMapper.getOpPayInfoByOrdNo(ordNo);
+    }
 
     @ResValid
     public void insertVacctApprove(String ordNo, VacctSeqResVO resVO){

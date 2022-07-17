@@ -1,14 +1,14 @@
-package com.plateer.ec1.payment.utils;
+package com.plateer.ec1.payment.utils.inicis;
 
 import com.plateer.ec1.common.utils.ObjectMapperUtil;
 import com.plateer.ec1.common.utils.RestTemplateUtil;
 import com.plateer.ec1.common.vo.RestTemplateReqVO;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
-import com.plateer.ec1.payment.vo.req.VacctCnlReqVO;
-import com.plateer.ec1.payment.vo.req.VacctSeqReqVO;
-import com.plateer.ec1.payment.vo.res.VacctCnlResVO;
-import com.plateer.ec1.payment.vo.res.VacctSeqResVO;
+import com.plateer.ec1.payment.vo.inicis.req.VacctCnlReqVO;
+import com.plateer.ec1.payment.vo.inicis.req.VacctSeqReqVO;
+import com.plateer.ec1.payment.vo.inicis.res.VacctCnlResVO;
+import com.plateer.ec1.payment.vo.inicis.res.VacctSeqResVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

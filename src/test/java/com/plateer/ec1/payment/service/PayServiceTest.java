@@ -1,7 +1,6 @@
 package com.plateer.ec1.payment.service;
 
 import com.plateer.ec1.common.utils.JsonReaderUtil;
-import com.plateer.ec1.payment.enums.PaymentBusiness;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.req.ApproveReqVO;
@@ -16,8 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class PayServiceTest {

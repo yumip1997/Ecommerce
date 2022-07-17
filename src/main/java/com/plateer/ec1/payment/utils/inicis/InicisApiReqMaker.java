@@ -1,10 +1,9 @@
-package com.plateer.ec1.payment.utils;
+package com.plateer.ec1.payment.utils.inicis;
 
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
-import com.plateer.ec1.payment.vo.req.VacctCnlReqVO;
-import com.plateer.ec1.payment.vo.req.VacctSeqReqVO;
-import lombok.RequiredArgsConstructor;
+import com.plateer.ec1.payment.vo.inicis.req.VacctCnlReqVO;
+import com.plateer.ec1.payment.vo.inicis.req.VacctSeqReqVO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +22,6 @@ public class InicisApiReqMaker {
     }
 
     public VacctCnlReqVO makeVacctCnlReqVO(){
-        return new VacctCnlReqVO();
+        return VacctCnlReqVO.builder().build();
     }
 }

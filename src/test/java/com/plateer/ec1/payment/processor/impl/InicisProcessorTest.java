@@ -6,7 +6,7 @@ import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
-import com.plateer.ec1.payment.vo.res.VacctDpstCmtResVO;
+import com.plateer.ec1.payment.vo.inicis.res.VacctDpstCmtResVO;
 import com.plateer.ec1.resource.TestConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

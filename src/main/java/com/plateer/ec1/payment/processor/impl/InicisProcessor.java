@@ -5,15 +5,15 @@ import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.payment.enums.OPT0011Code;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.processor.PaymentProcessor;
-import com.plateer.ec1.payment.utils.InicisApiCallHelper;
+import com.plateer.ec1.payment.utils.inicis.InicisApiCallHelper;
 import com.plateer.ec1.payment.utils.PaymentDataManipulator;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.OriginOrderVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
-import com.plateer.ec1.payment.vo.res.VacctCnlResVO;
-import com.plateer.ec1.payment.vo.res.VacctDpstCmtResVO;
-import com.plateer.ec1.payment.vo.res.VacctSeqResVO;
+import com.plateer.ec1.payment.vo.inicis.res.VacctCnlResVO;
+import com.plateer.ec1.payment.vo.inicis.res.VacctDpstCmtResVO;
+import com.plateer.ec1.payment.vo.inicis.res.VacctSeqResVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -41,22 +41,16 @@ public class InicisProcessor implements PaymentProcessor {
 
     @Override
     public void cancelPay(OriginOrderVO originOrderVO) {
-        OpPayInfoModel payInfoModel = OpPayInfoModel.builder().build();
+        OpPayInfoModel payInfoModel = paymentDataManipulator.getOpPayInfoModelByOrdNo(originOrderVO.getOrdNo());
         verifyAmount();
 
-        VacctCnlResVO vacctCnlResVO = inicisApiCallHelper.callVacctCnl();
-
         if(OPT0011Code.PAY_REQUEST.getCode().equals(payInfoModel.getPayPrgsScd())){
-            paymentDataManipulator.insertCnl(vacctCnlResVO);
         }
 
         if(OPT0011Code.PAY_COMPLETE.getCode().equals(payInfoModel.getPayPrgsScd())){
+            VacctCnlResVO vacctCnlResVO = inicisApiCallHelper.callVacctCnl();
             paymentDataManipulator.updateCnl(vacctCnlResVO);
         }
-    }
-
-    private void verifyAmount(){
-
     }
 
     @Override

@@ -1,35 +1,18 @@
-package com.plateer.ec1.payment.vo.req;
+package com.plateer.ec1.payment.vo.inicis.req;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.common.utils.CipherUtil;
 import com.plateer.ec1.common.utils.LocalDateTimeUtil;
+import com.plateer.ec1.payment.utils.inicis.InicisApiConstants;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import lombok.*;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VacctSeqReqVO {
+public class VacctSeqReqVO extends InicisReqBase{
 
-    private static final String PAYMENT_TYPE ="Pay";
-    private static final String PAYMENT_VACCT ="Vacct";
-
-    @Builder.Default
-    private String type = PAYMENT_TYPE;
-    @Builder.Default
-    private String paymethod = PAYMENT_VACCT;
-    private String timestamp;
-    private String clientIp;
-    private String mid;
     private String url;
     private String moid;
     private String goodName;
@@ -48,42 +31,27 @@ public class VacctSeqReqVO {
     private String vacct;
     private String hashData;
 
-    @JsonIgnore
-    private LocalDateTime now;
+    public VacctSeqReqVO(String type, String paymethod){
+        super(type, paymethod);
+    }
 
     public static VacctSeqReqVO of(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO){
-        return VacctSeqReqVO
-                .builder()
-                .moid(orderInfoVO.getOrdNo())
-                .goodName(orderInfoVO.getGoodName())
-                .buyerName(orderInfoVO.getBuyerName())
-                .buyerEmail(orderInfoVO.getBuyerEmail())
-                .price(String.valueOf(payInfoVO.getPayAmount()))
-                .bankCode(payInfoVO.getBankCode())
-                .nmInput(payInfoVO.getDepositorName())
-                .build();
+        VacctSeqReqVO reqVO = new VacctSeqReqVO(InicisApiConstants.TYPE_PAY, InicisApiConstants.PAYMETHOD_VACCT);
+        reqVO.setMoid(orderInfoVO.getOrdNo());
+        reqVO.setGoodName(orderInfoVO.getGoodName());
+        reqVO.setBuyerName(orderInfoVO.getBuyerName());
+        reqVO.setBuyerEmail(orderInfoVO.getBuyerEmail());
+        reqVO.setPrice(String.valueOf(payInfoVO.getPayAmount()));
+        reqVO.setBankCode(payInfoVO.getBankCode());
+        reqVO.setNmInput(payInfoVO.getDepositorName());
+        return reqVO;
     }
 
     public void setUpVirtualAccountReqVO(String API_KEY, String MID){
-        this.setMid(MID);
-        this.setNow(LocalDateTime.now());
-        this.setTimestamp(makeTimestamp());
-        this.setClientIp(makeClientIp());
+        super.setUp(MID);
         this.setDtInput(makeDtInput());
         this.setTmInput(makeTmInput());
         this.setHashData(makeHashData(API_KEY));
-    }
-
-    public String makeTimestamp(){
-        return LocalDateTimeUtil.toStringYearToSeconds(now);
-    }
-
-    public String makeClientIp(){
-        try{
-            return InetAddress.getLocalHost().getHostAddress();
-        }catch (UnknownHostException e){
-            throw new BusinessException(e.getMessage());
-        }
     }
 
     public String makeDtInput(){

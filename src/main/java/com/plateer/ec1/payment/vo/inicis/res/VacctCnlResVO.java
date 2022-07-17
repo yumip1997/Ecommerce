@@ -1,4 +1,4 @@
-package com.plateer.ec1.payment.vo.res;
+package com.plateer.ec1.payment.vo.inicis.res;
 
 import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.common.vo.ValidResVO;
