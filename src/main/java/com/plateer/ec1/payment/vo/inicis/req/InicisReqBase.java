@@ -47,4 +47,13 @@ public class InicisReqBase {
         this.setTimestamp(makeTimestamp());
         this.setClientIp(makeClientIp());
     }
+
+    public StringBuilder getBasicHashData(String API_KEY){
+        return new StringBuilder()
+                .append(API_KEY)
+                .append(this.getType())
+                .append(this.getPaymethod())
+                .append(this.getTimestamp())
+                .append(this.getClientIp());
+    }
 }

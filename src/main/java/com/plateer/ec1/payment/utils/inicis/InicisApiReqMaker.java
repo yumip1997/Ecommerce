@@ -17,11 +17,11 @@ public class InicisApiReqMaker {
 
     public VacctSeqReqVO makeVacctSeqReqVO(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO){
         VacctSeqReqVO req = VacctSeqReqVO.of(orderInfoVO, payInfoVO);
-        req.setUpVirtualAccountReqVO(API_KEY, MID);
+        req.setUpVirtualAccountReqVO(MID, API_KEY);
         return req;
     }
 
     public VacctCnlReqVO makeVacctCnlReqVO(){
-        return VacctCnlReqVO.builder().build();
+        return new VacctCnlReqVO();
     }
 }

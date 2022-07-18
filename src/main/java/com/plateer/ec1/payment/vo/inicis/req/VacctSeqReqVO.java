@@ -47,7 +47,7 @@ public class VacctSeqReqVO extends InicisReqBase{
         return reqVO;
     }
 
-    public void setUpVirtualAccountReqVO(String API_KEY, String MID){
+    public void setUpVirtualAccountReqVO(String MID, String API_KEY){
         super.setUp(MID);
         this.setDtInput(makeDtInput());
         this.setTmInput(makeTmInput());
@@ -63,12 +63,7 @@ public class VacctSeqReqVO extends InicisReqBase{
     }
 
     public String makeHashData(String API_KEY){
-        String input = new StringBuilder()
-                .append(API_KEY)
-                .append(this.getType())
-                .append(this.getPaymethod())
-                .append(this.getTimestamp())
-                .append(this.getClientIp())
+        String input = super.getBasicHashData(API_KEY)
                 .append(this.getMid())
                 .append(this.getMoid())
                 .append(this.getPrice())

@@ -17,5 +17,7 @@ public class InicisApiConstants {
 
     public static final String PAYMETHOD_VACCT = "Vacct";
 
+    public static final String TYPE_REFUND = "Refund";
+
 
 }
