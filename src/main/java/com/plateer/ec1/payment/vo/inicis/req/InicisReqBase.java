@@ -23,6 +23,8 @@ public class InicisReqBase {
 
     @JsonIgnore
     protected LocalDateTime now;
+    @JsonIgnore
+    protected String apiKey;
 
     public InicisReqBase(String type, String paymethod){
         this.type = type;
@@ -41,19 +43,21 @@ public class InicisReqBase {
         }
     }
 
-    public void setUp(String MID){
+    public void setUp(String MID, String API_KEY){
         this.setMid(MID);
         this.setNow(LocalDateTime.now());
         this.setTimestamp(makeTimestamp());
         this.setClientIp(makeClientIp());
+        this.setApiKey(API_KEY);
     }
 
-    public StringBuilder getBasicHashData(String API_KEY){
+    public StringBuilder getBasicHashData(){
         return new StringBuilder()
-                .append(API_KEY)
+                .append(this.getApiKey())
                 .append(this.getType())
                 .append(this.getPaymethod())
                 .append(this.getTimestamp())
-                .append(this.getClientIp());
+                .append(this.getClientIp())
+                .append(this.getMid());
     }
 }

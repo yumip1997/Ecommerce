@@ -19,5 +19,7 @@ public class InicisApiConstants {
 
     public static final String TYPE_REFUND = "Refund";
 
+    public static final String TYPE_PARTIAL_REFUND = "PartialRefund";
+
 
 }

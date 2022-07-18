@@ -48,10 +48,10 @@ public class VacctSeqReqVO extends InicisReqBase{
     }
 
     public void setUpVirtualAccountReqVO(String MID, String API_KEY){
-        super.setUp(MID);
+        super.setUp(MID, API_KEY);
         this.setDtInput(makeDtInput());
         this.setTmInput(makeTmInput());
-        this.setHashData(makeHashData(API_KEY));
+        this.setHashData(makeHashData());
     }
 
     public String makeDtInput(){
@@ -62,9 +62,8 @@ public class VacctSeqReqVO extends InicisReqBase{
         return LocalDateTimeUtil.toStringHourToSeconds(now.plusDays(1));
     }
 
-    public String makeHashData(String API_KEY){
-        String input = super.getBasicHashData(API_KEY)
-                .append(this.getMid())
+    public String makeHashData(){
+        String input = super.getBasicHashData()
                 .append(this.getMoid())
                 .append(this.getPrice())
                 .toString();
