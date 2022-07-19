@@ -5,8 +5,14 @@
         select
             #{cnclReqAmt} as cnclReqAmt,
             od.*,
-            py.*
+            py.*,
+            og.goods_no,
+            og.goods_nm,
+            mb.mbr_no,
+            mb.mbr_nm
         from op_ord_base od inner join op_pay_info py on od.ord_no = py.ord_no
+                            inner join op_goods_info og on od.ord_no = og.ord_no
+                            inner join et_mbr_base mb on od.mbr_no = mb.mbr_no
         where od.ord_no = #{ordNo}
           and (
                 (pay_prgs_scd = '10' and pay_cmt_dtime is null) or
