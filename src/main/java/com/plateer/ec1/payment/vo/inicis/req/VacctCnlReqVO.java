@@ -3,7 +3,6 @@ package com.plateer.ec1.payment.vo.inicis.req;
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.common.utils.CipherUtil;
 import com.plateer.ec1.payment.utils.inicis.InicisApiConstants;
-import com.plateer.ec1.payment.vo.OriginOrderVO;
 import lombok.*;
 
 @Getter
@@ -36,22 +35,22 @@ public class VacctCnlReqVO extends InicisReqBase{
         return reqVO;
     }
 
-    public void setUpVacctCnlReqVO(String MID, String API_KEY){
+    public void setUpVacctCnlReqVO(String MID, String API_KEY, String IV){
         super.setUp(MID, API_KEY);
-        String hashData = InicisApiConstants.TYPE_REFUND.equals(this.getType()) ? getAllCancelHashData() : getPartialRefundHashData();
+        String hashData = InicisApiConstants.TYPE_REFUND.equals(this.getType()) ? getAllCancelHashData(API_KEY, IV) : getPartialRefundHashData(API_KEY, IV);
         this.setHashData(hashData);
     }
 
-    public String getAllCancelHashData(){
+    public String getAllCancelHashData(String API_KEY, String IV){
         String input = super.getBasicHashData()
                 .append(this.getTid())
                 .append(this.getRefundAcctNum())
                 .toString();
 
-        return CipherUtil.encrypt(input);
+        return CipherUtil.encryptByAES(input, API_KEY, IV);
     }
 
-    public String getPartialRefundHashData(){
+    public String getPartialRefundHashData(String API_KEY, String IV){
         String input = super.getBasicHashData()
                 .append(this.getTid())
                 .append(this.getPrice())
@@ -59,7 +58,7 @@ public class VacctCnlReqVO extends InicisReqBase{
                 .append(this.getRefundAcctNum())
                 .toString();
 
-        return CipherUtil.encrypt(input);
+        return CipherUtil.encryptByAES(input, API_KEY, IV);
     }
 
 

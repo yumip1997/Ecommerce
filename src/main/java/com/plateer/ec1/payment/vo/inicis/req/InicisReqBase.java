@@ -44,10 +44,10 @@ public class InicisReqBase {
     }
 
     public void setUp(String MID, String API_KEY){
-        this.setMid(MID);
         this.setNow(LocalDateTime.now());
         this.setTimestamp(makeTimestamp());
         this.setClientIp(makeClientIp());
+        this.setMid(MID);
         this.setApiKey(API_KEY);
     }
 

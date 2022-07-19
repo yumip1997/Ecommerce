@@ -1,7 +1,7 @@
 package com.plateer.ec1.payment.vo.req;
 
 import com.plateer.ec1.payment.enums.PaymentType;
-import com.plateer.ec1.payment.vo.OriginOrderVO;
+import com.plateer.ec1.payment.vo.PayCancelInfoVO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class CancelReqVO {
+public class PaymentCancelReqVO {
     PaymentType paymentType;
-    OriginOrderVO originOrderVO;
+    PayCancelInfoVO payCancelInfoVO;
 }

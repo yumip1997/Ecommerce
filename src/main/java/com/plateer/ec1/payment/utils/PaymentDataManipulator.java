@@ -1,6 +1,6 @@
 package com.plateer.ec1.payment.utils;
 
-import com.plateer.ec1.common.aop.ResValid;
+import com.plateer.ec1.common.validation.annotation.ResValid;
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.payment.mapper.PaymentMapper;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
@@ -9,9 +9,13 @@ import com.plateer.ec1.payment.vo.inicis.res.VacctDpstCmtResVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctSeqResVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
 
 @Component
 @RequiredArgsConstructor
+@Validated
 public class PaymentDataManipulator {
 
     private final PaymentMapper paymentMapper;
@@ -21,26 +25,22 @@ public class PaymentDataManipulator {
         return paymentMapper.getOpPayInfoByOrdNo(ordNo);
     }
 
-    @ResValid
-    public void insertVacctApprove(String ordNo, VacctSeqResVO resVO){
+    public void insertVacctApprove(String ordNo, @Valid VacctSeqResVO resVO){
         OpPayInfoModel insertData = OpPayInfoModel.getInsertData(ordNo, resVO);
         paymentTrxMapper.insertOrderPayment(insertData);
     }
 
-    @ResValid
-    public void updateVacctApprove(VacctDpstCmtResVO resVO){
+    public void updateVacctApprove(@Valid VacctDpstCmtResVO resVO){
         OpPayInfoModel payCmpUpdateData = OpPayInfoModel.getPayCmpUpdateData(resVO);
         paymentTrxMapper.updateOrderPayment(payCmpUpdateData);
     }
 
-    @ResValid
-    public void insertCnl(VacctCnlResVO resVO){
+    public void insertCnl(@Valid VacctCnlResVO resVO){
         OpPayInfoModel opPayInfoModel = OpPayInfoModel.builder().build();
         paymentTrxMapper.insertOrderPayment(opPayInfoModel);
     }
 
-    @ResValid
-    public void updateCnl(VacctCnlResVO resVO){
+    public void updateCnl(@Valid VacctCnlResVO resVO){
         OpPayInfoModel opPayInfoModel = OpPayInfoModel.builder().build();
         paymentTrxMapper.updateOrderPayment(opPayInfoModel);
     }

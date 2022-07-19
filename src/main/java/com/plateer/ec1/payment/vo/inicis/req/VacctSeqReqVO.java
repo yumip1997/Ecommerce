@@ -68,6 +68,6 @@ public class VacctSeqReqVO extends InicisReqBase{
                 .append(this.getPrice())
                 .toString();
 
-        return CipherUtil.encrypt(input);
+        return CipherUtil.encryptBySHA512(input);
     }
 }

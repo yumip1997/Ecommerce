@@ -3,6 +3,7 @@ package com.plateer.ec1.payment.processor.impl;
 import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.common.utils.JsonReaderUtil;
 import com.plateer.ec1.payment.enums.PaymentType;
+import com.plateer.ec1.payment.vo.PayCancelInfoVO;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
@@ -14,6 +15,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.validation.ConstraintViolationException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -42,6 +45,14 @@ class InicisProcessorTest {
     @DisplayName("입금 통보 응답 코드가 성공이지 않을 때 예외 발생")
     void fail_vacct_deposit(){
         VacctDpstCmtResVO resVO = jsonReaderUtil.getObject("/VacctDpstCmtFailCode.json", VacctDpstCmtResVO.class);
-        assertThrows(BusinessException.class, () -> inicisProcessor.completeVacctDeposit(resVO));
+        assertThrows(ConstraintViolationException.class, () -> inicisProcessor.completeVacctDeposit(resVO));
+     }
+
+     @Test
+     @DisplayName("존재하지 않는 주문건에 대해 취소 요청을 할 때 예외 발생")
+    void fail_cancel_not_exist_ord(){
+         PayCancelInfoVO payCancelInfoVO = jsonReaderUtil.getObject("/CancelInfoVO.json", PayCancelInfoVO.class);
+         payCancelInfoVO.setOrdNo("123");
+         assertThrows(ConstraintViolationException.class, () -> inicisProcessor.cancelPay(payCancelInfoVO));
      }
 }

@@ -31,9 +31,7 @@ public class VacctSeqResVO implements ValidResVO {
     private String ablePartialCancelYn;
 
     @Override
-    public void isValidRes() {
-        if(!PaymentBusiness.VACCT_APV.getSucessCode().equals(this.resultCode)){
-            throw new BusinessException(PaymentException.FAIL_APPROVE.MSG);
-        }
+    public boolean isValidRes() {
+        return PaymentBusiness.VACCT_APV.getSucessCode().equals(this.resultCode);
     }
 }

@@ -5,8 +5,7 @@ import com.plateer.ec1.payment.processor.PaymentProcessor;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.req.ApproveReqVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
-import com.plateer.ec1.payment.vo.req.CancelReqVO;
-import com.plateer.ec1.payment.vo.req.NetCancelReqVO;
+import com.plateer.ec1.payment.vo.req.PaymentCancelReqVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,9 +36,9 @@ public class PayService {
         return approveResVOList;
     }
 
-    public void cancel(CancelReqVO cancelReqVO){
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.get(cancelReqVO.getPaymentType());
-        paymentProcessor.cancelPay(cancelReqVO.getOriginOrderVO());
+    public void cancel(PaymentCancelReqVO paymentCancelReqVO){
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.get(paymentCancelReqVO.getPaymentType());
+        paymentProcessor.cancelPay(paymentCancelReqVO.getPayCancelInfoVO());
     }
 
 }
