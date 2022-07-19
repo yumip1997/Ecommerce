@@ -2,6 +2,7 @@ package com.plateer.ec1.payment.utils.inicis;
 
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
+import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.inicis.req.VacctCnlReqVO;
 import com.plateer.ec1.payment.vo.inicis.req.VacctSeqReqVO;
@@ -24,8 +25,8 @@ public class InicisApiReqMaker {
         return req;
     }
 
-    public VacctCnlReqVO makeVacctCnlReqVO(String type, OpPayInfoModel opPayInfoModel){
-        VacctCnlReqVO req = VacctCnlReqVO.of(type, opPayInfoModel);
+    public VacctCnlReqVO makeVacctCnlReqVO(String type, OrderPayInfoVO orderPayInfoVO){
+        VacctCnlReqVO req = VacctCnlReqVO.of(type, orderPayInfoVO);
         req.setUpVacctCnlReqVO(MID, API_KEY, IV);
         return req;
     }

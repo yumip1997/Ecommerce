@@ -3,6 +3,7 @@ package com.plateer.ec1.payment.vo.inicis.req;
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.common.utils.CipherUtil;
 import com.plateer.ec1.payment.utils.inicis.InicisApiConstants;
+import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import lombok.*;
 
 @Getter
@@ -24,14 +25,15 @@ public class VacctCnlReqVO extends InicisReqBase{
         super(type, paymethod);
     }
 
-    public static VacctCnlReqVO of(String type, OpPayInfoModel payInfoModel){
+    public static VacctCnlReqVO of(String type, OrderPayInfoVO orderPayInfoVO){
         VacctCnlReqVO reqVO = new VacctCnlReqVO(type, InicisApiConstants.PAYMETHOD_VACCT);
-        reqVO.setTid(payInfoModel.getTrsnId());
-        reqVO.setPrice(String.valueOf(payInfoModel.getCnclAmt()));
-        reqVO.setConfirmPrice(String.valueOf(payInfoModel.getRfndAvlAmt()));
-        reqVO.setRefundAcctNum(payInfoModel.getVrAcct());
-        reqVO.setRefundBankCode(payInfoModel.getVrBnkCd());
-        reqVO.setRefundAcctName(payInfoModel.getVrAcctNm());
+        reqVO.setTid(orderPayInfoVO.getTrsnId());
+        //TODO 금액 셋팅 수정 필요
+        reqVO.setPrice(String.valueOf(orderPayInfoVO.getCnclAmt()));
+        reqVO.setConfirmPrice(String.valueOf(orderPayInfoVO.getRfndAvlAmt()));
+        reqVO.setRefundAcctNum(orderPayInfoVO.getRfndAcctNo());
+        reqVO.setRefundBankCode(orderPayInfoVO.getRfndBnkCk());
+        reqVO.setRefundAcctName(orderPayInfoVO.getRfndAcctOwnNm());
         return reqVO;
     }
 

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.payment.mapper.PaymentMapper">
-    <select id="getOpPayInfoByOrdNo" resultType="com.plateer.ec1.common.model.order.OpPayInfoModel">
-        select *
-        from op_pay_info
-        where ord_no = #{ordNo}
+    <select id="getOrderPayInfo" resultType="com.plateer.ec1.payment.vo.OrderPayInfoVO">
+        select
+            #{cnclReqAmt} as cnclReqAmt,
+            od.*,
+            py.*
+        from op_ord_base od inner join op_pay_info py on od.ord_no = py.ord_no
+        where od.ord_no = #{ordNo}
           and (
                 (pay_prgs_scd = '10' and pay_cmt_dtime is null) or
                 (pay_prgs_scd = '20' and pay_cmt_dtime is not null)

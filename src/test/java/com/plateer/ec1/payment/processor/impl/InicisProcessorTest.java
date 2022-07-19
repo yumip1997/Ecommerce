@@ -1,9 +1,8 @@
 package com.plateer.ec1.payment.processor.impl;
 
-import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.common.utils.JsonReaderUtil;
 import com.plateer.ec1.payment.enums.PaymentType;
-import com.plateer.ec1.payment.vo.PayCancelInfoVO;
+import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
@@ -51,8 +50,8 @@ class InicisProcessorTest {
      @Test
      @DisplayName("존재하지 않는 주문건에 대해 취소 요청을 할 때 예외 발생")
     void fail_cancel_not_exist_ord(){
-         PayCancelInfoVO payCancelInfoVO = jsonReaderUtil.getObject("/CancelInfoVO.json", PayCancelInfoVO.class);
-         payCancelInfoVO.setOrdNo("123");
-         assertThrows(ConstraintViolationException.class, () -> inicisProcessor.cancelPay(payCancelInfoVO));
+         OrderPayInfoVO orderPayInfoVO = jsonReaderUtil.getObject("/CancelInfoVO.json", OrderPayInfoVO.class);
+         orderPayInfoVO.setOrdNo("123");
+         assertThrows(ConstraintViolationException.class, () -> inicisProcessor.cancelPay(orderPayInfoVO));
      }
 }

@@ -1,8 +1,10 @@
 package com.plateer.ec1.payment.service;
 
 import com.plateer.ec1.payment.factory.PaymentProcessorFactory;
+import com.plateer.ec1.payment.mapper.PaymentMapper;
 import com.plateer.ec1.payment.processor.PaymentProcessor;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
+import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.req.ApproveReqVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
 import com.plateer.ec1.payment.vo.req.PaymentCancelReqVO;
@@ -21,6 +23,7 @@ import java.util.List;
 public class PayService {
 
     private final PaymentProcessorFactory paymentProcessorFactory;
+    private final PaymentMapper paymentMapper;
 
     public List<ApproveResVO> approve(@Valid ApproveReqVO approveReqVO){
         List<ApproveResVO> approveResVOList = new ArrayList<>();
@@ -38,7 +41,8 @@ public class PayService {
 
     public void cancel(PaymentCancelReqVO paymentCancelReqVO){
         PaymentProcessor paymentProcessor = paymentProcessorFactory.get(paymentCancelReqVO.getPaymentType());
-        paymentProcessor.cancelPay(paymentCancelReqVO.getPayCancelInfoVO());
+        OrderPayInfoVO orderPayInfoVO= paymentMapper.getOrderPayInfo(paymentCancelReqVO);
+        paymentProcessor.cancelPay(orderPayInfoVO);
     }
 
 }

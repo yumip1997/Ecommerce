@@ -21,10 +21,6 @@ public class PaymentDataManipulator {
     private final PaymentMapper paymentMapper;
     private final PaymentTrxMapper paymentTrxMapper;
 
-    public OpPayInfoModel getOpPayInfoModelByOrdNo(String ordNo){
-        return paymentMapper.getOpPayInfoByOrdNo(ordNo);
-    }
-
     public void insertVacctApprove(String ordNo, @Valid VacctSeqResVO resVO){
         OpPayInfoModel insertData = OpPayInfoModel.getInsertData(ordNo, resVO);
         paymentTrxMapper.insertOrderPayment(insertData);

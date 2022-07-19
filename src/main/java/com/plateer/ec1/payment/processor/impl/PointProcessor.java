@@ -4,7 +4,7 @@ import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.processor.PaymentProcessor;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
-import com.plateer.ec1.payment.vo.PayCancelInfoVO;
+import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class PointProcessor implements PaymentProcessor {
     }
 
     @Override
-    public void cancelPay(PayCancelInfoVO payCancelInfoVO) {
+    public void cancelPay(OrderPayInfoVO orderPayInfoVO) {
         log.info("포인트 결제취소 로직을 진행한다.");
     }
 

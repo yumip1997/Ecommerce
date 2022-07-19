@@ -1,10 +1,10 @@
 package com.plateer.ec1.payment.utils.inicis;
 
-import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.common.utils.ObjectMapperUtil;
 import com.plateer.ec1.common.utils.RestTemplateUtil;
 import com.plateer.ec1.common.vo.RestTemplateReqVO;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
+import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.inicis.req.VacctCnlReqVO;
 import com.plateer.ec1.payment.vo.inicis.req.VacctSeqReqVO;
@@ -33,8 +33,8 @@ public class InicisApiCallHelper {
         return restTemplateUtil.callApiByPost(restTemplateReqVO, VacctSeqResVO.class);
     }
 
-    public VacctCnlResVO callVacctCnl(String type, OpPayInfoModel opPayInfoModel){
-        VacctCnlReqVO vacctCnlReqVO = inicisApiReqMaker.makeVacctCnlReqVO(type, opPayInfoModel);
+    public VacctCnlResVO callVacctCnl(String type, OrderPayInfoVO orderPayInfoVO){
+        VacctCnlReqVO vacctCnlReqVO = inicisApiReqMaker.makeVacctCnlReqVO(type, orderPayInfoVO);
 
         RestTemplateReqVO<MultiValueMap<String, String>> restTemplateReqVO = RestTemplateReqVO.<MultiValueMap<String, String>>builder()
                 .url(InicisApiConstants.VIRTUAL_ACCOUNT_REFUND)
