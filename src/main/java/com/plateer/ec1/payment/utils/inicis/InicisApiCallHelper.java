@@ -24,11 +24,7 @@ public class InicisApiCallHelper {
 
     public VacctSeqResVO callVacctSeq(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {
         VacctSeqReqVO vacctSeqReqVO = inicisApiReqMaker.makeVacctSeqReqVO(orderInfoVO, payInfoVO);
-
-        RestTemplateReqVO<MultiValueMap<String, String>> restTemplateReqVO = RestTemplateReqVO.<MultiValueMap<String, String>>builder()
-                .url(InicisApiConstants.VIRTUAL_ACCOUNT_SEQ_URL)
-                .mediaType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(ObjectMapperUtil.convertMultiValueMap(vacctSeqReqVO)).build();
+        RestTemplateReqVO<MultiValueMap<String, String>> restTemplateReqVO = getRestTemplateReqVO(InicisApiConstants.VIRTUAL_ACCOUNT_SEQ_URL, vacctSeqReqVO);
 
         return restTemplateUtil.callApiByPost(restTemplateReqVO, VacctSeqResVO.class);
     }
@@ -36,14 +32,16 @@ public class InicisApiCallHelper {
     public VacctCnlResVO callVacctCnl(OrderPayInfoVO orderPayInfoVO){
         String type = orderPayInfoVO.isPartialCancel() ? InicisApiConstants.TYPE_PARTIAL_REFUND : InicisApiConstants.TYPE_REFUND;
         VacctCnlReqVO vacctCnlReqVO = inicisApiReqMaker.makeVacctCnlReqVO(type, orderPayInfoVO);
-
-        RestTemplateReqVO<MultiValueMap<String, String>> restTemplateReqVO = RestTemplateReqVO.<MultiValueMap<String, String>>builder()
-                .url(InicisApiConstants.VIRTUAL_ACCOUNT_REFUND)
-                .mediaType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(ObjectMapperUtil.convertMultiValueMap(vacctCnlReqVO)).build();
+        RestTemplateReqVO<MultiValueMap<String, String>> restTemplateReqVO = getRestTemplateReqVO(InicisApiConstants.VIRTUAL_ACCOUNT_REFUND, vacctCnlReqVO);
 
         return restTemplateUtil.callApiByPost(restTemplateReqVO, VacctCnlResVO.class);
     }
 
-
+    private <T> RestTemplateReqVO<MultiValueMap<String, String>> getRestTemplateReqVO(String uri, T body){
+        return RestTemplateReqVO.<MultiValueMap<String, String>>builder()
+                .url(uri)
+                .mediaType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(ObjectMapperUtil.convertMultiValueMap(body))
+                .build();
+    }
 }
