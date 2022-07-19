@@ -1,23 +1,15 @@
 package com.plateer.ec1.common.validation.validator;
 
-import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.common.validation.annotation.PayCancel;
 import com.plateer.ec1.payment.enums.OPT0011Code;
 import com.plateer.ec1.payment.enums.PaymentException;
-import com.plateer.ec1.payment.mapper.PaymentMapper;
-import com.plateer.ec1.payment.vo.PayCancelInfoVO;
-import lombok.RequiredArgsConstructor;
+import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-@Component
-@RequiredArgsConstructor
-public class PayCancelValidator implements ConstraintValidator<PayCancel, PayCancelInfoVO> {
-
-    private final PaymentMapper paymentMapper;
+public class PayCancelValidator implements ConstraintValidator<PayCancel, OrderPayInfoVO> {
 
     @Override
     public void initialize(PayCancel constraintAnnotation) {
@@ -25,15 +17,13 @@ public class PayCancelValidator implements ConstraintValidator<PayCancel, PayCan
     }
 
     @Override
-    public boolean isValid(PayCancelInfoVO value, ConstraintValidatorContext context) {
-        OpPayInfoModel model = paymentMapper.getOpPayInfoByOrdNo(value.getOrdNo());
-
-        if(ObjectUtils.isEmpty(model)){
+    public boolean isValid(OrderPayInfoVO value, ConstraintValidatorContext context) {
+        if(ObjectUtils.isEmpty(value)){
             addConstraintViolation(context, PaymentException.NOT_FIND_ORDER.MSG);
             return false;
         }
 
-        if(!isValidCnlAmt(value.getCnclAmt(), model)){
+        if(!isValidCnlAmt(value.getCnclReqAmt(), value)){
             addConstraintViolation(context, PaymentException.INVALID_CNL_AMT.MSG);
             return false;
         }
@@ -41,15 +31,15 @@ public class PayCancelValidator implements ConstraintValidator<PayCancel, PayCan
         return true;
     }
 
-    private boolean isValidCnlAmt(long cnlAmt, OpPayInfoModel model){
-        String payPrgsScd = model.getPayPrgsScd();
+    private boolean isValidCnlAmt(long cnlReqAmt, OrderPayInfoVO orderPayInfoVO){
+        String payPrgsScd = orderPayInfoVO.getPayPrgsScd();
 
         if(OPT0011Code.PAY_REQUEST.getCode().equals(payPrgsScd)){
-            return cnlAmt <= model.getPayAmt();
+            return cnlReqAmt <= orderPayInfoVO.getPayAmt();
         }
 
         if(OPT0011Code.PAY_COMPLETE.getCode().equals(payPrgsScd)){
-            return cnlAmt <= model.getRfndAvlAmt();
+            return cnlReqAmt <= orderPayInfoVO.getRfndAvlAmt();
         }
 
         return false;
