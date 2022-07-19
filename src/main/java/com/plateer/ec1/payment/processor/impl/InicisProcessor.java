@@ -31,7 +31,7 @@ public class InicisProcessor implements PaymentProcessor {
     @Override
     public ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {
         VacctSeqResVO resVO = inicisApiCallHelper.callVacctSeq(orderInfoVO, payInfoVO);
-        paymentDataManipulator.insertVacctApprove(orderInfoVO.getOrdNo(), resVO);
+        paymentDataManipulator.insertVacctApprove(orderInfoVO, resVO);
 
         return new ApproveResVO(payInfoVO.getPaymentType(), resVO.getAblePartialCancelYn());
     }
@@ -43,15 +43,25 @@ public class InicisProcessor implements PaymentProcessor {
 
     @Override
     public void cancelPay(OrderPayInfoVO orderPayInfoVO) {
-        String type = isPartialCancel(orderPayInfoVO.getPayAmt(), orderPayInfoVO.getCnclAmt()) ? InicisApiConstants.TYPE_PARTIAL_REFUND : InicisApiConstants.TYPE_REFUND;
 
         if(OPT0011Code.PAY_REQUEST.getCode().equals(orderPayInfoVO.getPayPrgsScd())){
+            cancelPayBeforeDeposit(orderPayInfoVO);
         }
 
         if(OPT0011Code.PAY_COMPLETE.getCode().equals(orderPayInfoVO.getPayPrgsScd())){
-            VacctCnlResVO vacctCnlResVO = inicisApiCallHelper.callVacctCnl(type, orderPayInfoVO);
-            paymentDataManipulator.updateCnl(vacctCnlResVO);
+            cancelPayAfterDeposit(orderPayInfoVO);
         }
+    }
+
+    private void cancelPayBeforeDeposit(OrderPayInfoVO orderPayInfoVO){
+        paymentDataManipulator.manipulateCnlBeforeDeposit(orderPayInfoVO);
+        if(!orderPayInfoVO.isPartialCancel()) return;
+        approvePay(orderPayInfoVO.toOrderInfoVO(), orderPayInfoVO.toPayInfoVO());
+    }
+
+    private void cancelPayAfterDeposit(OrderPayInfoVO orderPayInfoVO){
+        VacctCnlResVO vacctCnlResVO = inicisApiCallHelper.callVacctCnl(orderPayInfoVO);
+        paymentDataManipulator.manipulateCnlAfterDeposit(vacctCnlResVO, orderPayInfoVO);
     }
 
     @Override

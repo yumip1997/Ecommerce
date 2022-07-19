@@ -13,9 +13,4 @@ public interface PaymentProcessor extends CustomFactory<PaymentType> {
 
     ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO);
     void cancelPay(@Valid OrderPayInfoVO orderPayInfoVO);
-
-    default boolean isPartialCancel(long payAmt, long cnlAmt){
-        return payAmt != cnlAmt;
-    }
-
 }

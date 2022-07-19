@@ -7,5 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PaymentMapper {
 
+    //TODO 쿼리 수정하기 - 주문상품, 회원하고도 join해야 할 듯?
     OrderPayInfoVO getOrderPayInfo(PaymentCancelReqVO reqVO);
 }

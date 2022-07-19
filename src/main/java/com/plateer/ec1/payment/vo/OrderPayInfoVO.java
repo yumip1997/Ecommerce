@@ -1,6 +1,7 @@
 package com.plateer.ec1.payment.vo;
 
 import com.plateer.ec1.common.validation.annotation.PayCancel;
+import com.plateer.ec1.payment.enums.PaymentType;
 import lombok.*;
 
 @Getter
@@ -31,5 +32,28 @@ public class OrderPayInfoVO {
     private String rfndBnkCk;
     private String rfndAcctNo;
     private String rfndAcctOwnNm;
+    private String goodsNm;
+    private String mbrNm;
 
+    public boolean isPartialCancel(){
+        return this.getPayAmt() != this.getCnclReqAmt();
+    }
+
+    public OrderInfoVO toOrderInfoVO(){
+        return OrderInfoVO.builder()
+                .ordNo(this.getOrdNo())
+                .clmNo(this.getClmNo())
+                .goodName(this.getGoodsNm())
+                .buyerName(this.getMbrNm())
+                .build();
+    }
+
+    public PayInfoVO toPayInfoVO(){
+        return PayInfoVO.builder()
+                .payAmount(this.getPayAmt() - this.getCnclReqAmt())
+                .bankCode(this.getRfndBnkCk())
+                .depositorName(this.getRfndAcctOwnNm())
+                .paymentType(PaymentType.INICIS)
+                .build();
+    }
 }

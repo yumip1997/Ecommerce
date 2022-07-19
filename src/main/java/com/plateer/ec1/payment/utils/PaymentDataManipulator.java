@@ -1,9 +1,9 @@
 package com.plateer.ec1.payment.utils;
 
-import com.plateer.ec1.common.validation.annotation.ResValid;
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
-import com.plateer.ec1.payment.mapper.PaymentMapper;
 import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
+import com.plateer.ec1.payment.vo.OrderInfoVO;
+import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctCnlResVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctDpstCmtResVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctSeqResVO;
@@ -18,17 +18,24 @@ import javax.validation.Valid;
 @Validated
 public class PaymentDataManipulator {
 
-    private final PaymentMapper paymentMapper;
     private final PaymentTrxMapper paymentTrxMapper;
 
-    public void insertVacctApprove(String ordNo, @Valid VacctSeqResVO resVO){
-        OpPayInfoModel insertData = OpPayInfoModel.getInsertData(ordNo, resVO);
-        paymentTrxMapper.insertOrderPayment(insertData);
+    public void insertVacctApprove(OrderInfoVO orderInfoVO, @Valid VacctSeqResVO resVO){
+        paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getInsertData(orderInfoVO, resVO));
     }
 
     public void updateVacctApprove(@Valid VacctDpstCmtResVO resVO){
-        OpPayInfoModel payCmpUpdateData = OpPayInfoModel.getPayCmpUpdateData(resVO);
-        paymentTrxMapper.updateOrderPayment(payCmpUpdateData);
+        paymentTrxMapper.updateOrderPayment(OpPayInfoModel.getPayCmpUpdateData(resVO));
+    }
+
+    public void manipulateCnlBeforeDeposit(OrderPayInfoVO orderPayInfoVO){
+        paymentTrxMapper.updateOrderPayment(OpPayInfoModel.getCnlUpdateData(orderPayInfoVO));
+        paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getCnlCmpInsertData(orderPayInfoVO));
+    }
+
+    public void manipulateCnlAfterDeposit(@Valid VacctCnlResVO resVO, OrderPayInfoVO orderPayInfoVO){
+        //결제 완료 row update
+        //취소 완료 row insert
     }
 
     public void insertCnl(@Valid VacctCnlResVO resVO){

@@ -5,11 +5,14 @@ import com.plateer.ec1.common.utils.LocalDateTimeUtil;
 import com.plateer.ec1.payment.enums.OPT0009Code;
 import com.plateer.ec1.payment.enums.OPT0010Code;
 import com.plateer.ec1.payment.enums.OPT0011Code;
+import com.plateer.ec1.payment.vo.OrderInfoVO;
+import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctDpstCmtResVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctSeqResVO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
 
@@ -40,9 +43,10 @@ public class OpPayInfoModel extends BaseModel {
     private String vrValDt;
     private String vrValTt;
 
-    public static OpPayInfoModel getInsertData(String ordNo, VacctSeqResVO resVO){
+    public static OpPayInfoModel getInsertData(OrderInfoVO orderInfoVO, VacctSeqResVO resVO){
         return OpPayInfoModel.builder()
-                .ordNo(ordNo)
+                .ordNo(orderInfoVO.getOrdNo())
+                .clmNo(orderInfoVO.getClmNo())
                 .payMnCd(OPT0009Code.VIRTUAL_ACCOUNT.getCode())
                 .payCcd(OPT0010Code.PAY.getCode())
                 .payPrgsScd(OPT0011Code.PAY_REQUEST.getCode())
@@ -67,6 +71,33 @@ public class OpPayInfoModel extends BaseModel {
                 .rfndAvlAmt(Long.parseLong(resVO.getAmt_input()))
                 .vrAcct(resVO.getNo_vacct())
                 .build();
+    }
+
+    public static OpPayInfoModel getCnlUpdateData(OrderPayInfoVO orderPayInfoVO){
+        OpPayInfoModel opPayInfoModel = convertModel(orderPayInfoVO);
+        opPayInfoModel.setRfndAvlAmt(calculateRfndAvlAmt(orderPayInfoVO.getPayAmt(), orderPayInfoVO.getCnclReqAmt()));
+        opPayInfoModel.setCnclAmt(orderPayInfoVO.getCnclReqAmt());
+        return opPayInfoModel;
+    }
+
+    public static OpPayInfoModel getCnlCmpInsertData(OrderPayInfoVO orderPayInfoVO){
+        OpPayInfoModel opPayInfoModel = convertModel(orderPayInfoVO);
+        opPayInfoModel.setPayCcd(OPT0010Code.CANCEL.getCode());
+        opPayInfoModel.setPayPrgsScd(OPT0011Code.CANCEL_COMPLETE.getCode());
+        opPayInfoModel.setCnclAmt(0);
+        opPayInfoModel.setRfndAvlAmt(0);
+        return opPayInfoModel;
+    }
+
+    private static long calculateRfndAvlAmt(long payAmt, long cnclReqAmt){
+        return payAmt - cnclReqAmt;
+    }
+
+    public static <T> OpPayInfoModel convertModel(T t){
+        OpPayInfoModel opPayInfoModel = OpPayInfoModel.builder().build();
+        BeanUtils.copyProperties(t, opPayInfoModel);
+        return opPayInfoModel;
+
     }
 
 
