@@ -6,7 +6,6 @@ import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.processor.PaymentProcessor;
 import com.plateer.ec1.payment.utils.PaymentDataManipulator;
 import com.plateer.ec1.payment.utils.inicis.InicisApiCallHelper;
-import com.plateer.ec1.payment.utils.inicis.InicisApiConstants;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
@@ -43,19 +42,18 @@ public class InicisProcessor implements PaymentProcessor {
 
     @Override
     public void cancelPay(OrderPayInfoVO orderPayInfoVO) {
-
-        if(OPT0011Code.PAY_REQUEST.getCode().equals(orderPayInfoVO.getPayPrgsScd())){
+        if(orderPayInfoVO.isPayRequest()){
             cancelPayBeforeDeposit(orderPayInfoVO);
         }
-
-        if(OPT0011Code.PAY_COMPLETE.getCode().equals(orderPayInfoVO.getPayPrgsScd())){
+        if(orderPayInfoVO.isPayComplete()){
             cancelPayAfterDeposit(orderPayInfoVO);
         }
     }
 
     private void cancelPayBeforeDeposit(OrderPayInfoVO orderPayInfoVO){
-        paymentDataManipulator.manipulateCnlBeforeDeposit(orderPayInfoVO);
+        paymentDataManipulator.manipulateCnl(orderPayInfoVO);
         if(!orderPayInfoVO.isPartialCancel()) return;
+
         approvePay(orderPayInfoVO.toOrderInfoVO(), orderPayInfoVO.toPayInfoVO());
     }
 

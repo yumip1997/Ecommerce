@@ -28,23 +28,12 @@ public class PaymentDataManipulator {
         paymentTrxMapper.updateOrderPayment(OpPayInfoModel.getPayCmpUpdateData(resVO));
     }
 
-    public void manipulateCnlBeforeDeposit(OrderPayInfoVO orderPayInfoVO){
+    public void manipulateCnlAfterDeposit(@Valid VacctCnlResVO resVO, OrderPayInfoVO orderPayInfoVO){
+        manipulateCnl(orderPayInfoVO);
+    }
+
+    public void manipulateCnl(OrderPayInfoVO orderPayInfoVO){
         paymentTrxMapper.updateOrderPayment(OpPayInfoModel.getCnlUpdateData(orderPayInfoVO));
         paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getCnlCmpInsertData(orderPayInfoVO));
-    }
-
-    public void manipulateCnlAfterDeposit(@Valid VacctCnlResVO resVO, OrderPayInfoVO orderPayInfoVO){
-        //결제 완료 row update
-        //취소 완료 row insert
-    }
-
-    public void insertCnl(@Valid VacctCnlResVO resVO){
-        OpPayInfoModel opPayInfoModel = OpPayInfoModel.builder().build();
-        paymentTrxMapper.insertOrderPayment(opPayInfoModel);
-    }
-
-    public void updateCnl(@Valid VacctCnlResVO resVO){
-        OpPayInfoModel opPayInfoModel = OpPayInfoModel.builder().build();
-        paymentTrxMapper.updateOrderPayment(opPayInfoModel);
     }
 }
