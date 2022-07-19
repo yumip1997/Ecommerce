@@ -13,6 +13,7 @@ public class OrderInfoVO {
 
     @NotNull
     private String ordNo;
+    private String clmNo;
     private String goodName;
     private String buyerName;
     private String buyerEmail;
