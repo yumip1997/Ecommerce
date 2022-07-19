@@ -33,7 +33,8 @@ public class InicisApiCallHelper {
         return restTemplateUtil.callApiByPost(restTemplateReqVO, VacctSeqResVO.class);
     }
 
-    public VacctCnlResVO callVacctCnl(String type, OrderPayInfoVO orderPayInfoVO){
+    public VacctCnlResVO callVacctCnl(OrderPayInfoVO orderPayInfoVO){
+        String type = orderPayInfoVO.isPartialCancel() ? InicisApiConstants.TYPE_PARTIAL_REFUND : InicisApiConstants.TYPE_REFUND;
         VacctCnlReqVO vacctCnlReqVO = inicisApiReqMaker.makeVacctCnlReqVO(type, orderPayInfoVO);
 
         RestTemplateReqVO<MultiValueMap<String, String>> restTemplateReqVO = RestTemplateReqVO.<MultiValueMap<String, String>>builder()
