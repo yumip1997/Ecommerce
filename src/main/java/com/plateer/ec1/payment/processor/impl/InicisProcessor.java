@@ -1,7 +1,5 @@
 package com.plateer.ec1.payment.processor.impl;
 
-import com.plateer.ec1.common.enums.CommonConstants;
-import com.plateer.ec1.payment.enums.OPT0011Code;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.processor.PaymentProcessor;
 import com.plateer.ec1.payment.utils.PaymentDataManipulator;
@@ -10,7 +8,6 @@ import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctCnlResVO;
-import com.plateer.ec1.payment.vo.inicis.res.VacctDpstCmtResVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctSeqResVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +32,6 @@ public class InicisProcessor implements PaymentProcessor {
         paymentDataManipulator.insertVacctApprove(orderInfoVO, resVO);
 
         return new ApproveResVO(payInfoVO.getPaymentType(), resVO.getAblePartialCancelYn());
-    }
-
-    public String completeVacctDeposit(VacctDpstCmtResVO resVO){
-        paymentDataManipulator.updateVacctApprove(resVO);
-        return CommonConstants.OK.getCode();
     }
 
     @Override

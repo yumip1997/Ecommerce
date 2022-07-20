@@ -5,7 +5,6 @@ import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctCnlResVO;
-import com.plateer.ec1.payment.vo.inicis.res.VacctDpstCmtResVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctSeqResVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,10 +21,6 @@ public class PaymentDataManipulator {
 
     public void insertVacctApprove(OrderInfoVO orderInfoVO, @Valid VacctSeqResVO resVO){
         paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getInsertData(orderInfoVO, resVO));
-    }
-
-    public void updateVacctApprove(@Valid VacctDpstCmtResVO resVO){
-        paymentTrxMapper.updateOrderPayment(OpPayInfoModel.getPayCmpUpdateData(resVO));
     }
 
     public void manipulateCnlAfterDeposit(@Valid VacctCnlResVO resVO, OrderPayInfoVO orderPayInfoVO){

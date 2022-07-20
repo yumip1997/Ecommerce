@@ -2,7 +2,7 @@ package com.plateer.ec1.payment.controller;
 
 import com.plateer.ec1.common.enums.CommonConstants;
 import com.plateer.ec1.common.utils.HttpServletRequestUtil;
-import com.plateer.ec1.payment.processor.impl.InicisProcessor;
+import com.plateer.ec1.payment.service.InicisService;
 import com.plateer.ec1.payment.utils.inicis.InicisApiConstants;
 import com.plateer.ec1.payment.vo.inicis.res.VacctDpstCmtResVO;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/payment")
 public class InicisController {
 
-    private final InicisProcessor inicisProcessor;
+    private final InicisService inicisService;
 
     @PostMapping("/vcaatDeposit")
     public String completeVacctDeposit(VacctDpstCmtResVO data, HttpServletRequest req){
         String clientIp = HttpServletRequestUtil.getClientIP(req);
         if(!InicisApiConstants.VACCT_DPST_NTC_LIST.contains(clientIp)) return CommonConstants.FAIL.getCode();
 
-        return inicisProcessor.completeVacctDeposit(data);
+        return inicisService.completeVacctDeposit(data);
     }
 }
