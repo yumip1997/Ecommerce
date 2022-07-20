@@ -16,6 +16,7 @@ import com.plateer.ec1.payment.vo.res.ApproveResVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Component
@@ -28,6 +29,7 @@ public class InicisProcessor implements PaymentProcessor {
     private final PaymentDataManipulator paymentDataManipulator;
 
     @Override
+    @Transactional
     public ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {
         VacctSeqResVO resVO = inicisApiCallHelper.callVacctSeq(orderInfoVO, payInfoVO);
         paymentDataManipulator.insertVacctApprove(orderInfoVO, resVO);
@@ -41,6 +43,7 @@ public class InicisProcessor implements PaymentProcessor {
     }
 
     @Override
+    @Transactional
     public void cancelPay(OrderPayInfoVO orderPayInfoVO) {
         if(orderPayInfoVO.isPayRequest()){
             cancelPayBeforeDeposit(orderPayInfoVO);
@@ -51,10 +54,12 @@ public class InicisProcessor implements PaymentProcessor {
     }
 
     private void cancelPayBeforeDeposit(OrderPayInfoVO orderPayInfoVO){
-        paymentDataManipulator.manipulateCnl(orderPayInfoVO);
-        if(!orderPayInfoVO.isPartialCancel()) return;
-
-        approvePay(orderPayInfoVO.toOrderInfoVO(), orderPayInfoVO.toPayInfoVO());
+        if(orderPayInfoVO.isPartialCancel()){
+            paymentDataManipulator.manipulateCnl(orderPayInfoVO.changeCnlReqAmt(orderPayInfoVO.getPayAmt()));
+            approvePay(orderPayInfoVO.toOrderInfoVO(), orderPayInfoVO.toPayInfoVO());
+        }else{
+            paymentDataManipulator.manipulateCnl(orderPayInfoVO);
+        }
     }
 
     private void cancelPayAfterDeposit(OrderPayInfoVO orderPayInfoVO){

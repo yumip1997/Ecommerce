@@ -52,7 +52,7 @@ public class OpPayInfoModel extends BaseModel {
                 .payPrgsScd(OPT0011Code.PAY_REQUEST.getCode())
                 .payAmt(Long.parseLong(resVO.getPrice()))
                 .cnclAmt(0)
-                .rfndAvlAmt(Long.parseLong(resVO.getPrice()))
+                .rfndAvlAmt(0)
                 .trsnId(resVO.getTid())
                 .vrAcct(resVO.getVacct())
                 .vrBnkCd(resVO.getVacctBankCode())
@@ -86,6 +86,7 @@ public class OpPayInfoModel extends BaseModel {
         opPayInfoModel.setPayPrgsScd(OPT0011Code.CANCEL_COMPLETE.getCode());
         opPayInfoModel.setCnclAmt(orderPayInfoVO.getCnclReqAmt());
         opPayInfoModel.setRfndAvlAmt(calculateRfndAvlAmt(orderPayInfoVO.getPayAmt(), orderPayInfoVO.getCnclReqAmt()));
+        opPayInfoModel.setOrgPayNo(orderPayInfoVO.getPayNo());
         return opPayInfoModel;
     }
 
@@ -99,6 +100,4 @@ public class OpPayInfoModel extends BaseModel {
         return opPayInfoModel;
 
     }
-
-
 }
