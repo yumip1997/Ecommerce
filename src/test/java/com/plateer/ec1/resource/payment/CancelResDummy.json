@@ -1,0 +1,18 @@
+{"ordNo":"020220712001",
+  "ordNm" : "박유미",
+  "rfndBnkCk" : "03",
+  "rfndAcctNo" : "123",
+  "rfndAcctOwnNm" : "박유미",
+  "clmNo" : "C1",
+  "cnclReqAmt" : "7200",
+  "payNo" : "S202207201000035",
+  "payMnCd" : "10",
+  "payCcd" : "10",
+  "payPrgsScd" : "10",
+  "payAmt" : "16200",
+  "cnclAmt" : 0,
+  "rfndAvlAmt" : 0,
+  "trsnId" : "INIAPIVBNKINIpayTest20220720112618942117",
+  "goodsNm" : "반팔티",
+  "ordEmail" : "youmi321@naver.com"
+}
