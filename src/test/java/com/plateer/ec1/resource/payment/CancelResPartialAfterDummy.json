@@ -5,14 +5,14 @@
   "rfndAcctOwnNm" : "박유미",
   "clmNo" : "C1",
   "cnclReqAmt" : 7200,
-  "payNo" : "S202207201000046",
+  "payNo" : "S202207201000052",
   "payMnCd" : "10",
   "payCcd" : "10",
   "payPrgsScd" : "20",
   "payAmt" : 16200,
   "cnclAmt" : 0,
   "rfndAvlAmt" : 16200,
-  "trsnId" : "INIAPIVBNKINIpayTest20220720152146154125",
+  "trsnId" : "INIAPIVBNKINIpayTest20220720154959622161",
   "goodsNm" : "반팔티",
   "ordEmail" : "youmi321@naver.com"
 }

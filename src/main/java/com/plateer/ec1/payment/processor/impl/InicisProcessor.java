@@ -56,9 +56,6 @@ public class InicisProcessor implements PaymentProcessor {
 
     private void cancelPayAfterDeposit(OrderPayInfoVO orderPayInfoVO){
         VacctCnlResVO vacctCnlResVO = inicisApiCallHelper.callVacctCnl(orderPayInfoVO);
-        if(orderPayInfoVO.isPartialCancel()){
-            orderPayInfoVO.setTrsnId(vacctCnlResVO.getTid());
-        }
         paymentDataManipulator.manipulateCnlAfterDeposit(vacctCnlResVO, orderPayInfoVO);
     }
 

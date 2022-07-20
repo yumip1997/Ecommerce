@@ -29,7 +29,11 @@ public class PaymentDataManipulator {
     }
 
     public void manipulateCnlAfterDeposit(@Valid VacctCnlResVO resVO, OrderPayInfoVO orderPayInfoVO){
-        manipulateCnl(orderPayInfoVO);
+        paymentTrxMapper.updateOrderPayment(OpPayInfoModel.getCnlUpdateData(orderPayInfoVO));
+        if(orderPayInfoVO.isPartialCancel()){
+            orderPayInfoVO.setTrsnId(resVO.getTid());
+        }
+        paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getCnlCmpInsertData(orderPayInfoVO));
     }
 
     public void manipulateCnl(OrderPayInfoVO orderPayInfoVO){
