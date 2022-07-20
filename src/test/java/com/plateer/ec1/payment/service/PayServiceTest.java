@@ -4,6 +4,7 @@ import com.plateer.ec1.common.utils.JsonReaderUtil;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.req.ApproveReqVO;
+import com.plateer.ec1.payment.vo.req.PaymentCancelReqVO;
 import com.plateer.ec1.resource.TestConstants;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,4 +69,20 @@ class PayServiceTest {
         ApproveReqVO reqVO = ApproveReqVO.builder().orderInfoVO(orderInfoVO).payInfoVOList(Arrays.asList(payInfoVO)).build();
         Assertions.assertThrows(ConstraintViolationException.class, ()-> payService.approve(reqVO));
     }
+
+    @Test
+    @DisplayName("입금 전 부분취소 테스트")
+    void partial_cancel_before_deposit(){
+        PaymentCancelReqVO object = jsonReaderUtil.getObject("/CancelPartialBefore.json", PaymentCancelReqVO.class);
+        payService.cancel(object);
+    }
+
+    @Test
+    @DisplayName("입금 전 전체취소 테스트")
+    void all_cancel_before_deposit(){
+        PaymentCancelReqVO object = jsonReaderUtil.getObject("/CancelAllBefore.json", PaymentCancelReqVO.class);
+        payService.cancel(object);
+    }
+
+
 }
