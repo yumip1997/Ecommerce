@@ -29,7 +29,7 @@ public class InicisProcessor implements PaymentProcessor {
     @Transactional
     public ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {
         VacctSeqResVO resVO = inicisApiCallHelper.callVacctSeq(orderInfoVO, payInfoVO);
-        paymentDataManipulator.insertVacctApprove(orderInfoVO, resVO);
+        paymentDataManipulator.insertVacctApprove(resVO, orderInfoVO);
 
         return new ApproveResVO(payInfoVO.getPaymentType(), resVO.getAblePartialCancelYn());
     }

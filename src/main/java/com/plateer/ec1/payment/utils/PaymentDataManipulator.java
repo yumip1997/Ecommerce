@@ -23,8 +23,8 @@ public class PaymentDataManipulator {
         paymentTrxMapper.insertOrderPayment(opPayInfoModel);
     }
 
-    public void insertVacctApprove(OrderInfoVO orderInfoVO, @Valid VacctSeqResVO resVO){
-        OpPayInfoModel model = OpPayInfoModel.getInsertVacctApvData(orderInfoVO, resVO);
+    public void insertVacctApprove(@Valid VacctSeqResVO resVO, OrderInfoVO orderInfoVO){
+        OpPayInfoModel model = OpPayInfoModel.getInsertVacctApvData(resVO, orderInfoVO);
         insertOrderPayment(model);
     }
 

@@ -12,10 +12,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class PointProcessor implements PaymentProcessor {
 
     private final PaymentDataManipulator paymentDataManipulator;

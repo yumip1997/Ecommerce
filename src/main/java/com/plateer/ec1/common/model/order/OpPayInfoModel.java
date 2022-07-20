@@ -58,7 +58,7 @@ public class OpPayInfoModel extends BaseModel {
                 .build();
     }
 
-    public static OpPayInfoModel getInsertVacctApvData(OrderInfoVO orderInfoVO, VacctSeqResVO resVO){
+    public static OpPayInfoModel getInsertVacctApvData(VacctSeqResVO resVO, OrderInfoVO orderInfoVO){
         OpPayInfoModel model = getInsertData(Long.parseLong(resVO.getPrice()), orderInfoVO);
         model.setRfndAvlAmt(0);
         model.setTrsnId(resVO.getTid());
