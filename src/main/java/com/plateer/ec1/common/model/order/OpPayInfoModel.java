@@ -91,8 +91,9 @@ public class OpPayInfoModel extends BaseModel {
         OpPayInfoModel opPayInfoModel = convertModel(orderPayInfoVO);
         opPayInfoModel.setPayCcd(OPT0010Code.CANCEL.getCode());
         opPayInfoModel.setPayPrgsScd(OPT0011Code.CANCEL_COMPLETE.getCode());
-        opPayInfoModel.setCnclAmt(orderPayInfoVO.getCnclReqAmt());
-        opPayInfoModel.setRfndAvlAmt(calculateRfndAvlAmt(orderPayInfoVO.getPayAmt(), orderPayInfoVO.getCnclReqAmt()));
+        opPayInfoModel.setPayAmt(orderPayInfoVO.getCnclReqAmt());
+        opPayInfoModel.setCnclAmt(0);
+        opPayInfoModel.setRfndAvlAmt(0);
         opPayInfoModel.setOrgPayNo(orderPayInfoVO.getPayNo());
         return opPayInfoModel;
     }

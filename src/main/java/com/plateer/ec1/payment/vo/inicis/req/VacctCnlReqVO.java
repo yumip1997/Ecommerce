@@ -28,9 +28,9 @@ public class VacctCnlReqVO extends InicisReqBase{
     public static VacctCnlReqVO of(String type, OrderPayInfoVO orderPayInfoVO){
         VacctCnlReqVO reqVO = new VacctCnlReqVO(type, InicisApiConstants.PAYMETHOD_VACCT);
         reqVO.setTid(orderPayInfoVO.getTrsnId());
-        //TODO 금액 셋팅 수정 필요
-        reqVO.setPrice(String.valueOf(orderPayInfoVO.getCnclAmt()));
-        reqVO.setConfirmPrice(String.valueOf(orderPayInfoVO.getRfndAvlAmt()));
+        reqVO.setMsg("");
+        reqVO.setPrice(String.valueOf(orderPayInfoVO.getCnclReqAmt()));
+        reqVO.setConfirmPrice(String.valueOf(orderPayInfoVO.getPayAmt() - orderPayInfoVO.getCnclReqAmt()));
         reqVO.setRefundAcctNum(orderPayInfoVO.getRfndAcctNo());
         reqVO.setRefundBankCode(orderPayInfoVO.getRfndBnkCk());
         reqVO.setRefundAcctName(orderPayInfoVO.getRfndAcctOwnNm());
@@ -39,20 +39,21 @@ public class VacctCnlReqVO extends InicisReqBase{
 
     public void setUpVacctCnlReqVO(String MID, String API_KEY, String IV){
         super.setUp(MID, API_KEY);
-        String hashData = InicisApiConstants.TYPE_REFUND.equals(this.getType()) ? getAllCancelHashData(API_KEY, IV) : getPartialRefundHashData(API_KEY, IV);
+        this.setRefundAcctNum(CipherUtil.encryptByAES(this.getRefundAcctNum(), API_KEY, IV));
+        String hashData = InicisApiConstants.TYPE_REFUND.equals(this.getType()) ? getAllCancelHashData() : getPartialRefundHashData();
         this.setHashData(hashData);
     }
 
-    public String getAllCancelHashData(String API_KEY, String IV){
+    public String getAllCancelHashData(){
         String input = super.getBasicHashData()
                 .append(this.getTid())
                 .append(this.getRefundAcctNum())
                 .toString();
 
-        return CipherUtil.encryptByAES(input, API_KEY, IV);
+        return CipherUtil.encryptBySHA512(input);
     }
 
-    public String getPartialRefundHashData(String API_KEY, String IV){
+    public String getPartialRefundHashData(){
         String input = super.getBasicHashData()
                 .append(this.getTid())
                 .append(this.getPrice())
@@ -60,7 +61,7 @@ public class VacctCnlReqVO extends InicisReqBase{
                 .append(this.getRefundAcctNum())
                 .toString();
 
-        return CipherUtil.encryptByAES(input, API_KEY, IV);
+        return CipherUtil.encryptBySHA512(input);
     }
 
 

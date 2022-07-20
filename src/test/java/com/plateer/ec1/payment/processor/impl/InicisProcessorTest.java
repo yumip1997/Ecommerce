@@ -51,4 +51,20 @@ class InicisProcessorTest {
          orderPayInfoVO.setOrdNo("123");
          assertThrows(ConstraintViolationException.class, () -> inicisProcessor.cancelPay(orderPayInfoVO));
      }
+
+    @Test
+    @DisplayName("입금 후 전체 취소 테스트")
+    void cancel_after_all(){
+        OrderPayInfoVO orderPayInfoVO = jsonReaderUtil.getObject("/CancelResAfterDummy.json", OrderPayInfoVO.class);
+        inicisProcessor.cancelPay(orderPayInfoVO);
+    }
+
+    @Test
+    @DisplayName("입금 후 부분 취소 테스트")
+    void cancel_after_partial(){
+        OrderPayInfoVO orderPayInfoVO = jsonReaderUtil.getObject("/CancelResPartialAfterDummy.json", OrderPayInfoVO.class);
+        inicisProcessor.cancelPay(orderPayInfoVO);
+    }
+
+
 }

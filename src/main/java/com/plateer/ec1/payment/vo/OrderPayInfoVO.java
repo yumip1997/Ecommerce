@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 public class OrderPayInfoVO {
 
     private String ordNo;
+    private String mbrNo;
     private String ordNm;
     private String ordEmail;
     private String rfndBnkCk;

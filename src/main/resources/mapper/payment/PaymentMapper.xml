@@ -4,6 +4,7 @@
     <select id="getOrderPayInfo" resultType="com.plateer.ec1.payment.vo.OrderPayInfoVO">
         select
             od.ord_no,
+            od.mbr_no,
             od.ord_nm,
             od.rfnd_bnk_ck,
             od.rfnd_acct_no,
