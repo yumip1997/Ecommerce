@@ -3,18 +3,35 @@
 <mapper namespace="com.plateer.ec1.payment.mapper.PaymentMapper">
     <select id="getOrderPayInfo" resultType="com.plateer.ec1.payment.vo.OrderPayInfoVO">
         select
+            od.ord_no,
+            od.ord_nm,
+            od.rfnd_bnk_ck,
+            od.rfnd_acct_no,
+            od.rfnd_acct_own_nm,
+            cl.clm_no,
             #{cnclReqAmt} as cnclReqAmt,
-            od.*,
-            py.*,
-            og.goods_no,
-            og.goods_nm,
-            mb.mbr_no,
-            mb.mbr_nm
-        from op_ord_base od inner join op_pay_info py on od.ord_no = py.ord_no
+            py.pay_no,
+            py.pay_mn_cd,
+            py.pay_ccd,
+            py.pay_prgs_scd,
+            py.pay_amt,
+            py.cncl_amt,
+            py.rfnd_avl_amt,
+            py.trsn_id,
+            py.org_pay_no,
+            py.vr_acct,
+            py.vr_acct_nm,
+            py.vr_bnk_cd,
+            py.vr_val_dt,
+            py.vr_val_tt,
+            og.goods_nm
+        from op_ord_base od inner join op_clm_info cl on od.ord_no = cl.ord_no
+                            inner join op_pay_info py on od.ord_no = py.ord_no
                             inner join op_goods_info og on od.ord_no = og.ord_no
-                            inner join et_mbr_base mb on od.mbr_no = mb.mbr_no
-        where od.ord_no = #{ordNo}
-          and (
+        where 1 = 1
+            and od.ord_no = #{ordNo}
+            and cl.clm_no = #{clmNo}
+            and (
                 (pay_prgs_scd = '10' and pay_cmt_dtime is null) or
                 (pay_prgs_scd = '20' and pay_cmt_dtime is not null)
             )
