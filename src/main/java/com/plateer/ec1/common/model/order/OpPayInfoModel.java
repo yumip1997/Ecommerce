@@ -44,7 +44,7 @@ public class OpPayInfoModel extends BaseModel {
     private String vrValDt;
     private String vrValTt;
 
-    public static OpPayInfoModel getBasicInsertData(long payAmt, OrderInfoVO orderInfoVO){
+    public static OpPayInfoModel getInsertData(long payAmt, OrderInfoVO orderInfoVO){
         PaymentBusiness paymentBusiness = orderInfoVO.getPaymentBusiness();
         return OpPayInfoModel.builder()
                 .ordNo(orderInfoVO.getOrdNo())
@@ -59,7 +59,7 @@ public class OpPayInfoModel extends BaseModel {
     }
 
     public static OpPayInfoModel getInsertVacctApvData(OrderInfoVO orderInfoVO, VacctSeqResVO resVO){
-        OpPayInfoModel model = getBasicInsertData(Long.parseLong(resVO.getPrice()), orderInfoVO);
+        OpPayInfoModel model = getInsertData(Long.parseLong(resVO.getPrice()), orderInfoVO);
         model.setRfndAvlAmt(0);
         model.setTrsnId(resVO.getTid());
         model.setVrAcct(resVO.getVacct());

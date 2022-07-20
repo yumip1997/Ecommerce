@@ -19,8 +19,13 @@ public class PaymentDataManipulator {
 
     private final PaymentTrxMapper paymentTrxMapper;
 
+    public void insertOrderPayment(OpPayInfoModel opPayInfoModel){
+        paymentTrxMapper.insertOrderPayment(opPayInfoModel);
+    }
+
     public void insertVacctApprove(OrderInfoVO orderInfoVO, @Valid VacctSeqResVO resVO){
-        paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getInsertVacctApvData(orderInfoVO, resVO));
+        OpPayInfoModel model = OpPayInfoModel.getInsertVacctApvData(orderInfoVO, resVO);
+        insertOrderPayment(model);
     }
 
     public void manipulateCnlAfterDeposit(@Valid VacctCnlResVO resVO, OrderPayInfoVO orderPayInfoVO){

@@ -2,8 +2,8 @@ package com.plateer.ec1.payment.processor.impl;
 
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.payment.enums.PaymentType;
-import com.plateer.ec1.payment.mapper.PaymentTrxMapper;
 import com.plateer.ec1.payment.processor.PaymentProcessor;
+import com.plateer.ec1.payment.utils.PaymentDataManipulator;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
@@ -18,19 +18,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class PointProcessor implements PaymentProcessor {
 
-    private final PaymentTrxMapper paymentTrxMapper;
+    private final PaymentDataManipulator paymentDataManipulator;
 
     @Override
     @Transactional
     public ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {
-        OpPayInfoModel model = OpPayInfoModel.getBasicInsertData(payInfoVO.getPayAmount(), orderInfoVO);
-        paymentTrxMapper.insertOrderPayment(model);
+        paymentDataManipulator.insertOrderPayment(OpPayInfoModel.getInsertData(payInfoVO.getPayAmount(), orderInfoVO));
         return new ApproveResVO(payInfoVO.getPaymentType());
     }
 
     @Override
+    @Transactional
     public void cancelPay(OrderPayInfoVO orderPayInfoVO) {
-        log.info("포인트 결제취소 로직을 진행한다.");
+        paymentDataManipulator.manipulateCnl(orderPayInfoVO);
     }
 
     @Override
