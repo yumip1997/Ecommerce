@@ -4,6 +4,7 @@ import com.plateer.ec1.common.validation.annotation.PayCancel;
 import com.plateer.ec1.payment.enums.OPT0011Code;
 import com.plateer.ec1.payment.enums.PaymentType;
 import lombok.*;
+import org.springframework.beans.BeanUtils;
 
 @Getter
 @Setter
@@ -13,10 +14,15 @@ import lombok.*;
 @PayCancel
 public class OrderPayInfoVO {
 
+    private String ordNo;
+    private String ordNm;
+    private String ordEmail;
+    private String rfndBnkCk;
+    private String rfndAcctNo;
+    private String rfndAcctOwnNm;
+    private String clmNo;
     private long cnclReqAmt;
     private String payNo;
-    private String ordNo;
-    private String clmNo;
     private String payMnCd;
     private String payCcd;
     private String payPrgsScd;
@@ -30,11 +36,7 @@ public class OrderPayInfoVO {
     private String vrBnkCd;
     private String vrValDt;
     private String vrValTt;
-    private String rfndBnkCk;
-    private String rfndAcctNo;
-    private String rfndAcctOwnNm;
     private String goodsNm;
-    private String mbrNm;
 
     public boolean isPayRequest(){
         return OPT0011Code.PAY_REQUEST.getCode().equals(this.getPayPrgsScd());
@@ -48,12 +50,20 @@ public class OrderPayInfoVO {
         return this.getPayAmt() != this.getCnclReqAmt();
     }
 
+    public OrderPayInfoVO changeCnlReqAmt(long payAmt){
+        OrderPayInfoVO orderPayInfoVO = new OrderPayInfoVO();
+        BeanUtils.copyProperties(this, orderPayInfoVO);
+        orderPayInfoVO.setCnclReqAmt(payAmt);
+        return orderPayInfoVO;
+    }
+
     public OrderInfoVO toOrderInfoVO(){
         return OrderInfoVO.builder()
                 .ordNo(this.getOrdNo())
                 .clmNo(this.getClmNo())
                 .goodName(this.getGoodsNm())
-                .buyerName(this.getMbrNm())
+                .buyerName(this.getOrdNm())
+                .buyerEmail(this.getOrdEmail())
                 .build();
     }
 
