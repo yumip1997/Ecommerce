@@ -1,6 +1,8 @@
 package com.plateer.ec1.payment.processor.impl;
 
 import com.plateer.ec1.common.utils.JsonReaderUtil;
+import com.plateer.ec1.payment.enums.OPT0009Code;
+import com.plateer.ec1.payment.enums.PaymentBusiness;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
@@ -35,17 +37,12 @@ class InicisProcessorTest {
     void approve_test(){
         OrderInfoVO orderInfoVO = jsonReaderUtil.getObject("/OrderInfo.json", OrderInfoVO.class);
         PayInfoVO payInfoVO = jsonReaderUtil.getObject("/PayInfo.json", PayInfoVO.class);
+        orderInfoVO.setPaymentBusiness(PaymentBusiness.VACCT_APV);
+        payInfoVO.setMethodType(OPT0009Code.VIRTUAL_ACCOUNT);
 
         ApproveResVO approveResVO = inicisProcessor.approvePay(orderInfoVO, payInfoVO);
         Assertions.assertThat(approveResVO.getPaymentType()).isEqualTo(PaymentType.INICIS);
     }
-
-    @Test
-    @DisplayName("입금 통보 응답 코드가 성공이지 않을 때 예외 발생")
-    void fail_vacct_deposit(){
-        VacctDpstCmtResVO resVO = jsonReaderUtil.getObject("/VacctDpstCmtFailCode.json", VacctDpstCmtResVO.class);
-        assertThrows(ConstraintViolationException.class, () -> inicisProcessor.completeVacctDeposit(resVO));
-     }
 
      @Test
      @DisplayName("존재하지 않는 주문건에 대해 취소 요청을 할 때 예외 발생")
