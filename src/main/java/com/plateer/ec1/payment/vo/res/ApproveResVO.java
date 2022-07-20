@@ -13,4 +13,8 @@ public class ApproveResVO {
     private PaymentType paymentType;
     private String ablePartialCancelYn;
 
+    public ApproveResVO(PaymentType paymentType){
+        this.paymentType = paymentType;
+    }
+
 }

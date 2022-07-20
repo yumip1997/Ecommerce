@@ -1,6 +1,6 @@
 package com.plateer.ec1.payment.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.plateer.ec1.payment.enums.OPT0009Code;
 import com.plateer.ec1.payment.enums.PaymentType;
 import lombok.*;
 
@@ -19,4 +19,5 @@ public class PayInfoVO {
     private String depositorName;
     @NotNull
     private PaymentType paymentType;
+    private OPT0009Code methodType;
 }

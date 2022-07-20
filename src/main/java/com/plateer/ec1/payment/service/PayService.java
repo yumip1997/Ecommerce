@@ -1,5 +1,6 @@
 package com.plateer.ec1.payment.service;
 
+import com.plateer.ec1.payment.enums.PaymentBusiness;
 import com.plateer.ec1.payment.factory.PaymentProcessorFactory;
 import com.plateer.ec1.payment.mapper.PaymentMapper;
 import com.plateer.ec1.payment.processor.PaymentProcessor;
@@ -32,6 +33,8 @@ public class PayService {
 
         for (PayInfoVO payInfoVO : approveReqVO.getPayInfoVOList()) {
             PaymentProcessor paymentProcessor = paymentProcessorFactory.get(payInfoVO.getPaymentType());
+
+            orderInfoVO.setPaymentBusiness(PaymentBusiness.of(payInfoVO.getPaymentType(), payInfoVO.getMethodType()));
             ApproveResVO approveResVO = paymentProcessor.approvePay(orderInfoVO, payInfoVO);
             approveResVOList.add(approveResVO);
         }

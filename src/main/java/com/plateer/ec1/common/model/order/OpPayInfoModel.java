@@ -5,6 +5,7 @@ import com.plateer.ec1.common.utils.LocalDateTimeUtil;
 import com.plateer.ec1.payment.enums.OPT0009Code;
 import com.plateer.ec1.payment.enums.OPT0010Code;
 import com.plateer.ec1.payment.enums.OPT0011Code;
+import com.plateer.ec1.payment.enums.PaymentBusiness;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctDpstCmtResVO;
@@ -43,24 +44,30 @@ public class OpPayInfoModel extends BaseModel {
     private String vrValDt;
     private String vrValTt;
 
-    public static OpPayInfoModel getInsertData(OrderInfoVO orderInfoVO, VacctSeqResVO resVO){
+    public static OpPayInfoModel getBasicInsertData(long payAmt, OrderInfoVO orderInfoVO){
+        PaymentBusiness paymentBusiness = orderInfoVO.getPaymentBusiness();
         return OpPayInfoModel.builder()
                 .ordNo(orderInfoVO.getOrdNo())
                 .clmNo(orderInfoVO.getClmNo())
-                .payMnCd(OPT0009Code.VIRTUAL_ACCOUNT.getCode())
+                .payMnCd(paymentBusiness.getMethodCode().getCode())
                 .payCcd(OPT0010Code.PAY.getCode())
-                .payPrgsScd(OPT0011Code.PAY_REQUEST.getCode())
-                .payAmt(Long.parseLong(resVO.getPrice()))
+                .payPrgsScd(paymentBusiness.getPayPrgsCode().getCode())
+                .payAmt(payAmt)
                 .cnclAmt(0)
-                .rfndAvlAmt(0)
-                .trsnId(resVO.getTid())
-                .vrAcct(resVO.getVacct())
-                .vrBnkCd(resVO.getVacctBankCode())
-                .vrAcctNm(resVO.getVacctName())
-                .vrBnkCd(resVO.getVacctBankCode())
-                .vrValDt(resVO.getValidDate())
-                .vrValTt(resVO.getValidTime())
+                .rfndAvlAmt(payAmt)
                 .build();
+    }
+
+    public static OpPayInfoModel getInsertVacctApvData(OrderInfoVO orderInfoVO, VacctSeqResVO resVO){
+        OpPayInfoModel model = getBasicInsertData(Long.parseLong(resVO.getPrice()), orderInfoVO);
+        model.setRfndAvlAmt(0);
+        model.setTrsnId(resVO.getTid());
+        model.setVrAcct(resVO.getVacct());
+        model.setVrBnkCd(resVO.getVacctBankCode());
+        model.setVrAcctNm(resVO.getVacctName());
+        model.setVrValDt(resVO.getValidDate());
+        model.setVrValTt(resVO.getValidTime());
+        return model;
     }
 
     public static OpPayInfoModel getPayCmpUpdateData(VacctDpstCmtResVO resVO){

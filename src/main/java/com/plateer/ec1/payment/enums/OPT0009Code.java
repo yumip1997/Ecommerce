@@ -11,4 +11,5 @@ public enum OPT0009Code {
     POINT("20");
 
     private final String code;
+
 }
