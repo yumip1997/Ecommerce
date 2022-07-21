@@ -1,7 +1,9 @@
 package com.plateer.ec1.payment.vo;
 
 import com.plateer.ec1.common.validation.annotation.PayCancel;
+import com.plateer.ec1.payment.enums.OPT0009Code;
 import com.plateer.ec1.payment.enums.OPT0011Code;
+import com.plateer.ec1.payment.enums.PaymentBusiness;
 import com.plateer.ec1.payment.enums.PaymentType;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
@@ -38,6 +40,7 @@ public class OrderPayInfoVO {
     private String vrValDt;
     private String vrValTt;
     private String goodsNm;
+    private PaymentBusiness paymentBusiness;
 
     public boolean isPayRequest(){
         return OPT0011Code.PAY_REQUEST.getCode().equals(this.getPayPrgsScd());
@@ -65,6 +68,7 @@ public class OrderPayInfoVO {
                 .goodName(this.getGoodsNm())
                 .buyerName(this.getOrdNm())
                 .buyerEmail(this.getOrdEmail())
+                .paymentBusiness(this.getPaymentBusiness())
                 .build();
     }
 
@@ -73,7 +77,15 @@ public class OrderPayInfoVO {
                 .payAmount(this.getPayAmt() - this.getCnclReqAmt())
                 .bankCode(this.getRfndBnkCk())
                 .depositorName(this.getRfndAcctOwnNm())
-                .paymentType(PaymentType.INICIS)
+                .paymentType(this.getPaymentBusiness().getPaymentType())
                 .build();
     }
+
+    private PaymentBusiness getPaymentBusiness(){
+        if(this.paymentBusiness == null){
+            return PaymentBusiness.of(OPT0009Code.of(this.getPayMnCd()), OPT0011Code.of(this.getPayPrgsScd()));
+        }
+        return this.paymentBusiness;
+    }
+
 }

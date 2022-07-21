@@ -28,5 +28,11 @@ public enum PaymentBusiness {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessage.NOT_VALID_CODE.getMsg()));
     }
+    public static PaymentBusiness of(OPT0009Code methodCode, OPT0011Code payPrgsCode){
+        return Arrays.stream(PaymentBusiness.values())
+                .filter(business -> business.getMethodCode().equals(methodCode) && business.getPayPrgsCode().equals(payPrgsCode))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessage.NOT_VALID_CODE.getMsg()));
+    }
 
 }

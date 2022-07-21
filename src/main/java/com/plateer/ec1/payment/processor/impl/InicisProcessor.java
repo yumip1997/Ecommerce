@@ -11,14 +11,12 @@ import com.plateer.ec1.payment.vo.inicis.res.VacctCnlResVO;
 import com.plateer.ec1.payment.vo.inicis.res.VacctSeqResVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 @Validated
 public class InicisProcessor implements PaymentProcessor {
 

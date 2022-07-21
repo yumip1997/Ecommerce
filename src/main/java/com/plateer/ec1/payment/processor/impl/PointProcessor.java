@@ -16,7 +16,6 @@ import org.springframework.validation.annotation.Validated;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 @Validated
 public class PointProcessor implements PaymentProcessor {
 
