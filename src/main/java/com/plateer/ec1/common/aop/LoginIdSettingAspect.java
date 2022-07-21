@@ -18,7 +18,7 @@ public class LoginIdSettingAspect {
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {
             if(arg instanceof List){
-                for (Object o : (List) arg) {
+                for (Object o : (List<?>) arg) {
                     setLoginIdOfArgs(o);
                 }
                 continue;
