@@ -6,7 +6,7 @@
   "dt_trans": "20220717",
   "tm_trans": "203235",
   "no_vacct": "07500516397907",
-  "amt_input": "1",
+  "amt_input": "16200",
   "flg_close": "0",
   "cl_close": "0",
   "type_msg": "0200",
@@ -17,5 +17,5 @@
   "dt_transbase": "20220717",
   "cl_trans": "1100",
   "cl_kor": "2",
-  "no_req_tid" : "INIAPIVBNKINIpayTest20220717203210013134"
+  "no_req_tid" : "INIAPIVBNKINIpayTest20220721163401061119"
 }

@@ -43,18 +43,28 @@ class InicisProcessorTest {
         Assertions.assertThat(approveResVO.getPaymentType()).isEqualTo(PaymentType.INICIS);
     }
 
-     @Test
-     @DisplayName("존재하지 않는 주문건에 대해 취소 요청을 할 때 예외 발생")
-     void fail_cancel_not_exist_ord(){
-         OrderPayInfoVO orderPayInfoVO = jsonReaderUtil.getObject("/CancelInfoVO.json", OrderPayInfoVO.class);
-         orderPayInfoVO.setOrdNo("123");
-         assertThrows(ConstraintViolationException.class, () -> inicisProcessor.cancelPay(orderPayInfoVO));
-     }
+    @Test
+    @DisplayName("입금 전 전체 취소 테스트")
+    void test_all_cancel_before(){
+        OrderPayInfoVO orderPayInfoVO = jsonReaderUtil.getObject("/CancelResDummy.json", OrderPayInfoVO.class);
+        orderPayInfoVO.setPayPrgsScd("10");
+        orderPayInfoVO.setCnclReqAmt(16200);
+        inicisProcessor.cancelPay(orderPayInfoVO);
+    }
+
+    @Test
+    @DisplayName("입금 전 부분 취소 테스트")
+    void test_partial_cancel_before(){
+        OrderPayInfoVO orderPayInfoVO = jsonReaderUtil.getObject("/CancelResDummy.json", OrderPayInfoVO.class);
+        orderPayInfoVO.setPayPrgsScd("10");
+        orderPayInfoVO.setCnclReqAmt(7200);
+        inicisProcessor.cancelPay(orderPayInfoVO);
+    }
 
      @Test
      @DisplayName("입금 전 취소요청금액이 결제금액보다 클 때 예외 발생")
      void fail_cancel_before_amt(){
-         OrderPayInfoVO orderPayInfoVO = jsonReaderUtil.getObject("/CancelInfoVO.json", OrderPayInfoVO.class);
+         OrderPayInfoVO orderPayInfoVO = jsonReaderUtil.getObject("/CancelResDummy.json", OrderPayInfoVO.class);
          orderPayInfoVO.setPayPrgsScd("10");
          orderPayInfoVO.setCnclReqAmt(20000);
          assertThrows(ConstraintViolationException.class, () -> inicisProcessor.cancelPay(orderPayInfoVO));
