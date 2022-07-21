@@ -1,29 +1,30 @@
 package com.plateer.ec1.common.model.order;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.plateer.ec1.common.model.BaseModel;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class OpClmInfo {
+public class OpClmInfo extends BaseModel {
+
     private String ordNo;
     private String ordGoodsNo;
     private String ordItemNo;
-    private Integer ordSeq;
-    private Integer procSeq;
+    private int ordSeq;
+    private int procSeq;
     private String ordClmTpCd;
     private String ordPrgsScd;
     private String dvRvtCcd;
-    private Long ordAmt;
-    private Integer ordCnt;
-    private Integer cnclCnt;
-    private Integer rtgsCnt;
-    private Integer dvGrpNo;
+    private long ordAmt;
+    private int ordCnt;
+    private int cnclCnt;
+    private int rtgsCnt;
+    private int dvGrpNo;
     private LocalDateTime ordClmReqDtime;
     private LocalDateTime ordClmAcptDtime;
     private LocalDateTime ordClmCmtDtime;
@@ -34,5 +35,6 @@ public class OpClmInfo {
     private LocalDateTime sysModDtime;
     private String sysModrId;
     private String clmNo;
-    private Integer orgProcSeq;
+    private int orgProcSeq;
+
 }
