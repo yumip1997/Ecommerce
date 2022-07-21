@@ -20,7 +20,7 @@ public class InicisService {
 
     @Transactional
     public String completeVacctDeposit(@Valid VacctDpstCmtResVO resVO){
-        paymentTrxMapper.updateOrderPayment(OpPayInfoModel.getPayCmpUpdateData(resVO));
+        paymentTrxMapper.updateOrderPaymentByTransId(OpPayInfoModel.getPayCmpUpdateData(resVO));
         return CommonConstants.OK.getCode();
     }
 }

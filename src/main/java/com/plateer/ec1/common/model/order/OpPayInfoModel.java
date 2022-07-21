@@ -45,22 +45,22 @@ public class OpPayInfoModel extends BaseModel {
     private String vrValTt;
 
     public static OpPayInfoModel getInsertData(long payAmt, OrderInfoVO orderInfoVO){
-        PaymentBusiness paymentBusiness = orderInfoVO.getPaymentBusiness();
+        PaymentBusiness business = orderInfoVO.getPaymentBusiness();
         return OpPayInfoModel.builder()
                 .ordNo(orderInfoVO.getOrdNo())
                 .clmNo(orderInfoVO.getClmNo())
-                .payMnCd(paymentBusiness.getMethodCode().getCode())
+                .payMnCd(business.getMethodCode().getCode())
                 .payCcd(OPT0010Code.PAY.getCode())
-                .payPrgsScd(paymentBusiness.getPayPrgsCode().getCode())
+                .payPrgsScd(business.getPayPrgsCode().getCode())
                 .payAmt(payAmt)
                 .cnclAmt(0)
-                .rfndAvlAmt(payAmt)
+                .rfndAvlAmt(business.getMethodCode().equals(OPT0009Code.VIRTUAL_ACCOUNT) ? 0 : payAmt)
+                .payCmtDtime(business.getMethodCode().equals(OPT0009Code.VIRTUAL_ACCOUNT) ? null : LocalDateTime.now())
                 .build();
     }
 
     public static OpPayInfoModel getInsertVacctApvData(VacctSeqResVO resVO, OrderInfoVO orderInfoVO){
         OpPayInfoModel model = getInsertData(Long.parseLong(resVO.getPrice()), orderInfoVO);
-        model.setRfndAvlAmt(0);
         model.setTrsnId(resVO.getTid());
         model.setVrAcct(resVO.getVacct());
         model.setVrBnkCd(resVO.getVacctBankCode());

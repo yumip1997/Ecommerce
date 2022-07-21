@@ -6,9 +6,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PaymentTrxMapper {
 
-    //TODO List로 변경
     void insertOrderPayment(OpPayInfoModel opPayInfoModel);
 
     void updateOrderPayment(OpPayInfoModel opPayInfoModel);
+
+    void updateOrderPaymentByTransId(OpPayInfoModel opPayInfoModel);
 
 }
