@@ -8,4 +8,5 @@ public interface OrdClmMntLogTrxMapper {
 
     Long insertMonitoringLog(OpOrdClmMntLog opOrdClmMntLog);
     void updateMonitoringLog(OpOrdClmMntLog opOrdClmMntLog);
+
 }

@@ -1,5 +1,6 @@
 package com.plateer.ec1.order.vo;
 
+import com.google.gson.JsonObject;
 import com.plateer.ec1.common.model.order.OpOrdClmMntLog;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,13 +9,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class OrdClmMntLogVO<T, U> {
+public class OrdClmMntLogVO {
 
     private Long logSeq;
     private String ordNo;
     private String clmNo;
-    private T insData;
-    private U uptData;
+    private JsonObject insData;
+    private JsonObject uptData;
     private String procCcd;
 
     public OpOrdClmMntLog toModel(){
