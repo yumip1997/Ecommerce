@@ -1,5 +1,6 @@
 package com.plateer.ec1.order.validator;
 
+import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.order.enums.OrderException;
 import com.plateer.ec1.order.enums.OrderType;
 import com.plateer.ec1.order.enums.SystemType;
@@ -50,11 +51,11 @@ public enum OrderValidator {
         return predicate.test(s);
     }
 
-    public static OrderValidator findOrderValidatory(OrderRequestVO orderRequestVO) throws Exception {
+    public static OrderValidator findOrderValidator(OrderRequestVO orderRequestVO){
         return Arrays.stream(OrderValidator.values())
                 .filter(orderValidator -> isEqualsTypeCode(orderValidator, orderRequestVO))
                 .findFirst()
-                .orElseThrow(() -> new Exception(OrderException.NOT_FIND_VALIDATOR.msg));
+                .orElseThrow(() -> new BusinessException(OrderException.NOT_FIND_VALIDATOR.msg));
     }
 
     private static boolean isEqualsTypeCode(OrderValidator orderValidator, OrderRequestVO orderRequestVO){
