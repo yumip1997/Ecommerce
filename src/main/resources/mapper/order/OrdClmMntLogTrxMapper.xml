@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.order.mapper.OrdClmMntLogTrxMapper">
-        <insert id="insertMonitoringLog" parameterType="opOrdClmMntLog" useGeneratedKeys="true" keyProperty="logSeq">
+        <select id="insertMonitoringLog" resultType="Long">
             insert into op_ord_clm_mnt_log (
                                             ord_no
                                             , req_pram
@@ -18,7 +18,8 @@
                     ,now()
                     ,#{loginId}
                     )
-        </insert>
+            returning log_seq
+        </select>
 
     <update id="updateMonitoringLog">
         update op_ord_clm_mnt_log
