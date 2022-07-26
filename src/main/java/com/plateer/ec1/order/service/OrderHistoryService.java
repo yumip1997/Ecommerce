@@ -1,8 +1,7 @@
 package com.plateer.ec1.order.service;
 
-import com.plateer.ec1.claim.helper.MonitoringLogHelper;
-import com.plateer.ec1.order.vo.OrderVO;
-import com.plateer.ec1.order.vo.OrderRequestVO;
+import com.plateer.ec1.order.mapper.OrdClmMntLogTrxMapper;
+import com.plateer.ec1.order.vo.OrdClmMntLogVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,15 +9,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OrderHistoryService {
 
-    private final MonitoringLogHelper monitoringLogHelper;
+    private final OrdClmMntLogTrxMapper ordClmMntLogTrxMapper;
 
-    public Long insertOrderHistory(OrderRequestVO orderRequestVO){
-        return monitoringLogHelper.insertMonitoringLog(orderRequestVO.toString());
+    public Long insertOrderHistory(OrdClmMntLogVO<?, ?> logVO) {
+        return ordClmMntLogTrxMapper.insertMonitoringLog(logVO.toModel());
     }
 
-    public void updateOrderHistory(OrderVO orderVO, Long historyNo){
-        monitoringLogHelper.updateMonitoringLog(historyNo, orderVO.toString());
+    public void updateOrderHistory(OrdClmMntLogVO<?, ?> logVO){
+        ordClmMntLogTrxMapper.updateMonitoringLog(logVO.toModel());
     }
-
-
 }

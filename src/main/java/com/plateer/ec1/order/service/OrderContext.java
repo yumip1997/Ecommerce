@@ -1,7 +1,12 @@
 package com.plateer.ec1.order.service;
 
+import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.order.enums.OrderException;
-import com.plateer.ec1.order.mapper.OrderDao;
+import com.plateer.ec1.order.enums.OrderType;
+import com.plateer.ec1.order.enums.SystemType;
+import com.plateer.ec1.order.factory.AfterStrategyFactory;
+import com.plateer.ec1.order.factory.DataStrategyFactory;
+import com.plateer.ec1.order.mapper.OrdTrxMapper;
 import com.plateer.ec1.order.strategy.after.AfterStrategy;
 import com.plateer.ec1.order.strategy.data.DataStrategy;
 import com.plateer.ec1.order.validator.OrderValidator;
@@ -10,61 +15,76 @@ import com.plateer.ec1.order.vo.OrderProductViewVO;
 import com.plateer.ec1.order.vo.OrderRequestVO;
 import com.plateer.ec1.order.vo.OrderValidationVO;
 import com.plateer.ec1.payment.service.PayService;
+import com.plateer.ec1.product.service.ProductService;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+
+
 
 @RequiredArgsConstructor
 @Component
-@Log4j2
+@Slf4j
 public class OrderContext {
+    private final DataStrategyFactory dataStrategyFactory;
+    private final AfterStrategyFactory afterStrategyFactory;
 
-    private final OrderHistoryService orderHistoryService;
-    private final OrderDao orderDao;
     private final PayService payService;
+    private final ProductService productService;
+    private final OrdTrxMapper ordTrxMapper;
 
-    public void execute(DataStrategy dataStrategy, AfterStrategy afterStrategy, OrderRequestVO orderRequestVO){
-        //TODO OrderDao에서 가져오기
-        OrderProductViewVO productView = new OrderProductViewVO();
-
-        Long logKey = null;
-
+    public void execute(OrderRequestVO orderRequestVO){
         try{
-            //주문 모니터링 로그 생성
-            logKey = orderHistoryService.insertOrderHistory(orderRequestVO);
-
-            //파라미터 유혀성 검증
-            validate(orderRequestVO);
-
-            //주문데이터생성
-            OrderVO orderVO = dataStrategy.create(orderRequestVO, productView);
-
-            //결제호출예정 - order , list<pay>
-
-            //주문데이터등록
-            insertOrderData(orderVO);
-
-            //TODO 금액검증
-
-            afterStrategy.call(orderRequestVO, orderVO);
+            OrderVO orderVO = doOrderProcess(orderRequestVO);
+            doOrderAfterProcess(orderRequestVO, orderVO);
         }catch (Exception e){
             log.error(e.getMessage());
         }
-
     }
 
-    private void validate(OrderRequestVO orderRequestVO) throws Exception {
-        log.info("파라미터 유효성 체크를 한다.");
-        OrderValidator orderValidator = OrderValidator.findOrderValidatory(orderRequestVO);
+    private OrderVO doOrderProcess(OrderRequestVO orderRequestVO){
+        //주문상품조회
+        OrderProductViewVO productView = new OrderProductViewVO();
+        //유효성검사
+        validate(orderRequestVO);
+        //주문데이터생성
+        OrderVO orderVO = create(orderRequestVO, productView);
+        //주문데이터등록
+        //결제호출
+        payService.approve(orderVO.toPayApproveReqVO());
+        return orderVO;
+    }
+
+    private void doOrderAfterProcess(OrderRequestVO orderRequestVO, OrderVO orderVO) {
+        AfterStrategy afterStrategy = getAfterStrategy(orderRequestVO.getSystemType());
+        afterStrategy.call(orderRequestVO, orderVO);
+    }
+
+    private void validate(OrderRequestVO orderRequestVO){
+        OrderValidator orderValidator = OrderValidator.findOrderValidator(orderRequestVO);
         boolean isValid = orderValidator.test(new OrderValidationVO());
 
         if(isValid) return;
-        throw new Exception(OrderException.INVALID_ORDER.msg);
+        throw new BusinessException(OrderException.INVALID_ORDER.msg);
     }
 
-    private void insertOrderData(OrderVO orderVO){
-        log.info("주문 데이터 insert 로직이 진행된다.");
-        //TODO orderDao.insertOrderData(orderDto);
+    private OrderVO create(OrderRequestVO orderRequestVO, OrderProductViewVO orderProductViewVO){
+        DataStrategy dataStrategy = getDataStrategy(orderRequestVO.getOrderType());
+        return dataStrategy.create(orderRequestVO, orderProductViewVO);
     }
 
+    private DataStrategy getDataStrategy(String typeStr){
+        OrderType orderType = OrderType.findOrderType(typeStr);
+        return dataStrategyFactory.get(orderType);
+    }
+
+    private AfterStrategy getAfterStrategy(String typeStr){
+        SystemType systemType = SystemType.findSystemType(typeStr);
+        return afterStrategyFactory.get(systemType);
+    }
 }
