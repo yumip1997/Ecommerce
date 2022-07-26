@@ -4,7 +4,7 @@ import com.plateer.ec1.order.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface OrderDao {
+public interface OrdTrxMapper {
 
     void insertOrderData(OrderVO orderVO);
 }
