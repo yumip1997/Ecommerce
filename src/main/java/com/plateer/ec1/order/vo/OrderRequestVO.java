@@ -1,18 +1,23 @@
 package com.plateer.ec1.order.vo;
 
+import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
 @Builder
-public class OrderRequestVO {
+public class OrderRequestVO extends OrderClaimBaseVO {
 
-    String orderNo;
-    String systemType;
-    String orderType;
-    PayInfoVO payInfoVO;
+    private String systemType;
+    private String orderType;
+
+    private OrderBasicVO orderBasicVO;
+    private List<OrderProductVO> orderProductVOList;
+    private List<OrderDeliveryVO> orderDeliveryVOList;
+    private List<OrderBenefitVO> orderBenefitVOList;
+    private List<PayInfoVO> payInfoVO;
 
 }
