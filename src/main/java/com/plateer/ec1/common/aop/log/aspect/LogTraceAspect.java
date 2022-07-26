@@ -1,7 +1,7 @@
-package com.plateer.ec1.common.log.aspect;
+package com.plateer.ec1.common.aop.log.aspect;
 
-import com.plateer.ec1.common.log.TraceLogger;
-import com.plateer.ec1.common.log.TraceStatus;
+import com.plateer.ec1.common.aop.log.TraceLogger;
+import com.plateer.ec1.common.aop.log.TraceStatus;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -19,7 +19,7 @@ public class LogTraceAspect {
     @Pointcut("execution(* com.plateer.ec1.payment..*.*(..))")
     private void allPayment(){}
 
-    @Pointcut("@annotation(com.plateer.ec1.common.log.annotation.LogTrace)")
+    @Pointcut("@annotation(com.plateer.ec1.common.aop.log.annotation.LogTrace)")
     private void LogTraceAnnotation(){}
 
     @Around("allPayment() || LogTraceAnnotation()")

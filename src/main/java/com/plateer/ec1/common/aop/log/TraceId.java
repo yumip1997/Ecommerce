@@ -1,4 +1,4 @@
-package com.plateer.ec1.common.log;
+package com.plateer.ec1.common.aop.log;
 
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.plateer.ec1.common.log.annotation;
+package com.plateer.ec1.common.aop.log.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
