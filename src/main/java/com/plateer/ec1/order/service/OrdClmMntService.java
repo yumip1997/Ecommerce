@@ -1,10 +1,9 @@
 package com.plateer.ec1.order.service;
 
 import com.plateer.ec1.common.model.order.OpOrdClmMntLog;
+import com.plateer.ec1.order.enums.OPT0012Code;
 import com.plateer.ec1.order.mapper.OrdClmMntLogTrxMapper;
 import com.plateer.ec1.order.vo.OrdClmCreationVO;
-import com.plateer.ec1.order.vo.OrdClmMntLogVO;
-import com.plateer.ec1.order.vo.OrderVO;
 import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,9 @@ public class OrdClmMntService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public <T, U> void updateOrderHistory(Long logSeq, OrdClmCreationVO<T,U> creationVO, String procCcd){
+    public <T, U> void updateOrderHistory(Long logSeq, OrdClmCreationVO<T,U> creationVO, Exception exception){
+        String procCcd = OPT0012Code.getCodeByException(exception);
+
         OpOrdClmMntLog updateData = OpOrdClmMntLog.getUpdateData(logSeq, creationVO, procCcd);
         ordClmMntLogTrxMapper.updateMonitoringLog(updateData);
     }
