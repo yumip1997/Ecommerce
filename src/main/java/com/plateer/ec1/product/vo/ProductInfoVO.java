@@ -16,6 +16,8 @@ public class ProductInfoVO {
     private String goodsTpCd;
     private Long salePrc;
     private Long prmPrc;
+    private String prgsStatCd;
+    private String goodsDlvTpCd;
     private Long orrAt;
     private Long orrCnt;
     private Long appliedCpnIssNo;

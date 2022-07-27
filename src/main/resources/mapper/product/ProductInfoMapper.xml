@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.plateer.ec1.product.mapper.ProductInfoMapper">
+    <select id="getProductInfoVo" resultType="productInfoVO">
+        select
+            gd.goods_no
+             , gd.goods_nm
+             , gd.goods_tp_cd
+             , gd.sale_prc
+             , gd.prm_prc
+             , gd.prgs_stat_cd
+             , gd.goods_dlv_tp_cd
+             , itm.item_no
+             , itm.item_nm
+        from pr_goods_base gd inner join pr_item_info itm on gd.goods_no = itm.goods_no
+        where
+            <foreach collection="list" item="prd" separator="or">
+                (gd.goods_no = #{prd.goodsNo} and itm.item_no = #{prd.itemNo})
+            </foreach>
+    </select>
+</mapper>

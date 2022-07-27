@@ -1,5 +1,15 @@
 {
   "ordNo" : "202207261",
   "systemType" : "FO",
-  "orderType" : "GL"
+  "orderType" : "GL",
+  "orderProductVOList" : [
+    {
+      "goodsNo" : "P001",
+      "itemNo" : "1"
+    },
+    {
+      "goodsNo" : "P002",
+      "itemNo" : "1"
+    }
+  ]
 }
