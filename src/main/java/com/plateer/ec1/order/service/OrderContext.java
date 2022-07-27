@@ -14,16 +14,11 @@ import com.plateer.ec1.order.strategy.data.DataStrategy;
 import com.plateer.ec1.order.validator.OrderValidator;
 import com.plateer.ec1.order.vo.*;
 import com.plateer.ec1.payment.service.PayService;
-import com.plateer.ec1.product.service.ProductService;
-import lombok.NoArgsConstructor;
+import com.plateer.ec1.product.service.ProductInfoService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.PostConstruct;
 
 @RequiredArgsConstructor
 @Component
@@ -33,7 +28,7 @@ public class OrderContext {
     private final AfterStrategyFactory afterStrategyFactory;
 
     private final PayService payService;
-    private final ProductService productService;
+    private final ProductInfoService productInfoService;
     private final OrdTrxMapper ordTrxMapper;
 
     @LogTrace @OrdClmMntLog
