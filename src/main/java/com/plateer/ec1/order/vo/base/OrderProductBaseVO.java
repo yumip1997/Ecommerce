@@ -4,10 +4,15 @@ import com.plateer.ec1.product.vo.ProductInfoVO;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 public class OrderProductBaseVO {
+
+    @NotNull
     private String goodsNo;
+    @NotNull
     private String itemNo;
 
     public ProductInfoVO toProductInfoVO(){

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Getter
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderProductVO extends OrderProductBaseVO {
 
+    @Min(0)
     private int ordCnt;
     private List<OrderBenefitBaseVO> productBenefits;
 
