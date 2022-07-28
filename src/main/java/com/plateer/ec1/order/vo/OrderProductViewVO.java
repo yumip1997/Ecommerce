@@ -10,7 +10,6 @@ import java.util.Map;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class OrderProductViewVO {
 
     private OrderRequestVO orderRequestVO;

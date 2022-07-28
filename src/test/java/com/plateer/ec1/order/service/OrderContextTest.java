@@ -28,6 +28,5 @@ class OrderContextTest {
     @Test
     void insert_test(){
         OrderRequestVO object = jsonReaderUtil.getObject("/OrderRequest.json", OrderRequestVO.class);
-        orderContext.doOrderProcess(object);
     }
 }

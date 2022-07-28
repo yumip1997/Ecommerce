@@ -31,8 +31,6 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class OrderContext {
-    private final DataStrategyFactory dataStrategyFactory;
-    private final AfterStrategyFactory afterStrategyFactory;
 
     private final PayService payService;
     private final ProductInfoService productInfoService;
@@ -40,34 +38,32 @@ public class OrderContext {
 
     @LogTrace @OrdClmMntLog
     @Transactional
-    public OrdClmCreationVO<OrderVO, Object> doOrderProcess(OrderRequestVO orderRequestVO){
-        OrderProductViewVO ordProductViewVO = getOrdProductViewVO(orderRequestVO);
-        validate(orderRequestVO, ordProductViewVO);
-        //주문데이터생성
-        OrderVO orderVO = create(orderRequestVO, ordProductViewVO);
-        //주문데이터등록
-        //결제호출
+    public OrdClmCreationVO<OrderVO, Object> doOrderProcess(OrderContextVO orderContextVO){
+        OrderProductViewVO ordProductViewVO = getOrdProductViewVO(orderContextVO.getOrderRequestVO());
+
+        validate(orderContextVO.getOrderValidator(), ordProductViewVO);
+
+        OrderVO orderVO= createData(orderContextVO, ordProductViewVO);
+
+        //TODO 주문 데이터 등록
+
         payService.approve(orderVO.toPayApproveReqVO());
+
         return orderVO.toOrdClmCreationVO();
     }
 
-    public void doOrderAfterProcess(OrderRequestVO orderRequestVO, OrderVO orderVO) {
-        AfterStrategy afterStrategy = getAfterStrategy(orderRequestVO.getSystemType());
-        afterStrategy.call(orderRequestVO, orderVO);
+    public void doOrderAfterProcess(OrderContextVO orderContextVO, OrderVO orderVO) {
+        AfterStrategy afterStrategy = orderContextVO.getAfterStrategy();
+        afterStrategy.call(orderContextVO.getOrderRequestVO(), orderVO);
     }
 
     private OrderProductViewVO getOrdProductViewVO(OrderRequestVO orderRequestVO){
         List<ProductInfoVO> param = convertProductInfoVOList(orderRequestVO.getOrderProductVOList());
 
         List<ProductInfoVO> productInfoVOList = productInfoService.getProductInfoVo(param);
-        Map<String, ProductInfoVO> productInfoVOMap = productInfoVOList.stream()
-                .collect(Collectors.toMap(ProductInfoVO::getGoodNoItemNo, Function.identity()));
+        Map<String, ProductInfoVO> productInfoVOMap = convertProductInfoVOMap(productInfoVOList);
 
-        return OrderProductViewVO.builder()
-                .orderRequestVO(orderRequestVO)
-                .productInfoVOList(productInfoVOList)
-                .productInfoVOMap(productInfoVOMap)
-                .build();
+        return new OrderProductViewVO(orderRequestVO, productInfoVOList, productInfoVOMap);
     }
 
     private List<ProductInfoVO> convertProductInfoVOList(List<OrderProductVO> productVOList){
@@ -76,26 +72,21 @@ public class OrderContext {
                 .collect(Collectors.toList());
     }
 
-    private void validate(OrderRequestVO orderRequestVO, OrderProductViewVO orderProductViewVO){
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(orderRequestVO);
+    private Map<String, ProductInfoVO> convertProductInfoVOMap(List<ProductInfoVO> productInfoVOList){
+        return productInfoVOList.stream()
+                .collect(Collectors.toMap(ProductInfoVO::getGoodNoItemNo, Function.identity()));
+    }
+
+    private void validate(OrderValidator orderValidator, OrderProductViewVO orderProductViewVO){
         boolean isValid = orderValidator.test(orderProductViewVO);
 
         if(isValid) return;
         throw new BusinessException(OrderException.INVALID_ORDER.msg);
     }
 
-    private OrderVO create(OrderRequestVO orderRequestVO, OrderProductViewVO orderProductViewVO){
-        DataStrategy dataStrategy = getDataStrategy(orderRequestVO.getOrderType());
-        return dataStrategy.create(orderRequestVO, orderProductViewVO);
+    private OrderVO createData(OrderContextVO orderContextVO, OrderProductViewVO orderProductViewVO){
+        DataStrategy dataStrategy = orderContextVO.getDataStrategy();
+        return dataStrategy.create(orderContextVO.getOrderRequestVO(), orderProductViewVO);
     }
 
-    private DataStrategy getDataStrategy(String typeStr){
-        OPT0001Code OPT0001Code = com.plateer.ec1.order.enums.OPT0001Code.findOrderType(typeStr);
-        return dataStrategyFactory.get(OPT0001Code);
-    }
-
-    private AfterStrategy getAfterStrategy(String typeStr){
-        SystemType systemType = SystemType.findSystemType(typeStr);
-        return afterStrategyFactory.get(systemType);
-    }
 }
