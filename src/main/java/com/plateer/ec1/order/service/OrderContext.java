@@ -58,23 +58,10 @@ public class OrderContext {
     }
 
     private OrderProductViewVO getOrdProductViewVO(OrderRequestVO orderRequestVO){
-        List<ProductInfoVO> param = convertProductInfoVOList(orderRequestVO.getOrderProductVOList());
-
+        List<ProductInfoVO> param = orderRequestVO.toProductInfoVOList();
         List<ProductInfoVO> productInfoVOList = productInfoService.getProductInfoVo(param);
-        Map<String, ProductInfoVO> productInfoVOMap = convertProductInfoVOMap(productInfoVOList);
 
-        return new OrderProductViewVO(orderRequestVO, productInfoVOList, productInfoVOMap);
-    }
-
-    private List<ProductInfoVO> convertProductInfoVOList(List<OrderProductVO> productVOList){
-        return productVOList.stream()
-                .map(OrderProductBaseVO::toProductInfoVO)
-                .collect(Collectors.toList());
-    }
-
-    private Map<String, ProductInfoVO> convertProductInfoVOMap(List<ProductInfoVO> productInfoVOList){
-        return productInfoVOList.stream()
-                .collect(Collectors.toMap(ProductInfoVO::getGoodNoItemNo, Function.identity()));
+        return new OrderProductViewVO(orderRequestVO, productInfoVOList);
     }
 
     private void validate(OrderValidator orderValidator, OrderProductViewVO orderProductViewVO){

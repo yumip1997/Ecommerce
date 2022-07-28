@@ -1,13 +1,16 @@
 package com.plateer.ec1.order.vo;
 
 import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
+import com.plateer.ec1.order.vo.base.OrderProductBaseVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
+import com.plateer.ec1.product.vo.ProductInfoVO;
 import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -39,5 +42,10 @@ public class OrderRequestVO extends OrderClaimBaseVO {
     @NotEmpty
     private List<PayInfoVO> payInfoVOList;
 
+    public List<ProductInfoVO> toProductInfoVOList(){
+        return orderProductVOList.stream()
+                .map(OrderProductBaseVO::toProductInfoVO)
+                .collect(Collectors.toList());
+    }
 
 }
