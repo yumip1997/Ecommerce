@@ -3,17 +3,13 @@ package com.plateer.ec1.order.service;
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.common.aop.mnt.annotation.OrdClmMntLog;
 import com.plateer.ec1.common.excpetion.custom.BusinessException;
-import com.plateer.ec1.order.enums.OPT0001Code;
 import com.plateer.ec1.order.enums.OrderException;
-import com.plateer.ec1.order.enums.SystemType;
-import com.plateer.ec1.order.factory.AfterStrategyFactory;
-import com.plateer.ec1.order.factory.DataStrategyFactory;
 import com.plateer.ec1.order.mapper.OrdTrxMapper;
 import com.plateer.ec1.order.strategy.after.AfterStrategy;
 import com.plateer.ec1.order.strategy.data.DataStrategy;
 import com.plateer.ec1.order.validator.OrderValidator;
 import com.plateer.ec1.order.vo.*;
-import com.plateer.ec1.order.vo.base.OrderProductBaseVO;
+import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.payment.service.PayService;
 import com.plateer.ec1.product.service.ProductInfoService;
 import com.plateer.ec1.product.vo.ProductInfoVO;
@@ -23,9 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -45,7 +38,7 @@ public class OrderContext {
 
         OrderVO orderVO= createData(orderContextVO, ordProductViewVO);
 
-        //TODO 주문 데이터 등록
+        ordTrxMapper.insertOrder(orderVO);
 
         payService.approve(orderVO.toPayApproveReqVO());
 

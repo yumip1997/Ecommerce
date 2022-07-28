@@ -9,7 +9,7 @@ import com.plateer.ec1.order.strategy.data.DataStrategy;
 import com.plateer.ec1.order.validator.OrderValidator;
 import com.plateer.ec1.order.vo.OrdClmCreationVO;
 import com.plateer.ec1.order.vo.OrderContextVO;
-import com.plateer.ec1.order.vo.OrderRequestVO;
+import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.order.vo.OrderVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

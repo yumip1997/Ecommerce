@@ -1,5 +1,6 @@
 package com.plateer.ec1.order.vo;
 
+import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.product.vo.ProductInfoVO;
 import lombok.*;
 

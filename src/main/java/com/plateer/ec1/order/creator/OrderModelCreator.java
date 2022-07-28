@@ -4,7 +4,7 @@ import com.plateer.ec1.common.model.order.OpClmInfo;
 import com.plateer.ec1.common.model.order.OpGoodsInfo;
 import com.plateer.ec1.common.model.order.OrderBase;
 import com.plateer.ec1.order.vo.OrderProductViewVO;
-import com.plateer.ec1.order.vo.OrderRequestVO;
+import com.plateer.ec1.order.vo.req.OrderRequestVO;
 
 public class OrderModelCreator {
 

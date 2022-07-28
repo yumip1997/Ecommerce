@@ -4,7 +4,7 @@ import com.plateer.ec1.common.excpetion.custom.ValidationException;
 import com.plateer.ec1.order.enums.OrderException;
 import com.plateer.ec1.order.enums.OPT0001Code;
 import com.plateer.ec1.order.enums.SystemType;
-import com.plateer.ec1.order.vo.OrderRequestVO;
+import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.order.vo.OrderProductViewVO;
 import lombok.RequiredArgsConstructor;
 
