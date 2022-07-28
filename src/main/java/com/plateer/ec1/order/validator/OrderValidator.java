@@ -53,6 +53,7 @@ public enum OrderValidator {
     private final String orderTypeCode;
     private final Predicate<OrderProductViewVO> predicate;
 
+    //TODO 상품 리스트 for문 돌면서 한번에 validation check하는 로직으로 변경하기
     public boolean test(OrderProductViewVO s) {
         return predicate.test(s);
     }

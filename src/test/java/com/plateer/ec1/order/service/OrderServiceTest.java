@@ -1,7 +1,7 @@
 package com.plateer.ec1.order.service;
 
 import com.plateer.ec1.common.utils.JsonReaderUtil;
-import com.plateer.ec1.order.vo.OrderRequestVO;
+import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.resource.TestConstants;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

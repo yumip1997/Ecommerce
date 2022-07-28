@@ -4,6 +4,7 @@ import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.common.aop.mnt.annotation.OrdClmMntLog;
 import com.plateer.ec1.common.excpetion.custom.BusinessException;
 import com.plateer.ec1.order.enums.OrderException;
+import com.plateer.ec1.order.manipulator.OrderDataManipulator;
 import com.plateer.ec1.order.mapper.OrdTrxMapper;
 import com.plateer.ec1.order.strategy.after.AfterStrategy;
 import com.plateer.ec1.order.strategy.data.DataStrategy;
@@ -27,7 +28,7 @@ public class OrderContext {
 
     private final PayService payService;
     private final ProductInfoService productInfoService;
-    private final OrdTrxMapper ordTrxMapper;
+    private final OrderDataManipulator orderDataManipulator;
 
     @LogTrace @OrdClmMntLog
     @Transactional
@@ -38,7 +39,7 @@ public class OrderContext {
 
         OrderVO orderVO= createData(orderContextVO, ordProductViewVO);
 
-        ordTrxMapper.insertOrder(orderVO);
+        orderDataManipulator.insertOrder(orderVO);
 
         payService.approve(orderVO.toPayApproveReqVO());
 

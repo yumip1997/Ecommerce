@@ -2,7 +2,7 @@ package com.plateer.ec1.order.mapper;
 
 import com.plateer.ec1.common.model.order.OpOrdClmMntLog;
 import com.plateer.ec1.common.utils.JsonReaderUtil;
-import com.plateer.ec1.order.vo.OrderRequestVO;
+import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.resource.TestConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
