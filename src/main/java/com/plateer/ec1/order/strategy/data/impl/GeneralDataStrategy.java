@@ -1,6 +1,6 @@
 package com.plateer.ec1.order.strategy.data.impl;
 
-import com.plateer.ec1.order.enums.OrderType;
+import com.plateer.ec1.order.enums.OPT0001Code;
 import com.plateer.ec1.order.strategy.data.DataStrategy;
 import com.plateer.ec1.order.vo.OrderVO;
 import com.plateer.ec1.order.vo.OrderProductViewVO;
@@ -19,7 +19,7 @@ public class GeneralDataStrategy implements DataStrategy {
     }
 
     @Override
-    public OrderType getType() {
-        return OrderType.GENERAL;
+    public OPT0001Code getType() {
+        return OPT0001Code.GENERAL;
     }
 }

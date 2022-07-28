@@ -8,16 +8,16 @@ import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Getter
-public enum OrderType{
+public enum OPT0001Code {
 
     ECOUPON("EC"),
     GENERAL("GL");
 
     private final String code;
 
-    public static OrderType findOrderType(String orderTypeCode){
-        return Arrays.stream(OrderType.values())
-                .filter(orderType -> orderType.getCode().equals(orderTypeCode))
+    public static OPT0001Code findOrderType(String orderTypeCode){
+        return Arrays.stream(OPT0001Code.values())
+                .filter(OPT0001Code -> OPT0001Code.getCode().equals(orderTypeCode))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(OrderException.INVALID_ORDER_TPYE.msg));
     }

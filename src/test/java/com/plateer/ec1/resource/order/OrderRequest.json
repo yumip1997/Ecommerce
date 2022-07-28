@@ -2,6 +2,15 @@
   "ordNo" : "202207261",
   "systemType" : "FO",
   "orderType" : "GL",
+  "orderBasicVO" : {
+    "mbrNo" : "123",
+    "ordTpCd" : "10",
+    "ordSysCcd" : "FO",
+    "ordNm" : "박유미",
+    "ordSellNo" : "박유미",
+    "ordAddr" : "서울",
+    "ordAddrDtl" : "관악구"
+  },
   "orderProductVOList" : [
     {
       "goodsNo" : "P001",
@@ -10,6 +19,23 @@
     {
       "goodsNo" : "P002",
       "itemNo" : "1"
+    }
+  ],
+  "orderDeliveryVOList" : [
+    {
+      "rmtiNm" : "박유미",
+      "rmtiHpNo" : "01086229710",
+      "rmtiAddr" : "서울특별시",
+      "rmtiAddrDtl" : "관악구"
+    }
+  ],
+  "payInfoVOList" : [
+    {
+      "payAmount" : "58000",
+      "bankCode" : "03",
+      "depositorName" : "박유미",
+      "paymentType" : "inicis",
+      "methodType" : "10"
     }
   ]
 }

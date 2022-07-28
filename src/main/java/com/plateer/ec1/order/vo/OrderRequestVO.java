@@ -26,17 +26,18 @@ public class OrderRequestVO extends OrderClaimBaseVO {
     private OrderBasicVO orderBasicVO;
 
     @Valid
-    @NotNull
+    @NotEmpty
     private List<OrderProductVO> orderProductVOList;
 
     @Valid
-    @NotNull
+    @NotEmpty
     private List<OrderDeliveryVO> orderDeliveryVOList;
 
     private List<OrderBenefitVO> orderBenefitVOList;
 
     @Valid
-    @NotNull
-    private List<PayInfoVO> payInfoVO;
+    @NotEmpty
+    private List<PayInfoVO> payInfoVOList;
+
 
 }
