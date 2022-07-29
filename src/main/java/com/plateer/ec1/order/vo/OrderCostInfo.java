@@ -5,13 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderCostInfo {
 
+    @NotEmpty
     private String dvAmtTpCd;
-    private long orgDvAmt;
+    @NotEmpty
+    private Long orgDvAmt;
 
 }

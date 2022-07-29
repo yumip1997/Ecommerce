@@ -11,9 +11,9 @@ import lombok.Getter;
 @Builder
 public class OrderContextVO {
 
-    private OrderRequestVO orderRequestVO;
-    private DataStrategy dataStrategy;
-    private AfterStrategy afterStrategy;
-    private OrderValidator orderValidator;
+    private final OrderRequestVO orderRequestVO;
+    private final DataStrategy dataStrategy;
+    private final AfterStrategy afterStrategy;
+    private final OrderValidator orderValidator;
 
 }
