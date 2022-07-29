@@ -46,10 +46,4 @@ public class OrderRequestVO extends OrderClaimBaseVO {
     @NotEmpty
     private List<PayInfoVO> payInfoVOList;
 
-    public List<ProductInfoVO> toProductInfoVOList(){
-        return orderProductVOList.stream()
-                .map(OrderProductBaseVO::toProductInfoVO)
-                .collect(Collectors.toList());
-    }
-
 }
