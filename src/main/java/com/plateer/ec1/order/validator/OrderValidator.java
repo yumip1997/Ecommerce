@@ -1,61 +1,58 @@
 package com.plateer.ec1.order.validator;
 
 import com.plateer.ec1.common.excpetion.custom.ValidationException;
-import com.plateer.ec1.order.enums.OrderException;
 import com.plateer.ec1.order.enums.OPT0001Code;
+import com.plateer.ec1.order.enums.OrderException;
 import com.plateer.ec1.order.enums.SystemType;
+import com.plateer.ec1.order.vo.OrderProductView;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
-import com.plateer.ec1.order.vo.OrderProductViewVO;
+import com.plateer.ec1.product.vo.ProductInfoVO;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 @RequiredArgsConstructor
 public enum OrderValidator {
 
     FO_GENERAL(SystemType.FO.getCode(), OPT0001Code.GENERAL.getCode(),
-            OrderCommonValidator.isSellingProduct
-                    .and(OrderProductValidator.isExistOrderPrd)
-                    .and(OrderProductValidator.validateMaxPurchaseCnt)
-                    .and(OrderProductValidator.validateMinPurchaseCnt)
-                    .and(OrderTypeValidator.isGeneralOrderAbleProduct)
-                    .and(OrderTypeValidator.isGeneralDelivery)
-                    .and(OrderSystemTypeValidator.isFOOrderAbleProduct)
+            OrderProductValidator.isExistPrd
+                    .and(OrderProductValidator.isSelling)
+                    .and(OrderProductValidator.isGeneralPrd)
+                    .and(OrderProductValidator.isGeneralDelivery)
     ),
     BO_GENERAL(SystemType.BO.getCode(), OPT0001Code.GENERAL.getCode(),
-            OrderCommonValidator.isSellingProduct
-                    .and(OrderProductValidator.isExistOrderPrd)
-                    .and(OrderProductValidator.validateMaxPurchaseCnt)
-                    .and(OrderProductValidator.validateMinPurchaseCnt)
-                    .and(OrderTypeValidator.isGeneralOrderAbleProduct)
-                    .and(OrderTypeValidator.isGeneralDelivery)
-                    .and(OrderSystemTypeValidator.isBOOrderAbleProduct)
-    ),
+            OrderProductValidator.isExistPrd
+                    .and(OrderProductValidator.isSelling)
+                    .and(OrderProductValidator.isGeneralPrd)
+                    .and(OrderProductValidator.isGeneralDelivery)),
     FO_ECOUPON(SystemType.FO.getCode(), OPT0001Code.ECOUPON.getCode(),
-            OrderCommonValidator.isSellingProduct
-                    .and(OrderProductValidator.isExistOrderPrd)
-                    .and(OrderProductValidator.validateMaxPurchaseCnt)
-                    .and(OrderProductValidator.validateMinPurchaseCnt)
-                    .and(OrderTypeValidator.isEcouponOrderAbleProduct)
-                    .and(OrderSystemTypeValidator.isFOOrderAbleProduct)
-    ),
+            OrderProductValidator.isExistPrd
+                    .and(OrderProductValidator.isSelling)
+                    .and(OrderProductValidator.isECouponPrd)
+                    .and(OrderProductValidator.isECouponDelivery)),
     BO_ECOUPON(SystemType.BO.getCode(), OPT0001Code.ECOUPON.getCode(),
-            OrderCommonValidator.isSellingProduct
-                    .and(OrderProductValidator.isExistOrderPrd)
-                    .and(OrderProductValidator.validateMaxPurchaseCnt)
-                    .and(OrderProductValidator.validateMinPurchaseCnt)
-                    .and(OrderTypeValidator.isEcouponOrderAbleProduct)
-                    .and(OrderSystemTypeValidator.isBOOrderAbleProduct)
-    );
+            OrderProductValidator.isExistPrd
+                    .and(OrderProductValidator.isSelling)
+                    .and(OrderProductValidator.isECouponPrd)
+                    .and(OrderProductValidator.isECouponDelivery));
 
     private final String systemTypeCode;
     private final String orderTypeCode;
-    private final Predicate<OrderProductViewVO> predicate;
+    private final Predicate<ProductInfoVO> productInfoVOPredicate;
 
-    //TODO 상품 리스트 for문 돌면서 한번에 validation check하는 로직으로 변경하기
-    public boolean test(OrderProductViewVO s) {
-        return predicate.test(s);
+    public void isValid(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
+        isValidOrdPrd(orderProductViewList);
+    }
+
+    private void isValidOrdPrd(List<OrderProductView> orderProductViewList){
+        for (OrderProductView orderProductView : orderProductViewList) {
+            boolean isValid = productInfoVOPredicate.test(orderProductView.getProductInfoVO());
+            if(isValid) continue;
+
+            throw new ValidationException(OrderException.INVALID_ORDER.msg);
+        }
     }
 
     public static OrderValidator findOrderValidator(OrderRequestVO orderRequestVO){
