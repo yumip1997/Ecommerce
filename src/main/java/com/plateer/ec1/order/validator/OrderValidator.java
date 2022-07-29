@@ -8,6 +8,7 @@ import com.plateer.ec1.order.vo.OrderProductView;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.product.vo.ProductInfoVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,29 +21,39 @@ public enum OrderValidator {
             OrderProductValidator.isExistPrd
                     .and(OrderProductValidator.isSelling)
                     .and(OrderProductValidator.isGeneralPrd)
-                    .and(OrderProductValidator.isGeneralDelivery)
+                    .and(OrderProductValidator.isGeneralDelivery),
+            OrderDeliveryValidator.generalParamPredicate
     ),
     BO_GENERAL(SystemType.BO.getCode(), OPT0001Code.GENERAL.getCode(),
             OrderProductValidator.isExistPrd
                     .and(OrderProductValidator.isSelling)
                     .and(OrderProductValidator.isGeneralPrd)
-                    .and(OrderProductValidator.isGeneralDelivery)),
+                    .and(OrderProductValidator.isGeneralDelivery),
+            OrderDeliveryValidator.generalParamPredicate),
     FO_ECOUPON(SystemType.FO.getCode(), OPT0001Code.ECOUPON.getCode(),
             OrderProductValidator.isExistPrd
                     .and(OrderProductValidator.isSelling)
                     .and(OrderProductValidator.isECouponPrd)
-                    .and(OrderProductValidator.isECouponDelivery)),
+                    .and(OrderProductValidator.isECouponDelivery),
+            OrderDeliveryValidator.generalParamPredicate
+                    .and(OrderDeliveryValidator.eCouponParamPredicate)
+                    .and(OrderDeliveryValidator.eCoupondeliveryCntPredicate)),
     BO_ECOUPON(SystemType.BO.getCode(), OPT0001Code.ECOUPON.getCode(),
             OrderProductValidator.isExistPrd
                     .and(OrderProductValidator.isSelling)
                     .and(OrderProductValidator.isECouponPrd)
-                    .and(OrderProductValidator.isECouponDelivery));
+                    .and(OrderProductValidator.isECouponDelivery),
+            OrderDeliveryValidator.generalParamPredicate
+                    .and(OrderDeliveryValidator.eCouponParamPredicate)
+                    .and(OrderDeliveryValidator.eCoupondeliveryCntPredicate));
 
     private final String systemTypeCode;
     private final String orderTypeCode;
     private final Predicate<ProductInfoVO> productInfoVOPredicate;
+    private final Predicate<OrderRequestVO> deliveryPredicate;
 
     public void isValid(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
+        isValidDelivery(orderRequestVO);
         isValidOrdPrd(orderProductViewList);
     }
 
@@ -51,6 +62,13 @@ public enum OrderValidator {
             boolean isValid = productInfoVOPredicate.test(orderProductView.getProductInfoVO());
             if(isValid) continue;
 
+            throw new ValidationException(OrderException.INVALID_ORDER.msg);
+        }
+    }
+
+    private void isValidDelivery(OrderRequestVO orderRequestVO){
+        boolean isValid = deliveryPredicate.test(orderRequestVO);
+        if(!isValid){
             throw new ValidationException(OrderException.INVALID_ORDER.msg);
         }
     }
