@@ -2,18 +2,17 @@ package com.plateer.ec1.order.service;
 
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.common.aop.mnt.annotation.OrdClmMntLog;
-import com.plateer.ec1.common.excpetion.custom.BusinessException;
-import com.plateer.ec1.order.enums.OrderException;
 import com.plateer.ec1.order.manipulator.OrderDataManipulator;
-import com.plateer.ec1.order.mapper.OrdTrxMapper;
+import com.plateer.ec1.order.mapper.OrderMapper;
 import com.plateer.ec1.order.strategy.after.AfterStrategy;
 import com.plateer.ec1.order.strategy.data.DataStrategy;
 import com.plateer.ec1.order.validator.OrderValidator;
-import com.plateer.ec1.order.vo.*;
+import com.plateer.ec1.order.vo.OrdClmCreationVO;
+import com.plateer.ec1.order.vo.OrderContextVO;
+import com.plateer.ec1.order.vo.OrderProductView;
+import com.plateer.ec1.order.vo.OrderVO;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.payment.service.PayService;
-import com.plateer.ec1.product.service.ProductInfoService;
-import com.plateer.ec1.product.vo.ProductInfoVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,17 +26,17 @@ import java.util.List;
 public class OrderContext {
 
     private final PayService payService;
-    private final ProductInfoService productInfoService;
+    private final OrderMapper orderMapper;
     private final OrderDataManipulator orderDataManipulator;
 
     @LogTrace @OrdClmMntLog
     @Transactional
     public OrdClmCreationVO<OrderVO, Object> doOrderProcess(OrderContextVO orderContextVO){
-        OrderProductViewVO ordProductViewVO = getOrdProductViewVO(orderContextVO.getOrderRequestVO());
+        List<OrderProductView> orderProductViewList = getOrdProductView(orderContextVO.getOrderRequestVO());
 
-        validate(orderContextVO.getOrderValidator(), ordProductViewVO);
+        validate(orderContextVO.getOrderValidator(), orderContextVO.getOrderRequestVO(), orderProductViewList);
 
-        OrderVO orderVO= createData(orderContextVO, ordProductViewVO);
+        OrderVO orderVO= createData(orderContextVO.getDataStrategy(), orderContextVO.getOrderRequestVO(), orderProductViewList);
 
         orderDataManipulator.insertOrder(orderVO);
 
@@ -51,23 +50,16 @@ public class OrderContext {
         afterStrategy.call(orderContextVO.getOrderRequestVO(), orderVO);
     }
 
-    private OrderProductViewVO getOrdProductViewVO(OrderRequestVO orderRequestVO){
-        List<ProductInfoVO> param = orderRequestVO.toProductInfoVOList();
-        List<ProductInfoVO> productInfoVOList = productInfoService.getProductInfoVo(param);
-
-        return new OrderProductViewVO(orderRequestVO, productInfoVOList);
+    private List<OrderProductView> getOrdProductView(OrderRequestVO orderRequestVO){
+        return orderMapper.getOrderProductView(orderRequestVO.getOrderProductVOList());
     }
 
-    private void validate(OrderValidator orderValidator, OrderProductViewVO orderProductViewVO){
-        boolean isValid = orderValidator.test(orderProductViewVO);
-
-        if(isValid) return;
-        throw new BusinessException(OrderException.INVALID_ORDER.msg);
+    private void validate(OrderValidator orderValidator, OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList){
+       orderValidator.isValid(orderRequestVO, orderProductViewList);
     }
 
-    private OrderVO createData(OrderContextVO orderContextVO, OrderProductViewVO orderProductViewVO){
-        DataStrategy dataStrategy = orderContextVO.getDataStrategy();
-        return dataStrategy.create(orderContextVO.getOrderRequestVO(), orderProductViewVO);
+    private OrderVO createData(DataStrategy dataStrategy, OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList){
+        return dataStrategy.create(orderRequestVO, orderProductViewList);
     }
 
 }
