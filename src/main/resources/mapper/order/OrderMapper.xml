@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.plateer.ec1.order.mapper.OrderMapper">
+    <resultMap id="orderProductViewMap" type="orderProductView">
+        <association property="orderProductVO" autoMapping="true" columnPrefix="op_"/>
+        <association property="productInfoVO" autoMapping="true" />
+    </resultMap>
+
+    <select id="getOrderProductView" resultMap="orderProductViewMap">
+        with ord_prd as (
+            <foreach collection="orderProductVOList" item="ordPrd" separator="union all">
+                select
+                    #{ordPrd.ordCnt, jdbcType=INTEGER} as ord_cnt
+                    , #{ordPrd.goodsNo, jdbcType=VARCHAR} as goods_no
+                    , #{ordPrd.itemNo, jdbcType=VARCHAR} as item_no
+                    , #{ordPrd.goodsNm, jdbcType=VARCHAR} as goods_nm
+                    , #{ordPrd.itemNm, jdbcType=VARCHAR} as item_nm
+            </foreach>
+        )
+        select
+            op.ord_cnt as op_ord_cnt
+             , op.goods_no as op_goods_no
+             , op.item_no as op_item_no
+             , op.goods_nm as op_goods_nm
+             , op.item_nm as op_item_nm
+             , gd.goods_no
+             , gd.goods_nm
+             , gd.goods_tp_cd
+             , gd.sale_prc
+             , gd.prm_prc
+             , gd.prgs_stat_cd
+             , gd.goods_dlv_tp_cd
+             , itm.item_no
+             , itm.item_nm
+        from ord_prd op left join pr_goods_base gd on op.goods_no = gd.goods_no
+                        left join pr_item_info itm on gd.goods_no = itm.goods_no and op.item_no = itm.item_no
+    </select>
+</mapper>
