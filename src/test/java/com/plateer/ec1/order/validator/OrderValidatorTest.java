@@ -34,7 +34,6 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
         orderValidator.isValid(requestVO, orderProductView);
-
     }
 
     @Test
@@ -62,6 +61,36 @@ class OrderValidatorTest {
     void fo_general_not_general_prd_test(){
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         orderProductView.get(0).getProductInfoVO().setGoodsTpCd("20");
+
+        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
+        Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
+    }
+
+    @Test
+    @DisplayName("일반 주문을 했는데 수취인 이름이 없을 경우 예외가 발생한다.")
+    void fo_general_not_rmt_nm_test(){
+        List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
+        requestVO.getOrderDeliveryVOList().get(0).setRmtiNm("");
+
+        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
+        Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
+    }
+
+    @Test
+    @DisplayName("일반 주문을 했는데 수취인 휴대폰 번호이 없을 경우 예외가 발생한다.")
+    void fo_general_not_rmt_hp_test(){
+        List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
+        requestVO.getOrderDeliveryVOList().get(0).setRmtiHpNo("");
+
+        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
+        Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
+    }
+
+    @Test
+    @DisplayName("일반 주문을 했는데 수취인 주소가 없을 경우 예외가 발생한다.")
+    void fo_general_not_rmt_ad_test(){
+        List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
+        requestVO.getOrderDeliveryVOList().get(0).setRmtiAddr("");
 
         OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
