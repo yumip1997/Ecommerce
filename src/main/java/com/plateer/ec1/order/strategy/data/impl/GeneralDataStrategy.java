@@ -2,24 +2,25 @@ package com.plateer.ec1.order.strategy.data.impl;
 
 import com.plateer.ec1.order.enums.OPT0001Code;
 import com.plateer.ec1.order.strategy.data.DataStrategy;
+import com.plateer.ec1.order.vo.OrderProductView;
 import com.plateer.ec1.order.vo.OrderVO;
-import com.plateer.ec1.order.vo.OrderProductViewVO;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Log4j2
 public class GeneralDataStrategy implements DataStrategy {
 
     @Override
-    public OrderVO create(OrderRequestVO orderRequestVO, OrderProductViewVO orderProductViewVO) {
-        log.info("일반상품 주문 데이터를 생성한다.");
-        return null;
+    public OPT0001Code getType() {
+        return OPT0001Code.GENERAL;
     }
 
     @Override
-    public OPT0001Code getType() {
-        return OPT0001Code.GENERAL;
+    public OrderVO create(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
+        return null;
     }
 }
