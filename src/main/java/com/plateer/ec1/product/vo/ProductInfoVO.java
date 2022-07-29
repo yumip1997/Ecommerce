@@ -45,4 +45,6 @@ public class ProductInfoVO {
         return PRD0001Code.ECOUPON.getCode().equals(this.getGoodsTpCd());
     }
 
+    public boolean isECouponDelivery() {return PRD0001Code.ECOUPON.getCode().equals(this.getGoodsDlvTpCd());}
+
 }
