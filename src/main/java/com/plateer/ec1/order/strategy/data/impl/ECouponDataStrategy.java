@@ -2,6 +2,7 @@ package com.plateer.ec1.order.strategy.data.impl;
 
 import com.plateer.ec1.order.enums.OPT0001Code;
 import com.plateer.ec1.order.strategy.data.DataStrategy;
+import com.plateer.ec1.order.vo.OrdClmCreationVO;
 import com.plateer.ec1.order.vo.OrderProductView;
 import com.plateer.ec1.order.vo.OrderVO;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
@@ -18,7 +19,7 @@ public class ECouponDataStrategy implements DataStrategy {
     }
 
     @Override
-    public OrderVO create(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
+    public OrdClmCreationVO<OrderVO, Object> create(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
         return null;
     }
 }
