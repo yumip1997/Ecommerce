@@ -25,20 +25,15 @@ public class OrdClmMntLogAspect {
 
     @Around("mntLogAnnotation() && orderClaimBaseArg() && args(arg,..)")
     public Object manipulateLog(ProceedingJoinPoint joinPoint, OrderClaimBaseVO arg) throws Throwable{
-        OrdClmCreationVO<?,?> result = null;
         Long logSeq = null;
-        Exception ex = null;
+        OrdClmCreationVO<?,?> result = null;
 
         try{
             logSeq = ordClmMntService.insertOrderHistory(arg);
             result = (OrdClmCreationVO<?,?>) joinPoint.proceed();
             return result;
-        }catch (Exception exception){
-            ex = exception;
-            throw exception;
-        }
-        finally {
-            ordClmMntService.updateOrderHistory(logSeq, result, ex);
+        } finally {
+            ordClmMntService.updateOrderHistory(logSeq, result);
         }
 
     }

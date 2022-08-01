@@ -23,10 +23,8 @@ public class OrdClmMntService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public <T, U> void updateOrderHistory(Long logSeq, OrdClmCreationVO<T,U> creationVO, Exception exception){
-        String procCcd = OPT0012Code.getCodeByException(exception);
-
-        OpOrdClmMntLog updateData = OpOrdClmMntLog.getUpdateData(logSeq, creationVO, procCcd);
+    public <T, U> void updateOrderHistory(Long logSeq, OrdClmCreationVO<T,U> creationVO){
+        OpOrdClmMntLog updateData = OpOrdClmMntLog.getUpdateData(logSeq, creationVO);
         ordClmMntLogTrxMapper.updateMonitoringLog(updateData);
     }
 }

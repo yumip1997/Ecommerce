@@ -14,5 +14,6 @@ public class OrdClmCreationVO<T,U> extends OrderClaimBaseVO {
 
     private T insertData;
     private U updateData;
+    private Exception exception;
 
 }

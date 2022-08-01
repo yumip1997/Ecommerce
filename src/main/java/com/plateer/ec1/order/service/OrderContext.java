@@ -29,36 +29,38 @@ public class OrderContext {
     private final OrderMapper orderMapper;
     private final OrderDataManipulator orderDataManipulator;
 
+    //TODO catch절.. 여러가지 예외경우 생각해보기
     @LogTrace @OrdClmMntLog
     @Transactional
-    public OrdClmCreationVO<OrderVO, Object> doOrderProcess(OrderContextVO orderContextVO){
-        List<OrderProductView> orderProductViewList = getOrdProductView(orderContextVO.getOrderRequestVO());
+    public OrdClmCreationVO<OrderVO, Object> doOrderProcess(OrderRequestVO orderRequestVO, OrderContextVO orderContextVO) {
+        OrdClmCreationVO<OrderVO, Object> ordClmCreationVO = new OrdClmCreationVO<>();
 
-        validate(orderContextVO.getOrderValidator(), orderContextVO.getOrderRequestVO(), orderProductViewList);
+        try {
+            List<OrderProductView> orderProductViewList = getOrdProductView(orderRequestVO);
+            validate(orderContextVO.getOrderValidator(), orderRequestVO, orderProductViewList);
+            ordClmCreationVO = createData(orderContextVO.getDataStrategy(), orderRequestVO, orderProductViewList);
+            orderDataManipulator.insertOrder(ordClmCreationVO.getInsertData());
+            payService.approve(ordClmCreationVO.getInsertData().toPayApproveReqVO());
+        }catch (Exception e){
+            ordClmCreationVO.setException(e);
+        }
 
-        OrderVO orderVO= createData(orderContextVO.getDataStrategy(), orderContextVO.getOrderRequestVO(), orderProductViewList);
-
-        orderDataManipulator.insertOrder(orderVO);
-
-        payService.approve(orderVO.toPayApproveReqVO());
-
-        return orderVO.toOrdClmCreationVO();
+        return ordClmCreationVO;
     }
 
-    public void doOrderAfterProcess(OrderContextVO orderContextVO, OrderVO orderVO) {
-        AfterStrategy afterStrategy = orderContextVO.getAfterStrategy();
-        afterStrategy.call(orderContextVO.getOrderRequestVO(), orderVO);
+    public void doOrderAfterProcess(OrderRequestVO orderRequestVO, OrderVO orderVO, AfterStrategy afterStrategy) {
+        afterStrategy.call(orderRequestVO, orderVO);
     }
 
-    private List<OrderProductView> getOrdProductView(OrderRequestVO orderRequestVO){
+    private List<OrderProductView> getOrdProductView(OrderRequestVO orderRequestVO) {
         return orderMapper.getOrderProductView(orderRequestVO.getOrderProductVOList());
     }
 
-    private void validate(OrderValidator orderValidator, OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList){
-       orderValidator.isValid(orderRequestVO, orderProductViewList);
+    private void validate(OrderValidator orderValidator, OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
+        orderValidator.isValid(orderRequestVO, orderProductViewList);
     }
 
-    private OrderVO createData(DataStrategy dataStrategy, OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList){
+    private OrdClmCreationVO<OrderVO, Object> createData(DataStrategy dataStrategy, OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
         return dataStrategy.create(orderRequestVO, orderProductViewList);
     }
 
