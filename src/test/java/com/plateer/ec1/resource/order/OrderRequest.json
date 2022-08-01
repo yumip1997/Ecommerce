@@ -26,7 +26,18 @@
       "rmtiNm" : "박유미",
       "rmtiHpNo" : "01086229710",
       "rmtiAddr" : "서울특별시",
-      "rmtiAddrDtl" : "관악구"
+      "rmtiAddrDtl" : "관악구",
+      "orderDeliveryGroupInfoVOList" : [
+        {
+          "dvGrpNo" : 1,
+          "orderCostInfoList" : [
+            {
+              "dvAmtTpCd" : "10",
+              "orgDvAmt" : 0
+            }
+          ]
+        }
+      ]
     }
   ],
   "payInfoVOList" : [

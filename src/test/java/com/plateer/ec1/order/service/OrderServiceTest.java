@@ -36,7 +36,11 @@ class OrderServiceTest {
     void product_list_empty_test(){
         requestVO.setOrderProductVOList(new ArrayList<>());
         Assertions.assertThrows(ConstraintViolationException.class, () -> orderService.order(requestVO));
+    }
 
+    @Test
+    void order_test(){
+        orderService.order(requestVO);
     }
 
 }
