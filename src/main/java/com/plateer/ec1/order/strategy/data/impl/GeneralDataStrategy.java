@@ -6,14 +6,11 @@ import com.plateer.ec1.order.vo.OrdClmCreationVO;
 import com.plateer.ec1.order.vo.OrderProductView;
 import com.plateer.ec1.order.vo.OrderVO;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
-import lombok.extern.log4j.Log4j2;
-import org.graalvm.compiler.core.common.type.ArithmeticOpTable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-@Log4j2
 public class GeneralDataStrategy implements DataStrategy {
 
     @Override
@@ -23,6 +20,22 @@ public class GeneralDataStrategy implements DataStrategy {
 
     @Override
     public OrdClmCreationVO<OrderVO, Object> create(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
-        return new OrdClmCreationVO<>();
+        OrdClmCreationVO<OrderVO, Object> creationVO = new OrdClmCreationVO<>();
+        creationVO.setOrdNo(orderRequestVO.getOrdNo());
+        creationVO.setInsertData(createOrderVO(orderRequestVO, orderProductViewList));
+        return creationVO;
     }
+
+    private OrderVO createOrderVO(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList){
+        String ordNo = orderRequestVO.getOrdNo();
+
+        OrderVO orderVO = new OrderVO();
+        orderVO.setOpOrdBase(createOpOrdBase(ordNo, orderRequestVO.getOrderBasicVO()));
+        orderVO.setOpGoodsInfoList(createOpGoodsInfoList(ordNo, orderProductViewList));
+        return orderVO;
+    }
+
+
+
+
 }

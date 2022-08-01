@@ -2,6 +2,7 @@ package com.plateer.ec1.order.vo;
 
 import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /*
 주문, 클레임 데이터 생성 객체

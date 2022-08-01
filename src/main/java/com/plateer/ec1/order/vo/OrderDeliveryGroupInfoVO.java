@@ -21,5 +21,9 @@ public class OrderDeliveryGroupInfoVO {
     @Valid
     private List<OrderCostInfo> orderCostInfoList;
 
+    @NotEmpty
+    @Valid
+    private List<OrderProductVO> orderProductVOList;
+
 
 }
