@@ -32,7 +32,7 @@ class OrderValidatorTest {
     @Test
     void fo_general_test(){
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
+        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
         orderValidator.isValid(requestVO, orderProductView);
     }
 
@@ -42,7 +42,7 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         orderProductView.get(0).setProductInfoVO(null);
 
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
+        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 
@@ -52,7 +52,7 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         orderProductView.get(0).getProductInfoVO().setPrgsStatCd("30");
 
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
+        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 
@@ -62,7 +62,7 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         orderProductView.get(0).getProductInfoVO().setGoodsTpCd("20");
 
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
+        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 
@@ -72,7 +72,7 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         requestVO.getOrderDeliveryVOList().get(0).setRmtiNm("");
 
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
+        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 
@@ -82,7 +82,7 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         requestVO.getOrderDeliveryVOList().get(0).setRmtiHpNo("");
 
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
+        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 
@@ -92,7 +92,7 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         requestVO.getOrderDeliveryVOList().get(0).setRmtiAddr("");
 
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO);
+        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 }
