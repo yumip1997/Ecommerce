@@ -9,14 +9,6 @@ import lombok.Setter;
 @Setter
 public class OrderVO extends OrderClaimBaseVO {
 
-    public OrdClmCreationVO<OrderVO, Object> toOrdClmCreationVO(){
-        OrdClmCreationVO<OrderVO, Object> creationVO = new OrdClmCreationVO<>();
-        creationVO.setOrdNo(this.getOrdNo());
-        creationVO.setClmNo(this.getClmNo());
-        creationVO.setInsertData(this);
-        return creationVO;
-    }
-
     public ApproveReqVO toPayApproveReqVO(){
         return ApproveReqVO.builder().build();
     }
