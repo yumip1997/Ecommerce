@@ -12,7 +12,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 public class OrderVO extends OrderClaimBaseVO {
 
     private OpOrdBase opOrdBase;
