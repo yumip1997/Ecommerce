@@ -3,6 +3,7 @@ package com.plateer.ec1.order.validator;
 import com.plateer.ec1.common.excpetion.custom.ValidationException;
 import com.plateer.ec1.common.utils.JsonReaderUtil;
 import com.plateer.ec1.order.mapper.OrderMapper;
+import com.plateer.ec1.order.vo.OrderBasicVO;
 import com.plateer.ec1.order.vo.OrderProductView;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.resource.TestConstants;
@@ -29,10 +30,16 @@ class OrderValidatorTest {
         requestVO = jsonReaderUtil.getObject("/OrderRequest.json", OrderRequestVO.class);
     }
 
+    public OrderValidator getValidator(OrderBasicVO orderBasicVO){
+        String ordSysCcd = orderBasicVO.getOrdSysCcd();
+        String ordTpCd = orderBasicVO.getOrdTpCd();
+        return OrderValidator.findOrderValidator(ordSysCcd, ordTpCd);
+    }
+
     @Test
     void fo_general_test(){
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
+        OrderValidator orderValidator = getValidator(requestVO.getOrderBasicVO());
         orderValidator.isValid(requestVO, orderProductView);
     }
 
@@ -41,8 +48,7 @@ class OrderValidatorTest {
     void fo_general_not_exsit_prd_test(){
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         orderProductView.get(0).setProductInfoVO(null);
-
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
+        OrderValidator orderValidator = getValidator(requestVO.getOrderBasicVO());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 
@@ -52,7 +58,7 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         orderProductView.get(0).getProductInfoVO().setPrgsStatCd("30");
 
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
+        OrderValidator orderValidator = getValidator(requestVO.getOrderBasicVO());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 
@@ -62,7 +68,7 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         orderProductView.get(0).getProductInfoVO().setGoodsTpCd("20");
 
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
+        OrderValidator orderValidator = getValidator(requestVO.getOrderBasicVO());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 
@@ -72,7 +78,7 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         requestVO.getOrderDeliveryVOList().get(0).setRmtiNm("");
 
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
+        OrderValidator orderValidator = getValidator(requestVO.getOrderBasicVO());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 
@@ -82,7 +88,7 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         requestVO.getOrderDeliveryVOList().get(0).setRmtiHpNo("");
 
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
+        OrderValidator orderValidator = getValidator(requestVO.getOrderBasicVO());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 
@@ -92,7 +98,7 @@ class OrderValidatorTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
         requestVO.getOrderDeliveryVOList().get(0).setRmtiAddr("");
 
-        OrderValidator orderValidator = OrderValidator.findOrderValidator(requestVO.getSystemType(), requestVO.getOrderType());
+        OrderValidator orderValidator = getValidator(requestVO.getOrderBasicVO());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
 }

@@ -1,11 +1,13 @@
 package com.plateer.ec1.order.vo;
 
+import com.plateer.ec1.common.model.order.OpOrdBase;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
@@ -13,22 +15,27 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class OrderBasicVO {
 
-    @NotNull
+    @NotEmpty
     private String mbrNo;
-    @NotNull
+    @NotEmpty
     private String ordTpCd;
-    @NotNull
+    @NotEmpty
     private String ordSysCcd;
-    @NotNull
+    @NotEmpty
     private String ordNm;
-    @NotNull
+    @NotEmpty
     private String ordSellNo;
-    @NotNull
+    @NotEmpty
     private String ordAddr;
-    @NotNull
+    @NotEmpty
     private String ordAddrDtl;
     private String rfndBnkCk;
     private String rfndAcctNo;
     private String rfndAcctOwnNm;
 
+    public OpOrdBase toOpOrdBase(String ordNo){
+        OpOrdBase opOrdBase = new OpOrdBase();
+        BeanUtils.copyProperties(this, opOrdBase);
+        return opOrdBase;
+    }
 }

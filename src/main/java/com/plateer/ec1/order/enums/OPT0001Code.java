@@ -10,8 +10,8 @@ import java.util.Arrays;
 @Getter
 public enum OPT0001Code {
 
-    ECOUPON("EC"),
-    GENERAL("GL");
+    GENERAL("10"),
+    ECOUPON("20");
 
     private final String code;
 

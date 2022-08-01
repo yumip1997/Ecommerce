@@ -29,7 +29,6 @@ public class OrderContext {
     private final OrderMapper orderMapper;
     private final OrderDataManipulator orderDataManipulator;
 
-    //TODO catch절.. 여러가지 예외경우 생각해보기
     @LogTrace @OrdClmMntLog
     @Transactional
     public OrdClmCreationVO<OrderVO, Object> doOrderProcess(OrderRequestVO orderRequestVO, OrderContextVO orderContextVO) {

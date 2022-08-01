@@ -8,12 +8,14 @@ import com.plateer.ec1.order.strategy.after.AfterStrategy;
 import com.plateer.ec1.order.strategy.data.DataStrategy;
 import com.plateer.ec1.order.validator.OrderValidator;
 import com.plateer.ec1.order.vo.OrdClmCreationVO;
+import com.plateer.ec1.order.vo.OrderBasicVO;
 import com.plateer.ec1.order.vo.OrderContextVO;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.order.vo.OrderVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -28,9 +30,10 @@ public class OrderService {
     private final AfterStrategyFactory afterStrategyFactory;
     private final OrderContext orderContext;
 
+    @Transactional
     public void order(@Valid OrderRequestVO orderRequestVO){
         try{
-            OrderContextVO orderContextVO = getOrderContextVO(orderRequestVO);
+            OrderContextVO orderContextVO = getOrderContextVO(orderRequestVO.getOrderBasicVO());
             OrdClmCreationVO<OrderVO, Object> creationVO = orderContext.doOrderProcess(orderRequestVO, orderContextVO);
             orderContext.doOrderAfterProcess(orderRequestVO, creationVO.getInsertData(), orderContextVO.getAfterStrategy());
         }catch (Exception e){
@@ -38,11 +41,11 @@ public class OrderService {
         }
     }
 
-    private OrderContextVO getOrderContextVO(OrderRequestVO orderRequestVO){
+    private OrderContextVO getOrderContextVO(OrderBasicVO orderBasicVO){
         return OrderContextVO.builder()
-                .orderValidator(getOrderValidator(orderRequestVO.getSystemType(), orderRequestVO.getOrderType()))
-                .dataStrategy(getDataStrategy(orderRequestVO.getOrderType()))
-                .afterStrategy(getAfterStrategy(orderRequestVO.getSystemType()))
+                .orderValidator(getOrderValidator(orderBasicVO.getOrdSysCcd(), orderBasicVO.getOrdTpCd()))
+                .dataStrategy(getDataStrategy(orderBasicVO.getOrdTpCd()))
+                .afterStrategy(getAfterStrategy(orderBasicVO.getOrdSysCcd()))
                 .build();
     }
 
