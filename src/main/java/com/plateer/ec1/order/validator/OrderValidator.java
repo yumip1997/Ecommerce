@@ -8,7 +8,6 @@ import com.plateer.ec1.order.vo.OrderProductView;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.product.vo.ProductInfoVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.annotation.Order;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +28,8 @@ public enum OrderValidator {
                     .and(OrderProductValidator.isSelling)
                     .and(OrderProductValidator.isGeneralPrd)
                     .and(OrderProductValidator.isGeneralDelivery),
-            OrderDeliveryValidator.generalParamPredicate),
+            OrderDeliveryValidator.generalParamPredicate
+    ),
     FO_ECOUPON(SystemType.FO.getCode(), OPT0001Code.ECOUPON.getCode(),
             OrderProductValidator.isExistPrd
                     .and(OrderProductValidator.isSelling)
@@ -37,7 +37,8 @@ public enum OrderValidator {
                     .and(OrderProductValidator.isECouponDelivery),
             OrderDeliveryValidator.generalParamPredicate
                     .and(OrderDeliveryValidator.eCouponParamPredicate)
-                    .and(OrderDeliveryValidator.eCoupondeliveryCntPredicate)),
+                    .and(OrderDeliveryValidator.eCoupondeliveryCntPredicate)
+    ),
     BO_ECOUPON(SystemType.BO.getCode(), OPT0001Code.ECOUPON.getCode(),
             OrderProductValidator.isExistPrd
                     .and(OrderProductValidator.isSelling)
@@ -45,7 +46,8 @@ public enum OrderValidator {
                     .and(OrderProductValidator.isECouponDelivery),
             OrderDeliveryValidator.generalParamPredicate
                     .and(OrderDeliveryValidator.eCouponParamPredicate)
-                    .and(OrderDeliveryValidator.eCoupondeliveryCntPredicate));
+                    .and(OrderDeliveryValidator.eCoupondeliveryCntPredicate)
+    );
 
     private final String systemTypeCode;
     private final String orderTypeCode;
@@ -73,15 +75,11 @@ public enum OrderValidator {
         }
     }
 
-    public static OrderValidator findOrderValidator(OrderRequestVO orderRequestVO){
+    public static OrderValidator findOrderValidator(String systemType, String orderType){
         return Arrays.stream(OrderValidator.values())
-                .filter(orderValidator -> isEqualsTypeCode(orderValidator, orderRequestVO))
+                .filter(e -> e.systemTypeCode.equals(systemType) && e.orderTypeCode.equals(orderType))
                 .findFirst()
                 .orElseThrow(() -> new ValidationException(OrderException.NOT_FIND_VALIDATOR.msg));
-    }
-
-    private static boolean isEqualsTypeCode(OrderValidator orderValidator, OrderRequestVO orderRequestVO){
-        return orderValidator.systemTypeCode.equals(orderRequestVO.getSystemType()) && orderValidator.orderTypeCode.equals(orderRequestVO.getOrderType());
     }
 
 }
