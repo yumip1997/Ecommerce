@@ -1,5 +1,6 @@
 package com.plateer.ec1.order.vo;
 
+import com.plateer.ec1.common.model.order.OpDvpInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,5 @@ public class OrderDeliveryGroupInfoVO {
     @NotEmpty
     @Valid
     private List<OrderProductVO> orderProductVOList;
-
 
 }

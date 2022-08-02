@@ -1,5 +1,6 @@
 package com.plateer.ec1.order.vo;
 
+import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

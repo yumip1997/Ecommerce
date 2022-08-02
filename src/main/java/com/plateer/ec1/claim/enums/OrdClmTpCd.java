@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum OrdClmTpCd {
 
+    ORDER("0"),
     CANCEL("C"),
     RETURN("R"),
     RETURN_WITHDRAWAL("RC"),

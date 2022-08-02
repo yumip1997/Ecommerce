@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -34,8 +33,19 @@ public class OrderBasicVO {
     private String rfndAcctOwnNm;
 
     public OpOrdBase toOpOrdBase(String ordNo){
-        OpOrdBase opOrdBase = new OpOrdBase();
-        BeanUtils.copyProperties(this, opOrdBase);
-        return opOrdBase;
+        return OpOrdBase.builder()
+                .ordNo(ordNo)
+                .mbrNo(this.getMbrNo())
+                .ordTpCd(this.getOrdTpCd())
+                .ordSysCcd(this.getOrdSysCcd())
+                .ordNm(this.getOrdNm())
+                .ordSellNo(this.getOrdSellNo())
+                .ordAddr(this.getOrdAddr())
+                .ordAddrDtl(this.getOrdAddrDtl())
+                .rfndBnkCk(this.getRfndBnkCk())
+                .rfndAcctNo(this.getRfndAcctNo())
+                .rfndAcctOwnNm(this.getRfndAcctOwnNm())
+                .build();
     }
+
 }
