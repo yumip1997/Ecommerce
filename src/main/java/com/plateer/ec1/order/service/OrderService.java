@@ -1,5 +1,6 @@
 package com.plateer.ec1.order.service;
 
+import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.order.enums.OPT0001Code;
 import com.plateer.ec1.order.enums.SystemType;
 import com.plateer.ec1.order.factory.AfterStrategyFactory;
@@ -30,15 +31,11 @@ public class OrderService {
     private final AfterStrategyFactory afterStrategyFactory;
     private final OrderContext orderContext;
 
+    @LogTrace
     @Transactional
     public void order(@Valid OrderRequestVO orderRequestVO){
-        try{
-            OrderContextVO orderContextVO = getOrderContextVO(orderRequestVO.getOrderBasicVO());
-            OrdClmCreationVO<OrderVO, Object> creationVO = orderContext.doOrderProcess(orderRequestVO, orderContextVO);
-            orderContext.doOrderAfterProcess(orderRequestVO, creationVO.getInsertData(), orderContextVO.getAfterStrategy());
-        }catch (Exception e){
-            log.error(e.getMessage());
-        }
+        OrderContextVO orderContextVO = getOrderContextVO(orderRequestVO.getOrderBasicVO());
+        orderContext.order(orderRequestVO, orderContextVO);
     }
 
     private OrderContextVO getOrderContextVO(OrderBasicVO orderBasicVO){

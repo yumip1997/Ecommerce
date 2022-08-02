@@ -1,7 +1,6 @@
 package com.plateer.ec1.order.service;
 
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
-import com.plateer.ec1.common.aop.mnt.annotation.OrdClmMntLog;
 import com.plateer.ec1.order.manipulator.OrderDataManipulator;
 import com.plateer.ec1.order.mapper.OrderMapper;
 import com.plateer.ec1.order.strategy.after.AfterStrategy;
@@ -25,30 +24,31 @@ import java.util.List;
 @Slf4j
 public class OrderContext {
 
-    private final PayService payService;
     private final OrderMapper orderMapper;
+    private final OrdClmMntService ordClmMntService;
+    private final PayService payService;
     private final OrderDataManipulator orderDataManipulator;
 
-    @LogTrace @OrdClmMntLog
+    @LogTrace
     @Transactional
-    public OrdClmCreationVO<OrderVO, Object> doOrderProcess(OrderRequestVO orderRequestVO, OrderContextVO orderContextVO) {
-        OrdClmCreationVO<OrderVO, Object> ordClmCreationVO = new OrdClmCreationVO<>();
+    public void order(OrderRequestVO orderRequestVO, OrderContextVO orderContextVO){
+        Long logSeq =  ordClmMntService.insertOrderHistory(orderRequestVO);
+        OrdClmCreationVO<OrderVO,Object> creationVO = new OrdClmCreationVO<>();
 
-        try {
+        try{
             List<OrderProductView> orderProductViewList = getOrdProductView(orderRequestVO);
             validate(orderContextVO.getOrderValidator(), orderRequestVO, orderProductViewList);
-            ordClmCreationVO = createData(orderContextVO.getDataStrategy(), orderRequestVO, orderProductViewList);
-            orderDataManipulator.insertOrder(ordClmCreationVO.getInsertData());
-            payService.approve(ordClmCreationVO.getInsertData().toPayApproveReqVO());
+            creationVO = createData(orderContextVO.getDataStrategy(), orderRequestVO, orderProductViewList);
+            orderDataManipulator.insertOrder(creationVO.getInsertData());
+            payService.approve(creationVO.getInsertData().toPayApproveReqVO());
+            doOrderAfterProcess(orderContextVO.getAfterStrategy(), orderRequestVO, creationVO.getInsertData());
         }catch (Exception e){
-            ordClmCreationVO.setException(e);
+            creationVO.setException(e);
+            throw e;
+        }finally {
+            ordClmMntService.updateOrderHistory(logSeq, creationVO);
         }
 
-        return ordClmCreationVO;
-    }
-
-    public void doOrderAfterProcess(OrderRequestVO orderRequestVO, OrderVO orderVO, AfterStrategy afterStrategy) {
-        afterStrategy.call(orderRequestVO, orderVO);
     }
 
     private List<OrderProductView> getOrdProductView(OrderRequestVO orderRequestVO) {
@@ -61,6 +61,10 @@ public class OrderContext {
 
     private OrdClmCreationVO<OrderVO, Object> createData(DataStrategy dataStrategy, OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
         return dataStrategy.create(orderRequestVO, orderProductViewList);
+    }
+
+    private void doOrderAfterProcess(AfterStrategy afterStrategy, OrderRequestVO orderRequestVO, OrderVO orderVO) {
+        afterStrategy.call(orderRequestVO, orderVO);
     }
 
 }
