@@ -32,7 +32,7 @@ public class GeneralDataStrategy implements DataStrategy {
         OrderVO orderVO = new OrderVO();
         orderVO.setOpOrdBase(createOpOrdBase(ordNo, orderRequestVO.getOrderBasicVO()));
         orderVO.setOpGoodsInfoList(createOpGoodsInfoList(ordNo, orderProductViewList));
-        orderVO.setOpClmInfoList(createOpClmInfoList(ordNo, orderRequestVO.getOrderDeliveryVOList()));
+        orderVO.setOpClmInfoList(createOpClmInfoList(orderRequestVO));
         orderVO.setOpDvpAreaInfoList(createOpDvpAreaInfoList(ordNo, orderRequestVO.getOrderDeliveryVOList()));
         return orderVO;
     }

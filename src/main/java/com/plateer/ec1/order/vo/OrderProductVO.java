@@ -23,6 +23,8 @@ public class OrderProductVO extends OrderProductBaseVO {
     @Min(0)
     private int ordCnt;
     private long ordAmt;
+    private long salePrc;
+    private long prmPrc;
     private List<OrderBenefitBaseVO> productBenefits;
 
     public OpClmInfo toOpClmInfo(String ordNo, int ordSeq, int dvGrpNo){
@@ -37,9 +39,26 @@ public class OrderProductVO extends OrderProductBaseVO {
                 .cnclCnt(0)
                 .rtgsCnt(0)
                 .dvGrpNo(dvGrpNo)
-                .ordPrgsScd(OPT0004Code.ORDER_WAITING.getCode())
                 .ordCnt(this.getOrdCnt())
                 .ordAmt(this.getOrdAmt())
                 .build();
+    }
+
+    /*
+    쿠폰적용 금액
+     */
+    public long getPrdBnfAplyOrdPrc(){
+        return this.getOrdPrc() - this.sumPrdBnf();
+    }
+
+    private long getOrdPrc(){
+        return prmPrc == 0 ? salePrc : prmPrc;
+    }
+
+    //TODO 적용한 쿠폰 없으면 0나오는지 확인하기
+    private long sumPrdBnf(){
+        return productBenefits.stream()
+                .mapToLong(OrderBenefitBaseVO::getAplyAmt)
+                .sum();
     }
 }

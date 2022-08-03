@@ -72,9 +72,9 @@
     <update id="updateOrderPaymentByTransId">
         update op_pay_info
         set
-        pay_prgs_scd= #{payPrgsScd},
-        rfnd_avl_amt=#{rfndAvlAmt},
-        pay_cmt_dtime=#{payCmtDtime},
+        pay_prgs_scd = #{payPrgsScd},
+        rfnd_avl_amt = #{rfndAvlAmt},
+        pay_cmt_dtime = #{payCmtDtime},
         sys_mod_dtime = now(),
         sys_modr_id = #{loginId}
         where trsn_id = #{trsnId}

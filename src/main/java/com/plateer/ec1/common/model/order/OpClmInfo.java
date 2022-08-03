@@ -37,4 +37,8 @@ public class OpClmInfo extends BaseModel {
     private String clmNo;
     private int orgProcSeq;
 
+    public String getGoodsNoItemNo(){
+        return this.ordGoodsNo + this.ordItemNo;
+    }
+
 }

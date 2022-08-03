@@ -26,4 +26,13 @@ public class OrderDeliveryGroupInfoVO {
     @Valid
     private List<OrderProductVO> orderProductVOList;
 
+    public OpDvpInfo toOpDvpInfo(String ordNo, int dvSeq, String dvMthdCd){
+        return OpDvpInfo.builder()
+                .dvpSeq(dvSeq)
+                .dvGrpNo(this.dvGrpNo)
+                .dvMthdCd(dvMthdCd)
+                .ordNo(ordNo)
+                .build();
+    }
+
 }

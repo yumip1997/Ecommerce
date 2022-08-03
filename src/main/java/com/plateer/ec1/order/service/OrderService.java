@@ -51,7 +51,7 @@ public class OrderService {
     }
 
     private DataStrategy getDataStrategy(String typeStr){
-        OPT0001Code OPT0001Code = com.plateer.ec1.order.enums.OPT0001Code.findOrderType(typeStr);
+        OPT0001Code OPT0001Code = com.plateer.ec1.order.enums.OPT0001Code.of(typeStr);
         return dataStrategyFactory.get(OPT0001Code);
     }
 

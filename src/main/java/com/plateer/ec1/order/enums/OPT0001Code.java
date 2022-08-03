@@ -15,7 +15,7 @@ public enum OPT0001Code {
 
     private final String code;
 
-    public static OPT0001Code findOrderType(String orderTypeCode){
+    public static OPT0001Code of(String orderTypeCode){
         return Arrays.stream(OPT0001Code.values())
                 .filter(OPT0001Code -> OPT0001Code.getCode().equals(orderTypeCode))
                 .findFirst()

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.order.mapper.OrderMapper">
+    <select id="getBnfNo" resultType="java.lang.String">
+        select concat('B', nextval('nextval_bnf_no'))
+    </select>
+
     <resultMap id="orderProductViewMap" type="orderProductView">
         <association property="orderProductVO" autoMapping="true" columnPrefix="op_"/>
         <association property="productInfoVO" autoMapping="true" />
@@ -35,4 +39,5 @@
         from ord_prd op left join pr_goods_base gd on op.goods_no = gd.goods_no
                         left join pr_item_info itm on gd.goods_no = itm.goods_no and op.item_no = itm.item_no
     </select>
+
 </mapper>
