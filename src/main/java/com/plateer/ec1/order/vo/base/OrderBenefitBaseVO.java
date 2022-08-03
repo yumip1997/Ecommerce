@@ -22,7 +22,8 @@ public class OrderBenefitBaseVO {
     public OpOrdBnfInfo toOpOrdBnfInfo(String bnfNo){
         return OpOrdBnfInfo.builder()
                 .ordBnfNo(bnfNo)
-                .prmNo(this.cpnIssNo)
+                .prmNo(this.prmNo)
+                .cpnIssNo(this.cpnIssNo)
                 .cpnKndCd(this.cpnKndCd)
                 .degrCcd(this.degrCcd)
                 .ordBnfAmt(this.aplyAmt)
