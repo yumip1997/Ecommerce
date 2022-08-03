@@ -5,18 +5,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 public class OrderProductBaseVO {
 
-    @NotNull
+    @NotEmpty
     private String goodsNo;
-    @NotNull
+    @NotEmpty
     private String itemNo;
-
+    @NotEmpty
     private String goodsNm;
+    @NotEmpty
     private String itemNm;
 
     public ProductInfoVO toProductInfoVO(){

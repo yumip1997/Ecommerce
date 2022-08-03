@@ -12,11 +12,15 @@
   "orderProductVOList" : [
     {
       "goodsNo" : "P001",
-      "itemNo" : "1"
+      "itemNo" : "1",
+      "goodsNm" : "라운드반팔티",
+      "itemNm" : "네이비"
     },
     {
       "goodsNo" : "P002",
-      "itemNo" : "1"
+      "itemNo" : "1",
+      "goodsNm" : "마스크대형",
+      "itemNm" : "화이트"
     }
   ],
   "orderDeliveryVOList" : [
@@ -32,6 +36,27 @@
             {
               "dvAmtTpCd" : "10",
               "orgDvAmt" : 0
+            }
+          ],
+          "orderProductVOList" : [
+            {
+              "goodsNo" : "P001",
+              "itemNo" : "1"
+            }
+          ]
+        },
+        {
+          "dvGrpNo" : 2,
+          "orderCostInfoList" : [
+            {
+              "dvAmtTpCd" : "10",
+              "orgDvAmt" : 0
+            }
+          ],
+          "orderProductVOList" : [
+            {
+              "goodsNo" : "P002",
+              "itemNo" : "1"
             }
           ]
         }
