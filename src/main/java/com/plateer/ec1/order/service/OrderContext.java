@@ -1,10 +1,10 @@
 package com.plateer.ec1.order.service;
 
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
+import com.plateer.ec1.order.creator.OrderDataCreator;
 import com.plateer.ec1.order.manipulator.OrderDataManipulator;
 import com.plateer.ec1.order.mapper.OrderMapper;
 import com.plateer.ec1.order.strategy.after.AfterStrategy;
-import com.plateer.ec1.order.strategy.data.DataStrategy;
 import com.plateer.ec1.order.validator.OrderValidator;
 import com.plateer.ec1.order.vo.OrdClmCreationVO;
 import com.plateer.ec1.order.vo.OrderContextVO;
@@ -38,7 +38,7 @@ public class OrderContext {
         try{
             List<OrderProductView> orderProductViewList = getOrdProductView(orderRequestVO);
             validate(orderContextVO.getOrderValidator(), orderRequestVO, orderProductViewList);
-            creationVO = createData(orderContextVO.getDataStrategy(), orderRequestVO, orderProductViewList);
+            creationVO = createData(orderRequestVO, orderProductViewList);
             orderDataManipulator.insertOrder(creationVO.getInsertData());
             payService.approve(creationVO.getInsertData().toPayApproveReqVO());
             doOrderAfterProcess(orderContextVO.getAfterStrategy(), orderRequestVO, creationVO.getInsertData());
@@ -59,8 +59,9 @@ public class OrderContext {
         orderValidator.isValid(orderRequestVO, orderProductViewList);
     }
 
-    private OrdClmCreationVO<OrderVO, Object> createData(DataStrategy dataStrategy, OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
-        return dataStrategy.create(orderRequestVO, orderProductViewList);
+    private OrdClmCreationVO<OrderVO, Object> createData(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
+        OrderDataCreator orderDataCreator = new OrderDataCreator(orderMapper);
+        return orderDataCreator.create(orderRequestVO, orderProductViewList);
     }
 
     private void doOrderAfterProcess(AfterStrategy afterStrategy, OrderRequestVO orderRequestVO, OrderVO orderVO) {

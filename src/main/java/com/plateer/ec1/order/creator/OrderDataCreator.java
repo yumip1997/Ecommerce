@@ -10,7 +10,6 @@ import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import com.plateer.ec1.order.vo.base.OrderProductBaseVO;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Component
 @RequiredArgsConstructor
 public class OrderDataCreator {
 
@@ -109,7 +107,6 @@ public class OrderDataCreator {
         List<OpOrdBnfInfo> opOrdBnfInfoList = new ArrayList<>();
         opOrdBnfInfoList.addAll(createPrdBnfInfoList(orderRequestVO.getOrdNo(), orderRequestVO.getOrderProductVOList()));
         opOrdBnfInfoList.addAll(createCartBnfInoList(orderRequestVO.getOrdNo(), orderRequestVO.getOrderBenefitVOList()));
-
         return opOrdBnfInfoList;
     }
 
@@ -180,8 +177,8 @@ public class OrderDataCreator {
                 long distribueAplyAmt = distribueAplyAmt(orderProductVO.getPrdBnfAplyOrdPrc(), totalPrdBnfAplyOrdPrc, aplyAmt);
 
                 OpOrdBnfRelInfo opOrdBnfRelInfo = OpOrdBnfRelInfo.builder()
+                        .ordNo(ordNo)
                         .ordBnfNo(ordBnfNo)
-                        .ordBnfNo(ordNo)
                         .ordSeq(ordSeq)
                         .procSeq(1)
                         .aplyCnclCcd("")
