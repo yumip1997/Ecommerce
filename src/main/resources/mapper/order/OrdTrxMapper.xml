@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.plateer.ec1.order.mapper.OrdTrxMapper">
+
+    <insert id="insertOrderBasic">
+        INSERT INTO OP_ORD_BASE(ORD_NO,
+                                MBR_NO,
+                                ORD_TP_CD,
+                                ORD_SYS_CCD,
+                                ORD_REQ_DTIME,
+                                ORD_CMT_DTIME,
+                                ORD_NM,
+                                ORD_SELL_NO,
+                                ORD_ADDR,
+                                ORD_ADDR_DTL,
+                                RFND_BNK_CK,
+                                RFND_ACCT_NO,
+                                RFND_ACCT_OWN_NM,
+                                SYS_REG_DTIME,
+                                SYS_REGR_ID,
+                                SYS_MODR_ID,
+                                SYS_MOD_DTIME)
+        VALUES (#{ordNo},
+                #{mbrNo},
+                #{ordTpCd},
+                #{ordSysCcd},
+                #{ordReqDtime},
+                #{ordCmtDtime},
+                #{ordNm},
+                #{ordSellNo},
+                #{ordAddr},
+                #{ordAddrDtl},
+                #{rfndBnkCk},
+                #{rfndAcctNo},
+                #{rfndAcctOwnNm},
+                now(),
+                #{loginId},
+                #{logindId},
+                now())
+    </insert>
+
+    <insert id="insertOpGoodsInfo">
+        INSERT INTO OP_GOODS_INFO(ORD_NO,
+                                  ORD_GOODS_NO,
+                                  ORD_ITEM_NO,
+                                  GOODS_SELL_TP_CD,
+                                  GOODS_DLV_TP_CD,
+                                  GOODS_NM,
+                                  ITEM_NM,
+                                  SELL_AMT,
+                                  SELL_DC_AMT,
+                                  SYS_REG_DTIME,
+                                  SYS_REGR_ID,
+                                  SYS_MOD_DTIME,
+                                  SYS_MODR_ID)
+        VALUES
+               <foreach collection="list" item="item" separator=",">
+               (#{item.ordNo},
+                #{item.ordGoodsNo},
+                #{item.ordItemNo},
+                #{item.goodsSellTpCd},
+                #{item.goodsDlvTpCd},
+                #{item.goodsNm},
+                #{item.itemNm},
+                #{item.sellAmt},
+                #{item.sellDcAmt},
+                now(),
+                #{item.loginId},
+                now(),
+                #{item.loginId}
+                )
+               </foreach>
+    </insert>
+
+
+    <insert id="insertOpClmInfoList">
+        INSERT INTO OP_CLM_INFO(ORD_NO,
+                                ORD_GOODS_NO,
+                                ORD_ITEM_NO,
+                                ORD_SEQ,
+                                PROC_SEQ,
+                                ORD_CLM_TP_CD,
+                                ORD_PRGS_SCD,
+                                DV_RVT_CCD,
+                                ORD_AMT,
+                                ORD_CNT,
+                                CNCL_CNT,
+                                RTGS_CNT,
+                                DV_GRP_NO,
+                                ORD_CLM_REQ_DTIME,
+                                ORD_CLM_ACPT_DTIME,
+                                ORD_CLM_CMT_DTIME,
+                                CLM_RSN_CD,
+                                CLM_DTL_RSN_TT,
+                                SYS_REG_DTIME,
+                                SYS_REGR_ID,
+                                SYS_MOD_DTIME,
+                                SYS_MODR_ID,
+                                CLM_NO,
+                                ORG_PROC_SEQ)
+        VALUES
+               <foreach collection="list" item="item" separator=",">
+               (#{item.ordNo},
+                #{item.ordGoodsNo},
+                #{item.ordItemNo},
+                #{item.ordSeq},
+                #{item.procSeq},
+                #{item.ordClmTpCd},
+                #{item.ordPrgsScd},
+                #{item.dvRvtCcd},
+                #{item.ordAmt},
+                #{item.ordCnt},
+                #{item.cnclCnt},
+                #{item.rtgsCnt},
+                #{item.dvGrpNo},
+                #{item.ordClmReqDtime},
+                #{item.ordClmAcptDtime},
+                #{item.ordClmCmtDtime},
+                #{item.clmRsnCd},
+                #{item.clmDtlRsnTt},
+                now(),
+                #{item.loginId},
+                now(),
+                #{item.loginId},
+                #{itme.clmNo},
+                #{item.orgProcSeq})
+               </foreach>
+    </insert>
+
+    <insert id="insertOpDvpAreaInfoList">
+        INSERT INTO OP_DVP_AREA_INFO(ORD_NO,
+                                     DVP_SEQ,
+                                     RMTI_NM,
+                                     RMTI_HP_NO,
+                                     RMTI_ADDR,
+                                     RMTI_ADDR_DTL,
+                                     SYS_REG_DTIME,
+                                     SYS_REGR_ID,
+                                     SYS_MOD_DTIME,
+                                     SYS_MODR_ID)
+        VALUES
+               <foreach collection="list" item="item" separator=",">
+               (#{item.ordNo},
+                #{item.dvpSeq},
+                #{item.rmtiNm},
+                #{item.rmtiHpNo},
+                #{item.rmtiAddr},
+                #{item.rmtiAddrDtl},
+                now(),
+                #{item.loginId},
+                now(),
+                #{item.loginId})
+                </foreach>
+    </insert>
+
+    <insert id="insertOpOrdCostInfo">
+        INSERT INTO OP_ORD_COST_INFO(ORD_CST_NO,
+                                     DV_GRP_NO,
+                                     APLY_CCD,
+                                     ORG_ORD_CST_NO,
+                                     CLM_NO,
+                                     ORD_NO,
+                                     DV_AMT_TP_CD,
+                                     ORG_DV_AMT,
+                                     DV_BNF_AMT,
+                                     APLY_DV_AMT,
+                                     IMTN_RSN_CCD,
+                                     SYS_REG_DTIME,
+                                     SYS_REGR_ID,
+                                     SYS_MOD_DTIME,
+                                     SYS_MODR_ID,
+                                     DV_PLC_TP_CD,
+                                     CNCL_DV_AMT)
+        VALUES
+               <foreach collection="list" item="item" separator=",">
+               (#{item.ordCstNo},
+                #{item.dvGrpNo},
+                #{item.aplyCcd},
+                #{item.orgOrdCstNo},
+                #{item.clmNo},
+                #{item.ordNo},
+                #{item.dvAmtTpCd},
+                #{item.orgDvAmt},
+                #{item.dvBnfAmt},
+                #{item.aplyDvAmt},
+                #{item.imtnRsnCcd},
+                now(),
+                #{item.loginId},
+                now(),
+                #{item.loginId},
+                #{item.dvPlcTpCd},
+                #{item.cnclDvAmt})
+               </foreach>
+    </insert>
+
+    <insert id="insertOpDvpInfoList">
+        INSERT INTO OP_DVP_INFO(DV_GRP_NO,
+                                ORD_NO,
+                                DVP_SEQ,
+                                SYS_REG_DTIME,
+                                SYS_REGR_ID,
+                                SYS_MOD_DTIME,
+                                SYS_MODR_ID,
+                                DV_MTHD_CD)
+        VALUES
+                <foreach collection="list" item="item" separator=",">
+               (#{item.dvGrpNo},
+                #{item.ordNo},
+                #{item.dvpSeq},
+                now(),
+                #{item.loginId},
+                now(),
+                #{item.loginId},
+                #{item.dvMthdCd})
+                </foreach>
+    </insert>
+
+    <insert id="insertOpOrdBnfInfo">
+        INSERT INTO OP_ORD_BNF_INFO(ORD_BNF_NO,
+                                    ORD_BNF_AMT,
+                                    PRM_NO,
+                                    CPN_ISS_NO,
+                                    ORD_CNCL_BNF_AMT,
+                                    DEGR_CCD,
+                                    SYS_REG_DTIME,
+                                    SYS_REGR_ID,
+                                    SYS_MOD_DTIME,
+                                    SYS_MODR_ID,
+                                    CPN_KND_CD)
+        VALUES
+               <foreach collection="list" item="item" separator=",">
+               (#{item.ordBnfNo},
+                #{item.ordBnfAmt},
+                #{item.prmNo},
+                #{item.cpnIssNo},
+                #{item.ordCnclBnfAmt},
+                #{item.degrCcd},
+                now(),
+                #{item.loginId},
+                now(),
+                #{item.loginId},
+                #{item.cpnKndCd})
+               </foreach>
+    </insert>
+
+
+    <insert id="insertOpOrdBnfRelInfo">
+        INSERT INTO OP_ORD_BNF_REL_INFO(ORD_NO,
+                                        ORD_SEQ,
+                                        PROC_SEQ,
+                                        ORD_BNF_NO,
+                                        APLY_CNCL_CCD,
+                                        APLY_AMT,
+                                        CLM_NO,
+                                        SYS_REG_DTIME,
+                                        SYS_REGR_ID,
+                                        SYS_MOD_DTIME,
+                                        SYS_MODR_ID)
+        VALUES
+               <foreach collection="list" item="item" separator=",">
+               (#{item.ordNo},
+                #{item.ordSeq},
+                #{item.procSeq},
+                #{item.ordBnfNo},
+                #{item.aplyCnclCcd},
+                #{item.aplyAmt},
+                #{item.clmNo},
+                now(),
+                #{item.loginId},
+                now(),
+                #{item.loginId})
+                </foreach>
+    </insert>
+
+
+</mapper>
