@@ -1,11 +1,11 @@
-package com.plateer.ec1.claim.enums;
+package com.plateer.ec1.order.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum OrdClmTpCd {
+public enum OPT0003Code {
 
     ORDER("0"),
     CANCEL("C"),

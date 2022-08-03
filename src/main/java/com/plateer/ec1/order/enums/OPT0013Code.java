@@ -1,14 +1,14 @@
-package com.plateer.ec1.claim.enums;
+package com.plateer.ec1.order.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum GoodsSellTpCd {
+public enum OPT0013Code {
 
-    GENERAL("G"),
-    ECOUPON("EC");
+    DELIVERY("10"),
+    RETRIEVE("20");
 
     private final String code;
 

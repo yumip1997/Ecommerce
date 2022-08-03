@@ -1,11 +1,11 @@
-package com.plateer.ec1.claim.enums;
+package com.plateer.ec1.order.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum OrdPrgsScd {
+public enum OPT0004Code {
 
     //주문대기
     ORDER_WAITING("10"),
@@ -27,4 +27,5 @@ public enum OrdPrgsScd {
     EXCHANGE_WITHDRAWAL("80");
 
     public final String code;
+
 }

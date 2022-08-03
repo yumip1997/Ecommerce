@@ -1,9 +1,13 @@
 package com.plateer.ec1.claim.validator;
-import com.plateer.ec1.claim.enums.*;
+
+import com.plateer.ec1.claim.enums.ClaimException;
+import com.plateer.ec1.claim.enums.ValidatorType;
 import com.plateer.ec1.claim.enums.define.ClaimDefine;
 import com.plateer.ec1.claim.vo.ClaimBaseVO;
 import com.plateer.ec1.common.factory.CustomFactory;
 import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.order.enums.OPT0001Code;
+import com.plateer.ec1.order.enums.OPT0004Code;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,13 +19,13 @@ public abstract class ClaimValidator implements CustomFactory<ValidatorType> {
     abstract public void verifyAmount(ClaimBaseVO claimBaseVO) throws Exception;
 
     public void isValidOrdPrgsScd(ClaimBaseVO claimBaseVO) throws Exception {
-        OpClmInfo currentClaim = OpClmInfo.builder().ordPrgsScd(OrdPrgsScd.ORDER_COMPLETE.code).build();
+        OpClmInfo currentClaim = OpClmInfo.builder().ordPrgsScd(OPT0004Code.ORDER_COMPLETE.code).build();
 
         String currentClaimProcess = currentClaim.getOrdPrgsScd();
         List<String> validStatusList =  ClaimDefine.findClaimValidStatusCode(claimBaseVO)
                 .getValidOrdPrgsScd()
                 .stream()
-                .map(OrdPrgsScd::getCode)
+                .map(OPT0004Code::getCode)
                 .collect(Collectors.toList());
 
         if(isContainInList(validStatusList, currentClaimProcess)) return;
@@ -34,7 +38,7 @@ public abstract class ClaimValidator implements CustomFactory<ValidatorType> {
         List<String> validPrdTypeList = ClaimDefine.findClaimValidStatusCode(claimBaseVO)
                 .getValidSellTpCd()
                 .stream()
-                .map(GoodsSellTpCd::getCode)
+                .map(OPT0001Code::getCode)
                 .collect(Collectors.toList());
 
         if(isContainInList(validPrdTypeList, currentPrdType)) return;

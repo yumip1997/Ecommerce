@@ -1,9 +1,8 @@
 package com.plateer.ec1.claim.vo;
 
-import com.plateer.ec1.claim.enums.DvRvtCcd;
 import com.plateer.ec1.claim.enums.define.OpClmBase;
 import com.plateer.ec1.common.model.order.OpClmInfo;
-import lombok.AllArgsConstructor;
+import com.plateer.ec1.order.enums.OPT0013Code;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +48,7 @@ public class ClaimBaseVO{
         List<OpClmInfo> opClmInfoBaseList = new ArrayList<>();
         //TODO 수정 필요
         OpClmBase opClmBase = OpClmBase.valueOf(claimType);
-        List<DvRvtCcd> dvRvtCcdList = opClmBase.getDvRvtCcdList();
+        List<OPT0013Code> dvRvtCcdList = opClmBase.getOpt0013CodeList();
 
         for(int i=0;i<dvRvtCcdList.size();i++){
             //TODO clone으로 바꾸기
@@ -59,9 +58,9 @@ public class ClaimBaseVO{
             //TODO 처리 순번을 받아서 +i하기
             target.setProcSeq(this.getProcSeq() + (i +1));
             target.setOrgProcSeq(this.getProcSeq());
-            target.setOrdClmTpCd(opClmBase.getOrdClmTpCd().getCode());
+            target.setOrdClmTpCd(opClmBase.getOpt0003Code().getCode());
             target.setOrdPrgsScd(opClmBase.getOrdPrgsScd().getCode());
-            target.setDvRvtCcd(opClmBase.getDvRvtCcdList().get(i).getCode());
+            target.setDvRvtCcd(opClmBase.getOpt0013CodeList().get(i).getCode());
 
             opClmInfoBaseList.add(target);
         }
