@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -20,12 +21,18 @@ public class OrderProductBaseVO {
     private String goodsNm;
     @NotEmpty
     private String itemNm;
+    @Min(0)
+    private int ordCnt;
 
-    public ProductInfoVO toProductInfoVO(){
-        return ProductInfoVO.builder()
-                .goodsNo(this.getGoodsNo())
-                .itemNo(this.getItemNo())
-                .build();
+    private long ordAmt;
+
+    private long salePrc;
+
+    private long prmPrc;
+
+    protected long getOrdPrcWithOrdCnt(){
+        long ordPrc = this.prmPrc == 0 ? this.salePrc : this.prmPrc;
+        return ordPrc * this.ordCnt;
     }
 
     public String getGoodsNoItemNo(){

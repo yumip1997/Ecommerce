@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -20,11 +20,6 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderProductVO extends OrderProductBaseVO {
 
-    @Min(0)
-    private int ordCnt;
-    private long ordAmt;
-    private long salePrc;
-    private long prmPrc;
     private List<OrderBenefitBaseVO> productBenefits;
 
     public OpClmInfo toOpClmInfo(String ordNo, int ordSeq, int dvGrpNo){
@@ -45,20 +40,18 @@ public class OrderProductVO extends OrderProductBaseVO {
     }
 
     /*
-    쿠폰적용 금액
+    쿠폰적용된 금액
      */
     public long getPrdBnfAplyOrdPrc(){
-        return this.getOrdPrc() - this.sumPrdBnf();
+        return this.getOrdPrcWithOrdCnt() - this.sumPrdBnf();
     }
 
-    private long getOrdPrc(){
-        return prmPrc == 0 ? salePrc : prmPrc;
-    }
-
-    //TODO 적용한 쿠폰 없으면 0나오는지 확인하기
     private long sumPrdBnf(){
-        return productBenefits.stream()
+        return Optional.ofNullable(productBenefits)
+                .orElse(Collections.emptyList())
+                .stream()
                 .mapToLong(OrderBenefitBaseVO::getAplyAmt)
                 .sum();
+
     }
 }
