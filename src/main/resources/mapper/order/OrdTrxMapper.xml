@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.order.mapper.OrdTrxMapper">
 
-    <insert id="insertOrderBasic">
+    <insert id="insertOpOrdBase">
         INSERT INTO OP_ORD_BASE(ORD_NO,
                                 MBR_NO,
                                 ORD_TP_CD,
@@ -153,7 +153,7 @@
                 </foreach>
     </insert>
 
-    <insert id="insertOpOrdCostInfo">
+    <insert id="insertOpOrdCostInfoList">
         INSERT INTO OP_ORD_COST_INFO(ORD_CST_NO,
                                      DV_GRP_NO,
                                      APLY_CCD,
@@ -215,7 +215,7 @@
                 </foreach>
     </insert>
 
-    <insert id="insertOpOrdBnfInfo">
+    <insert id="insertOpOrdBnfInfoList">
         INSERT INTO OP_ORD_BNF_INFO(ORD_BNF_NO,
                                     ORD_BNF_AMT,
                                     PRM_NO,
@@ -244,7 +244,7 @@
     </insert>
 
 
-    <insert id="insertOpOrdBnfRelInfo">
+    <insert id="insertOpOrdBnfRelInfoList">
         INSERT INTO OP_ORD_BNF_REL_INFO(ORD_NO,
                                         ORD_SEQ,
                                         PROC_SEQ,

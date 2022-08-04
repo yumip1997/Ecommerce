@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface OrdTrxMapper {
 
-    void insertOrderBasic(OrderBasicVO orderBasicVO);
+    void insertOpOrdBase(OpOrdBase opOrdBase);
 
     void insertOpGoodsInfo(List<OpGoodsInfo> opGoodsInfoList);
 
@@ -18,12 +18,12 @@ public interface OrdTrxMapper {
 
     void insertOpDvpAreaInfoList(List<OpDvpAreaInfo> opDvpAreaInfoList);
 
-    void insertOpDvpInfoList(List<OpOrdCostInfo> opOrdCostInfoList);
+    void insertOpDvpInfoList(List<OpDvpInfo> opDvpInfoList);
 
-    void insertOpOrdCostInfo(List<OpOrdCostInfo> OpOrdCostInfoList);
+    void insertOpOrdCostInfoList(List<OpOrdCostInfo> OpOrdCostInfoList);
 
-    void insertOpOrdBnfInfo(List<OpOrdBnfInfo> opOrdBnfInfoList);
+    void insertOpOrdBnfInfoList(List<OpOrdBnfInfo> opOrdBnfInfoList);
 
-    void insertOpOrdBnfRelInfo(List<OpOrdBnfRelInfo> opOrdBnfRelInfoList);
+    void insertOpOrdBnfRelInfoList(List<OpOrdBnfRelInfo> opOrdBnfRelInfoList);
 
 }
