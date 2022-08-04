@@ -25,6 +25,7 @@
   ],
   "orderDeliveryVOList" : [
     {
+      "dvpSeq" : 1,
       "rmtiNm" : "박유미",
       "rmtiHpNo" : "01086229710",
       "rmtiAddr" : "서울특별시",
