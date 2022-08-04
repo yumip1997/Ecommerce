@@ -15,7 +15,16 @@
       "goodsNo" : "P001",
       "itemNo" : "1",
       "goodsNm" : "라운드반팔티",
-      "itemNm" : "네이비"
+      "itemNm" : "네이비",
+      "productBenefits" : [
+        {
+          "prmNo" : 1,
+          "cpnIssNo" : 1,
+          "cpnKndCd" : "10",
+          "degrCcd" : 1,
+          "aplyAmt" : 1000
+        }
+      ]
     },
     {
       "ordCnt" : 2,

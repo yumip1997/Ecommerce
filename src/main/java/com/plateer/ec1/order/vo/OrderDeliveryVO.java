@@ -1,6 +1,7 @@
 package com.plateer.ec1.order.vo;
 
 import com.plateer.ec1.common.model.order.OpDvpAreaInfo;
+import com.plateer.ec1.common.model.order.OpDvpInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -34,6 +36,12 @@ public class OrderDeliveryVO{
                 .rmtiAddr(this.getRmtiAddr())
                 .rmtiAddrDtl(this.getRmtiAddrDtl())
                 .build();
+    }
+
+    public List<OpDvpInfo> toOpDvpInfoList(String ordnO, String dvMthdCd){
+        return this.getOrderDeliveryGroupInfoVOList().stream()
+                .map(e -> e.toOpDvpInfo(ordnO, this.dvpSeq, dvMthdCd))
+                .collect(Collectors.toList());
     }
 
 }

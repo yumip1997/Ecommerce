@@ -1,6 +1,6 @@
 package com.plateer.ec1.order.vo.req;
 
-import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.order.vo.OrderBasicVO;
 import com.plateer.ec1.order.vo.OrderBenefitVO;
 import com.plateer.ec1.order.vo.OrderDeliveryVO;
@@ -14,9 +14,12 @@ import lombok.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Getter
@@ -24,7 +27,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderRequestVO extends OrderClaimBaseVO {
+public class OrderRequestVO extends OrderClaimBaseVO implements Cloneable{
 
     @Valid
     @NotNull
@@ -46,12 +49,20 @@ public class OrderRequestVO extends OrderClaimBaseVO {
 
     private Map<String, OrderProductVO> orderProductVOMap;
 
+    public List<OpOrdBnfInfo> toCartBnfInoList(Supplier<String> bnfNoSupplier){
+        return Optional.ofNullable(this.getOrderBenefitVOList())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(e -> e.toOpOrdBnfInfo(bnfNoSupplier.get()))
+                .collect(Collectors.toList());
+    }
+
     public boolean isContainsVacctPayment(){
         return payInfoVOList.stream()
                 .anyMatch(payInfoVO -> OPT0009Code.VIRTUAL_ACCOUNT == payInfoVO.getMethodType());
     }
 
-    public Map<String, OrderProductVO> setUpOrderProductVOMap(){
+    public Map<String, OrderProductVO> getOrderProductVOMap(){
         if(this.orderProductVOMap == null){
             this.orderProductVOMap = makeOrderProductVOMap();
         }
@@ -63,4 +74,27 @@ public class OrderRequestVO extends OrderClaimBaseVO {
                 .collect(Collectors.toMap(OrderProductBaseVO::getGoodsNoItemNo, Function.identity()));
     }
 
+    public OrderProductVO getOrderProductVOFromMap(String goodsNoItemNo){
+        Map<String, OrderProductVO> map = this.getOrderProductVOMap();
+        return map.get(goodsNoItemNo);
+    }
+    
+    public long getTotalPrdBnfAplyOrdPrc(List<OrderProductBaseVO> orderProductBaseVOList){
+        return Optional.ofNullable(orderProductBaseVOList)
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(e -> this.getOrderProductVOFromMap(e.getGoodsNoItemNo()))
+                .mapToLong(OrderProductVO::getPrdBnfAplyOrdPrc)
+                .sum();
+
+    }
+
+    @Override
+    public OrderRequestVO clone() {
+        try {
+            return (OrderRequestVO) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.plateer.ec1.order.vo.base;
 
 import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
+import com.plateer.ec1.order.enums.OPT0005Code;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +38,7 @@ public class OrderBenefitBaseVO {
                 .ordBnfNo(bnfNo)
                 .ordSeq(ordSeq)
                 .procSeq(1)
-                .aplyCnclCcd("")
+                .aplyCnclCcd(OPT0005Code.APPLY.getCode())
                 .aplyAmt(this.aplyAmt)
                 .build();
     }

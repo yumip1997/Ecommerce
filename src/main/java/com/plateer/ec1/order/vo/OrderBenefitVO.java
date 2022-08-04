@@ -17,4 +17,7 @@ public class OrderBenefitVO extends OrderBenefitBaseVO {
 
     List<OrderProductBaseVO> orderProductBaseVOList;
 
+    public long distributeAplyAmt(long prdBnfAplyOrdPrc, long totalPrdBnfApyOrdPrc){
+        return (prdBnfAplyOrdPrc / totalPrdBnfApyOrdPrc) * this.getAplyAmt();
+    }
 }

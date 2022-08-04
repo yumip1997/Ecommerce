@@ -1,6 +1,8 @@
 package com.plateer.ec1.order.vo;
 
 import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
+import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.order.enums.OPT0003Code;
 import com.plateer.ec1.order.enums.OPT0004Code;
 import com.plateer.ec1.order.enums.OPT0013Code;
@@ -12,7 +14,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -22,10 +27,9 @@ public class OrderProductVO extends OrderProductBaseVO {
 
     private List<OrderBenefitBaseVO> productBenefits;
 
-    public OpClmInfo toOpClmInfo(String ordNo, int ordSeq, int dvGrpNo){
+    public OpClmInfo toOpClmInfo(String ordNo, int dvGrpNo){
         return OpClmInfo.builder()
                 .ordNo(ordNo)
-                .ordSeq(ordSeq)
                 .procSeq(1)
                 .ordGoodsNo(this.getGoodsNo())
                 .ordItemNo(this.getItemNo())
@@ -36,6 +40,8 @@ public class OrderProductVO extends OrderProductBaseVO {
                 .dvGrpNo(dvGrpNo)
                 .ordCnt(this.getOrdCnt())
                 .ordAmt(this.getOrdAmt())
+                .ordClmAcptDtime(LocalDateTime.now())
+                .ordClmReqDtime(LocalDateTime.now())
                 .build();
     }
 
@@ -47,11 +53,18 @@ public class OrderProductVO extends OrderProductBaseVO {
     }
 
     private long sumPrdBnf(){
-        return Optional.ofNullable(productBenefits)
+        return Optional.ofNullable(this.getProductBenefits())
                 .orElse(Collections.emptyList())
                 .stream()
                 .mapToLong(OrderBenefitBaseVO::getAplyAmt)
                 .sum();
+    }
 
+    public List<OpOrdBnfInfo> toPrdBnfInoList(Supplier<String> bnfNoSupplier){
+        return Optional.ofNullable(this.getProductBenefits())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(e -> e.toOpOrdBnfInfo(bnfNoSupplier.get()))
+                .collect(Collectors.toList());
     }
 }

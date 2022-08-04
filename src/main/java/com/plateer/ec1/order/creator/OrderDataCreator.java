@@ -4,6 +4,7 @@ import com.plateer.ec1.common.model.order.*;
 import com.plateer.ec1.delivery.enums.DVP0001Code;
 import com.plateer.ec1.order.enums.OPT0001Code;
 import com.plateer.ec1.order.enums.OPT0004Code;
+import com.plateer.ec1.order.enums.OPT0005Code;
 import com.plateer.ec1.order.mapper.OrderMapper;
 import com.plateer.ec1.order.vo.*;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
@@ -12,8 +13,10 @@ import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
-import java.util.function.Function;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -22,9 +25,11 @@ public class OrderDataCreator {
     private final OrderMapper orderMapper;
 
     public OrdClmCreationVO<OrderVO, Object> create(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
+        OrderRequestVO cloneReq = orderRequestVO.clone();
+
         OrdClmCreationVO<OrderVO, Object> creationVO = new OrdClmCreationVO<>();
-        creationVO.setOrdNo(orderRequestVO.getOrdNo());
-        creationVO.setInsertData(createOrderVO(orderRequestVO, orderProductViewList));
+        creationVO.setOrdNo(cloneReq.getOrdNo());
+        creationVO.setInsertData(createOrderVO(cloneReq, orderProductViewList));
         return creationVO;
     }
 
@@ -37,9 +42,9 @@ public class OrderDataCreator {
         orderVO.setOpClmInfoList(createOpClmInfoList(orderRequestVO));
         orderVO.setOpDvpAreaInfoList(createOpDvpAreaInfoList(ordNo, orderRequestVO.getOrderDeliveryVOList()));
         orderVO.setOpDvpInfoList(createOpDvpInfoList(orderRequestVO));
+        orderVO.setOpOrdCostInfoList(createOpOrdCostInfoList(orderRequestVO));
         orderVO.setOpOrdBnfInfoList(createOpOrdBnfInfoList(orderRequestVO));
-
-        orderVO.setOpOrdBnfRelInfoList(createOpOrdBnfRelInfoList(orderRequestVO, orderVO.getOpClmInfoList(), orderVO.getOpOrdBnfInfoList()));
+        orderVO.setOpOrdBnfRelInfoList(createOpOrdBnfRelInfoList(orderRequestVO, orderVO));
         return orderVO;
     }
 
@@ -55,25 +60,21 @@ public class OrderDataCreator {
     }
 
     private List<OpClmInfo> createOpClmInfoList(OrderRequestVO orderRequestVO){
-        List<OpClmInfo> opClmInfoList = new ArrayList<>();
+        List<OpClmInfo> collect = orderRequestVO.getOrderDeliveryVOList().stream()
+                .flatMap(e -> e.getOrderDeliveryGroupInfoVOList().stream())
+                .flatMap(e -> e.toOpClmInfoList(orderRequestVO.getOrdNo()).stream())
+                .collect(Collectors.toList());
+        return setUpOpClmInfoList(orderRequestVO, collect);
+    }
+
+    private List<OpClmInfo> setUpOpClmInfoList(OrderRequestVO orderRequestVO, List<OpClmInfo> opClmInfoList){
         boolean containsVacctPayment = orderRequestVO.isContainsVacctPayment();
-
-        List<OrderDeliveryVO> orderDeliveryVOList = orderRequestVO.getOrderDeliveryVOList();
-        for (OrderDeliveryVO orderDeliveryVO : orderDeliveryVOList) {
-            List<OrderDeliveryGroupInfoVO> orderDeliveryGroupInfoVOList = orderDeliveryVO.getOrderDeliveryGroupInfoVOList();
-
-            for (OrderDeliveryGroupInfoVO orderDeliveryGroupInfoVO : orderDeliveryGroupInfoVOList) {
-                List<OrderProductVO> orderProductVOList = orderDeliveryGroupInfoVO.getOrderProductVOList();
-
-                int ordSeq = 1;
-                for (OrderProductVO orderProductVO : orderProductVOList) {
-                    OpClmInfo opClmInfo = orderProductVO.toOpClmInfo(orderRequestVO.getOrdNo(), ordSeq++, orderDeliveryGroupInfoVO.getDvGrpNo());
-                    opClmInfo.setOrdPrgsScd(containsVacctPayment ? OPT0004Code.ORDER_WAITING.getCode() : OPT0004Code.ORDER_COMPLETE.getCode());
-                    opClmInfoList.add(opClmInfo);
-                }
-            }
+        int ordSeq = 1;
+        for (OpClmInfo opClmInfo : opClmInfoList) {
+            opClmInfo.setOrdSeq(ordSeq++);
+            opClmInfo.setOrdPrgsScd(containsVacctPayment ? OPT0004Code.ORDER_WAITING.getCode() : OPT0004Code.ORDER_COMPLETE.getCode());
+            opClmInfo.setOrdClmCmtDtime(containsVacctPayment ? null : LocalDateTime.now());
         }
-
         return opClmInfoList;
     }
 
@@ -84,72 +85,59 @@ public class OrderDataCreator {
     }
 
     private List<OpDvpInfo> createOpDvpInfoList(OrderRequestVO orderRequestVO){
-        List<OpDvpInfo> opDvpInfoList = new ArrayList<>();
-
         OrderBasicVO orderBasicVO = orderRequestVO.getOrderBasicVO();
         String dvMthdCd = OPT0001Code.of(orderBasicVO.getOrdTpCd()) == OPT0001Code.GENERAL ? DVP0001Code.DELIVERY.getCode() : DVP0001Code.NON_DELIVERY.getCode();
+        return orderRequestVO.getOrderDeliveryVOList().stream()
+                .flatMap(e -> e.toOpDvpInfoList(orderRequestVO.getOrdNo(), dvMthdCd).stream())
+                .collect(Collectors.toList());
+    }
 
-        List<OrderDeliveryVO> orderDeliveryVOList = orderRequestVO.getOrderDeliveryVOList();
-        for (OrderDeliveryVO orderDeliveryVO : orderDeliveryVOList) {
-
-            List<OrderDeliveryGroupInfoVO> orderDeliveryGroupInfoVOList = orderDeliveryVO.getOrderDeliveryGroupInfoVOList();
-            for (OrderDeliveryGroupInfoVO orderDeliveryGroupInfoVO : orderDeliveryGroupInfoVOList) {
-                OpDvpInfo opDvpInfo = orderDeliveryGroupInfoVO.toOpDvpInfo(orderRequestVO.getOrdNo(), orderDeliveryVO.getDvpSeq(), dvMthdCd);
-                opDvpInfoList.add(opDvpInfo);
-            }
-        }
-
-        return opDvpInfoList;
+    private List<OpOrdCostInfo> createOpOrdCostInfoList(OrderRequestVO orderRequestVO){
+        return orderRequestVO.getOrderDeliveryVOList().stream()
+                .flatMap(e -> e.getOrderDeliveryGroupInfoVOList().stream())
+                .flatMap(e -> e.toOpOrdCostInfoList(orderRequestVO.getOrdNo()).stream())
+                .collect(Collectors.toList());
     }
 
     private List<OpOrdBnfInfo> createOpOrdBnfInfoList(OrderRequestVO orderRequestVO){
         List<OpOrdBnfInfo> opOrdBnfInfoList = new ArrayList<>();
         opOrdBnfInfoList.addAll(createPrdBnfInfoList(orderRequestVO.getOrderProductVOList()));
-        opOrdBnfInfoList.addAll(createCartBnfInoList(orderRequestVO.getOrderBenefitVOList()));
+        opOrdBnfInfoList.addAll(createCartBnfInoList(orderRequestVO));
         return opOrdBnfInfoList;
     }
 
     private List<OpOrdBnfInfo> createPrdBnfInfoList(List<OrderProductVO> orderProductVOList){
         return orderProductVOList.stream()
-                .filter(orderProductVO -> !CollectionUtils.isEmpty(orderProductVO.getProductBenefits()))
-                .flatMap(orderProductVO -> orderProductVO.getProductBenefits().stream())
-                .map(orderBenefitBaseVO -> orderBenefitBaseVO.toOpOrdBnfInfo(orderMapper.getBnfNo()))
+                .flatMap(e -> e.toPrdBnfInoList(orderMapper::getBnfNo).stream())
                 .collect(Collectors.toList());
     }
 
-    private List<OpOrdBnfInfo> createCartBnfInoList(List<OrderBenefitVO> orderBenefitVOList){
-        return Optional.ofNullable(orderBenefitVOList)
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(orderBenefitVO -> orderBenefitVO.toOpOrdBnfInfo(orderMapper.getBnfNo()))
-                .collect(Collectors.toList());
+    private List<OpOrdBnfInfo> createCartBnfInoList(OrderRequestVO orderRequestVO){
+        return orderRequestVO.toCartBnfInoList(orderMapper::getBnfNo);
     }
 
-    private List<OpOrdBnfRelInfo> createOpOrdBnfRelInfoList(OrderRequestVO orderRequestVO, List<OpClmInfo> opClmInfoList, List<OpOrdBnfInfo> opOrdBnfInfoList){
-        if(CollectionUtils.isEmpty(opOrdBnfInfoList)) return Collections.emptyList();
-
-        Map<String, OpClmInfo> opClmInfoMap = toOpClmInfoMapByGoodsNoItemNo(opClmInfoList);
-        Map<Long, OpOrdBnfInfo> opOrdBnfInfoMap = toOpOrdBnfInfoMapByCpnIssNo(opOrdBnfInfoList);
+    private List<OpOrdBnfRelInfo> createOpOrdBnfRelInfoList(OrderRequestVO orderRequestVO, OrderVO orderVO){
+        if(CollectionUtils.isEmpty(orderVO.getOpOrdBnfInfoList())) return Collections.emptyList();
 
         List<OpOrdBnfRelInfo> opOrdBnfRelInfoList = new ArrayList<>();
-        opOrdBnfRelInfoList.addAll(createPrdBnfRelInfoList(orderRequestVO.getOrderProductVOList(), opClmInfoMap, opOrdBnfInfoMap));
-        opOrdBnfRelInfoList.addAll(createCartBnfRelInfoList(orderRequestVO, opClmInfoMap, opOrdBnfInfoMap));
-
+        opOrdBnfRelInfoList.addAll(createPrdBnfRelInfoList(orderRequestVO.getOrderProductVOList(), orderVO));
+        opOrdBnfRelInfoList.addAll(createCartBnfRelInfoList(orderRequestVO, orderVO));
         return opOrdBnfRelInfoList;
     }
 
-    private List<OpOrdBnfRelInfo> createPrdBnfRelInfoList(List<OrderProductVO> orderProductVOList, Map<String, OpClmInfo> ordClmMap, Map<Long, OpOrdBnfInfo> ordBnfMap){
+    private List<OpOrdBnfRelInfo> createPrdBnfRelInfoList(List<OrderProductVO> orderProductVOList, OrderVO orderVO){
         List<OpOrdBnfRelInfo> opOrdBnfRelInfoList = new ArrayList<>();
 
         for (OrderProductVO orderProductVO : orderProductVOList) {
-            String ordNo = getOrdNoFromOrdClmMap(orderProductVO.getGoodsNoItemNo(), ordClmMap);
-            int ordSeq = getOrdSeqFromOrdClmMap(orderProductVO.getGoodsNoItemNo(), ordClmMap);
-
             List<OrderBenefitBaseVO> productBenefits = orderProductVO.getProductBenefits();
-            for (OrderBenefitBaseVO productBenefit : productBenefits) {
-                String ordBnfNo = getOrdBnfFromOrdBnfMap(productBenefit.getCpnIssNo(), ordBnfMap);
+            if(CollectionUtils.isEmpty(productBenefits)) continue;
 
-                OpOrdBnfRelInfo opOrdBnfRelInfo = productBenefit.toOpOrdBnfRelInfo(ordNo, ordSeq, ordBnfNo);
+            String goodsNoItemNo = orderProductVO.getGoodsNoItemNo();
+            for (OrderBenefitBaseVO productBenefit : productBenefits) {
+                OpOrdBnfRelInfo opOrdBnfRelInfo = productBenefit.toOpOrdBnfRelInfo(
+                        orderVO.getOrdNoFromOrdClmMap(goodsNoItemNo),
+                        orderVO.getOrdSeqFromOrdClmMap(goodsNoItemNo),
+                        orderVO.getOrdBnfFromOrdBnfMap(productBenefit.getCpnIssNo()));
                 opOrdBnfRelInfoList.add(opOrdBnfRelInfo);
             }
         }
@@ -157,38 +145,28 @@ public class OrderDataCreator {
         return opOrdBnfRelInfoList;
     }
 
-    private List<OpOrdBnfRelInfo> createCartBnfRelInfoList(OrderRequestVO orderRequestVO, Map<String, OpClmInfo> ordClmMap, Map<Long, OpOrdBnfInfo> ordBnfMap){
+    private List<OpOrdBnfRelInfo> createCartBnfRelInfoList(OrderRequestVO orderRequestVO, OrderVO orderVO){
         if(CollectionUtils.isEmpty(orderRequestVO.getOrderBenefitVOList())) return Collections.emptyList();
 
         List<OpOrdBnfRelInfo> opOrdBnfRelInfoList = new ArrayList<>();
-        Map<String, OrderProductVO> orderProductVOMap = orderRequestVO.setUpOrderProductVOMap();
 
-        List<OrderBenefitVO> orderBenefitVOList = orderRequestVO.getOrderBenefitVOList();
-        for (OrderBenefitVO orderBenefitVO : orderBenefitVOList) {
-            String ordBnfNo = getOrdBnfFromOrdBnfMap(orderBenefitVO.getCpnIssNo(), ordBnfMap);
-            //혜택 금액
-            int aplyAmt = orderBenefitVO.getAplyAmt();
+        for (OrderBenefitVO orderBenefitVO : orderRequestVO.getOrderBenefitVOList()) {
 
             List<OrderProductBaseVO> orderProductBaseVOList = orderBenefitVO.getOrderProductBaseVOList();
-            //적용상품 총 금액(이전 차수 혜택 적용 금액)
-            long totalPrdBnfAplyOrdPrc = getTotalPrdBnfAplyOrdPrc(orderProductBaseVOList, orderProductVOMap);
+            long totalPrdBnfAplyOrdPrc = orderRequestVO.getTotalPrdBnfAplyOrdPrc(orderProductBaseVOList);
 
             for (OrderProductBaseVO orderProductBaseVO : orderProductBaseVOList) {
                 String goodsNoItemNo = orderProductBaseVO.getGoodsNoItemNo();
-                String ordNo = getOrdNoFromOrdClmMap(goodsNoItemNo, ordClmMap);
-                int ordSeq = getOrdSeqFromOrdClmMap(goodsNoItemNo, ordClmMap);
+                OrderProductVO orderProductVO = orderRequestVO.getOrderProductVOFromMap(goodsNoItemNo);
+                long distributeAplyAmt = orderBenefitVO.distributeAplyAmt(orderProductVO.getPrdBnfAplyOrdPrc(), totalPrdBnfAplyOrdPrc);
 
-                OrderProductVO orderProductVO = orderProductVOMap.get(goodsNoItemNo);
-                long distributeAplyAmt = distributeAplyAmt(orderProductVO.getPrdBnfAplyOrdPrc(), totalPrdBnfAplyOrdPrc, aplyAmt);
-
-                OpOrdBnfRelInfo opOrdBnfRelInfo = OpOrdBnfRelInfo.builder()
-                        .ordNo(ordNo)
-                        .ordBnfNo(ordBnfNo)
-                        .ordSeq(ordSeq)
-                        .procSeq(1)
-                        .aplyCnclCcd("")
-                        .aplyAmt(distributeAplyAmt)
-                        .build();
+                OpOrdBnfRelInfo opOrdBnfRelInfo = new OpOrdBnfRelInfo();
+                opOrdBnfRelInfo.setOrdNo(orderVO.getOrdNoFromOrdClmMap(goodsNoItemNo));
+                opOrdBnfRelInfo.setOrdBnfNo(orderVO.getOrdBnfFromOrdBnfMap(orderBenefitVO.getCpnIssNo()));
+                opOrdBnfRelInfo.setOrdSeq(orderVO.getOrdSeqFromOrdClmMap(goodsNoItemNo));
+                opOrdBnfRelInfo.setProcSeq(1);
+                opOrdBnfRelInfo.setAplyCnclCcd(OPT0005Code.APPLY.getCode());
+                opOrdBnfRelInfo.setAplyAmt(distributeAplyAmt);
 
                 opOrdBnfRelInfoList.add(opOrdBnfRelInfo);
             }
@@ -196,39 +174,4 @@ public class OrderDataCreator {
         return opOrdBnfRelInfoList;
     }
 
-    private Map<String, OpClmInfo> toOpClmInfoMapByGoodsNoItemNo(List<OpClmInfo> opClmInfoList){
-        return opClmInfoList.stream()
-                .collect(Collectors.toMap(OpClmInfo::getGoodsNoItemNo, Function.identity()));
-    }
-
-    private Map<Long, OpOrdBnfInfo> toOpOrdBnfInfoMapByCpnIssNo(List<OpOrdBnfInfo> opOrdBnfInfoList){
-        return opOrdBnfInfoList.stream()
-                .collect(Collectors.toMap(OpOrdBnfInfo::getCpnIssNo, Function.identity()));
-    }
-
-    private String getOrdNoFromOrdClmMap(String goodsNoItemNo, Map<String, OpClmInfo> ordClmMap){
-        OpClmInfo opClmInfo = ordClmMap.get(goodsNoItemNo);
-        return opClmInfo.getClmNo();
-    }
-
-    private int getOrdSeqFromOrdClmMap(String goodsNoItemNo, Map<String, OpClmInfo> ordClmMap){
-        OpClmInfo opClmInfo = ordClmMap.get(goodsNoItemNo);
-        return opClmInfo.getOrdSeq();
-    }
-
-    private String getOrdBnfFromOrdBnfMap(Long cpnIssNo, Map<Long, OpOrdBnfInfo> ordBnfInfoMap){
-        OpOrdBnfInfo opOrdBnfInfo = ordBnfInfoMap.get(cpnIssNo);
-        return opOrdBnfInfo.getOrdBnfNo();
-    }
-
-    private long getTotalPrdBnfAplyOrdPrc(List<OrderProductBaseVO> orderProductBaseVOList, Map<String, OrderProductVO> orderProductVOMap){
-        return orderProductBaseVOList.stream()
-                .map(e -> orderProductVOMap.get(e.getGoodsNoItemNo()))
-                .mapToLong(OrderProductVO::getPrdBnfAplyOrdPrc)
-                .sum();
-    }
-
-    private long distributeAplyAmt(long prdBnfAplyOrdPrc, long totalPrdBnfApyOrdPrc, long aplyAmt){
-        return (prdBnfAplyOrdPrc / totalPrdBnfApyOrdPrc) * aplyAmt;
-    }
 }

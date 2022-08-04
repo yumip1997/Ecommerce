@@ -21,11 +21,13 @@ class OrderDataCreatorTest {
     private OrderMapper orderMapper;
     private JsonReaderUtil jsonReaderUtil;
     private OrderRequestVO orderRequestVO;
+    private OrderRequestVO orderRequestVOWithPrdCup;
 
     @BeforeEach
     void init(){
         jsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "order");
         orderRequestVO = jsonReaderUtil.getObject("/OrderRequest.json", OrderRequestVO.class);
+        orderRequestVOWithPrdCup = jsonReaderUtil.getObject("/OrderRequestWithPrdCup.json", OrderRequestVO.class);
     }
 
     @Test
@@ -33,6 +35,13 @@ class OrderDataCreatorTest {
         OrderDataCreator orderDataCreator = new OrderDataCreator(orderMapper);
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(orderRequestVO.getOrderProductVOList());
         orderDataCreator.create(orderRequestVO, orderProductView);
+    }
+
+    @Test
+    public void test_prdcup(){
+        OrderDataCreator orderDataCreator = new OrderDataCreator(orderMapper);
+        List<OrderProductView> orderProductView = orderMapper.getOrderProductView(orderRequestVOWithPrdCup.getOrderProductVOList());
+        orderDataCreator.create(orderRequestVOWithPrdCup, orderProductView);
     }
 
 
