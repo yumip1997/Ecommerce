@@ -1,5 +1,6 @@
 package com.plateer.ec1.common.model.order;
 
+import com.plateer.ec1.common.model.BaseModel;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OpOrdBase {
+public class OpOrdBase extends BaseModel {
 
     private String ordNo;
     private String mbrNo;

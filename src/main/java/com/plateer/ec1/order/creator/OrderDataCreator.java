@@ -50,6 +50,8 @@ public class OrderDataCreator {
 
     private OpOrdBase createOpOrdBase(OrderRequestVO orderRequestVO){
         OrderBasicVO orderBasicVO = orderRequestVO.getOrderBasicVO();
+        OpOrdBase opOrdBase = orderBasicVO.toOpOrdBase(orderRequestVO.getOrdNo());
+        opOrdBase.setOrdCmtDtime(orderRequestVO.isContainsVacctPayment() ? null : LocalDateTime.now());
         return orderBasicVO.toOpOrdBase(orderRequestVO.getOrdNo());
     }
 

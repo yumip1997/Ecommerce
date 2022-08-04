@@ -14,19 +14,13 @@ public class OrderProductBaseVO {
     private String goodsNo;
     @NotEmpty
     private String itemNo;
-    @NotEmpty
     private String goodsNm;
-    @NotEmpty
     private String itemNm;
     @Min(1)
     private int ordCnt;
-
     private long ordAmt;
-
     private long salePrc;
-
     private long prmPrc;
-
     private String goodsNoItemNo;
 
     protected long getOrdPrcWithOrdCnt(){

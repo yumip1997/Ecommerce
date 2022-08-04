@@ -45,7 +45,8 @@
           "orderProductVOList" : [
             {
               "goodsNo" : "P001",
-              "itemNo" : "1"
+              "itemNo" : "1",
+              "ordCnt" : 1
             }
           ]
         },
@@ -61,7 +62,8 @@
           "orderProductVOList" : [
             {
               "goodsNo" : "P002",
-              "itemNo" : "1"
+              "itemNo" : "1",
+              "ordCnt" : 2
             }
           ]
         }

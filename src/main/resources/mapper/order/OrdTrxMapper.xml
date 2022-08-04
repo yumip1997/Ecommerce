@@ -24,7 +24,7 @@
                 #{mbrNo},
                 #{ordTpCd},
                 #{ordSysCcd},
-                #{ordReqDtime},
+                now(),
                 #{ordCmtDtime},
                 #{ordNm},
                 #{ordSellNo},
@@ -35,7 +35,7 @@
                 #{rfndAcctOwnNm},
                 now(),
                 #{loginId},
-                #{logindId},
+                #{loginId},
                 now())
     </insert>
 
@@ -122,7 +122,7 @@
                 #{item.loginId},
                 now(),
                 #{item.loginId},
-                #{itme.clmNo},
+                #{item.clmNo},
                 #{item.orgProcSeq})
                </foreach>
     </insert>
@@ -170,27 +170,31 @@
                                      SYS_MOD_DTIME,
                                      SYS_MODR_ID,
                                      DV_PLC_TP_CD,
-                                     CNCL_DV_AMT)
-        VALUES
-               <foreach collection="list" item="item" separator=",">
-               (#{item.ordCstNo},
-                #{item.dvGrpNo},
-                #{item.aplyCcd},
-                #{item.orgOrdCstNo},
-                #{item.clmNo},
-                #{item.ordNo},
-                #{item.dvAmtTpCd},
-                #{item.orgDvAmt},
-                #{item.dvBnfAmt},
-                #{item.aplyDvAmt},
-                #{item.imtnRsnCcd},
-                now(),
-                #{item.loginId},
-                now(),
-                #{item.loginId},
-                #{item.dvPlcTpCd},
-                #{item.cnclDvAmt})
-               </foreach>
+                                     CNCL_DV_AMT
+                                     )
+               select nextval('nextval_cost_no') as ordCstNo,
+                      t.*
+               from (
+                    <foreach collection="list" item="item" separator="union all">
+                        select
+                            #{item.dvGrpNo},
+                            #{item.aplyCcd},
+                            #{item.orgOrdCstNo},
+                            #{item.clmNo},
+                            #{item.ordNo},
+                            #{item.dvAmtTpCd},
+                            #{item.orgDvAmt},
+                            #{item.dvBnfAmt},
+                            #{item.aplyDvAmt},
+                            #{item.imtnRsnCcd},
+                            now(),
+                            #{item.loginId},
+                            now(),
+                            #{item.loginId},
+                            #{item.dvPlcTpCd},
+                            #{item.cnclDvAmt}
+                    </foreach>
+                    ) t
     </insert>
 
     <insert id="insertOpDvpInfoList">
