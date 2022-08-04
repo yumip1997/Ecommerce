@@ -10,10 +10,9 @@ import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import com.plateer.ec1.order.vo.base.OrderProductBaseVO;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -105,25 +104,30 @@ public class OrderDataCreator {
 
     private List<OpOrdBnfInfo> createOpOrdBnfInfoList(OrderRequestVO orderRequestVO){
         List<OpOrdBnfInfo> opOrdBnfInfoList = new ArrayList<>();
-        opOrdBnfInfoList.addAll(createPrdBnfInfoList(orderRequestVO.getOrdNo(), orderRequestVO.getOrderProductVOList()));
-        opOrdBnfInfoList.addAll(createCartBnfInoList(orderRequestVO.getOrdNo(), orderRequestVO.getOrderBenefitVOList()));
+        opOrdBnfInfoList.addAll(createPrdBnfInfoList(orderRequestVO.getOrderProductVOList()));
+        opOrdBnfInfoList.addAll(createCartBnfInoList(orderRequestVO.getOrderBenefitVOList()));
         return opOrdBnfInfoList;
     }
 
-    private List<OpOrdBnfInfo> createPrdBnfInfoList(String ordNo, List<OrderProductVO> orderProductVOList){
+    private List<OpOrdBnfInfo> createPrdBnfInfoList(List<OrderProductVO> orderProductVOList){
         return orderProductVOList.stream()
+                .filter(orderProductVO -> !CollectionUtils.isEmpty(orderProductVO.getProductBenefits()))
                 .flatMap(orderProductVO -> orderProductVO.getProductBenefits().stream())
                 .map(orderBenefitBaseVO -> orderBenefitBaseVO.toOpOrdBnfInfo(orderMapper.getBnfNo()))
                 .collect(Collectors.toList());
     }
 
-    private List<OpOrdBnfInfo> createCartBnfInoList(String ordNo, List<OrderBenefitVO> orderBenefitVOList){
-        return orderBenefitVOList.stream()
+    private List<OpOrdBnfInfo> createCartBnfInoList(List<OrderBenefitVO> orderBenefitVOList){
+        return Optional.ofNullable(orderBenefitVOList)
+                .orElse(Collections.emptyList())
+                .stream()
                 .map(orderBenefitVO -> orderBenefitVO.toOpOrdBnfInfo(orderMapper.getBnfNo()))
                 .collect(Collectors.toList());
     }
 
     private List<OpOrdBnfRelInfo> createOpOrdBnfRelInfoList(OrderRequestVO orderRequestVO, List<OpClmInfo> opClmInfoList, List<OpOrdBnfInfo> opOrdBnfInfoList){
+        if(CollectionUtils.isEmpty(opOrdBnfInfoList)) return Collections.emptyList();
+
         Map<String, OpClmInfo> opClmInfoMap = toOpClmInfoMapByGoodsNoItemNo(opClmInfoList);
         Map<Long, OpOrdBnfInfo> opOrdBnfInfoMap = toOpOrdBnfInfoMapByCpnIssNo(opOrdBnfInfoList);
 
@@ -154,8 +158,9 @@ public class OrderDataCreator {
     }
 
     private List<OpOrdBnfRelInfo> createCartBnfRelInfoList(OrderRequestVO orderRequestVO, Map<String, OpClmInfo> ordClmMap, Map<Long, OpOrdBnfInfo> ordBnfMap){
-        List<OpOrdBnfRelInfo> opOrdBnfRelInfoList = new ArrayList<>();
+        if(CollectionUtils.isEmpty(orderRequestVO.getOrderBenefitVOList())) return Collections.emptyList();
 
+        List<OpOrdBnfRelInfo> opOrdBnfRelInfoList = new ArrayList<>();
         Map<String, OrderProductVO> orderProductVOMap = orderRequestVO.setUpOrderProductVOMap();
 
         List<OrderBenefitVO> orderBenefitVOList = orderRequestVO.getOrderBenefitVOList();
@@ -174,7 +179,7 @@ public class OrderDataCreator {
                 int ordSeq = getOrdSeqFromOrdClmMap(goodsNoItemNo, ordClmMap);
 
                 OrderProductVO orderProductVO = orderProductVOMap.get(goodsNoItemNo);
-                long distribueAplyAmt = distribueAplyAmt(orderProductVO.getPrdBnfAplyOrdPrc(), totalPrdBnfAplyOrdPrc, aplyAmt);
+                long distributeAplyAmt = distributeAplyAmt(orderProductVO.getPrdBnfAplyOrdPrc(), totalPrdBnfAplyOrdPrc, aplyAmt);
 
                 OpOrdBnfRelInfo opOrdBnfRelInfo = OpOrdBnfRelInfo.builder()
                         .ordNo(ordNo)
@@ -182,7 +187,7 @@ public class OrderDataCreator {
                         .ordSeq(ordSeq)
                         .procSeq(1)
                         .aplyCnclCcd("")
-                        .aplyAmt(distribueAplyAmt)
+                        .aplyAmt(distributeAplyAmt)
                         .build();
 
                 opOrdBnfRelInfoList.add(opOrdBnfRelInfo);
@@ -223,7 +228,7 @@ public class OrderDataCreator {
                 .sum();
     }
 
-    private long distribueAplyAmt(long prdBnfAplyOrdPrc, long totalPrdBnfApyOrdPrc, long aplyAmt){
+    private long distributeAplyAmt(long prdBnfAplyOrdPrc, long totalPrdBnfApyOrdPrc, long aplyAmt){
         return (prdBnfAplyOrdPrc / totalPrdBnfApyOrdPrc) * aplyAmt;
     }
 }
