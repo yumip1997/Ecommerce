@@ -9,18 +9,41 @@
     "ordAddr" : "서울",
     "ordAddrDtl" : "관악구"
   },
+  "orderBenefitVOList" : [
+    {
+      "prmNo" : 2,
+      "cpnIssNo" : 1,
+      "aplyAmt" : 1800,
+      "orderProductBaseVOList" : [
+        {
+          "goodsNo" : "P001",
+          "itemNo" : "1"
+        },
+        {
+          "goodsNo" : "P002",
+          "itemNo" : "1"
+        }
+      ]
+    }
+  ],
   "orderProductVOList" : [
     {
+      "ordCnt" : 1,
       "goodsNo" : "P001",
       "itemNo" : "1",
       "goodsNm" : "라운드반팔티",
-      "itemNm" : "네이비"
+      "itemNm" : "네이비",
+      "salePrc" : 10000,
+      "prmPrc" : 9000
     },
     {
+      "ordCnt" : 2,
       "goodsNo" : "P002",
       "itemNo" : "1",
       "goodsNm" : "마스크대형",
-      "itemNm" : "화이트"
+      "itemNm" : "화이트",
+      "salePrc" : 5000,
+      "prmPrc" : 0
     }
   ],
   "orderDeliveryVOList" : [
@@ -36,7 +59,8 @@
           "orderCostInfoList" : [
             {
               "dvAmtTpCd" : "10",
-              "orgDvAmt" : 0
+              "orgDvAmt" : 0,
+              "dvBnfAmt" : 0
             }
           ],
           "orderProductVOList" : [
@@ -51,7 +75,8 @@
           "orderCostInfoList" : [
             {
               "dvAmtTpCd" : "10",
-              "orgDvAmt" : 0
+              "orgDvAmt" : 0,
+              "dvBnfAmt" : 0
             }
           ],
           "orderProductVOList" : [

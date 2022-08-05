@@ -15,14 +15,18 @@
       "goodsNo" : "P001",
       "itemNo" : "1",
       "goodsNm" : "라운드반팔티",
-      "itemNm" : "네이비"
+      "itemNm" : "네이비",
+      "salePrc" : 10000,
+      "prmPrc" : 9000
     },
     {
       "ordCnt" : 2,
       "goodsNo" : "P002",
       "itemNo" : "1",
       "goodsNm" : "마스크대형",
-      "itemNm" : "화이트"
+      "itemNm" : "화이트",
+      "salePrc" : 5000,
+      "prmPrc" : 0
     }
   ],
   "orderDeliveryVOList" : [
