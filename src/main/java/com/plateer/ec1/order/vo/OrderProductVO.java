@@ -39,7 +39,7 @@ public class OrderProductVO extends OrderProductBaseVO {
                 .rtgsCnt(0)
                 .dvGrpNo(dvGrpNo)
                 .ordCnt(this.getOrdCnt())
-                .ordAmt(this.getOrdAmt())
+                .ordAmt(this.getOrdPrc())
                 .ordClmAcptDtime(LocalDateTime.now())
                 .ordClmReqDtime(LocalDateTime.now())
                 .build();

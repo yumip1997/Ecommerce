@@ -38,9 +38,9 @@ public class OrderDeliveryVO{
                 .build();
     }
 
-    public List<OpDvpInfo> toOpDvpInfoList(String ordnO, String dvMthdCd){
+    public List<OpDvpInfo> toOpDvpInfoList(String ordNo, String dvMthdCd){
         return this.getOrderDeliveryGroupInfoVOList().stream()
-                .map(e -> e.toOpDvpInfo(ordnO, this.dvpSeq, dvMthdCd))
+                .map(e -> e.toOpDvpInfo(ordNo, this.dvpSeq, dvMthdCd))
                 .collect(Collectors.toList());
     }
 

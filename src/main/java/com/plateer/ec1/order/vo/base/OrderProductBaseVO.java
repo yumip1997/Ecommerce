@@ -18,14 +18,16 @@ public class OrderProductBaseVO {
     private String itemNm;
     @Min(1)
     private int ordCnt;
-    private long ordAmt;
     private long salePrc;
     private long prmPrc;
     private String goodsNoItemNo;
 
-    protected long getOrdPrcWithOrdCnt(){
-        long ordPrc = this.prmPrc == 0 ? this.salePrc : this.prmPrc;
-        return ordPrc * this.ordCnt;
+    public long getOrdPrc(){
+        return this.prmPrc == 0 ? this.salePrc : this.prmPrc;
+    }
+
+    public long getOrdPrcWithOrdCnt(){
+        return this.getOrdPrc() * this.ordCnt;
     }
 
     public String getGoodsNoItemNo(){
