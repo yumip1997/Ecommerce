@@ -8,8 +8,11 @@ import com.plateer.ec1.order.vo.OrderProductVO;
 import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
 import com.plateer.ec1.order.vo.base.OrderProductBaseVO;
 import com.plateer.ec1.payment.enums.OPT0009Code;
+import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
+import com.plateer.ec1.payment.vo.req.ApproveReqVO;
 import lombok.*;
+import org.springframework.core.annotation.Order;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -86,7 +89,25 @@ public class OrderRequestVO extends OrderClaimBaseVO implements Cloneable{
                 .map(e -> this.getOrderProductVOFromMap(e.getGoodsNoItemNo()))
                 .mapToLong(OrderProductVO::getPrdBnfAplyOrdPrc)
                 .sum();
+    }
 
+    public ApproveReqVO toApproveReqVO(){
+        return ApproveReqVO.builder()
+                .orderInfoVO(this.toOrderInfoVO())
+                .payInfoVOList(this.getPayInfoVOList())
+                .build();
+    }
+
+    public OrderInfoVO toOrderInfoVO(){
+        OrderProductVO orderProductVO = this.getOrderProductVOList().get(0);
+        OrderBasicVO orderBasicVO = this.getOrderBasicVO();
+
+        return OrderInfoVO.builder()
+                .ordNo(this.getOrdNo())
+                .goodName(orderProductVO.getGoodsNm())
+                .buyerName(orderBasicVO.getOrdNm())
+                .buyerEmail(orderBasicVO.getOrdEmail())
+                .build();
     }
 
     @Override

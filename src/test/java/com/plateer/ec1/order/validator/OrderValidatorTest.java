@@ -101,4 +101,15 @@ class OrderValidatorTest {
         OrderValidator orderValidator = getValidator(requestVO.getOrderBasicVO());
         Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
     }
+
+    @Test
+    @DisplayName("가상계좌 주문인데 환불관련 정보가 없을 경우 예외가 발생한다.")
+    void empty_refund_test(){
+        List<OrderProductView> orderProductView = orderMapper.getOrderProductView(requestVO.getOrderProductVOList());
+        OrderValidator orderValidator = getValidator(requestVO.getOrderBasicVO());
+
+        OrderBasicVO orderBasicVO = requestVO.getOrderBasicVO();
+        orderBasicVO.setRfndAcctNo("");
+        Assertions.assertThrows(ValidationException.class, () -> orderValidator.isValid(requestVO, orderProductView));
+    }
 }

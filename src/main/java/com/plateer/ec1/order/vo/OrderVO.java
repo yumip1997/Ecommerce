@@ -1,8 +1,10 @@
 package com.plateer.ec1.order.vo;
 
 import com.plateer.ec1.common.model.order.*;
-import com.plateer.ec1.payment.vo.req.ApproveReqVO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
@@ -26,10 +28,6 @@ public class OrderVO {
 
     private Map<String, OpClmInfo> opClmInfoMap;
     private Map<Long, OpOrdBnfInfo> opOrdBnfInfoMap;
-    
-    public ApproveReqVO toPayApproveReqVO(){
-        return ApproveReqVO.builder().build();
-    }
 
     public String getOrdNoFromOrdClmMap(String goodsNoItemNo){
         Map<String, OpClmInfo> ordClmMap = this.setUpOpClmInfoMap();

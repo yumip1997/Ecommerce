@@ -55,6 +55,7 @@ public enum OrderValidator {
     private final Predicate<OrderRequestVO> deliveryPredicate;
 
     public void isValid(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
+        isValidOrderBasic(orderRequestVO);
         isValidDelivery(orderRequestVO);
         isValidOrdPrd(orderProductViewList);
     }
@@ -72,6 +73,16 @@ public enum OrderValidator {
         boolean isValid = deliveryPredicate.test(orderRequestVO);
         if(!isValid){
             throw new ValidationException(OrderException.INVALID_ORDER.msg);
+        }
+    }
+
+    private void isValidOrderBasic(OrderRequestVO orderRequestVO){
+        boolean containsVacctPayment = orderRequestVO.isContainsVacctPayment();
+        if(!containsVacctPayment) return;
+
+        boolean isValid = OrderPaymentValidator.vacctPredicate.test(orderRequestVO.getOrderBasicVO());
+        if(!isValid){
+            throw new ValidationException(OrderException.INVALID_ORDER_TPYE.msg);
         }
     }
 

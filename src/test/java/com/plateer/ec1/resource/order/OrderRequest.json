@@ -7,7 +7,11 @@
     "ordNm" : "박유미",
     "ordSellNo" : "박유미",
     "ordAddr" : "서울",
-    "ordAddrDtl" : "관악구"
+    "ordAddrDtl" : "관악구",
+    "ordEmail" : "youmi321@naver.com",
+    "rfndBnkCk" : "03",
+    "rfndAcctNo" : "87830101279926",
+    "rfndAcctOwnNm" : "박유미"
   },
   "orderProductVOList" : [
     {

@@ -1,5 +1,6 @@
 package com.plateer.ec1.payment.processor.impl;
 
+import com.plateer.ec1.common.excpetion.custom.PaymentException;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.processor.PaymentProcessor;
 import com.plateer.ec1.payment.utils.PaymentDataManipulator;
@@ -26,10 +27,13 @@ public class InicisProcessor implements PaymentProcessor {
     @Override
     @Transactional
     public ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {
-        VacctSeqResVO resVO = inicisApiCallHelper.callVacctSeq(orderInfoVO, payInfoVO);
-        paymentDataManipulator.insertVacctApprove(resVO, orderInfoVO);
-
-        return new ApproveResVO(payInfoVO.getPaymentType(), resVO.getAblePartialCancelYn());
+       try{
+           VacctSeqResVO resVO = inicisApiCallHelper.callVacctSeq(orderInfoVO, payInfoVO);
+           paymentDataManipulator.insertVacctApprove(resVO, orderInfoVO);
+           return new ApproveResVO(payInfoVO.getPaymentType(), resVO.getAblePartialCancelYn());
+       }catch (Exception e){
+           throw new PaymentException(e.getMessage());
+       }
     }
 
     @Override

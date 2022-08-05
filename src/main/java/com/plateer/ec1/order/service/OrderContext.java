@@ -39,8 +39,8 @@ public class OrderContext {
             List<OrderProductView> orderProductViewList = getOrdProductView(orderRequestVO);
             validate(orderContextVO.getOrderValidator(), orderRequestVO, orderProductViewList);
             creationVO = createData(orderRequestVO, orderProductViewList);
+            payService.approve(orderRequestVO.toApproveReqVO());
             orderDataManipulator.insertOrder(creationVO.getInsertData());
-            payService.approve(creationVO.getInsertData().toPayApproveReqVO());
             doOrderAfterProcess(orderContextVO.getAfterStrategy(), orderRequestVO, creationVO.getInsertData());
         }catch (Exception e){
             creationVO.setException(e);

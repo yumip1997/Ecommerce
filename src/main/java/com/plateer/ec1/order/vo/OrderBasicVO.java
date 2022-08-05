@@ -31,6 +31,7 @@ public class OrderBasicVO {
     private String rfndBnkCk;
     private String rfndAcctNo;
     private String rfndAcctOwnNm;
+    private String ordEmail;
 
     public OpOrdBase toOpOrdBase(String ordNo){
         return OpOrdBase.builder()
