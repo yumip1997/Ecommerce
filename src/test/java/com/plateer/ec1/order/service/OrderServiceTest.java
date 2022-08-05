@@ -23,7 +23,7 @@ class OrderServiceTest {
     @BeforeEach
     void init(){
         jsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "order");
-        requestVO = jsonReaderUtil.getObject("/OrderRequest.json", OrderRequestVO.class);
+        requestVO = jsonReaderUtil.getObject("/OrderRequestWithPrdCartCup.json", OrderRequestVO.class);
     }
 
     @Test
