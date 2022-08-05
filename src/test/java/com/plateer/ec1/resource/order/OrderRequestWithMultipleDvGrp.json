@@ -9,6 +9,23 @@
     "ordAddr" : "서울",
     "ordAddrDtl" : "관악구"
   },
+  "orderBenefitVOList" : [
+    {
+      "prmNo" : 2,
+      "cpnIssNo" : 1,
+      "aplyAmt" : 1800,
+      "orderProductBaseVOList" : [
+        {
+          "goodsNo" : "P001",
+          "itemNo" : "1"
+        },
+        {
+          "goodsNo" : "P002",
+          "itemNo" : "1"
+        }
+      ]
+    }
+  ],
   "orderProductVOList" : [
     {
       "ordCnt" : 1,
@@ -49,13 +66,23 @@
           "orderProductVOList" : [
             {
               "goodsNo" : "P001",
-              "itemNo" : "1",
-              "ordCnt" : 1
-            },
+              "itemNo" : "1"
+            }
+          ]
+        },
+        {
+          "dvGrpNo" : 2,
+          "orderCostInfoList" : [
+            {
+              "dvAmtTpCd" : "10",
+              "orgDvAmt" : 0,
+              "dvBnfAmt" : 0
+            }
+          ],
+          "orderProductVOList" : [
             {
               "goodsNo" : "P002",
-              "itemNo" : "1",
-              "ordCnt" : 2
+              "itemNo" : "1"
             }
           ]
         }

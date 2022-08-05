@@ -26,6 +26,7 @@ class OrderDataCreatorTest {
     private OrderMapper orderMapper;
     private JsonReaderUtil jsonReaderUtil;
     private OrderRequestVO orderRequestVO;
+    private OrderRequestVO orderRequestVOWithMultipleDvGrp;
     private OrderRequestVO orderRequestVOWithPrdCup;
     private OrderRequestVO orderRequestVOWithCartCup;
     private OrderRequestVO orderRequestVOWithPrdCartCup;
@@ -34,6 +35,7 @@ class OrderDataCreatorTest {
     void init(){
         jsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "order");
         orderRequestVO = jsonReaderUtil.getObject("/OrderRequest.json", OrderRequestVO.class);
+        orderRequestVOWithMultipleDvGrp = jsonReaderUtil.getObject("/OrderRequestWithMultipleDvGrp.json", OrderRequestVO.class);
         orderRequestVOWithPrdCup = jsonReaderUtil.getObject("/OrderRequestWithPrdCup.json", OrderRequestVO.class);
         orderRequestVOWithCartCup = jsonReaderUtil.getObject("/OrderRequestWithCartCup.json", OrderRequestVO.class);
         orderRequestVOWithPrdCartCup = jsonReaderUtil.getObject("/OrderRequestWithPrdCartCup.json", OrderRequestVO.class);
@@ -100,6 +102,15 @@ class OrderDataCreatorTest {
         OrdClmCreationVO<OrderVO, Object> creationVO = orderDataCreator.create(orderRequestVO, orderProductView);
         OrderVO insertData = creationVO.getInsertData();
         rowSizeTest(insertData, orderRequestVO);
+    }
+
+    @Test
+    public void test_multiple_dv_grp(){
+        OrderDataCreator orderDataCreator = new OrderDataCreator(orderMapper);
+        List<OrderProductView> orderProductView = orderMapper.getOrderProductView(orderRequestVOWithMultipleDvGrp.getOrderProductVOList());
+        OrdClmCreationVO<OrderVO, Object> creationVO = orderDataCreator.create(orderRequestVOWithMultipleDvGrp, orderProductView);
+        OrderVO insertData = creationVO.getInsertData();
+        rowSizeTest(insertData, orderRequestVOWithMultipleDvGrp);
     }
 
     @Test
