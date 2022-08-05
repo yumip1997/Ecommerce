@@ -63,7 +63,7 @@
               "dvBnfAmt" : 0
             }
           ],
-          "orderProductVOList" : [
+          "orderProductBaseVOList" : [
             {
               "goodsNo" : "P001",
               "itemNo" : "1"
@@ -79,7 +79,7 @@
               "dvBnfAmt" : 0
             }
           ],
-          "orderProductVOList" : [
+          "orderProductBaseVOList" : [
             {
               "goodsNo" : "P002",
               "itemNo" : "1"

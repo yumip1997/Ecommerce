@@ -16,19 +16,7 @@ public class OrderProductBaseVO {
     private String itemNo;
     private String goodsNm;
     private String itemNm;
-    @Min(1)
-    private int ordCnt;
-    private long salePrc;
-    private long prmPrc;
     private String goodsNoItemNo;
-
-    public long getOrdPrc(){
-        return this.prmPrc == 0 ? this.salePrc : this.prmPrc;
-    }
-
-    public long getOrdPrcWithOrdCnt(){
-        return this.getOrdPrc() * this.ordCnt;
-    }
 
     public String getGoodsNoItemNo(){
         if(this.goodsNoItemNo == null){

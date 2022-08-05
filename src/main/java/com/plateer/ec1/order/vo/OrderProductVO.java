@@ -25,7 +25,19 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrderProductVO extends OrderProductBaseVO {
 
+    @Min(1)
+    private int ordCnt;
+    private long salePrc;
+    private long prmPrc;
     private List<OrderBenefitBaseVO> productBenefits;
+
+    public long getOrdPrc(){
+        return this.prmPrc == 0 ? this.salePrc : this.prmPrc;
+    }
+
+    public long getOrdPrcWithOrdCnt(){
+        return this.getOrdPrc() * this.ordCnt;
+    }
 
     public OpClmInfo toOpClmInfo(String ordNo, int dvGrpNo){
         return OpClmInfo.builder()

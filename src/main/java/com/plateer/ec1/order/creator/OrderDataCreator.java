@@ -70,7 +70,7 @@ public class OrderDataCreator {
     private List<OpClmInfo> createOpClmInfoList(OrderRequestVO orderRequestVO){
         List<OpClmInfo> collect = orderRequestVO.getOrderDeliveryVOList().stream()
                 .flatMap(e -> e.getOrderDeliveryGroupInfoVOList().stream())
-                .flatMap(e -> e.toOpClmInfoList(orderRequestVO.getOrdNo()).stream())
+                .flatMap(e -> e.toOpClmInfoList(orderRequestVO.getOrdNo(), orderRequestVO.getOrderProductVOMap()).stream())
                 .collect(Collectors.toList());
         return setUpOpClmInfoList(orderRequestVO, collect);
     }
