@@ -1,10 +1,13 @@
 package com.plateer.ec1.order.creator;
 
+import com.plateer.ec1.common.excpetion.custom.BusinessException;
+import com.plateer.ec1.common.excpetion.custom.DataCreationException;
 import com.plateer.ec1.common.model.order.*;
 import com.plateer.ec1.delivery.enums.DVP0001Code;
 import com.plateer.ec1.order.enums.OPT0001Code;
 import com.plateer.ec1.order.enums.OPT0004Code;
 import com.plateer.ec1.order.enums.OPT0005Code;
+import com.plateer.ec1.order.enums.OrderException;
 import com.plateer.ec1.order.mapper.OrderMapper;
 import com.plateer.ec1.order.vo.*;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
@@ -25,12 +28,15 @@ public class OrderDataCreator {
     private final OrderMapper orderMapper;
 
     public OrdClmCreationVO<OrderVO, Object> create(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
-        OrderRequestVO cloneReq = orderRequestVO.clone();
-
-        OrdClmCreationVO<OrderVO, Object> creationVO = new OrdClmCreationVO<>();
-        creationVO.setOrdNo(cloneReq.getOrdNo());
-        creationVO.setInsertData(createOrderVO(cloneReq, orderProductViewList));
-        return creationVO;
+        try{
+            OrderRequestVO cloneReq = orderRequestVO.clone();
+            OrdClmCreationVO<OrderVO, Object> creationVO = new OrdClmCreationVO<>();
+            creationVO.setOrdNo(cloneReq.getOrdNo());
+            creationVO.setInsertData(createOrderVO(cloneReq, orderProductViewList));
+            return creationVO;
+        }catch (Exception e){
+            throw new DataCreationException(OrderException.DATA_CREATION_ERROR.msg);
+        }
     }
 
     private OrderVO createOrderVO(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList){
