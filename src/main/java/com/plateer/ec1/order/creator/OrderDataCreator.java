@@ -58,7 +58,7 @@ public class OrderDataCreator {
         OrderBasicVO orderBasicVO = orderRequestVO.getOrderBasicVO();
         OpOrdBase opOrdBase = orderBasicVO.toOpOrdBase(orderRequestVO.getOrdNo());
         opOrdBase.setOrdCmtDtime(orderRequestVO.isContainsVacctPayment() ? null : LocalDateTime.now());
-        return orderBasicVO.toOpOrdBase(orderRequestVO.getOrdNo());
+        return opOrdBase;
     }
 
     private List<OpGoodsInfo> createOpGoodsInfoList(String ordNo, List<OrderProductView> orderProductViewList){
@@ -95,6 +95,7 @@ public class OrderDataCreator {
     private List<OpDvpInfo> createOpDvpInfoList(OrderRequestVO orderRequestVO){
         OrderBasicVO orderBasicVO = orderRequestVO.getOrderBasicVO();
         String dvMthdCd = OPT0001Code.of(orderBasicVO.getOrdTpCd()) == OPT0001Code.GENERAL ? DVP0001Code.DELIVERY.getCode() : DVP0001Code.NON_DELIVERY.getCode();
+
         return orderRequestVO.getOrderDeliveryVOList().stream()
                 .flatMap(e -> e.toOpDvpInfoList(orderRequestVO.getOrdNo(), dvMthdCd).stream())
                 .collect(Collectors.toList());
