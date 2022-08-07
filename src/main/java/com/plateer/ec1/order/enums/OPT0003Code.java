@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum OPT0003Code {
 
-    ORDER("0"),
+    ORDER("O"),
     CANCEL("C"),
     RETURN("R"),
     RETURN_WITHDRAWAL("RC"),
