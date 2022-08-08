@@ -1,5 +1,6 @@
 package com.plateer.ec1.payment.service;
 
+import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.payment.enums.PaymentBusiness;
 import com.plateer.ec1.payment.factory.PaymentProcessorFactory;
 import com.plateer.ec1.payment.mapper.PaymentMapper;
@@ -21,6 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Validated
+@LogTrace
 public class PayService {
 
     private final PaymentProcessorFactory paymentProcessorFactory;

@@ -1,5 +1,6 @@
 package com.plateer.ec1.payment.utils.inicis;
 
+import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.common.model.order.OpPayInfoModel;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.OrderPayInfoVO;
@@ -19,12 +20,14 @@ public class InicisApiReqMaker {
     @Value("${payment.inicis.iv}")
     private String IV;
 
+    @LogTrace
     public VacctSeqReqVO makeVacctSeqReqVO(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO){
         VacctSeqReqVO req = VacctSeqReqVO.of(orderInfoVO, payInfoVO);
         req.setUpVirtualAccountReqVO(MID, API_KEY);
         return req;
     }
 
+    @LogTrace
     public VacctCnlReqVO makeVacctCnlReqVO(String type, OrderPayInfoVO orderPayInfoVO){
         VacctCnlReqVO req = VacctCnlReqVO.of(type, orderPayInfoVO);
         req.setUpVacctCnlReqVO(MID, API_KEY, IV);

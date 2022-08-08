@@ -1,5 +1,6 @@
 package com.plateer.ec1.payment.processor.impl;
 
+import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.common.excpetion.custom.PaymentException;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.processor.PaymentProcessor;
@@ -19,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 @Component
 @RequiredArgsConstructor
 @Validated
+@LogTrace
 public class InicisProcessor implements PaymentProcessor {
 
     private final InicisApiCallHelper inicisApiCallHelper;

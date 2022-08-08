@@ -1,5 +1,6 @@
 package com.plateer.ec1.payment.utils.inicis;
 
+import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.common.utils.ObjectMapperUtil;
 import com.plateer.ec1.common.utils.RestTemplateUtil;
 import com.plateer.ec1.common.vo.RestTemplateReqVO;
@@ -17,6 +18,7 @@ import org.springframework.util.MultiValueMap;
 
 @RequiredArgsConstructor
 @Component
+@LogTrace
 public class InicisApiCallHelper {
 
     private final InicisApiReqMaker inicisApiReqMaker;

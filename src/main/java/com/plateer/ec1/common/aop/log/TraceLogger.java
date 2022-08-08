@@ -11,8 +11,20 @@ public class TraceLogger {
     private static final String COMPLETE_PREFIX = "<--";
     private static final String EX_PREFIX = "<X-";
 
+    private final ThreadLocal<TraceId> traceLogHolder= new ThreadLocal<>();
+
     public TraceStatus begin(String message){
-        return doBeginTraceLog(new TraceId(), message);
+        TraceId syncTraceLog = getSyncTraceLog();
+        return doBeginTraceLog(syncTraceLog, message);
+    }
+
+    private TraceId getSyncTraceLog(){
+        if(traceLogHolder.get() == null){
+            traceLogHolder.set(new TraceId());
+        }else{
+            traceLogHolder.set(traceLogHolder.get().createNextId());
+        }
+        return traceLogHolder.get();
     }
 
     private TraceStatus doBeginTraceLog(TraceId traceId, String message){
@@ -41,6 +53,17 @@ public class TraceLogger {
             log.info("[{}] {}{} time={}ms ex={}", traceId.getId(),
                     addSpace(EX_PREFIX, traceId.getLevel()), status.getMessage(), resultTimeMs,
                     e.toString());
+        }
+
+        releaseTraceLog();
+    }
+
+    private void releaseTraceLog() {
+        TraceId traceLog = traceLogHolder.get();
+        if(traceLog.isFirstLevel()) {
+            traceLogHolder.remove();
+        } else {
+            traceLogHolder.set(traceLog.createPreviousId());
         }
     }
 
