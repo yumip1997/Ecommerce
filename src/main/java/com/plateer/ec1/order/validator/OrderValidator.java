@@ -60,12 +60,13 @@ public enum OrderValidator {
         isValidOrdPrd(orderProductViewList);
     }
 
-    private void isValidOrdPrd(List<OrderProductView> orderProductViewList){
-        for (OrderProductView orderProductView : orderProductViewList) {
-            boolean isValid = productInfoVOPredicate.test(orderProductView.getProductInfoVO());
-            if(isValid) continue;
+    private void isValidOrderBasic(OrderRequestVO orderRequestVO){
+        boolean containsVacctPayment = orderRequestVO.isContainsVacctPayment();
+        if(!containsVacctPayment) return;
 
-            throw new ValidationException(OrderException.INVALID_ORDER.msg);
+        boolean isValid = OrderPaymentValidator.vacctPredicate.test(orderRequestVO.getOrderBasicVO());
+        if(!isValid){
+            throw new ValidationException(OrderException.INVALID_ORDER_TPYE.msg);
         }
     }
 
@@ -76,13 +77,12 @@ public enum OrderValidator {
         }
     }
 
-    private void isValidOrderBasic(OrderRequestVO orderRequestVO){
-        boolean containsVacctPayment = orderRequestVO.isContainsVacctPayment();
-        if(!containsVacctPayment) return;
+    private void isValidOrdPrd(List<OrderProductView> orderProductViewList){
+        for (OrderProductView orderProductView : orderProductViewList) {
+            boolean isValid = productInfoVOPredicate.test(orderProductView.getProductInfoVO());
+            if(isValid) continue;
 
-        boolean isValid = OrderPaymentValidator.vacctPredicate.test(orderRequestVO.getOrderBasicVO());
-        if(!isValid){
-            throw new ValidationException(OrderException.INVALID_ORDER_TPYE.msg);
+            throw new ValidationException(OrderException.INVALID_ORDER.msg);
         }
     }
 
