@@ -31,4 +31,10 @@ class OrderMapperTest {
         List<OrderProductView> orderProductView = orderMapper.getOrderProductView(orderRequestVO.getOrderProductVOList());
         Assertions.assertThat(orderProductView).isNotEmpty();
     }
+
+    @Test
+    void validate_amount_test(){
+        String ordNo = "123";
+        Assertions.assertThat(orderMapper.validateAmount(ordNo)).isNull();
+    }
 }

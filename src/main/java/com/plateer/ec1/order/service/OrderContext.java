@@ -74,8 +74,8 @@ public class OrderContext {
     }
 
     private void validateAmount(String ordNo) {
-        boolean isValid = orderMapper.validateAmount(ordNo);
-        if(!isValid){
+        Boolean isValid = orderMapper.validateAmount(ordNo);
+        if(isValid == null || !isValid){
             throw new BusinessException(OrderException.INVALID_AMT.msg);
         }
     }

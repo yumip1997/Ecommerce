@@ -13,6 +13,6 @@ public interface OrderMapper {
 
     List<OrderProductView> getOrderProductView(List<OrderProductVO> orderProductVOList);
 
-    boolean validateAmount(String ordNo);
+    Boolean validateAmount(String ordNo);
 
 }
