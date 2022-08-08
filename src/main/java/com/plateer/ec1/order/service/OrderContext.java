@@ -1,7 +1,10 @@
 package com.plateer.ec1.order.service;
 
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
+import com.plateer.ec1.common.excpetion.custom.BusinessException;
+import com.plateer.ec1.common.excpetion.custom.PaymentException;
 import com.plateer.ec1.order.creator.OrderDataCreator;
+import com.plateer.ec1.order.enums.OrderException;
 import com.plateer.ec1.order.manipulator.OrderDataManipulator;
 import com.plateer.ec1.order.mapper.OrderMapper;
 import com.plateer.ec1.order.strategy.after.AfterStrategy;
@@ -37,10 +40,17 @@ public class OrderContext {
 
         try{
             List<OrderProductView> orderProductViewList = getOrdProductView(orderRequestVO);
+
             validate(orderContextVO.getOrderValidator(), orderRequestVO, orderProductViewList);
+
             creationVO = createData(orderRequestVO, orderProductViewList);
+
             payService.approve(orderRequestVO.toApproveReqVO());
+
             orderDataManipulator.insertOrder(creationVO.getInsertData());
+
+            validateAmount(orderRequestVO.getOrdNo());
+
             doOrderAfterProcess(orderContextVO.getAfterStrategy(), orderRequestVO, creationVO.getInsertData());
         }catch (Exception e){
             creationVO.setException(e);
@@ -48,7 +58,6 @@ public class OrderContext {
         }finally {
             ordClmMntService.updateOrderHistory(logSeq, creationVO);
         }
-
     }
 
     private List<OrderProductView> getOrdProductView(OrderRequestVO orderRequestVO) {
@@ -62,6 +71,13 @@ public class OrderContext {
     private OrdClmCreationVO<OrderVO, Object> createData(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
         OrderDataCreator orderDataCreator = new OrderDataCreator(orderMapper);
         return orderDataCreator.create(orderRequestVO, orderProductViewList);
+    }
+
+    private void validateAmount(String ordNo) {
+        boolean isValid = orderMapper.validateAmount(ordNo);
+        if(!isValid){
+            throw new BusinessException(OrderException.INVALID_AMT.msg);
+        }
     }
 
     private void doOrderAfterProcess(AfterStrategy afterStrategy, OrderRequestVO orderRequestVO, OrderVO orderVO) {

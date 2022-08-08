@@ -40,4 +40,39 @@
                         left join pr_item_info itm on gd.goods_no = itm.goods_no and op.item_no = itm.item_no
     </select>
 
+    <select id="validateAmount"  resultType="java.lang.Boolean">
+        with clm_cst as(
+            select
+                clm.ord_no
+                 , coalesce(sum(clm.ord_amt * clm.ord_cnt),0) as clm_sum
+                 , coalesce(sum(cst.aply_dv_amt),0) as cst_sum
+            from op_clm_info clm inner join op_ord_cost_info cst on clm.ord_no = cst.ord_no and clm.dv_grp_no = cst.dv_grp_no
+            where clm.ord_clm_tp_cd = 'O'
+              and (clm.ord_prgs_scd = '10' or clm.ord_prgs_scd = '20')
+              and cst.aply_ccd = '10'
+            group by clm.ord_no
+        ),bnf as(
+            select bnf.ord_no
+                 ,coalesce(sum(ord_bnf_amt),0) as bnf_sum
+            from (
+                     select distinct rel.ord_no, inf.ord_bnf_no, inf.ord_bnf_amt
+                     from op_ord_bnf_rel_info rel inner join op_ord_bnf_info inf on rel.ord_bnf_no = inf.ord_bnf_no
+                     where rel.aply_cncl_ccd = '10'
+                 ) as bnf
+            group by ord_no
+        ), pay as (
+            select ord_no
+                 , coalesce(sum(pay_amt),0) as pay_sum
+            from op_pay_info
+            where pay_ccd = '10'
+              and ( pay_prgs_scd = '10' or pay_prgs_scd = '20')
+            group by ord_no
+        )
+        select
+            pay_sum = clm_sum + cst_sum - bnf_sum
+        from pay inner join clm_cst on pay.ord_no = clm_cst.ord_no
+                 left join bnf on bnf.ord_no = clm_cst.ord_no
+        where pay.ord_no = #{ordNo}
+    </select>
+
 </mapper>

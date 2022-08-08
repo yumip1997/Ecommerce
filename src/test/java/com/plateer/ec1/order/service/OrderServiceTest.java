@@ -1,6 +1,7 @@
 package com.plateer.ec1.order.service;
 
 import com.plateer.ec1.common.utils.JsonReaderUtil;
+import com.plateer.ec1.common.utils.LocalDateTimeUtil;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.resource.TestConstants;
 import org.junit.jupiter.api.Assertions;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @SpringBootTest
@@ -24,6 +26,7 @@ class OrderServiceTest {
     void init(){
         jsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "order");
         requestVO = jsonReaderUtil.getObject("/OrderRequestWithPrdCartCup.json", OrderRequestVO.class);
+        requestVO.setOrdNo("O"+ LocalDateTimeUtil.toStringYearToSeconds(LocalDateTime.now()));
     }
 
     @Test
