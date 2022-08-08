@@ -31,14 +31,6 @@ public class OrderProductVO extends OrderProductBaseVO {
     private long prmPrc;
     private List<OrderBenefitBaseVO> productBenefits;
 
-    public long getOrdPrc(){
-        return this.prmPrc == 0 ? this.salePrc : this.prmPrc;
-    }
-
-    public long getOrdPrcWithOrdCnt(){
-        return this.getOrdPrc() * this.ordCnt;
-    }
-
     public OpClmInfo toOpClmInfo(String ordNo, int dvGrpNo){
         return OpClmInfo.builder()
                 .ordNo(ordNo)
@@ -57,14 +49,19 @@ public class OrderProductVO extends OrderProductBaseVO {
                 .build();
     }
 
-    /*
-    쿠폰적용된 금액
-     */
+    public long getOrdPrc(){
+        return this.prmPrc == 0 ? this.salePrc : this.prmPrc;
+    }
+
     public long getPrdBnfAplyOrdPrc(){
         return this.getOrdPrcWithOrdCnt() - this.sumPrdBnf();
     }
 
-    private long sumPrdBnf(){
+    public long getOrdPrcWithOrdCnt(){
+        return this.getOrdPrc() * this.ordCnt;
+    }
+
+    public long sumPrdBnf(){
         return Optional.ofNullable(this.getProductBenefits())
                 .orElse(Collections.emptyList())
                 .stream()

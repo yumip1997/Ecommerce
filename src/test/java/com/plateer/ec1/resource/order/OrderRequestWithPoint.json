@@ -1,0 +1,121 @@
+{
+  "ordNo" : "202207262",
+  "orderBasicVO" : {
+    "mbrNo" : "123",
+    "ordTpCd" : "10",
+    "ordSysCcd" : "FO",
+    "ordNm" : "박유미",
+    "ordSellNo" : "박유미",
+    "ordAddr" : "서울",
+    "ordAddrDtl" : "관악구",
+    "ordEmail" : "youmi321@naver.com",
+    "rfndBnkCk" : "03",
+    "rfndAcctNo" : "87830101279926",
+    "rfndAcctOwnNm" : "박유미"
+  },
+  "orderBenefitVOList" : [
+    {
+      "prmNo" : 2,
+      "cpnIssNo" : 2,
+      "aplyAmt" : 1800,
+      "cpnKndCd" : "30",
+      "degrCcd" : 3,
+      "orderProductBaseVOList" : [
+        {
+          "goodsNo" : "P001",
+          "itemNo" : "1"
+        },
+        {
+          "goodsNo" : "P002",
+          "itemNo" : "1"
+        }
+      ]
+    }
+  ],
+  "orderProductVOList" : [
+    {
+      "ordCnt" : 1,
+      "goodsNo" : "P001",
+      "itemNo" : "1",
+      "goodsNm" : "라운드반팔티",
+      "itemNm" : "네이비",
+      "salePrc" : 10000,
+      "prmPrc" : 9000,
+      "productBenefits" : [
+        {
+          "prmNo" : 1,
+          "cpnIssNo" : 1,
+          "cpnKndCd" : "10",
+          "degrCcd" : 1,
+          "aplyAmt" : 1000
+        }
+      ]
+    },
+    {
+      "ordCnt" : 2,
+      "goodsNo" : "P002",
+      "itemNo" : "1",
+      "goodsNm" : "마스크대형",
+      "itemNm" : "화이트",
+      "salePrc" : 5000,
+      "prmPrc" : 0
+    }
+  ],
+  "orderDeliveryVOList" : [
+    {
+      "dvpSeq" : 1,
+      "rmtiNm" : "박유미",
+      "rmtiHpNo" : "01086229710",
+      "rmtiAddr" : "서울특별시",
+      "rmtiAddrDtl" : "관악구",
+      "orderDeliveryGroupInfoVOList" : [
+        {
+          "dvGrpNo" : 1,
+          "orderCostInfoList" : [
+            {
+              "dvAmtTpCd" : "10",
+              "orgDvAmt" : 0,
+              "dvBnfAmt" : 0
+            }
+          ],
+          "orderProductBaseVOList" : [
+            {
+              "goodsNo" : "P001",
+              "itemNo" : "1"
+            }
+          ]
+        },
+        {
+          "dvGrpNo" : 2,
+          "orderCostInfoList" : [
+            {
+              "dvAmtTpCd" : "10",
+              "orgDvAmt" : 0,
+              "dvBnfAmt" : 0
+            }
+          ],
+          "orderProductBaseVOList" : [
+            {
+              "goodsNo" : "P002",
+              "itemNo" : "1"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "payInfoVOList" : [
+    {
+      "payAmount" : "6200",
+      "bankCode" : "03",
+      "depositorName" : "박유미",
+      "paymentType" : "inicis",
+      "methodType" : "10"
+    },
+    {
+      "payAmount" : "10000",
+      "paymentType" : "point",
+      "methodType" : "20"
+    }
+  ]
+}
