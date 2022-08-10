@@ -29,17 +29,8 @@ public class ClaimService {
         ClaimDefine claimDefine = ClaimDefine.of(claimRequestVO);
         return ClaimContextVO.builder()
                 .claimDefine(claimDefine)
-                .claimValidator(getClaimValidator(claimDefine.getClaimStatusType()))
-                .claimAfterStrategy(getClaimAfterStrategy(claimDefine.getClaimStatusType()))
+                .claimValidator(claimValidatorFactory.get(claimDefine.getClaimStatusType()))
+                .claimAfterStrategy(claimAfterStrategyFactory.get(claimDefine.getClaimStatusType()))
                 .build();
-    }
-
-    private ClaimValidator getClaimValidator(ClaimStatusType claimStatusType){
-        return claimValidatorFactory.get(claimStatusType);
-    }
-
-    //TODO NULL 처리 하기
-    private ClaimAfterStrategy getClaimAfterStrategy(ClaimStatusType claimStatusType){
-        return claimAfterStrategyFactory.get(claimStatusType);
     }
 }

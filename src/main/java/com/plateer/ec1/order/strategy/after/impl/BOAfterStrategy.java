@@ -4,11 +4,11 @@ import com.plateer.ec1.order.enums.SystemType;
 import com.plateer.ec1.order.strategy.after.AfterStrategy;
 import com.plateer.ec1.order.vo.OrderVO;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
-@Log4j2
+@Slf4j
 public class BOAfterStrategy implements AfterStrategy {
 
     @Override
