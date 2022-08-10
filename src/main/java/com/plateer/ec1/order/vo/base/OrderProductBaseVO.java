@@ -17,6 +17,7 @@ public class OrderProductBaseVO {
     private String goodsNm;
     private String itemNm;
     private String goodsNoItemNo;
+    private String goodsTpCd;
 
     public String getGoodsNoItemNo(){
         if(this.goodsNoItemNo == null){

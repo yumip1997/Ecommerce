@@ -9,5 +9,5 @@ public enum ExceptionMessage {
 
     NOT_VALID_CODE("코드 유형이 올바르지 않습니다!");
 
-    private final String msg;
+    public final String msg;
 }

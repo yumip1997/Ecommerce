@@ -14,6 +14,6 @@ public enum OPT0003Code {
     EXCHANGE_ACCEPT("X"),
     EXCHANGE_WITHDRAWAL("XC");
 
-    private final String code;
+    public final String code;
 
 }

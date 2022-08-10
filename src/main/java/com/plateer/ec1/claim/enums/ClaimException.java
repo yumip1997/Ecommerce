@@ -10,5 +10,5 @@ public enum ClaimException {
     INVALID_PRD_TPYE("상품 유형이 올바르지 않습니다!"),
     INVALID_AMOUNT("금액이 일치하지 않습니다");
 
-    public final String EXCEPTION_MSG;
+    public final String MSG;
 }

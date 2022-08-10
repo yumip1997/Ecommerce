@@ -1,4 +1,4 @@
-package com.plateer.ec1.claim.helper;
+package com.plateer.ec1.claim.manipulator;
 
 import com.plateer.ec1.claim.mapper.ClaimDao;
 import com.plateer.ec1.claim.vo.ClaimInsertBase;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ClaimDataManipulateHelper {
+public class ClaimDataManipulator {
 
     private final ClaimDao claimDao;
 
@@ -31,8 +31,6 @@ public class ClaimDataManipulateHelper {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void updateClaimData(ClaimUpdateBase claimUpdateBase){
-        updateOrderClaim(claimUpdateBase.getOpClmInfo());
-        updateOrgOrderCnt(claimUpdateBase.getOpClmInfo());
         updateOrderBenefit(claimUpdateBase.getOrderBenefit());
     }
 

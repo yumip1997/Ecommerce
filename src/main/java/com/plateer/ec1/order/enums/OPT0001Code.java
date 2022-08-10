@@ -13,7 +13,7 @@ public enum OPT0001Code {
     GENERAL("10"),
     ECOUPON("20");
 
-    private final String code;
+    public final String code;
 
     public static OPT0001Code of(String orderTypeCode){
         return Arrays.stream(OPT0001Code.values())

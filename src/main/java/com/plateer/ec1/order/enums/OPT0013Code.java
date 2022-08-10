@@ -10,6 +10,6 @@ public enum OPT0013Code {
     DELIVERY("10"),
     RETRIEVE("20");
 
-    private final String code;
+    public final String code;
 
 }

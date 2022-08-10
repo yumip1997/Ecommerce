@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class OrdClmCreationVO<T,U> extends OrderClaimBaseVO {
 
     private T insertData;
