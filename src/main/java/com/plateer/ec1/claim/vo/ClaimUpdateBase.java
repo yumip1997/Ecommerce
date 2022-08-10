@@ -16,5 +16,6 @@ import java.util.List;
 public class ClaimUpdateBase {
 
     private List<OpClmInfo> opClmInfoList;
-    private OpOrdBnfInfo orderBenefit;
+    private List<OpOrdBnfInfo> opOrdBnfInfoList;
+
 }

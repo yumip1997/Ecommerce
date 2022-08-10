@@ -14,10 +14,10 @@ import java.util.List;
 @Builder
 public class ClaimInsertBase {
 
-    List<OpClmInfo> opClmInfoList;
+    private List<OpClmInfo> opClmInfoList;
 
-    List<OpOrdCostInfo> opOrdCostInfoList;
+    private List<OpOrdCostInfo> opOrdCostInfoList;
 
-    OpOrdBnfRelInfo opOrdBnfRelInfo;
+    private List<OpOrdBnfRelInfo> opOrdBnfRelInfoList;
 
 }
