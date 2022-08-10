@@ -2,7 +2,6 @@ package com.plateer.ec1.order.service;
 
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.common.excpetion.custom.BusinessException;
-import com.plateer.ec1.common.excpetion.custom.PaymentException;
 import com.plateer.ec1.order.creator.OrderDataCreator;
 import com.plateer.ec1.order.enums.OrderException;
 import com.plateer.ec1.order.manipulator.OrderDataManipulator;
