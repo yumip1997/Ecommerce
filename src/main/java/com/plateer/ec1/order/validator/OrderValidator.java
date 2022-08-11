@@ -1,5 +1,6 @@
 package com.plateer.ec1.order.validator;
 
+import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.common.excpetion.custom.ValidationException;
 import com.plateer.ec1.order.enums.OPT0001Code;
 import com.plateer.ec1.order.enums.OrderException;
@@ -11,39 +12,40 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @RequiredArgsConstructor
 public enum OrderValidator {
 
-    FO_GENERAL(SystemType.FO.getCode(), OPT0001Code.GENERAL.getCode(),
-            OrderProductValidator.isExistPrd
-                    .and(OrderProductValidator.isSelling)
-                    .and(OrderProductValidator.isGeneralPrd)
-                    .and(OrderProductValidator.isGeneralDelivery),
+    FO_GENERAL(SystemType.FO.getCode(), OPT0001Code.GENERAL.code,
+            OrderProductValidator.validateExistPrd
+                    .andThen(OrderProductValidator.validateIsSelling)
+                    .andThen(OrderProductValidator.validateGeneralPrd)
+                    .andThen(OrderProductValidator.validateGeneralDelivery),
             OrderDeliveryValidator.generalParamPredicate
     ),
-    BO_GENERAL(SystemType.BO.getCode(), OPT0001Code.GENERAL.getCode(),
-            OrderProductValidator.isExistPrd
-                    .and(OrderProductValidator.isSelling)
-                    .and(OrderProductValidator.isGeneralPrd)
-                    .and(OrderProductValidator.isGeneralDelivery),
+    BO_GENERAL(SystemType.BO.getCode(), OPT0001Code.GENERAL.code,
+            OrderProductValidator.validateExistPrd
+                    .andThen(OrderProductValidator.validateIsSelling)
+                    .andThen(OrderProductValidator.validateGeneralPrd)
+                    .andThen(OrderProductValidator.validateGeneralDelivery),
             OrderDeliveryValidator.generalParamPredicate
     ),
-    FO_ECOUPON(SystemType.FO.getCode(), OPT0001Code.ECOUPON.getCode(),
-            OrderProductValidator.isExistPrd
-                    .and(OrderProductValidator.isSelling)
-                    .and(OrderProductValidator.isECouponPrd)
-                    .and(OrderProductValidator.isECouponDelivery),
+    FO_ECOUPON(SystemType.FO.getCode(), OPT0001Code.ECOUPON.code,
+            OrderProductValidator.validateExistPrd
+                    .andThen(OrderProductValidator.validateIsSelling)
+                    .andThen(OrderProductValidator.validateECouponPrd)
+                    .andThen(OrderProductValidator.validateECouponDelivery),
             OrderDeliveryValidator.generalParamPredicate
                     .and(OrderDeliveryValidator.eCouponParamPredicate)
                     .and(OrderDeliveryValidator.eCoupondeliveryCntPredicate)
     ),
-    BO_ECOUPON(SystemType.BO.getCode(), OPT0001Code.ECOUPON.getCode(),
-            OrderProductValidator.isExistPrd
-                    .and(OrderProductValidator.isSelling)
-                    .and(OrderProductValidator.isECouponPrd)
-                    .and(OrderProductValidator.isECouponDelivery),
+    BO_ECOUPON(SystemType.BO.getCode(), OPT0001Code.ECOUPON.code,
+            OrderProductValidator.validateExistPrd
+                    .andThen(OrderProductValidator.validateIsSelling)
+                    .andThen(OrderProductValidator.validateECouponPrd)
+                    .andThen(OrderProductValidator.validateECouponDelivery),
             OrderDeliveryValidator.generalParamPredicate
                     .and(OrderDeliveryValidator.eCouponParamPredicate)
                     .and(OrderDeliveryValidator.eCoupondeliveryCntPredicate)
@@ -51,7 +53,7 @@ public enum OrderValidator {
 
     private final String systemTypeCode;
     private final String orderTypeCode;
-    private final Predicate<ProductInfoVO> productInfoVOPredicate;
+    private final Consumer<ProductInfoVO> productInfoVOPredicate;
     private final Predicate<OrderRequestVO> deliveryPredicate;
 
     public void isValid(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
@@ -79,10 +81,7 @@ public enum OrderValidator {
 
     private void isValidOrdPrd(List<OrderProductView> orderProductViewList){
         for (OrderProductView orderProductView : orderProductViewList) {
-            boolean isValid = productInfoVOPredicate.test(orderProductView.getProductInfoVO());
-            if(isValid) continue;
-
-            throw new ValidationException(OrderException.INVALID_ORDER.msg);
+            productInfoVOPredicate.accept(orderProductView.getProductInfoVO());
         }
     }
 

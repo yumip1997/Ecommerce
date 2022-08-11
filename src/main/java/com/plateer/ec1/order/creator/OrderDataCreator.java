@@ -27,6 +27,10 @@ public class OrderDataCreator {
 
     private final OrderMapper orderMapper;
 
+    public static OrderDataCreator of(OrderMapper orderMapper){
+        return new OrderDataCreator(orderMapper);
+    }
+
     public OrdClmCreationVO<OrderVO, Object> create(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
         try{
             OrderRequestVO cloneReq = orderRequestVO.clone();
