@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -14,16 +15,16 @@ import java.util.List;
 public enum OpClmBase {
 
     //일반상품주문취소완료
-    GCC(OPT0003Code.CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, Arrays.asList(OPT0013Code.DELIVERY.code)),
+    GCC(OPT0003Code.CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, Collections.singletonList(OPT0013Code.DELIVERY.code)),
     //모바일쿠폰주문취소접수
-    MCA(OPT0003Code.CANCEL.code, OPT0004Code.CANCEL_REQUEST.code, Arrays.asList(OPT0013Code.DELIVERY.code)),
+    MCA(OPT0003Code.CANCEL.code, OPT0004Code.CANCEL_REQUEST.code, Collections.singletonList(OPT0013Code.DELIVERY.code)),
     //모바일쿠폰주문취소완료
-    MCC(OPT0003Code.CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, Arrays.asList(OPT0013Code.DELIVERY.code)),
+    MCC(OPT0003Code.CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, Collections.singletonList(OPT0013Code.DELIVERY.code)),
 
     //반품접수
-    RA(OPT0003Code.RETURN.code, OPT0004Code.RETURN_ACCEPT.code, Arrays.asList(OPT0013Code.RETRIEVE.code)),
+    RA(OPT0003Code.RETURN.code, OPT0004Code.RETURN_ACCEPT.code, Collections.singletonList(OPT0013Code.RETRIEVE.code)),
     //반품철회
-    RW(OPT0003Code.RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, Arrays.asList(OPT0013Code.RETRIEVE.code)),
+    RW(OPT0003Code.RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, Collections.singletonList(OPT0013Code.RETRIEVE.code)),
 
     //교환접수
     EA(OPT0003Code.EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code, Arrays.asList(OPT0013Code.DELIVERY.code, OPT0013Code.RETRIEVE.code)),

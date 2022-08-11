@@ -36,7 +36,7 @@ public class ClaimContext {
 
             validate(claimRequestVO, claimContextVO);
 
-            creationVO = create(claimRequestVO);
+            creationVO = createData(claimRequestVO);
 
             manipulateClaim(creationVO);
 
@@ -62,7 +62,7 @@ public class ClaimContext {
         claimValidator.isValid(claimRequestVO, claimDefine.getValidCode());
     }
 
-    private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> create(ClaimRequestVO claimRequestVO){
+    private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> createData(ClaimRequestVO claimRequestVO){
         return OrdClmCreationVO.<ClaimInsertBase, ClaimUpdateBase>builder()
                 .insertData(ClaimDataCreator.createClaimInsertBase(claimRequestVO))
                 .updateData(ClaimDataCreator.createClaimUpdateBase(claimRequestVO))
