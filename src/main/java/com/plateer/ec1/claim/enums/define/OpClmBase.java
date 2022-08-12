@@ -29,9 +29,9 @@ public enum OpClmBase {
     RW(OPT0003Code.RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, toList(OPT0013Code.RETRIEVE.code), Boolean.TRUE, ClaimStatusType.ACCEPT_WITHDRAWAL),
 
     //교환접수
-    EA(OPT0003Code.EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code, toList(OPT0013Code.DELIVERY.code, OPT0013Code.RETRIEVE.code), Boolean.TRUE, ClaimStatusType.COMPLETE),
+    EA(OPT0003Code.EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code, toList(OPT0013Code.DELIVERY.code, OPT0013Code.RETRIEVE.code), Boolean.TRUE, ClaimStatusType.ACCEPT_WITHDRAWAL),
     //교환철회
-    EW(OPT0003Code.EXCHANGE_WITHDRAWAL.code, OPT0004Code.EXCHANGE_WITHDRAWAL.code, toList(OPT0013Code.DELIVERY.code, OPT0013Code.RETRIEVE.code), Boolean.TRUE, ClaimStatusType.COMPLETE);
+    EW(OPT0003Code.EXCHANGE_WITHDRAWAL.code, OPT0004Code.EXCHANGE_WITHDRAWAL.code, toList(OPT0013Code.DELIVERY.code, OPT0013Code.RETRIEVE.code), Boolean.TRUE, ClaimStatusType.ACCEPT_WITHDRAWAL);
 
     private final String opt0003Code;
     private final String ordPrgsScd;
