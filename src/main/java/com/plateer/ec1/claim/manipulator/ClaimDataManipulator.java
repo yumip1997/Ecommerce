@@ -11,11 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ClaimDataManipulator {
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
+    public void manipulateClaimData(ClaimInsertBase claimInsertBase, ClaimUpdateBase claimUpdateBase){
+        insertClaimData(claimInsertBase);
+        updateClaimData(claimUpdateBase);
+    }
+
     public void insertClaimData(ClaimInsertBase claimInsertBase){
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     public void updateClaimData(ClaimUpdateBase claimUpdateBase){
     }
+
 }

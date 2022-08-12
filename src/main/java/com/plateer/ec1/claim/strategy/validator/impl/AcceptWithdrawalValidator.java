@@ -4,13 +4,16 @@ import com.plateer.ec1.claim.enums.ClaimStatusType;
 import com.plateer.ec1.claim.enums.define.ValidCode;
 import com.plateer.ec1.claim.strategy.validator.ClaimValidator;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
+import com.plateer.ec1.claim.vo.ClaimView;
+
+import java.util.List;
 
 public class AcceptWithdrawalValidator implements ClaimValidator {
 
     @Override
-    public void isValid(ClaimRequestVO claimRequestVO, ValidCode validCode){
-        isValidOrdPrgsScd(claimRequestVO, validCode.getValidOrdPrgsCode());
-        isValidProductType(claimRequestVO, validCode.getValidPrdCode());
+    public void isValid(List<ClaimView> claimViewList, ValidCode validCode){
+        isValidOrdPrgsScd(claimViewList, validCode.getValidOrdPrgsCode());
+        isValidProductType(claimViewList, validCode.getValidPrdCode());
     }
 
     @Override

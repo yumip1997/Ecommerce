@@ -3,12 +3,10 @@ package com.plateer.ec1.claim.service;
 import com.plateer.ec1.claim.creator.ClaimDataCreator;
 import com.plateer.ec1.claim.enums.define.ClaimDefine;
 import com.plateer.ec1.claim.manipulator.ClaimDataManipulator;
+import com.plateer.ec1.claim.mapper.ClaimMapper;
 import com.plateer.ec1.claim.strategy.after.ClaimAfterStrategy;
 import com.plateer.ec1.claim.strategy.validator.ClaimValidator;
-import com.plateer.ec1.claim.vo.ClaimContextVO;
-import com.plateer.ec1.claim.vo.ClaimInsertBase;
-import com.plateer.ec1.claim.vo.ClaimRequestVO;
-import com.plateer.ec1.claim.vo.ClaimUpdateBase;
+import com.plateer.ec1.claim.vo.*;
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.order.service.OrdClmMntService;
 import com.plateer.ec1.order.vo.OrdClmCreationVO;
@@ -17,11 +15,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class ClaimContext {
 
+    private final ClaimMapper claimMapper;
     private final OrdClmMntService ordClmMntService;
     private final ClaimDataManipulator claimDataManipulator;
 
@@ -32,16 +33,13 @@ public class ClaimContext {
         OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO = new OrdClmCreationVO<>();
 
         try{
-            setUpClaimNum(claimRequestVO, claimContextVO.getClaimDefine());
+            validate(claimRequestVO.getClaimBaseVOList(), claimContextVO);
 
-            validate(claimRequestVO, claimContextVO);
+            creationVO = ClaimDataCreator.createOrdClmCreationVO(claimRequestVO, claimMapper::getClaimNo);
 
-            creationVO = createData(claimRequestVO);
-
-            manipulateClaim(creationVO);
+            claimDataManipulator.manipulateClaimData(creationVO.getInsertData(), creationVO.getUpdateData());
 
             doClaimAfterProcess(claimContextVO);
-
         }catch (Exception e){
             creationVO.setException(e);
             throw e;
@@ -50,28 +48,12 @@ public class ClaimContext {
         }
     }
 
-    private void setUpClaimNum(ClaimRequestVO claimRequestVO, ClaimDefine claimDefine){
-        if(!claimDefine.isClaimNumFlag()) return;
-
-    }
-
-    private void validate(ClaimRequestVO claimRequestVO, ClaimContextVO claimContextVO) {
+    private void validate(List<ClaimBaseVO> claimBaseVOList, ClaimContextVO claimContextVO) {
         ClaimValidator claimValidator = claimContextVO.getClaimValidator();
+        List<ClaimView> claimViewList = claimMapper.getClaimViewList(claimBaseVOList);
         ClaimDefine claimDefine = claimContextVO.getClaimDefine();
 
-        claimValidator.isValid(claimRequestVO, claimDefine.getValidCode());
-    }
-
-    private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> createData(ClaimRequestVO claimRequestVO){
-        return OrdClmCreationVO.<ClaimInsertBase, ClaimUpdateBase>builder()
-                .insertData(ClaimDataCreator.createClaimInsertBase(claimRequestVO))
-                .updateData(ClaimDataCreator.createClaimUpdateBase(claimRequestVO))
-                .build();
-    }
-
-    private void manipulateClaim(OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO) {
-        claimDataManipulator.insertClaimData(creationVO.getInsertData());
-        claimDataManipulator.updateClaimData(creationVO.getUpdateData());
+        claimValidator.isValid(claimViewList, claimDefine.getValidCode());
     }
 
     private void doClaimAfterProcess(ClaimContextVO claimContextVO) {
@@ -80,7 +62,4 @@ public class ClaimContext {
 
         claimAfterStrategy.call();
     }
-
-
-
 }

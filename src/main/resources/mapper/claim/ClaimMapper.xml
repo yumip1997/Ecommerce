@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.plateer.ec1.claim.mapper.ClaimMapper">
+    <select id="getClaimNo" resultType="java.lang.String">
+        select concat('C', to_char(now(), 'YYYYMMDD'), nextval('nextval_clm_no'))
+    </select>
+
+    <select id="getClaimViewList" resultType="com.plateer.ec1.claim.vo.ClaimView">
+
+    </select>
+</mapper>

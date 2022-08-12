@@ -1,5 +1,6 @@
 package com.plateer.ec1.claim.vo;
 
+import com.plateer.ec1.claim.enums.ClaimStatusType;
 import com.plateer.ec1.claim.enums.define.OpClmBase;
 import com.plateer.ec1.common.model.order.OpClmInfo;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Getter
 @Setter
@@ -37,22 +39,20 @@ public class ClaimBaseVO{
     private String clmNo;
     private int orgProcSeq;
 
-    public List<OpClmInfo> getInsertOrderClaim(OpClmBase opClmBase){
+    public List<OpClmInfo> toOpClmInfoList(OpClmBase opClmBase, Supplier<String> clmNoSupplier){
         List<OpClmInfo> opClmInfoBaseList = new ArrayList<>();
-        //TODO 수정 필요
-        List<String> dvRvtCcdList = opClmBase.getOpt0013CodeList();
 
-        for(int i=0;i<dvRvtCcdList.size();i++){
-            //TODO clone으로 바꾸기
-            OpClmInfo target = OpClmInfo.builder().build();
+        for(int i=0;i<opClmBase.getOpt0013CodeList().size();i++){
+            OpClmInfo target = new OpClmInfo();
             BeanUtils.copyProperties(this, target);
 
-            //TODO 처리 순번을 받아서 +i하기
-            target.setProcSeq(this.getProcSeq() + (i +1));
+            target.setProcSeq(this.getProcSeq() + (i + 1));
             target.setOrgProcSeq(this.getProcSeq());
             target.setOrdClmTpCd(opClmBase.getOpt0003Code());
             target.setOrdPrgsScd(opClmBase.getOrdPrgsScd());
             target.setDvRvtCcd(opClmBase.getOpt0013CodeList().get(i));
+            target.setClmNo(opClmBase.isCreateClaimNoFlag() ? clmNoSupplier.get() : this.getClmNo());
+            target.setOrdClmCmtDtime(opClmBase.getClaimStatusType() == ClaimStatusType.COMPLETE ? LocalDateTime.now() : null);
 
             opClmInfoBaseList.add(target);
         }
