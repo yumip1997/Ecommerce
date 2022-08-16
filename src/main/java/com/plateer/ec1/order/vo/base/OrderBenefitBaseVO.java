@@ -14,6 +14,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class OrderBenefitBaseVO {
 
+    private String ordNo;
+    private String bnfNo;
+    private long ordSeq;
+    private long procSeq;
     private Long prmNo;
     private Long cpnIssNo;
     private String cpnKndCd;
@@ -40,6 +44,18 @@ public class OrderBenefitBaseVO {
                 .procSeq(1)
                 .aplyCnclCcd(OPT0005Code.APPLY.getCode())
                 .aplyAmt(this.aplyAmt)
+                .build();
+    }
+
+    public OpOrdBnfRelInfo toOpOrdBnfRelInfo(String clmNo){
+        return OpOrdBnfRelInfo.builder()
+                .ordNo(this.ordNo)
+                .ordBnfNo(this.bnfNo)
+                .ordSeq(this.ordSeq)
+                .procSeq(this.procSeq + 1)
+                .aplyCnclCcd(OPT0005Code.CANCEL.getCode())
+                .aplyAmt(this.aplyAmt)
+                .clmNo(clmNo)
                 .build();
     }
 

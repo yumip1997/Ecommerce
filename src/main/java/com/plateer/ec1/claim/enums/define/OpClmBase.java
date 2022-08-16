@@ -24,7 +24,7 @@ public enum OpClmBase {
     MCC(OPT0003Code.CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, toList(OPT0013Code.DELIVERY.code), Boolean.FALSE, ClaimStatusType.COMPLETE),
 
     //반품접수
-    RA(OPT0003Code.RETURN.code, OPT0004Code.RETURN_ACCEPT.code, toList(OPT0013Code.RETRIEVE.code), Boolean.TRUE, ClaimStatusType.ACCEPT_WITHDRAWAL),
+    RA(OPT0003Code.RETURN_ACCEPT.code, OPT0004Code.RETURN_ACCEPT.code, toList(OPT0013Code.RETRIEVE.code), Boolean.TRUE, ClaimStatusType.ACCEPT_WITHDRAWAL),
     //반품철회
     RW(OPT0003Code.RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, toList(OPT0013Code.RETRIEVE.code), Boolean.TRUE, ClaimStatusType.ACCEPT_WITHDRAWAL),
 

@@ -3,6 +3,7 @@ package com.plateer.ec1.claim.vo;
 import com.plateer.ec1.claim.enums.ClaimStatusType;
 import com.plateer.ec1.claim.enums.define.OpClmBase;
 import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,12 +13,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class ClaimGoodsInfo {
+public class ClaimGoodsInfo implements Cloneable{
 
     @NotEmpty
     private String ordNo;
@@ -44,9 +47,11 @@ public class ClaimGoodsInfo {
     private String clmDtlRsnTt;
     private String clmNo;
     private int orgProcSeq;
+
+    private int cnclReqCnt;
     private List<OrderBenefitBaseVO> benefitBaseVOList;
 
-    public List<OpClmInfo> toOpClmInfoList(OpClmBase opClmBase, Supplier<String> clmNoSupplier){
+    public List<OpClmInfo> toInsertOpClmInfoList(OpClmBase opClmBase, String clmNo){
         List<OpClmInfo> opClmInfoBaseList = new ArrayList<>();
 
         for(int i=0;i<opClmBase.getOpt0013CodeList().size();i++){
@@ -58,8 +63,8 @@ public class ClaimGoodsInfo {
             target.setOrdClmTpCd(opClmBase.getOpt0003Code());
             target.setOrdPrgsScd(opClmBase.getOrdPrgsScd());
             target.setDvRvtCcd(opClmBase.getOpt0013CodeList().get(i));
-            target.setClmNo(opClmBase.isCreateClaimNoFlag() ? clmNoSupplier.get() : this.getClmNo());
             target.setOrdClmCmtDtime(opClmBase.getClaimStatusType() == ClaimStatusType.COMPLETE ? LocalDateTime.now() : null);
+            target.setClmNo(clmNo);
 
             opClmInfoBaseList.add(target);
         }
@@ -67,4 +72,20 @@ public class ClaimGoodsInfo {
         return opClmInfoBaseList;
     }
 
+    public List<OpOrdBnfRelInfo> toOpOrdBnfRelInfoList(String clmNo){
+        return Optional.ofNullable(this.getBenefitBaseVOList())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(e -> e.toOpOrdBnfRelInfo(clmNo))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ClaimGoodsInfo clone() {
+        try {
+            return (ClaimGoodsInfo) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

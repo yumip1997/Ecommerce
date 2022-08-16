@@ -2,6 +2,7 @@ package com.plateer.ec1.claim.service;
 
 import com.plateer.ec1.claim.enums.ClaimStatusType;
 import com.plateer.ec1.claim.enums.define.ClaimDefine;
+import com.plateer.ec1.claim.enums.define.OpClmBase;
 import com.plateer.ec1.claim.factory.ClaimAfterStrategyFactory;
 import com.plateer.ec1.claim.factory.ClaimValidatorFactory;
 import com.plateer.ec1.claim.strategy.after.ClaimAfterStrategy;
@@ -27,10 +28,11 @@ public class ClaimService {
 
     private ClaimContextVO getClaimContextVO(ClaimRequestVO claimRequestVO){
         ClaimDefine claimDefine = ClaimDefine.of(claimRequestVO);
+        OpClmBase opClmBase = claimDefine.getOpClmBase();
         return ClaimContextVO.builder()
                 .claimDefine(claimDefine)
-                .claimValidator(claimValidatorFactory.get(claimDefine.getClaimStatusType()))
-                .claimAfterStrategy(claimAfterStrategyFactory.get(claimDefine.getClaimStatusType()))
+                .claimValidator(claimValidatorFactory.get(opClmBase.getClaimStatusType()))
+                .claimAfterStrategy(claimAfterStrategyFactory.get(opClmBase.getClaimStatusType()))
                 .build();
     }
 }

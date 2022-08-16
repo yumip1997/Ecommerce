@@ -9,7 +9,7 @@ public enum OPT0003Code {
 
     ORDER("O"),
     CANCEL("C"),
-    RETURN("R"),
+    RETURN_ACCEPT("R"),
     RETURN_WITHDRAWAL("RC"),
     EXCHANGE_ACCEPT("X"),
     EXCHANGE_WITHDRAWAL("XC");
