@@ -6,6 +6,25 @@
     </select>
 
     <select id="getClaimViewList" resultType="com.plateer.ec1.claim.vo.ClaimView">
-
+        select clm.ord_no,
+               clm.clm_no,
+               clm.ord_goods_no,
+               clm.ord_item_no,
+               clm.ord_seq,
+               clm.proc_seq,
+               clm.ord_clm_tp_cd,
+               clm.dv_rvt_ccd,
+               clm.ord_prgs_scd,
+               gd.goods_sell_tp_cd
+        from op_clm_info clm inner join op_goods_info gd
+            on clm.ord_no = gd.ord_no and clm.ord_goods_no = gd.ord_goods_no and clm.ord_item_no = gd.ord_item_no
+        where
+            <foreach collection="list" item="item" separator="or">
+                (
+                    clm.ord_no = #{item.ordNo}
+                    and clm.ord_seq =  #{item.ordSeq}
+                    and clm.proc_seq = #{item.procSeq}
+                )
+            </foreach>
     </select>
 </mapper>
