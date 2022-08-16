@@ -3,11 +3,13 @@ package com.plateer.ec1.claim.vo;
 import com.plateer.ec1.claim.enums.ClaimStatusType;
 import com.plateer.ec1.claim.enums.define.OpClmBase;
 import com.plateer.ec1.common.model.order.OpClmInfo;
-import lombok.Builder;
+import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +17,18 @@ import java.util.function.Supplier;
 
 @Getter
 @Setter
-@Builder
-public class ClaimBaseVO{
+public class ClaimGoodsInfo {
 
+    @NotEmpty
     private String ordNo;
+    @NotEmpty
     private String ordGoodsNo;
+    @NotEmpty
     private String ordItemNo;
-    private int ordSeq;
-    private int procSeq;
+    @NotNull
+    private Integer ordSeq;
+    @NotNull
+    private Integer procSeq;
     private String ordClmTpCd;
     private String ordPrgsScd;
     private String dvRvtCcd;
@@ -38,6 +44,7 @@ public class ClaimBaseVO{
     private String clmDtlRsnTt;
     private String clmNo;
     private int orgProcSeq;
+    private List<OrderBenefitBaseVO> benefitBaseVOList;
 
     public List<OpClmInfo> toOpClmInfoList(OpClmBase opClmBase, Supplier<String> clmNoSupplier){
         List<OpClmInfo> opClmInfoBaseList = new ArrayList<>();
@@ -59,4 +66,5 @@ public class ClaimBaseVO{
 
         return opClmInfoBaseList;
     }
+
 }
