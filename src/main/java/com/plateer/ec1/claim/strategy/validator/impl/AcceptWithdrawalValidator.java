@@ -1,20 +1,12 @@
 package com.plateer.ec1.claim.strategy.validator.impl;
 
 import com.plateer.ec1.claim.enums.ClaimStatusType;
-import com.plateer.ec1.claim.enums.define.ValidCode;
 import com.plateer.ec1.claim.strategy.validator.ClaimValidator;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
-import com.plateer.ec1.claim.vo.ClaimView;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-
+@Component
 public class AcceptWithdrawalValidator implements ClaimValidator {
-
-    @Override
-    public void isValid(List<ClaimView> claimViewList, ValidCode validCode){
-        isValidOrdPrgsScd(claimViewList, validCode.getValidOrdPrgsCode());
-        isValidProductType(claimViewList, validCode.getValidPrdCode());
-    }
 
     @Override
     public void verifyAmount(ClaimRequestVO claimRequestVO){

@@ -1,20 +1,13 @@
 package com.plateer.ec1.claim.creator;
 
 import com.plateer.ec1.claim.enums.define.ClaimDefine;
-import com.plateer.ec1.claim.vo.ClaimBaseVO;
 import com.plateer.ec1.claim.vo.ClaimInsertBase;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
 import com.plateer.ec1.claim.vo.ClaimUpdateBase;
-import com.plateer.ec1.common.model.order.OpClmInfo;
 import com.plateer.ec1.order.vo.OrdClmCreationVO;
 import lombok.extern.slf4j.Slf4j;
-import org.graalvm.compiler.nodes.calc.IntegerDivRemNode;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 public class ClaimDataCreator {
@@ -28,8 +21,7 @@ public class ClaimDataCreator {
     }
 
     public static ClaimInsertBase createClaimInsertBase(ClaimRequestVO claimRequestVO, ClaimDefine claimDefine, Supplier<String> clmNoSupplier) {
-        List<OpClmInfo> opClmInfoList = claimRequestVO.toInsertOpClmInfoList(claimDefine, clmNoSupplier);
-        return ClaimInsertBase.builder().opClmInfoList(opClmInfoList).build();
+        return ClaimInsertBase.builder().build();
     }
 
     public static ClaimUpdateBase createClaimUpdateBase(ClaimRequestVO claimRequestVO){

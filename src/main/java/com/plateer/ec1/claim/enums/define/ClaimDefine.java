@@ -9,33 +9,34 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
 public enum ClaimDefine {
 
     //일반상품주문취소완료
-    GCC(OPT0001Code.GENERAL.code, OPT0004Code.CANCEL_COMPLETE.code, ClaimStatusType.COMPLETE, ValidCode.GCC, OpClmBase.GCC),
+    GCC(OPT0001Code.GENERAL.code, OPT0004Code.CANCEL_COMPLETE.code, ClaimStatusType.COMPLETE, OpClmBase.GCC, ValidOrdPrgs.BY_ORDER_COMPLETE.getValidOrdPrgsList()),
     //모바일쿠폰주문취소접수
-    MCA(OPT0001Code.ECOUPON.code, OPT0004Code.CANCEL_REQUEST.code, ClaimStatusType.ACCEPT_WITHDRAWAL, ValidCode.MCA, OpClmBase.MCA),
+    MCA(OPT0001Code.ECOUPON.code, OPT0004Code.CANCEL_REQUEST.code, ClaimStatusType.ACCEPT_WITHDRAWAL,OpClmBase.MCA, ValidOrdPrgs.ORDER_COMPLETE.getValidOrdPrgsList()),
     //모바일쿠폰주문취소완료
-    MCC(OPT0001Code.ECOUPON.code, OPT0004Code.CANCEL_COMPLETE.code, ClaimStatusType.COMPLETE, ValidCode.MCC, OpClmBase.MCC),
+    MCC(OPT0001Code.ECOUPON.code, OPT0004Code.CANCEL_COMPLETE.code, ClaimStatusType.COMPLETE, OpClmBase.MCC, ValidOrdPrgs.ORDER_COMPLETE.getValidOrdPrgsList()),
 
     //반품접수
-    GRA(OPT0001Code.GENERAL.code, OPT0004Code.RETURN_ACCEPT.code, ClaimStatusType.ACCEPT_WITHDRAWAL, ValidCode.GRA, OpClmBase.RA),
+    GRA(OPT0001Code.GENERAL.code, OPT0004Code.RETURN_ACCEPT.code, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.RA, ValidOrdPrgs.DELIVERY_COMPLETE.getValidOrdPrgsList()),
     //반품철회
-    GRW(OPT0001Code.GENERAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, ClaimStatusType.ACCEPT_WITHDRAWAL, ValidCode.GRW, OpClmBase.RW),
+    GRW(OPT0001Code.GENERAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.RW, ValidOrdPrgs.RETURN_ACCEPT.getValidOrdPrgsList()),
 
     //교환접수
-    GEA(OPT0001Code.GENERAL.code, OPT0004Code.EXCHANGE_ACCEPT.code, ClaimStatusType.ACCEPT_WITHDRAWAL, ValidCode.GEA, OpClmBase.EA),
+    GEA(OPT0001Code.GENERAL.code, OPT0004Code.EXCHANGE_ACCEPT.code, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.EA, ValidOrdPrgs.DELIVERY_COMPLETE.getValidOrdPrgsList()),
     //교환철회
-    GEW(OPT0001Code.GENERAL.code, OPT0004Code.EXCHANGE_WITHDRAWAL.code, ClaimStatusType.ACCEPT_WITHDRAWAL, ValidCode.GEA, OpClmBase.EW);
+    GEW(OPT0001Code.GENERAL.code, OPT0004Code.EXCHANGE_WITHDRAWAL.code, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.EW, ValidOrdPrgs.EXCHANGE_ACCEPT.getValidOrdPrgsList());
 
     private final String prdType;
     private final String claimReqType;
     private final ClaimStatusType claimStatusType;
-    private final ValidCode validCode;
     private final OpClmBase opClmBase;
+    private final List<String> validOrdPrgsList;
 
     public static ClaimDefine of(ClaimRequestVO requestVO){
         return Arrays.stream(ClaimDefine.values())
