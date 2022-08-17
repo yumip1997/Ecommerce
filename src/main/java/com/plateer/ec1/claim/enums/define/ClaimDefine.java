@@ -16,27 +16,27 @@ import java.util.List;
 public enum ClaimDefine {
 
     //일반상품주문취소완료
-    GCC(OPT0001Code.GENERAL.code, OPT0004Code.CANCEL_COMPLETE.code, ClaimStatusType.COMPLETE, OpClmBase.GCC, ValidOrdPrgs.BY_ORDER_COMPLETE.getValidOrdPrgsList()),
+    GCC(OPT0001Code.GENERAL, OPT0004Code.CANCEL_COMPLETE, ClaimStatusType.COMPLETE, OpClmBase.GCC, ValidOrdPrgs.BY_ORDER_COMPLETE),
     //모바일쿠폰주문취소접수
-    MCA(OPT0001Code.ECOUPON.code, OPT0004Code.CANCEL_REQUEST.code, ClaimStatusType.ACCEPT_WITHDRAWAL,OpClmBase.MCA, ValidOrdPrgs.ORDER_COMPLETE.getValidOrdPrgsList()),
+    MCA(OPT0001Code.ECOUPON, OPT0004Code.CANCEL_REQUEST, ClaimStatusType.ACCEPT_WITHDRAWAL,OpClmBase.MCA, ValidOrdPrgs.ORDER_COMPLETE),
     //모바일쿠폰주문취소완료
-    MCC(OPT0001Code.ECOUPON.code, OPT0004Code.CANCEL_COMPLETE.code, ClaimStatusType.COMPLETE, OpClmBase.MCC, ValidOrdPrgs.ORDER_COMPLETE.getValidOrdPrgsList()),
+    MCC(OPT0001Code.ECOUPON, OPT0004Code.CANCEL_COMPLETE, ClaimStatusType.COMPLETE, OpClmBase.MCC, ValidOrdPrgs.ORDER_COMPLETE),
 
     //반품접수
-    GRA(OPT0001Code.GENERAL.code, OPT0004Code.RETURN_ACCEPT.code, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.RA, ValidOrdPrgs.DELIVERY_COMPLETE.getValidOrdPrgsList()),
+    GRA(OPT0001Code.GENERAL, OPT0004Code.RETURN_ACCEPT, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.RA, ValidOrdPrgs.DELIVERY_COMPLETE),
     //반품철회
-    GRW(OPT0001Code.GENERAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.RW, ValidOrdPrgs.RETURN_ACCEPT.getValidOrdPrgsList()),
+    GRW(OPT0001Code.GENERAL, OPT0004Code.RETURN_WITHDRAWAL, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.RW, ValidOrdPrgs.RETURN_ACCEPT),
 
     //교환접수
-    GEA(OPT0001Code.GENERAL.code, OPT0004Code.EXCHANGE_ACCEPT.code, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.EA, ValidOrdPrgs.DELIVERY_COMPLETE.getValidOrdPrgsList()),
+    GEA(OPT0001Code.GENERAL, OPT0004Code.EXCHANGE_ACCEPT, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.EA, ValidOrdPrgs.DELIVERY_COMPLETE),
     //교환철회
-    GEW(OPT0001Code.GENERAL.code, OPT0004Code.EXCHANGE_WITHDRAWAL.code, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.EW, ValidOrdPrgs.EXCHANGE_ACCEPT.getValidOrdPrgsList());
+    GEW(OPT0001Code.GENERAL, OPT0004Code.EXCHANGE_WITHDRAWAL, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.EW, ValidOrdPrgs.EXCHANGE_ACCEPT);
 
-    private final String prdType;
-    private final String claimReqType;
+    private final OPT0001Code prdType;
+    private final OPT0004Code claimReqType;
     private final ClaimStatusType claimStatusType;
     private final OpClmBase opClmBase;
-    private final List<String> validOrdPrgsList;
+    private final ValidOrdPrgs validOrdPrgs;
 
     public static ClaimDefine of(ClaimRequestVO requestVO){
         return Arrays.stream(ClaimDefine.values())
@@ -46,7 +46,15 @@ public enum ClaimDefine {
     }
 
     private boolean isMatchPrdClaimType(ClaimRequestVO req){
-        return this.prdType.equals(req.getPrdType()) && this.claimReqType.equals(req.getClaimReqType());
+        return this.prdType.code.equals(req.getPrdType()) && this.claimReqType.code.equals(req.getClaimReqType());
+    }
+
+    public List<String> getValidOrdPrgsStrList(){
+        return this.validOrdPrgs.getValidOrdPrgsList();
+    }
+
+    public String getPrdTypeStr(){
+        return this.prdType.code;
     }
 
 

@@ -49,12 +49,13 @@ public class ClaimContext {
     }
 
     private void validate(List<ClaimGoodsInfo> claimGoodsInfoList , ClaimContextVO claimContextVO) {
-        ClaimValidator claimValidator = claimContextVO.getClaimValidator();
         List<ClaimView> claimViewList = claimMapper.getClaimViewList(claimGoodsInfoList);
+
+        ClaimValidator claimValidator = claimContextVO.getClaimValidator();
         ClaimDefine claimDefine = claimContextVO.getClaimDefine();
 
-        claimValidator.isValidOrdPrgsScd(claimViewList, claimDefine.getValidOrdPrgsList());
-        claimValidator.isValidProductType(claimViewList, claimDefine.getPrdType());
+        claimValidator.isValidOrdPrgsScd(claimViewList, claimDefine.getValidOrdPrgsStrList());
+        claimValidator.isValidProductType(claimViewList,claimDefine.getPrdTypeStr());
     }
 
     private void doClaimAfterProcess(ClaimContextVO claimContextVO) {
