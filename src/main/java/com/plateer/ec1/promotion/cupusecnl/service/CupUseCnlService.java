@@ -3,6 +3,8 @@ package com.plateer.ec1.promotion.cupusecnl.service;
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.promotion.com.mapper.CupInfoMapper;
+import com.plateer.ec1.promotion.com.validation.CupRestore;
+import com.plateer.ec1.promotion.com.validation.CupUse;
 import com.plateer.ec1.promotion.com.validator.CupInfoValidator;
 import com.plateer.ec1.promotion.com.vo.CupInfoVO;
 import com.plateer.ec1.promotion.cupusecnl.mapper.CupUseCnlTrxMapper;
@@ -32,7 +34,8 @@ public class CupUseCnlService {
     private final CupUseCnlTrxMapper cupUseCnlTrxMapper;
 
     @Transactional
-    public void useCup(@Valid List<CupIssVO> cupUseRequestVOList){
+    @Validated(CupUse.class)
+    public void useCup(List<@Valid CupIssVO> cupUseRequestVOList){
         List<CupInfoVO> issuedCupInfo = cupInfoMapper.getIssuedCupInfo(cupUseRequestVOList);
 
         CupInfoValidator.validateCupUse(issuedCupInfo);
@@ -41,7 +44,8 @@ public class CupUseCnlService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void restoreCup(@Valid List<CupIssVO> cupRestoreRequestVOList){
+    @Validated(CupRestore.class)
+    public void restoreCup(List<@Valid CupIssVO> cupRestoreRequestVOList){
         List<CupInfoVO> issuedCupInfo = cupInfoMapper.getIssuedCupInfo(cupRestoreRequestVOList);
 
         CupInfoValidator.validateRestoreCup(issuedCupInfo);
