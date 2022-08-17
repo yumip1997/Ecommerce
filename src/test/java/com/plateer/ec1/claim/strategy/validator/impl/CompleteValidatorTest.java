@@ -39,7 +39,7 @@ class CompleteValidatorTest {
         ClaimDefine claimDefine = ClaimDefine.of(claimRequestAllCnclGeneral);
         ClaimView claimView = claimViewList.get(0);
         claimView.setOrdPrgsScd("40");
-        Assertions.assertThrows(ValidationException.class, () -> completeValidator.isValidOrdPrgsScd(claimViewList, claimDefine.getValidOrdPrgsList()));
+        Assertions.assertThrows(ValidationException.class, () -> completeValidator.isValidOrdPrgsScd(claimViewList, claimDefine.getValidOrdPrgsStrList()));
     }
 
     @Test
@@ -49,7 +49,7 @@ class CompleteValidatorTest {
         ClaimDefine claimDefine = ClaimDefine.of(claimRequestAllCnclGeneral);
         ClaimView claimView = claimViewList.get(0);
         claimView.setGoodsSellTpCd("20");
-        Assertions.assertThrows(ValidationException.class, () -> completeValidator.isValidProductType(claimViewList, claimDefine.getPrdType()));
+        Assertions.assertThrows(ValidationException.class, () -> completeValidator.isValidProductType(claimViewList, claimDefine.getPrdTypeStr()));
     }
 
 }

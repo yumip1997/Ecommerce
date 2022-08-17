@@ -1,8 +1,10 @@
 package com.plateer.ec1.claim.vo;
 
+import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 
 @Getter
 @Setter
@@ -22,5 +24,12 @@ public class ClaimDeliveryInfo {
     private String imtnRsnCcd;
     private String dvPlcTpCd;
     private long cnclDvAmt;
+
+    public OpOrdCostInfo toOpOrdCostInfo(String clmNo){
+        OpOrdCostInfo opOrdCostInfo = new OpOrdCostInfo();
+        BeanUtils.copyProperties(this, opOrdCostInfo);
+        opOrdCostInfo.setClmNo(clmNo);
+        return opOrdCostInfo;
+    }
 
 }
