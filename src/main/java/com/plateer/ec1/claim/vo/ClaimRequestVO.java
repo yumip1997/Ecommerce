@@ -5,6 +5,7 @@ import com.plateer.ec1.common.model.order.OpClmInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
+import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.*;
 
 import javax.validation.Valid;
@@ -26,6 +27,8 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
     private String claimReqType;
     @NotNull
     private Long cnclReqAmt;
+    @NotNull
+    private String mbrNo;
     @NotEmpty
     private List<@Valid ClaimGoodsInfo> claimGoodsInfoList;
 
@@ -49,6 +52,13 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
     public List<OpOrdCostInfo> toInsertOpOrdCostInfoList(String clmNo){
         return claimDeliveryInfoList.stream()
                 .map(e -> e.toOpOrdCostInfo(clmNo))
+                .collect(Collectors.toList());
+    }
+
+    public List<CupIssVO> toCupIssVOList(){
+        return claimGoodsInfoList.stream()
+                .map(e -> e.toCupIssVOList(this.mbrNo))
+                .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
 

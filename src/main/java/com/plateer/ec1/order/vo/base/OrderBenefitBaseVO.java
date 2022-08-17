@@ -3,6 +3,7 @@ package com.plateer.ec1.order.vo.base;
 import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.order.enums.OPT0005Code;
+import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,6 +57,13 @@ public class OrderBenefitBaseVO {
                 .aplyCnclCcd(OPT0005Code.CANCEL.getCode())
                 .aplyAmt(this.aplyAmt)
                 .clmNo(clmNo)
+                .build();
+    }
+
+    public CupIssVO toCupIssVO(String mbrNo){
+        return CupIssVO.builder()
+                .mbrNo(mbrNo)
+                .cpnIssNo(this.cpnIssNo)
                 .build();
     }
 

@@ -5,6 +5,7 @@ import com.plateer.ec1.claim.enums.define.OpClmBase;
 import com.plateer.ec1.common.model.order.OpClmInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
+import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
@@ -77,6 +78,14 @@ public class ClaimGoodsInfo implements Cloneable{
                 .orElse(Collections.emptyList())
                 .stream()
                 .map(e -> e.toOpOrdBnfRelInfo(clmNo))
+                .collect(Collectors.toList());
+    }
+
+    public List<CupIssVO> toCupIssVOList(String mbrNo){
+        return Optional.ofNullable(this.getBenefitBaseVOList())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(e -> e.toCupIssVO(mbrNo))
                 .collect(Collectors.toList());
     }
 

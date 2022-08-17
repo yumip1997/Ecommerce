@@ -2,6 +2,7 @@ package com.plateer.ec1.claim.strategy.after.impl;
 
 import com.plateer.ec1.claim.enums.ClaimStatusType;
 import com.plateer.ec1.claim.strategy.after.ClaimAfterStrategy;
+import com.plateer.ec1.claim.vo.ClaimRequestVO;
 import com.plateer.ec1.payment.service.PayService;
 import com.plateer.ec1.promotion.cupusecnl.service.CupUseCnlService;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +17,9 @@ public class CompleteAfterStrategy implements ClaimAfterStrategy {
 
     //TODO 수정하기
     @Override
-    public void call(){
+    public void call(ClaimRequestVO claimRequestVO){
         payService.cancel(null);
-        cupUseCnlService.restoreCup(null);
+        cupUseCnlService.restoreCup(claimRequestVO.toCupIssVOList());
     }
 
     @Override

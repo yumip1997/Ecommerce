@@ -39,7 +39,7 @@ public class ClaimContext {
 
             claimDataManipulator.manipulateClaimData(creationVO.getInsertData(), creationVO.getUpdateData());
 
-            doClaimAfterProcess(claimContextVO);
+            doClaimAfterProcess(claimRequestVO,claimContextVO);
         }catch (Exception e){
             creationVO.setException(e);
             throw e;
@@ -58,10 +58,10 @@ public class ClaimContext {
         claimValidator.isValidProductType(claimViewList,claimDefine.getPrdTypeStr());
     }
 
-    private void doClaimAfterProcess(ClaimContextVO claimContextVO) {
+    private void doClaimAfterProcess(ClaimRequestVO claimRequestVO, ClaimContextVO claimContextVO) {
         ClaimAfterStrategy claimAfterStrategy = claimContextVO.getClaimAfterStrategy();
         if(claimAfterStrategy == null) return;
 
-        claimAfterStrategy.call();
+        claimAfterStrategy.call(claimRequestVO);
     }
 }
