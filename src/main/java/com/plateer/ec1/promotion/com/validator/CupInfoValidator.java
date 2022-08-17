@@ -7,22 +7,25 @@ import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 //TODO 삭제예정
 public class CupInfoValidator {
 
-    public static void cupUseValidate(CupInfoVO cupInfoVO, String mbrNo){
-        isExistCupInfo(cupInfoVO);
-        isEqualMbrNo(cupInfoVO, mbrNo);
-        isNotUsed(cupInfoVO);
-        isValidPrmPeriod(cupInfoVO);
+    public static void validateCupUse(List<CupInfoVO> cupInfoVOList){
+        for (CupInfoVO cupInfoVO : cupInfoVOList) {
+            isExistCupInfo(cupInfoVO);
+            isNotUsed(cupInfoVO);
+            isValidPrmPeriod(cupInfoVO);
+        }
     }
 
-    public static void restoreCupValidate(CupInfoVO cupInfoVO, String mbrNo){
-        isExistCupInfo(cupInfoVO);
-        isEqualMbrNo(cupInfoVO, mbrNo);
-        isUsed(cupInfoVO);
-        isValidPrmPeriod(cupInfoVO);
+    public static void validateRestoreCup(List<CupInfoVO> cupInfoVOList){
+        for (CupInfoVO cupInfoVO : cupInfoVOList) {
+            isExistCupInfo(cupInfoVO);
+            isUsed(cupInfoVO);
+            isValidPrmPeriod(cupInfoVO);
+        }
     }
 
     public static void dwlValidate(CupInfoVO cupInfoVO){

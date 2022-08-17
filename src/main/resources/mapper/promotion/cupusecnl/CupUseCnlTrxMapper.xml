@@ -2,12 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.promotion.cupusecnl.mapper.CupUseCnlTrxMapper">
     <update id="updateCupUsed">
+        <foreach collection="list" item="item">
         update cc_cpn_issue
         set    cpn_use_dt = now(),
-               ord_no = #{ordNo},
+               ord_no = #{item.ordNo},
                sys_mod_dtime = now(),
-               sys_modr_id = #{loginId}
-        where  cpn_iss_no = #{cpnIssNo}
+               sys_modr_id = #{item.loginId}
+        where  cpn_iss_no = #{item.cpnIssNo}
+        </foreach>
     </update>
 
     <select id="insertOrgCup">
@@ -21,14 +23,17 @@
              sys_modr_id,
              prm_no
             )
-        values (
-                #{mbrNo},
-                #{cpnIssNo},
-                now(),
-                #{loginId},
-                now(),
-                #{loginId},
-                #{prmNo}
-               )
+        values
+               <foreach collection="list" item="item" separator=",">
+                   (
+                   #{item.mbrNo},
+                   #{item.cpnIssNo},
+                   now(),
+                   #{item.loginId},
+                   now(),
+                   #{item.loginId},
+                   #{item.prmNo}
+                   )
+               </foreach>
     </select>
 </mapper>

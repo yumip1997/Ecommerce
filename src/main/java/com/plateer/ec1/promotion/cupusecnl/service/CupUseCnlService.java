@@ -1,10 +1,12 @@
 package com.plateer.ec1.promotion.cupusecnl.service;
 
+import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.promotion.com.mapper.CupInfoMapper;
 import com.plateer.ec1.promotion.com.validator.CupInfoValidator;
 import com.plateer.ec1.promotion.com.vo.CupInfoVO;
 import com.plateer.ec1.promotion.cupusecnl.mapper.CupUseCnlTrxMapper;
+import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupRestoreRequestVO;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupUseRequestVO;
 import com.plateer.ec1.promotion.enums.PromotionException;
@@ -16,11 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-@Log4j2
+@LogTrace
 @Validated
 public class CupUseCnlService {
 
@@ -28,22 +32,27 @@ public class CupUseCnlService {
     private final CupUseCnlTrxMapper cupUseCnlTrxMapper;
 
     @Transactional
-    public void useCup(@Valid CupUseRequestVO cupUseRequestVO){
-        Optional<CupInfoVO> optCupInfoVO = cupInfoMapper.getIssuedCupInfo(cupUseRequestVO.getCpnIssNo());
-        CupInfoVO cupInfoVO = optCupInfoVO.orElseThrow(() -> new RuntimeException(PromotionException.NOT_FIND_PRM.getMSG()));
-        cupInfoVO.cupUseValidate(cupUseRequestVO.getMbrNo());
+    public void useCup(@Valid List<CupIssVO> cupUseRequestVOList){
+        List<CupInfoVO> issuedCupInfo = cupInfoMapper.getIssuedCupInfo(cupUseRequestVOList);
 
-        CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupUseRequestVO);
-        cupUseCnlTrxMapper.updateCupUsed(ccCpnIssueModel);
+        CupInfoValidator.validateCupUse(issuedCupInfo);
+
+        cupUseCnlTrxMapper.updateCupUsed(getModelList(issuedCupInfo));
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void restoreCup(@Valid CupRestoreRequestVO cupRestoreRequestVO){
-        Optional<CupInfoVO> optCupInfoVO = cupInfoMapper.getIssuedCupInfo(cupRestoreRequestVO.getCpnIssNo());
-        CupInfoVO cupInfoVO = optCupInfoVO.orElseThrow(() -> new RuntimeException(PromotionException.NOT_FIND_PRM.getMSG()));
-        cupInfoVO.restoreCupValidate(cupRestoreRequestVO.getMbrNo());
-        
-        CcCpnIssueModel ccCpnIssueModel = CcCpnIssueModel.convertModel(cupInfoVO);
-        cupUseCnlTrxMapper.insertOrgCup(ccCpnIssueModel);
+    public void restoreCup(@Valid List<CupIssVO> cupRestoreRequestVOList){
+        List<CupInfoVO> issuedCupInfo = cupInfoMapper.getIssuedCupInfo(cupRestoreRequestVOList);
+
+        CupInfoValidator.validateRestoreCup(issuedCupInfo);
+
+        cupUseCnlTrxMapper.insertOrgCup(getModelList(issuedCupInfo));
     }
+
+    private List<CcCpnIssueModel> getModelList(List<CupInfoVO> cupInfoVOList){
+        return cupInfoVOList.stream()
+                .map(CcCpnIssueModel::convertModel)
+                .collect(Collectors.toList());
+    }
+
 }

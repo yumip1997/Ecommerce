@@ -43,7 +43,11 @@
             end prm_end_dt,
             iss.cpn_use_dt
         from cc_prm_base as prm inner join cc_cpn_issue as iss on prm.prm_no = iss.prm_no
-        where iss.cpn_iss_no = #{cpnIssNo}
+        where
+        iss.cpn_iss_no in
+            <foreach collection="list" item="item" open="(" close=")" separator=",">
+                #{item.cpnIssNo}
+            </foreach>
     </select>
 
 </mapper>
