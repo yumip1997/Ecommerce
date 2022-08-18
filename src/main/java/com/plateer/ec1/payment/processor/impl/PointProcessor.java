@@ -8,6 +8,8 @@ import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.OrderPayInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.res.ApproveResVO;
+import com.plateer.ec1.promotion.point.service.PointService;
+import com.plateer.ec1.promotion.point.vo.PointVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,18 +22,22 @@ import org.springframework.validation.annotation.Validated;
 public class PointProcessor implements PaymentProcessor {
 
     private final PaymentDataManipulator paymentDataManipulator;
+    private final PointService pointService;
 
     @Override
     @Transactional
     public ApproveResVO approvePay(OrderInfoVO orderInfoVO, PayInfoVO payInfoVO) {
-        paymentDataManipulator.insertOrderPayment(OpPayInfoModel.getInsertData(payInfoVO.getPayAmount(), orderInfoVO));
+        String payNo = paymentDataManipulator.insertOrderPayment(OpPayInfoModel.getInsertData(payInfoVO.getPayAmount(), orderInfoVO));
+        pointService.usePoint(orderInfoVO.toUsePointVO(payNo, payInfoVO.getPayAmount()));
+
         return new ApproveResVO(payInfoVO.getPaymentType());
     }
 
     @Override
     @Transactional
     public void cancelPay(OrderPayInfoVO orderPayInfoVO) {
-        paymentDataManipulator.manipulateCnl(orderPayInfoVO);
+        String payNo = paymentDataManipulator.manipulateCnl(orderPayInfoVO);
+        pointService.restorePoint(orderPayInfoVO.toRestorePointVO(payNo));
     }
 
     @Override

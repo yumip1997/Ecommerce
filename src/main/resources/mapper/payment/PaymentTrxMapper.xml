@@ -5,10 +5,7 @@
         select concat('S', to_char(now(), 'YYYYMMDD'), nextval('nextval_pay_no')) as pay_no
     </sql>
 
-    <insert id="insertOrderPayment">
-        <selectKey resultType="String" keyColumn="pay_no" keyProperty="payNo" order="BEFORE">
-            <include refid="getPayNoNextval" />
-        </selectKey>
+    <select id="insertOrderPayment" resultType="string">
         insert into op_pay_info(
                                 pay_no
                                 , ord_no
@@ -32,7 +29,7 @@
                                 , vr_val_dt
                                 , vr_val_tt)
                 values(
-                       #{payNo}
+                        (select concat('S', to_char(now(), 'YYYYMMDD'), nextval('nextval_pay_no')))
                        , #{ordNo}
                        , #{clmNo}
                        , #{payMnCd}
@@ -54,8 +51,8 @@
                        , #{vrValDt}
                        , #{vrValTt}
                        )
-
-    </insert>
+        returning pay_no
+    </select>
 
     <update id="updateOrderPayment">
         update op_pay_info

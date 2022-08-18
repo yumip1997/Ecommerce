@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.plateer.ec1.promotion.point.mapper.PointMapper">
+    <select id="getPntBlcByMbrNo" resultType="java.lang.Long">
+        select pnt_blc
+        from cc_mbr_pnt
+        where mbr_no = #{mbrNo}
+        order by pnt_hst_seq desc
+        limit 1
+    </select>
+</mapper>

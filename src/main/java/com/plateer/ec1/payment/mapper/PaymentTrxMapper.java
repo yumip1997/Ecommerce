@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PaymentTrxMapper {
 
-    void insertOrderPayment(OpPayInfoModel opPayInfoModel);
+    String insertOrderPayment(OpPayInfoModel opPayInfoModel);
 
     void updateOrderPayment(OpPayInfoModel opPayInfoModel);
 

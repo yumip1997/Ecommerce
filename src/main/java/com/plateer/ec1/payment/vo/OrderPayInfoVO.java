@@ -5,6 +5,8 @@ import com.plateer.ec1.payment.enums.OPT0009Code;
 import com.plateer.ec1.payment.enums.OPT0011Code;
 import com.plateer.ec1.payment.enums.PaymentBusiness;
 import com.plateer.ec1.payment.enums.PaymentType;
+import com.plateer.ec1.promotion.enums.PRM0011Code;
+import com.plateer.ec1.promotion.point.vo.PointVO;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 
@@ -78,6 +80,16 @@ public class OrderPayInfoVO {
                 .bankCode(this.getRfndBnkCk())
                 .depositorName(this.getRfndAcctOwnNm())
                 .paymentType(this.getPaymentBusiness().getPaymentType())
+                .build();
+    }
+
+    public PointVO toRestorePointVO(String payNo){
+        return PointVO.builder()
+                .ordNo(this.ordNo)
+                .mbrNo(this.mbrNo)
+                .payNo(payNo)
+                .svUseCcd(PRM0011Code.SAVE.getCode())
+                .svUseAmt(this.cnclReqAmt)
                 .build();
     }
 

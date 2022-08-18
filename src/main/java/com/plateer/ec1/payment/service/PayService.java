@@ -1,6 +1,7 @@
 package com.plateer.ec1.payment.service;
 
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
+import com.plateer.ec1.common.excpetion.custom.PaymentException;
 import com.plateer.ec1.payment.enums.PaymentBusiness;
 import com.plateer.ec1.payment.factory.PaymentProcessorFactory;
 import com.plateer.ec1.payment.mapper.PaymentMapper;
@@ -30,24 +31,34 @@ public class PayService {
 
     public List<ApproveResVO> approve(@Valid ApproveReqVO approveReqVO){
         List<ApproveResVO> approveResVOList = new ArrayList<>();
-
         OrderInfoVO orderInfoVO = approveReqVO.getOrderInfoVO();
 
-        for (PayInfoVO payInfoVO : approveReqVO.getPayInfoVOList()) {
-            PaymentProcessor paymentProcessor = paymentProcessorFactory.get(payInfoVO.getPaymentType());
+        try{
+            for (PayInfoVO payInfoVO : approveReqVO.getPayInfoVOList()) {
+                PaymentProcessor paymentProcessor = paymentProcessorFactory.get(payInfoVO.getPaymentType());
 
-            orderInfoVO.setPaymentBusiness(PaymentBusiness.of(payInfoVO.getPaymentType(), payInfoVO.getMethodType()));
-            ApproveResVO approveResVO = paymentProcessor.approvePay(orderInfoVO, payInfoVO);
-            approveResVOList.add(approveResVO);
+                orderInfoVO.setPaymentBusiness(PaymentBusiness.of(payInfoVO.getPaymentType(), payInfoVO.getMethodType()));
+                ApproveResVO approveResVO = paymentProcessor.approvePay(orderInfoVO, payInfoVO);
+                approveResVOList.add(approveResVO);
+            }
+
+            return approveResVOList;
+        }catch (Exception e){
+            throw new PaymentException(e.getMessage());
         }
 
-        return approveResVOList;
     }
 
     public void cancel(PaymentCancelReqVO paymentCancelReqVO){
         PaymentProcessor paymentProcessor = paymentProcessorFactory.get(paymentCancelReqVO.getPaymentType());
         OrderPayInfoVO orderPayInfoVO= paymentMapper.getOrderPayInfo(paymentCancelReqVO);
-        paymentProcessor.cancelPay(orderPayInfoVO);
+
+        try{
+            paymentProcessor.cancelPay(orderPayInfoVO);
+        }catch (Exception e){
+            throw new PaymentException(e.getMessage());
+        }
+
     }
 
 }

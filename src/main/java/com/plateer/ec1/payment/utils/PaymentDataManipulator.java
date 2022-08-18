@@ -24,8 +24,8 @@ public class PaymentDataManipulator {
     private final PaymentTrxMapper paymentTrxMapper;
 
     @Transactional
-    public void insertOrderPayment(OpPayInfoModel opPayInfoModel){
-        paymentTrxMapper.insertOrderPayment(opPayInfoModel);
+    public String insertOrderPayment(OpPayInfoModel opPayInfoModel){
+        return paymentTrxMapper.insertOrderPayment(opPayInfoModel);
     }
 
     @Transactional
@@ -40,12 +40,13 @@ public class PaymentDataManipulator {
         if(orderPayInfoVO.isPartialCancel()){
             orderPayInfoVO.setTrsnId(resVO.getTid());
         }
+
         paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getCnlCmpInsertData(orderPayInfoVO));
     }
 
     @Transactional
-    public void manipulateCnl(OrderPayInfoVO orderPayInfoVO){
+    public String manipulateCnl(OrderPayInfoVO orderPayInfoVO){
         paymentTrxMapper.updateOrderPayment(OpPayInfoModel.getCnlUpdateData(orderPayInfoVO));
-        paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getCnlCmpInsertData(orderPayInfoVO));
+        return paymentTrxMapper.insertOrderPayment(OpPayInfoModel.getCnlCmpInsertData(orderPayInfoVO));
     }
 }

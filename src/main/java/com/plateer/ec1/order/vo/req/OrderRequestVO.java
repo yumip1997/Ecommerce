@@ -12,7 +12,6 @@ import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.req.ApproveReqVO;
 import lombok.*;
-import org.springframework.core.annotation.Order;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -103,6 +102,7 @@ public class OrderRequestVO extends OrderClaimBaseVO implements Cloneable{
         OrderBasicVO orderBasicVO = this.getOrderBasicVO();
 
         return OrderInfoVO.builder()
+                .mbrNo(orderBasicVO.getMbrNo())
                 .ordNo(this.getOrdNo())
                 .goodName(orderProductVO.getGoodsNm())
                 .buyerName(orderBasicVO.getOrdNm())

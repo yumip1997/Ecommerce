@@ -4,6 +4,7 @@ import com.plateer.ec1.claim.enums.ClaimStatusType;
 import com.plateer.ec1.claim.strategy.after.ClaimAfterStrategy;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
 import com.plateer.ec1.payment.service.PayService;
+import com.plateer.ec1.payment.vo.req.PaymentCancelReqVO;
 import com.plateer.ec1.promotion.cupusecnl.service.CupUseCnlService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class CompleteAfterStrategy implements ClaimAfterStrategy {
     //TODO 수정하기
     @Override
     public void call(ClaimRequestVO claimRequestVO){
-        payService.cancel(null);
+        payService.cancel(new PaymentCancelReqVO());
         cupUseCnlService.restoreCup(claimRequestVO.toCupIssVOList());
     }
 

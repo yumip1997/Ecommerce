@@ -1,6 +1,5 @@
 package com.plateer.ec1.order.validator;
 
-import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.common.excpetion.custom.ValidationException;
 import com.plateer.ec1.order.enums.OPT0001Code;
 import com.plateer.ec1.order.enums.OrderException;
