@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FactoryTemplate<K,V extends CustomFactory> {
+public class FactoryTemplate<K,V extends CustomFactory<?>> {
 
     private final Map<K, V> map = new HashMap<>();
 

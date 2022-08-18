@@ -6,7 +6,6 @@ import com.plateer.ec1.order.creator.OrderDataCreator;
 import com.plateer.ec1.order.enums.OrderException;
 import com.plateer.ec1.order.manipulator.OrderDataManipulator;
 import com.plateer.ec1.order.mapper.OrderMapper;
-import com.plateer.ec1.order.strategy.after.AfterStrategy;
 import com.plateer.ec1.order.validator.OrderValidator;
 import com.plateer.ec1.order.vo.OrdClmCreationVO;
 import com.plateer.ec1.order.vo.OrderContextVO;
@@ -49,8 +48,6 @@ public class OrderContext {
             orderDataManipulator.insertOrder(creationVO.getInsertData());
 
             validateAmount(orderRequestVO.getOrdNo());
-
-            doOrderAfterProcess(orderContextVO.getAfterStrategy(), orderRequestVO, creationVO.getInsertData());
         }catch (Exception e){
             creationVO.setException(e);
             throw e;
@@ -78,9 +75,4 @@ public class OrderContext {
             throw new BusinessException(OrderException.INVALID_AMT.msg);
         }
     }
-
-    private void doOrderAfterProcess(AfterStrategy afterStrategy, OrderRequestVO orderRequestVO, OrderVO orderVO) {
-        afterStrategy.call(orderRequestVO, orderVO);
-    }
-
 }
