@@ -28,11 +28,10 @@ public class ClaimService {
 
     private ClaimContextVO getClaimContextVO(ClaimRequestVO claimRequestVO){
         ClaimDefine claimDefine = ClaimDefine.of(claimRequestVO);
-        OpClmBase opClmBase = claimDefine.getOpClmBase();
         return ClaimContextVO.builder()
                 .claimDefine(claimDefine)
-                .claimValidator(claimValidatorFactory.get(opClmBase.getClaimStatusType()))
-                .claimAfterStrategy(claimAfterStrategyFactory.get(opClmBase.getClaimStatusType()))
+                .claimValidator(claimValidatorFactory.get(claimDefine.getClaimStatusType()))
+                .claimAfterStrategy(claimAfterStrategyFactory.get(claimDefine.getClaimStatusType()))
                 .build();
     }
 }
