@@ -1,10 +1,13 @@
 package com.plateer.ec1.claim.vo;
 
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
+import com.plateer.ec1.order.enums.OPT0005Code;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
+
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -25,11 +28,25 @@ public class ClaimDeliveryInfo {
     private String dvPlcTpCd;
     private long cnclDvAmt;
 
-    public OpOrdCostInfo toOpOrdCostInfo(String clmNo){
-        OpOrdCostInfo opOrdCostInfo = new OpOrdCostInfo();
-        BeanUtils.copyProperties(this, opOrdCostInfo);
-        opOrdCostInfo.setClmNo(clmNo);
-        return opOrdCostInfo;
+    public boolean isApply() {
+        return this.dvAmtTpCd.equals(OPT0005Code.APPLY.code);
+    }
+
+    public OpOrdCostInfo toOpOrdCostInfo(String clmNo) {
+        boolean isApply = this.isApply();
+        return OpOrdCostInfo.builder()
+                .dvGrpNo(isApply ? this.dvGrpNo + 1 : this.dvGrpNo)
+                .aplyCcd(this.aplyCcd)
+                .orgOrdCstNo(isApply ? null : this.ordCstNo)
+                .clmNo(clmNo)
+                .ordNo(this.ordNo)
+                .dvAmtTpCd(this.dvAmtTpCd)
+                .orgDvAmt(this.orgDvAmt)
+                .dvBnfAmt(this.dvBnfAmt)
+                .imtnRsnCcd(this.imtnRsnCcd)
+                .dvPlcTpCd(this.dvPlcTpCd)
+                .cnclDvAmt(this.cnclDvAmt)
+                .build();
     }
 
 }
