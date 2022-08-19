@@ -20,26 +20,27 @@ import static com.plateer.ec1.order.enums.OPT0004Code.*;
 public enum ClaimDefine {
 
     //일반상품주문취소완료
-    GCC(GENERAL, CANCEL_COMPLETE, COMPLETE, OpClmBase.GCC, ValidOrdPrgs.BY_ORDER_COMPLETE),
+    GCC(GENERAL, CANCEL_COMPLETE, COMPLETE, OpClmBase.GCC, OpClmUpdateBase.CANCEL, ValidOrdPrgs.BY_ORDER_COMPLETE),
     //모바일쿠폰주문취소접수
-    MCA(ECOUPON, CANCEL_REQUEST, ACCEPT_WITHDRAWAL,OpClmBase.MCA, ValidOrdPrgs.ORDER_COMPLETE),
+    MCA(ECOUPON, CANCEL_REQUEST, ACCEPT_WITHDRAWAL,OpClmBase.MCA, OpClmUpdateBase.CANCEL, ValidOrdPrgs.ORDER_COMPLETE),
     //모바일쿠폰주문취소완료
-    MCC(ECOUPON, CANCEL_COMPLETE, COMPLETE, OpClmBase.MCC, ValidOrdPrgs.ORDER_COMPLETE),
+    MCC(ECOUPON, CANCEL_COMPLETE, COMPLETE, OpClmBase.MCC, OpClmUpdateBase.CANCEL_COMPLETE, ValidOrdPrgs.ORDER_COMPLETE),
 
     //반품접수
-    GRA(GENERAL, RETURN_ACCEPT, ACCEPT_WITHDRAWAL, OpClmBase.RA, ValidOrdPrgs.DELIVERY_COMPLETE),
+    GRA(GENERAL, RETURN_ACCEPT, ACCEPT_WITHDRAWAL, OpClmBase.RA, OpClmUpdateBase.RETURN, ValidOrdPrgs.DELIVERY_COMPLETE),
     //반품철회
-    GRW(GENERAL, RETURN_WITHDRAWAL, ACCEPT_WITHDRAWAL, OpClmBase.RW, ValidOrdPrgs.RETURN_ACCEPT),
+    GRW(GENERAL, RETURN_WITHDRAWAL, ACCEPT_WITHDRAWAL, OpClmBase.RW, OpClmUpdateBase.CANCEL, ValidOrdPrgs.RETURN_ACCEPT),
 
     //교환접수
-    GEA(GENERAL, EXCHANGE_ACCEPT, ACCEPT_WITHDRAWAL, OpClmBase.EA, ValidOrdPrgs.DELIVERY_COMPLETE),
+    GEA(GENERAL, EXCHANGE_ACCEPT, ACCEPT_WITHDRAWAL, OpClmBase.EA, OpClmUpdateBase.RETURN, ValidOrdPrgs.DELIVERY_COMPLETE),
     //교환철회
-    GEW(GENERAL, EXCHANGE_WITHDRAWAL, ACCEPT_WITHDRAWAL, OpClmBase.EW, ValidOrdPrgs.EXCHANGE_ACCEPT);
+    GEW(GENERAL, EXCHANGE_WITHDRAWAL, ACCEPT_WITHDRAWAL, OpClmBase.EW, OpClmUpdateBase.RETURN_WITHDRAWAL, ValidOrdPrgs.EXCHANGE_ACCEPT);
 
     private final OPT0001Code prdType;
     private final OPT0004Code claimReqType;
     private final ClaimStatusType claimStatusType;
     private final OpClmBase opClmBase;
+    private final OpClmUpdateBase opClmUpdateBase;
     private final ValidOrdPrgs validOrdPrgs;
 
     public static ClaimDefine of(ClaimRequestVO requestVO){

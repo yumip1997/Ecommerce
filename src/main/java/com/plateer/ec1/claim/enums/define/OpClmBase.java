@@ -25,15 +25,15 @@ public enum OpClmBase {
     //모바일쿠폰주문취소접수
     MCA(CANCEL.code, OPT0004Code.CANCEL_REQUEST.code, toList(DELIVERY.code), IntUnaryOperator.identity(), TRUE, () -> null),
     //모바일쿠폰주문취소완료
-    MCC(CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, toList(DELIVERY.code), IntUnaryOperator.identity(), FALSE,LocalDateTime::now),
+    MCC(CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, toList(DELIVERY.code), IntUnaryOperator.identity(), FALSE, LocalDateTime::now),
 
     //반품접수
-    RA(RETURN_ACCEPT.code, OPT0004Code.RETURN_ACCEPT.code, toList(RETRIEVE.code), (dvp) -> dvp+1, TRUE, () -> null),
+    RA(RETURN_ACCEPT.code, OPT0004Code.RETURN_ACCEPT.code, toList(RETRIEVE.code), (dvp) -> dvp + 1, TRUE, () -> null),
     //반품철회
     RW(RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, toList(RETRIEVE.code), IntUnaryOperator.identity(), TRUE, LocalDateTime::now),
 
     //교환접수
-    EA(EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code, toList(DELIVERY.code, RETRIEVE.code), (dvp) -> dvp+1,  TRUE, () -> null),
+    EA(EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code, toList(DELIVERY.code, RETRIEVE.code), (dvp) -> dvp + 1, TRUE, () -> null),
     //교환철회
     EW(EXCHANGE_WITHDRAWAL.code, OPT0004Code.EXCHANGE_WITHDRAWAL.code, toList(DELIVERY.code, RETRIEVE.code), IntUnaryOperator.identity(), TRUE, LocalDateTime::now);
 
@@ -44,10 +44,9 @@ public enum OpClmBase {
     private final boolean createClaimNoFlag;
     private final Supplier<LocalDateTime> cmtDtimeSupplier;
 
-    private static List<String> toList(String ...codes){
+    private static List<String> toList(String... codes) {
         return Arrays.asList(codes);
     }
-
 
 
 }
