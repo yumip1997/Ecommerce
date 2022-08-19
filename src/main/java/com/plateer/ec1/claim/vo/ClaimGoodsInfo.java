@@ -65,6 +65,7 @@ public class ClaimGoodsInfo implements Cloneable{
             target.setOrdPrgsScd(opClmBase.getOrdPrgsScd());
             target.setDvRvtCcd(opClmBase.getOpt0013CodeList().get(i));
             target.setOrdClmCmtDtime(opClmBase.getClaimStatusType() == ClaimStatusType.COMPLETE ? LocalDateTime.now() : null);
+            target.setDvGrpNo(opClmBase.getDvpGrpOperator().applyAsInt(this.dvGrpNo));
             target.setClmNo(clmNo);
 
             opClmInfoBaseList.add(target);
