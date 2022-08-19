@@ -11,26 +11,30 @@ import lombok.RequiredArgsConstructor;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.plateer.ec1.claim.enums.ClaimStatusType.*;
+import static com.plateer.ec1.order.enums.OPT0001Code.*;
+import static com.plateer.ec1.order.enums.OPT0004Code.*;
+
 @RequiredArgsConstructor
 @Getter
 public enum ClaimDefine {
 
     //일반상품주문취소완료
-    GCC(OPT0001Code.GENERAL, OPT0004Code.CANCEL_COMPLETE, ClaimStatusType.COMPLETE, OpClmBase.GCC, ValidOrdPrgs.BY_ORDER_COMPLETE),
+    GCC(GENERAL, CANCEL_COMPLETE, COMPLETE, OpClmBase.GCC, ValidOrdPrgs.BY_ORDER_COMPLETE),
     //모바일쿠폰주문취소접수
-    MCA(OPT0001Code.ECOUPON, OPT0004Code.CANCEL_REQUEST, ClaimStatusType.ACCEPT_WITHDRAWAL,OpClmBase.MCA, ValidOrdPrgs.ORDER_COMPLETE),
+    MCA(ECOUPON, CANCEL_REQUEST, ACCEPT_WITHDRAWAL,OpClmBase.MCA, ValidOrdPrgs.ORDER_COMPLETE),
     //모바일쿠폰주문취소완료
-    MCC(OPT0001Code.ECOUPON, OPT0004Code.CANCEL_COMPLETE, ClaimStatusType.COMPLETE, OpClmBase.MCC, ValidOrdPrgs.ORDER_COMPLETE),
+    MCC(ECOUPON, CANCEL_COMPLETE, COMPLETE, OpClmBase.MCC, ValidOrdPrgs.ORDER_COMPLETE),
 
     //반품접수
-    GRA(OPT0001Code.GENERAL, OPT0004Code.RETURN_ACCEPT, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.RA, ValidOrdPrgs.DELIVERY_COMPLETE),
+    GRA(GENERAL, RETURN_ACCEPT, ACCEPT_WITHDRAWAL, OpClmBase.RA, ValidOrdPrgs.DELIVERY_COMPLETE),
     //반품철회
-    GRW(OPT0001Code.GENERAL, OPT0004Code.RETURN_WITHDRAWAL, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.RW, ValidOrdPrgs.RETURN_ACCEPT),
+    GRW(GENERAL, RETURN_WITHDRAWAL, ACCEPT_WITHDRAWAL, OpClmBase.RW, ValidOrdPrgs.RETURN_ACCEPT),
 
     //교환접수
-    GEA(OPT0001Code.GENERAL, OPT0004Code.EXCHANGE_ACCEPT, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.EA, ValidOrdPrgs.DELIVERY_COMPLETE),
+    GEA(GENERAL, EXCHANGE_ACCEPT, ACCEPT_WITHDRAWAL, OpClmBase.EA, ValidOrdPrgs.DELIVERY_COMPLETE),
     //교환철회
-    GEW(OPT0001Code.GENERAL, OPT0004Code.EXCHANGE_WITHDRAWAL, ClaimStatusType.ACCEPT_WITHDRAWAL, OpClmBase.EW, ValidOrdPrgs.EXCHANGE_ACCEPT);
+    GEW(GENERAL, EXCHANGE_WITHDRAWAL, ACCEPT_WITHDRAWAL, OpClmBase.EW, ValidOrdPrgs.EXCHANGE_ACCEPT);
 
     private final OPT0001Code prdType;
     private final OPT0004Code claimReqType;

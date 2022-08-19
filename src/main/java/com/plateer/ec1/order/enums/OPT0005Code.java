@@ -10,5 +10,5 @@ public enum OPT0005Code {
     APPLY("10"),
     CANCEL("20");
 
-    private final String code;
+    public final String code;
 }
