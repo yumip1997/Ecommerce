@@ -24,7 +24,7 @@ public enum OPT0004Code {
     //반품철회
     RETURN_WITHDRAWAL("80"),
     //교환철회
-    EXCHANGE_WITHDRAWAL("80");
+    EXCHANGE_WITHDRAWAL("90");
 
     public final String code;
 

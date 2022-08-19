@@ -55,16 +55,16 @@ public class ClaimGoodsInfo implements Cloneable{
     public List<OpClmInfo> toInsertOpClmInfoList(OpClmBase opClmBase, String clmNo){
         List<OpClmInfo> opClmInfoBaseList = new ArrayList<>();
 
-        for(int i=0;i<opClmBase.getOpt0013CodeList().size();i++){
+        for(int i=0;i<opClmBase.getDvRctCcdList().size();i++){
             OpClmInfo target = new OpClmInfo();
             BeanUtils.copyProperties(this, target);
 
             target.setProcSeq(this.getProcSeq() + (i + 1));
             target.setOrgProcSeq(this.getProcSeq());
-            target.setOrdClmTpCd(opClmBase.getOpt0003Code());
+            target.setOrdClmTpCd(opClmBase.getOrdClmTpCd());
             target.setOrdPrgsScd(opClmBase.getOrdPrgsScd());
-            target.setDvRvtCcd(opClmBase.getOpt0013CodeList().get(i));
-            target.setOrdClmCmtDtime(opClmBase.getClaimStatusType() == ClaimStatusType.COMPLETE ? LocalDateTime.now() : null);
+            target.setDvRvtCcd(opClmBase.getDvRctCcdList().get(i));
+            target.setOrdClmCmtDtime(opClmBase.getCmtDtimeSupplier().get());
             target.setDvGrpNo(opClmBase.getDvpGrpOperator().applyAsInt(this.dvGrpNo));
             target.setClmNo(clmNo);
 
