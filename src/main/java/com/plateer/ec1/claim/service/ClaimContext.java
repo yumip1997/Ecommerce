@@ -35,7 +35,7 @@ public class ClaimContext {
         try{
             validate(claimRequestVO.getClaimGoodsInfoList(), claimContextVO);
 
-            creationVO = ClaimDataCreator.createOrdClmCreationVO(claimRequestVO, claimMapper::getClaimNo);
+            creationVO = create(claimRequestVO);
 
             claimDataManipulator.manipulateClaimData(creationVO.getInsertData(), creationVO.getUpdateData());
 
@@ -56,6 +56,11 @@ public class ClaimContext {
 
         claimValidator.isValidOrdPrgsScd(claimViewList, claimDefine.getValidOrdPrgsStrList());
         claimValidator.isValidProductType(claimViewList,claimDefine.getPrdTypeStr());
+    }
+
+    private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> create(ClaimRequestVO claimRequestVO){
+        ClaimDataCreator claimDataCreator = ClaimDataCreator.of(claimMapper);
+        return claimDataCreator.createOrdClmCreationVO(claimRequestVO);
     }
 
     private void doClaimAfterProcess(ClaimRequestVO claimRequestVO, ClaimContextVO claimContextVO) {

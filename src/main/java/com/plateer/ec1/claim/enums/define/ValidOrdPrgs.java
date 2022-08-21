@@ -20,5 +20,9 @@ public enum ValidOrdPrgs {
 
     private final List<String> validOrdPrgsList;
 
+    public boolean isContains(String ordPrgs){
+        return this.validOrdPrgsList.contains(ordPrgs);
+    }
+
 
 }

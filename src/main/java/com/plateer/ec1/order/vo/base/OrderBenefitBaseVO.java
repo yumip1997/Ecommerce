@@ -1,5 +1,6 @@
 package com.plateer.ec1.order.vo.base;
 
+import com.plateer.ec1.claim.enums.define.OpBnfBase;
 import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.order.enums.OPT0005Code;
@@ -48,16 +49,12 @@ public class OrderBenefitBaseVO {
                 .build();
     }
 
-    public OpOrdBnfRelInfo toOpOrdBnfRelInfo(String clmNo){
-        return OpOrdBnfRelInfo.builder()
-                .ordNo(this.ordNo)
-                .ordBnfNo(this.bnfNo)
-                .ordSeq(this.ordSeq)
-                .procSeq(this.procSeq + 1)
-                .aplyCnclCcd(OPT0005Code.CANCEL.getCode())
-                .aplyAmt(this.aplyAmt)
-                .clmNo(clmNo)
-                .build();
+    public OpOrdBnfRelInfo toInsertOpOrdBnfRelInfo(OpBnfBase opBnfBase, String clmNo){
+        return opBnfBase.getOpOrdBnfRelInfo(this, clmNo);
+    }
+
+    public OpOrdBnfInfo toUpdateOpOrdBnfInfo(OpBnfBase opBnfBase){
+        return opBnfBase.getOpOrdBnfInfo(this);
     }
 
     public CupIssVO toCupIssVO(String mbrNo){

@@ -2,6 +2,7 @@ package com.plateer.ec1.claim.vo;
 
 import com.plateer.ec1.common.model.order.OpClmInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
+import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,9 @@ import java.util.List;
 public class ClaimUpdateBase {
 
     private List<OpClmInfo> opClmInfoList;
+
+    private List<OpOrdCostInfo> opOrdCostInfoList;
+
     private List<OpOrdBnfInfo> opOrdBnfInfoList;
 
 }

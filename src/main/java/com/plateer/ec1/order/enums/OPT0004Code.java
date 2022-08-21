@@ -22,9 +22,7 @@ public enum OPT0004Code {
     //교환접수
     EXCHANGE_ACCEPT("70"),
     //반품철회
-    RETURN_WITHDRAWAL("80"),
-    //교환철회
-    EXCHANGE_WITHDRAWAL("90");
+    RETURN_WITHDRAWAL("80");
 
     public final String code;
 

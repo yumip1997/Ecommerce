@@ -1,12 +1,8 @@
 package com.plateer.ec1.claim.service;
 
-import com.plateer.ec1.claim.enums.ClaimStatusType;
 import com.plateer.ec1.claim.enums.define.ClaimDefine;
-import com.plateer.ec1.claim.enums.define.OpClmBase;
 import com.plateer.ec1.claim.factory.ClaimAfterStrategyFactory;
 import com.plateer.ec1.claim.factory.ClaimValidatorFactory;
-import com.plateer.ec1.claim.strategy.after.ClaimAfterStrategy;
-import com.plateer.ec1.claim.strategy.validator.ClaimValidator;
 import com.plateer.ec1.claim.vo.ClaimContextVO;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;

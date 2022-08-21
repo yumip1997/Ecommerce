@@ -1,9 +1,12 @@
 package com.plateer.ec1.claim.vo;
 
-import com.plateer.ec1.claim.enums.ClaimStatusType;
-import com.plateer.ec1.claim.enums.define.OpClmBase;
+import com.plateer.ec1.claim.enums.define.OpBnfBase;
+import com.plateer.ec1.claim.enums.define.OpClmInsertBase;
+import com.plateer.ec1.claim.enums.define.OpClmUpdateBase;
 import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
+import com.plateer.ec1.order.enums.OPT0003Code;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.Getter;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Getter
@@ -52,20 +56,20 @@ public class ClaimGoodsInfo implements Cloneable{
     private int cnclReqCnt;
     private List<OrderBenefitBaseVO> benefitBaseVOList;
 
-    public List<OpClmInfo> toInsertOpClmInfoList(OpClmBase opClmBase, String clmNo){
+    public List<OpClmInfo> toInsertOpClmInfoList(OpClmInsertBase opClmInsertBase, String clmNo){
         List<OpClmInfo> opClmInfoBaseList = new ArrayList<>();
 
-        for(int i=0;i<opClmBase.getDvRctCcdList().size();i++){
+        for(int i = 0; i< opClmInsertBase.getDvRctCcdList().size(); i++){
             OpClmInfo target = new OpClmInfo();
             BeanUtils.copyProperties(this, target);
 
             target.setProcSeq(this.getProcSeq() + (i + 1));
             target.setOrgProcSeq(this.getProcSeq());
-            target.setOrdClmTpCd(opClmBase.getOrdClmTpCd());
-            target.setOrdPrgsScd(opClmBase.getOrdPrgsScd());
-            target.setDvRvtCcd(opClmBase.getDvRctCcdList().get(i));
-            target.setOrdClmCmtDtime(opClmBase.getCmtDtimeSupplier().get());
-            target.setDvGrpNo(opClmBase.getDvpGrpOperator().applyAsInt(this.dvGrpNo));
+            target.setOrdClmTpCd(opClmInsertBase.getOrdClmTpCd().get(i));
+            target.setOrdPrgsScd(opClmInsertBase.getOrdPrgsScd().get(i));
+            target.setDvRvtCcd(opClmInsertBase.getDvRctCcdList().get(i));
+            target.setOrdClmCmtDtime(opClmInsertBase.getCmtDtimeSupplier().get());
+            target.setDvGrpNo(opClmInsertBase.getDvpGrpOperator().applyAsInt(this.dvGrpNo));
             target.setClmNo(clmNo);
 
             opClmInfoBaseList.add(target);
@@ -74,11 +78,11 @@ public class ClaimGoodsInfo implements Cloneable{
         return opClmInfoBaseList;
     }
 
-    public List<OpOrdBnfRelInfo> toOpOrdBnfRelInfoList(String clmNo){
+    public List<OpOrdBnfRelInfo> toInsertOpOrdBnfRelInfoList(OpBnfBase opBnfBase, String clmNo){
         return Optional.ofNullable(this.getBenefitBaseVOList())
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(e -> e.toOpOrdBnfRelInfo(clmNo))
+                .map(e -> e.toInsertOpOrdBnfRelInfo(opBnfBase, clmNo))
                 .collect(Collectors.toList());
     }
 
@@ -89,6 +93,43 @@ public class ClaimGoodsInfo implements Cloneable{
                 .map(e -> e.toCupIssVO(mbrNo))
                 .collect(Collectors.toList());
     }
+
+    public List<OpClmInfo> toUpdateOpClmInfoList(OpClmUpdateBase updateBase, Supplier<ClaimGoodsInfo> supplier){
+        List<OpClmInfo> updateList = new ArrayList<>();
+        ClaimGoodsInfo orgOrd = isReturnWithdrawalReq() ? supplier.get() : this;
+
+        ClaimGoodsInfo orgOrdUpdate = updateBase.getOrgOrdUpdate(orgOrd);
+        ClaimGoodsInfo orgClmUpdate = updateBase.getOrgClmUpdate(this);
+
+        if(orgOrdUpdate != this){
+            updateList.add(convertOpClmInfo(orgOrdUpdate));
+        }
+
+        if(orgClmUpdate != this){
+            updateList.add(convertOpClmInfo(orgClmUpdate));
+        }
+
+        return updateList;
+    }
+
+    public OpClmInfo convertOpClmInfo(ClaimGoodsInfo claimGoodsInfo){
+        OpClmInfo target = new OpClmInfo();
+        BeanUtils.copyProperties(claimGoodsInfo, target);
+        return target;
+    }
+
+    private boolean isReturnWithdrawalReq(){
+        return OPT0003Code.RETURN_ACCEPT.code.equals(this.ordClmTpCd) || OPT0003Code.EXCHANGE_ACCEPT.code.equals(this.ordClmTpCd);
+    }
+
+    public List<OpOrdBnfInfo> toUpdateOpOrdBnfInfoList(OpBnfBase opBnfBase){
+        return Optional.ofNullable(this.getBenefitBaseVOList())
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(e -> e.toUpdateOpOrdBnfInfo(opBnfBase))
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public ClaimGoodsInfo clone() {

@@ -7,12 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
-import javax.validation.constraints.NotNull;
-
 @Getter
 @Setter
 @Builder
-public class ClaimDeliveryInfo {
+public class ClaimDeliveryInfo implements Cloneable{
 
     private String ordCstNo;
     private long dvGrpNo;
@@ -47,6 +45,24 @@ public class ClaimDeliveryInfo {
                 .dvPlcTpCd(this.dvPlcTpCd)
                 .cnclDvAmt(this.cnclDvAmt)
                 .build();
+    }
+
+    public OpOrdCostInfo toUpdateOpOrdCostInfo(){
+        ClaimDeliveryInfo clone = this.clone();
+        clone.setCnclDvAmt(this.getAplyDvAmt());
+
+        OpOrdCostInfo opOrdCostInfo = new OpOrdCostInfo();
+        BeanUtils.copyProperties(clone, opOrdCostInfo);
+        return opOrdCostInfo;
+    }
+
+    @Override
+    public ClaimDeliveryInfo clone() {
+        try {
+            return (ClaimDeliveryInfo) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 
 }

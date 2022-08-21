@@ -11,8 +11,7 @@ public enum OPT0003Code {
     CANCEL("C"),
     RETURN_ACCEPT("R"),
     RETURN_WITHDRAWAL("RC"),
-    EXCHANGE_ACCEPT("X"),
-    EXCHANGE_WITHDRAWAL("XC");
+    EXCHANGE_ACCEPT("X");
 
     public final String code;
 
