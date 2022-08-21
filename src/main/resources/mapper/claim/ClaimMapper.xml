@@ -27,4 +27,12 @@
                 )
             </foreach>
     </select>
+    <select id="getOrgOpClm" resultType="com.plateer.ec1.claim.vo.ClaimGoodsInfo">
+        select *
+        from op_clm_info clm
+        where clm.ord_no = #{ordNo}
+                and clm.ord_seq = #{ordSeq}
+                and clm.proc_seq = #{orgProcSeq}
+                and clm.ord_clm_tp_cd = 'O'
+    </select>
 </mapper>
