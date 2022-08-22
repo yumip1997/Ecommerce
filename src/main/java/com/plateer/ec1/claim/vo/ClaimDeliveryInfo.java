@@ -27,7 +27,7 @@ public class ClaimDeliveryInfo implements Cloneable{
     private long cnclDvAmt;
 
     public boolean isApply() {
-        return this.dvAmtTpCd.equals(OPT0005Code.APPLY.code);
+        return this.aplyCcd.equals(OPT0005Code.APPLY.code);
     }
 
     public OpOrdCostInfo toOpOrdCostInfo(String clmNo) {
