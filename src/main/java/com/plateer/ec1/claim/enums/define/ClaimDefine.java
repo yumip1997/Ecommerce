@@ -24,28 +24,28 @@ import static com.plateer.ec1.order.enums.OPT0001Code.GENERAL;
 public enum ClaimDefine {
 
     //일반상품주문취소완료
-    GCC(GENERAL, BY_ORDER_COMPLETE, COMPLETE, OpClmInsertBase.GCC, CANCEL, BNF_APPLY),
+    GCC(GENERAL, BY_ORDER_COMPLETE, OpClmInsertBase.GCC, CANCEL, BNF_CANCEL, COMPLETE),
     //모바일쿠폰주문취소접수
-    MCA(ECOUPON, ORDER_COMPLETE, ACCEPT_WITHDRAWAL, CA, CANCEL, BNF_APPLY),
+    MCA(ECOUPON, ORDER_COMPLETE, CA, CANCEL, BNF_CANCEL, ACCEPT_WITHDRAWAL),
     //모바일쿠폰주문취소완료
-    MCC(ECOUPON, ORDER_COMPLETE, COMPLETE, CC, CANCEL_COMPLETE, null),
+    MCC(ECOUPON, ORDER_COMPLETE, CC, CANCEL_COMPLETE, null, COMPLETE),
 
     //반품접수
-    GRA(GENERAL, DELIVERY_COMPLETE, ACCEPT_WITHDRAWAL, RA, RETURN, BNF_APPLY),
+    GRA(GENERAL, DELIVERY_COMPLETE, RA, RETURN, BNF_CANCEL, ACCEPT_WITHDRAWAL),
     //반품철회
-    GRW(GENERAL, RETURN_ACCEPT, ACCEPT_WITHDRAWAL, RW, RETURN_WITHDRAWAL, BNF_CANCEL),
+    GRW(GENERAL, RETURN_ACCEPT, RW, RETURN_WITHDRAWAL, BNF_APPLY, ACCEPT_WITHDRAWAL),
 
     //교환접수
-    GEA(GENERAL, DELIVERY_COMPLETE, ACCEPT_WITHDRAWAL, EA, RETURN, null),
+    GEA(GENERAL, DELIVERY_COMPLETE, EA, RETURN, null, ACCEPT_WITHDRAWAL),
     //교환철회
-    GEW(GENERAL, EXCHANGE_ACCEPT, ACCEPT_WITHDRAWAL, EW, RETURN_WITHDRAWAL, null);
+    GEW(GENERAL, EXCHANGE_ACCEPT, EW, RETURN_WITHDRAWAL, null, ACCEPT_WITHDRAWAL);
 
     private final OPT0001Code prdType;
     private final ValidOrdPrgs validOrdPrgs;
-    private final ClaimStatusType claimStatusType;
     private final OpClmInsertBase opClmInsertBase;
     private final OpClmUpdateBase opClmUpdateBase;
     private final OpBnfBase opBnfBase;
+    private final ClaimStatusType claimStatusType;
 
     public static ClaimDefine of(ClaimRequestVO requestVO){
         return Arrays.stream(ClaimDefine.values())

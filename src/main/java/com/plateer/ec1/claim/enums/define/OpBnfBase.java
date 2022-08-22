@@ -25,7 +25,7 @@ public enum OpBnfBase {
     }, (e) -> {
         return OpOrdBnfInfo.builder()
                 .ordBnfNo(e.getBnfNo())
-                .ordCnclBnfAmt(e.getAplyAmt())
+                .ordCnclBnfAmt(0)
                 .build();
     }),
     BNF_CANCEL((e, clmNo) ->{
@@ -41,7 +41,7 @@ public enum OpBnfBase {
     }, (e) -> {
         return OpOrdBnfInfo.builder()
                 .ordBnfNo(e.getBnfNo())
-                .ordCnclBnfAmt(0)
+                .ordCnclBnfAmt(e.getAplyAmt())
                 .build();
     });
 
