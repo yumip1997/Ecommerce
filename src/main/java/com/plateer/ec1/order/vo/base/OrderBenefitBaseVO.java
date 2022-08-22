@@ -17,7 +17,7 @@ import lombok.Setter;
 public class OrderBenefitBaseVO {
 
     private String ordNo;
-    private String bnfNo;
+    private String ordBnfNo;
     private long ordSeq;
     private long procSeq;
     private Long prmNo;

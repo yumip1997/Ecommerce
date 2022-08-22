@@ -18,9 +18,12 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 @Getter
 @Setter
@@ -46,7 +49,7 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
         return claimGoodsInfoList.stream()
                 .map(e -> e.toInsertOpClmInfoList(opClmInsertBase, clmNo))
                 .flatMap(List::stream)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public List<OpOrdBnfRelInfo> toInsertOpOrdBnfRelInfoList(OpBnfBase opBnfBase, String clmNo){
@@ -55,7 +58,7 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
         return claimGoodsInfoList.stream()
                 .map(e -> e.toInsertOpOrdBnfRelInfoList(opBnfBase, clmNo))
                 .flatMap(List::stream)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public List<OpOrdCostInfo> toInsertOpOrdCostInfoList(String clmNo){
@@ -63,23 +66,27 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
                 .orElse(Collections.emptyList())
                 .stream()
                 .map(e -> e.toOpOrdCostInfo(clmNo))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public List<OpClmInfo> toUpdateOpClmInfoList(OpClmUpdateBase updateBase, Supplier<ClaimGoodsInfo> supplier){
         return claimGoodsInfoList.stream()
                 .map(e -> e.toUpdateOpClmInfoList(updateBase, supplier))
                 .flatMap(List::stream)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public List<OpOrdBnfInfo> toUpdateOpOrdBnfInfo(OpBnfBase opBnfBase){
         if(opBnfBase == null) return Collections.emptyList();
 
-        return claimGoodsInfoList.stream()
+        Map<String, Integer> mapOfSumCnclAmtByBnfNo = claimGoodsInfoList.stream()
                 .map(e -> e.toUpdateOpOrdBnfInfoList(opBnfBase))
                 .flatMap(List::stream)
-                .collect(Collectors.toList());
+                .collect(groupingBy(OpOrdBnfInfo::getOrdBnfNo, summingInt(OpOrdBnfInfo::getOrdCnclBnfAmt)));
+
+        return mapOfSumCnclAmtByBnfNo.entrySet().stream()
+                .map(e -> OpOrdBnfInfo.of(e.getKey(), e.getValue()))
+                .collect(toList());
     }
 
     public List<OpOrdCostInfo> toUpdateOpOrdCostInfoList(){
@@ -91,14 +98,14 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
         return this.claimDeliveryInfoList.stream()
                 .filter(ClaimDeliveryInfo::isApply)
                 .map(ClaimDeliveryInfo::toUpdateOpOrdCostInfo)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public List<CupIssVO> toCupIssVOList(){
         return claimGoodsInfoList.stream()
                 .map(e -> e.toCupIssVOList(this.mbrNo))
                 .flatMap(List::stream)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public boolean isWithdrawalReq(){

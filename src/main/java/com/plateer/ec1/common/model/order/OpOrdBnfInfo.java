@@ -24,4 +24,11 @@ public class OpOrdBnfInfo extends BaseModel {
     private String sysModrId;
     private String cpnKndCd;
 
+    public static OpOrdBnfInfo of(String ordBnfNo, int ordCnclBnfAmt){
+        return OpOrdBnfInfo.builder()
+                .ordBnfNo(ordBnfNo)
+                .ordCnclBnfAmt(ordCnclBnfAmt)
+                .build();
+    }
+
 }

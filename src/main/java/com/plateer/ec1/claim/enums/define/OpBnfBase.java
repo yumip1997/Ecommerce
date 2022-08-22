@@ -15,7 +15,7 @@ public enum OpBnfBase {
     BNF_APPLY((e, clmNo) ->{
         return OpOrdBnfRelInfo.builder()
                 .ordNo(e.getOrdNo())
-                .ordBnfNo(e.getBnfNo())
+                .ordBnfNo(e.getOrdBnfNo())
                 .ordSeq(e.getOrdSeq())
                 .procSeq(e.getProcSeq() + 1)
                 .aplyCnclCcd(OPT0005Code.APPLY.code)
@@ -24,14 +24,14 @@ public enum OpBnfBase {
                 .build();
     }, (e) -> {
         return OpOrdBnfInfo.builder()
-                .ordBnfNo(e.getBnfNo())
+                .ordBnfNo(e.getOrdBnfNo())
                 .ordCnclBnfAmt(0)
                 .build();
     }),
     BNF_CANCEL((e, clmNo) ->{
         return OpOrdBnfRelInfo.builder()
                 .ordNo(e.getOrdNo())
-                .ordBnfNo(e.getBnfNo())
+                .ordBnfNo(e.getOrdBnfNo())
                 .ordSeq(e.getOrdSeq())
                 .procSeq(e.getProcSeq() + 1)
                 .aplyCnclCcd(OPT0005Code.CANCEL.code)
@@ -40,7 +40,7 @@ public enum OpBnfBase {
                 .build();
     }, (e) -> {
         return OpOrdBnfInfo.builder()
-                .ordBnfNo(e.getBnfNo())
+                .ordBnfNo(e.getOrdBnfNo())
                 .ordCnclBnfAmt(e.getAplyAmt())
                 .build();
     });

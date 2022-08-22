@@ -1,13 +1,36 @@
 {
   "prdType" : "10",
-  "claimReqType" : "40",
+  "ordPrgsType" : "20",
   "cnclReqAmt" : 16200,
   "claimDeliveryInfoList" : [
-
+    {
+      "ordCstNo" : "1000011",
+      "dvGrpNo" : "1",
+      "aplyCcd" : "20",
+      "ordNo" : "O20220822105556",
+      "dvAmtTpCd" : "10",
+      "orgDvAmt" : 0,
+      "dvBnfAmt" : 0,
+      "aplyDvAmt" : 0,
+      "dvPlcTpCd" : "10",
+      "cnclDvAmt" : 0
+    },
+    {
+      "ordCstNo" : "1000012",
+      "dvGrpNo" : "2",
+      "aplyCcd" : "20",
+      "ordNo" : "O20220822105556",
+      "dvAmtTpCd" : "10",
+      "orgDvAmt" : 0,
+      "dvBnfAmt" : 0,
+      "aplyDvAmt" : 0,
+      "dvPlcTpCd" : "10",
+      "cnclDvAmt" : 0
+    }
   ],
   "claimGoodsInfoList" : [
     {
-      "ordNo" : "O20220816084122",
+      "ordNo" : "O20220822105556",
       "ordGoodsNo" : "P001",
       "ordItemNo" : "1",
       "ordSeq" : "1",
@@ -25,18 +48,20 @@
           "prmNo" : "1",
           "cpnIssNo" : "1",
           "degrCcd" : "1",
-          "aplyAmt" : 1000
+          "aplyAmt" : 1000,
+          "ordBnfNo" : "B1000020"
         },
         {
           "prmNo" : "2",
           "cpnIssNo" : "2",
           "degrCcd" : "3",
-          "aplyAmt" : 800
+          "aplyAmt" : 800,
+          "ordBnfNo" : "B1000021"
         }
       ]
     },
     {
-      "ordNo" : "O20220816084122",
+      "ordNo" : "O20220822105556",
       "ordGoodsNo" : "P002",
       "ordItemNo" : "1",
       "ordSeq" : "2",
@@ -54,7 +79,8 @@
           "prmNo" : "2",
           "cpnIssNo" : "2",
           "degrCcd" : "3",
-          "aplyAmt" : 1000
+          "aplyAmt" : 1000,
+          "ordBnfNo" : "B1000021"
         }
       ]
     }
