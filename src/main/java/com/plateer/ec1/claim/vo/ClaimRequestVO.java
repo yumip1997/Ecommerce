@@ -34,6 +34,7 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
 
     @NotNull
     private String prdType;
+    private List<String> ordClmReqTypes;
     @NotNull
     private String ordPrgsType;
     @NotNull
@@ -46,6 +47,8 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
     private List<ClaimDeliveryInfo> claimDeliveryInfoList;
 
     public List<OpClmInfo> toInsertOpClmInfoList(OpClmInsertBase opClmInsertBase, String clmNo){
+        if(opClmInsertBase == null) return Collections.emptyList();
+
         return claimGoodsInfoList.stream()
                 .map(e -> e.toInsertOpClmInfoList(opClmInsertBase, clmNo))
                 .flatMap(List::stream)

@@ -14,7 +14,7 @@ public enum OpClmUpdateBase {
 
     // 접수, 철회 -> 취소 or 반품 수량 update
     // 완료 -> 주문진행상태, 클레임완료 일시 update
-    CANCEL((e) -> {
+    CANCEL_CNT((e) -> {
         ClaimGoodsInfo clone = e.clone();
         clone.setCnclCnt(clone.getOrdCnt());
         return clone;
@@ -25,12 +25,12 @@ public enum OpClmUpdateBase {
         clone.setOrdClmCmtDtime(LocalDateTime.now());
         return clone;
     }),
-    RETURN((e) -> {
+    RTGS_CNT((e) -> {
         ClaimGoodsInfo clone = e.clone();
         clone.setRtgsCnt(clone.getOrdCnt());
         return clone;
     }, Function.identity()),
-    RETURN_WITHDRAWAL((e) -> {
+    RTGS_CANCEL_CNT((e) -> {
         ClaimGoodsInfo clone = e.clone();
         clone.setRtgsCnt(0);
         return clone;

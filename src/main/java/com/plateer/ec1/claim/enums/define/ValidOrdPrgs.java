@@ -13,10 +13,11 @@ import java.util.List;
 public enum ValidOrdPrgs {
 
     BY_ORDER_COMPLETE(Arrays.asList(OPT0004Code.ORDER_WAITING.code, OPT0004Code.ORDER_COMPLETE.code)),
-    ORDER_COMPLETE(Collections.singletonList(OPT0004Code.ORDER_COMPLETE.code)),
-    DELIVERY_COMPLETE(Collections.singletonList(OPT0004Code.DELIVERY_COMPLETE.code)),
-    RETURN_ACCEPT(Collections.singletonList(OPT0004Code.RETURN_ACCEPT.code)),
-    EXCHANGE_ACCEPT(Collections.singletonList(OPT0004Code.EXCHANGE_ACCEPT.code));
+    IN_ORDER_COMPLETE(Collections.singletonList(OPT0004Code.ORDER_COMPLETE.code)),
+    IN_CANCEL_REQUEST(Collections.singletonList(OPT0004Code.CANCEL_REQUEST.code)),
+    IN_DELIVERY_COMPLETE(Collections.singletonList(OPT0004Code.DELIVERY_COMPLETE.code)),
+    IN_RETURN_ACCEPT(Collections.singletonList(OPT0004Code.RETURN_ACCEPT.code)),
+    IN_EXCHANGE_ACCEPT(Collections.singletonList(OPT0004Code.EXCHANGE_ACCEPT.code));
 
     private final List<String> validOrdPrgsList;
 
