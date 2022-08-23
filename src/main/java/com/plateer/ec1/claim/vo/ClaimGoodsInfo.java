@@ -37,7 +37,9 @@ public class ClaimGoodsInfo implements Cloneable{
     private Integer ordSeq;
     @NotNull
     private Integer procSeq;
+    @NotNull
     private String ordClmTpCd;
+    @NotNull
     private String ordPrgsScd;
     private String dvRvtCcd;
     private long ordAmt;

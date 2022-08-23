@@ -8,7 +8,6 @@ import com.plateer.ec1.common.model.order.OpClmInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
-import com.plateer.ec1.order.enums.OPT0005Code;
 import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.*;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -32,11 +30,10 @@ import static java.util.stream.Collectors.*;
 @Builder
 public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
 
-    @NotNull
+    @NotEmpty
     private String prdType;
-    private List<String> ordClmReqTypes;
     @NotNull
-    private String ordPrgsType;
+    private List<String> ordClmReqTypes;
     @NotNull
     private Long cnclReqAmt;
     @NotNull
@@ -45,6 +42,12 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
     private List<@Valid ClaimGoodsInfo> claimGoodsInfoList;
 
     private List<ClaimDeliveryInfo> claimDeliveryInfoList;
+
+    public List<String> getOrdPrsgList(){
+        return this.claimGoodsInfoList.stream()
+                .map(ClaimGoodsInfo::getOrdPrgsScd)
+                .collect(toList());
+    }
 
     public List<OpClmInfo> toInsertOpClmInfoList(OpClmInsertBase opClmInsertBase, String clmNo){
         if(opClmInsertBase == null) return Collections.emptyList();
