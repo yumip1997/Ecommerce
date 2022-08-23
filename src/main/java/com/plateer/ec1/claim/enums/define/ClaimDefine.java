@@ -60,12 +60,9 @@ public enum ClaimDefine {
     private boolean isMatchPrdClaimType(ClaimRequestVO req){
         return this.prdType.code.equals(req.getPrdType())
                 && req.getOrdClmReqTypes().containsAll(this.ordClmTypes)
-                && this.validOrdPrgs.isContains(req.getOrdPrgsType());
+                && req.getOrdPrsgList().stream().allMatch(e -> this.validOrdPrgs.isContains(e));
     }
 
-    public List<String> getValidOrdPrgsStrList(){
-        return this.validOrdPrgs.getValidOrdPrgsList();
-    }
 
     public String getPrdTypeStr(){
         return this.prdType.code;
