@@ -2,6 +2,8 @@ package com.plateer.ec1.claim.strategy.validator;
 
 import com.plateer.ec1.claim.enums.ClaimException;
 import com.plateer.ec1.claim.enums.ClaimStatusType;
+import com.plateer.ec1.claim.enums.define.ClaimDefine;
+import com.plateer.ec1.claim.enums.define.ValidOrdPrgs;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
 import com.plateer.ec1.claim.vo.ClaimView;
 import com.plateer.ec1.common.excpetion.custom.ValidationException;
@@ -11,11 +13,11 @@ import java.util.List;
 
 public interface ClaimValidator extends CustomFactory<ClaimStatusType> {
 
-    void verifyAmount(ClaimRequestVO claimRequestVO);
+    void isValid(List<ClaimView> claimViewList, ClaimDefine claimDefine);
 
-    default void isValidOrdPrgsScd(List<ClaimView> claimViewList, List<String> validOrdPrgsList){
+    default void isValidOrdPrgsScd(List<ClaimView> claimViewList, ValidOrdPrgs validOrdPrgs){
         for (ClaimView claimView : claimViewList) {
-            if(validOrdPrgsList.contains(claimView.getOrdPrgsScd())) continue;
+            if(validOrdPrgs.isContains(claimView.getOrdPrgsScd())) continue;
 
             throw new ValidationException(ClaimException.INVALID_ORDER_STATUS.MSG);
         }
@@ -28,6 +30,8 @@ public interface ClaimValidator extends CustomFactory<ClaimStatusType> {
             throw new ValidationException(ClaimException.INVALID_PRD_TPYE.MSG);
         }
     }
+
+    void verifyAmount(ClaimRequestVO claimRequestVO);
 
 }
 

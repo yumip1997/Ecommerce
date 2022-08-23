@@ -52,10 +52,7 @@ public class ClaimContext {
         List<ClaimView> claimViewList = claimMapper.getClaimViewList(claimGoodsInfoList);
 
         ClaimValidator claimValidator = claimContextVO.getClaimValidator();
-        ClaimDefine claimDefine = claimContextVO.getClaimDefine();
-
-        claimValidator.isValidOrdPrgsScd(claimViewList, claimDefine.getValidOrdPrgsStrList());
-        claimValidator.isValidProductType(claimViewList,claimDefine.getPrdTypeStr());
+        claimValidator.isValid(claimViewList,claimContextVO.getClaimDefine());
     }
 
     private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> create(ClaimRequestVO claimRequestVO){
