@@ -1,0 +1,62 @@
+{
+  "ordNo" : "O20220824134000",
+  "mbrNo" : "123",
+  "prdType" : "10",
+  "ordClmReqTypes" : ["C"],
+  "cnclReqAmt" : 7200,
+  "payAmt" : 16200,
+  "paymentType" : "inicis",
+  "claimDeliveryInfoList" : [
+    {
+      "ordCstNo" : "1000014",
+      "dvGrpNo" : "1",
+      "aplyCcd" : "20",
+      "ordNo" : "O20220824134000",
+      "dvAmtTpCd" : "10",
+      "orgDvAmt" : 0,
+      "dvBnfAmt" : 0,
+      "aplyDvAmt" : 0,
+      "dvPlcTpCd" : "10",
+      "cnclDvAmt" : 0
+    }
+  ],
+  "claimGoodsInfoList" : [
+    {
+      "ordNo" : "O20220824134000",
+      "ordGoodsNo" : "P001",
+      "ordItemNo" : "1",
+      "ordSeq" : "1",
+      "procSeq" : "1",
+      "ordClmTpCd" : "O",
+      "ordPrgsScd" : "10",
+      "dvRvtCcd" : "10",
+      "ordAmt" : 9000,
+      "ordCnt" : 1,
+      "cnclCnt" : 0,
+      "rtgsCnt" : 0,
+      "dvGrpNo" : 1,
+      "benefitBaseVOList" : [
+        {
+          "prmNo" : "1",
+          "cpnIssNo" : "1",
+          "degrCcd" : "1",
+          "aplyAmt" : 1000,
+          "ordBnfNo" : "B1000026",
+          "ordNo" : "O20220824134000",
+          "ordSeq" : "1",
+          "procSeq" : "1"
+        },
+        {
+          "prmNo" : "2",
+          "cpnIssNo" : "2",
+          "degrCcd" : "3",
+          "aplyAmt" : 800,
+          "ordBnfNo" : "B1000027",
+          "ordNo" : "O20220824134000",
+          "ordSeq" : "1",
+          "procSeq" : "1"
+        }
+      ]
+    }
+  ]
+}
