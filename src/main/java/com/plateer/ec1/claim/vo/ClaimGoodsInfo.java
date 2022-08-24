@@ -37,16 +37,20 @@ public class ClaimGoodsInfo implements Cloneable{
     private Integer ordSeq;
     @NotNull
     private Integer procSeq;
-    @NotNull
+    @NotEmpty
     private String ordClmTpCd;
-    @NotNull
+    @NotEmpty
     private String ordPrgsScd;
+    @NotEmpty
     private String dvRvtCcd;
-    private long ordAmt;
-    private int ordCnt;
+    @NotNull
+    private Long ordAmt;
+    @NotNull
+    private Integer ordCnt;
     private int cnclCnt;
     private int rtgsCnt;
-    private int dvGrpNo;
+    @NotNull
+    private Integer dvGrpNo;
     private LocalDateTime ordClmReqDtime;
     private LocalDateTime ordClmAcptDtime;
     private LocalDateTime ordClmCmtDtime;
@@ -70,6 +74,8 @@ public class ClaimGoodsInfo implements Cloneable{
             target.setOrdClmTpCd(opClmInsertBase.getOrdClmTpCd().get(i));
             target.setOrdPrgsScd(opClmInsertBase.getOrdPrgsScd().get(i));
             target.setDvRvtCcd(opClmInsertBase.getDvRctCcdList().get(i));
+            target.setOrdClmAcptDtime(LocalDateTime.now());
+            target.setOrdClmReqDtime(LocalDateTime.now());
             target.setOrdClmCmtDtime(opClmInsertBase.getCmtDtimeSupplier().get());
             target.setDvGrpNo(opClmInsertBase.getDvpGrpOperator().applyAsInt(this.dvGrpNo));
             target.setClmNo(clmNo);
