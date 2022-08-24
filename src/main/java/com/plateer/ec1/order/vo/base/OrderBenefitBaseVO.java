@@ -1,6 +1,7 @@
 package com.plateer.ec1.order.vo.base;
 
 import com.plateer.ec1.claim.enums.define.OpBnfBase;
+import com.plateer.ec1.claim.validation.groups.Claim;
 import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.order.enums.OPT0005Code;
@@ -10,17 +11,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderBenefitBaseVO {
 
+    @NotEmpty(groups = Claim.class)
     private String ordNo;
     private String ordBnfNo;
-    private long ordSeq;
-    private long procSeq;
+    @NotNull(groups = Claim.class)
+    private Long ordSeq;
+    @NotNull(groups = Claim.class)
+    private Long procSeq;
+    @NotNull(groups = Claim.class)
     private Long prmNo;
+    @NotNull(groups = Claim.class)
     private Long cpnIssNo;
     private String cpnKndCd;
     private int degrCcd;

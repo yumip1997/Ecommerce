@@ -2,29 +2,42 @@ package com.plateer.ec1.claim.vo;
 
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import com.plateer.ec1.order.enums.OPT0005Code;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.beans.BeanUtils;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClaimDeliveryInfo implements Cloneable{
 
+    @NotEmpty
     private String ordCstNo;
-    private long dvGrpNo;
+    @NotNull
+    private Long dvGrpNo;
+    @NotEmpty
     private String aplyCcd;
     private String orgOrdCstNo;
     private String clmNo;
+    @NotEmpty
     private String ordNo;
+    @NotEmpty
     private String dvAmtTpCd;
-    private long orgDvAmt;
-    private long dvBnfAmt;
-    private long aplyDvAmt;
+    @NotNull
+    private Long orgDvAmt;
+    @NotNull
+    private Long dvBnfAmt;
+    @NotNull
+    private Long aplyDvAmt;
     private String imtnRsnCcd;
+    @NotEmpty
     private String dvPlcTpCd;
-    private long cnclDvAmt;
+    @NotNull
+    private Long cnclDvAmt;
 
     public boolean isApply() {
         return this.aplyCcd.equals(OPT0005Code.APPLY.code);
