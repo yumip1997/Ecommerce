@@ -33,7 +33,7 @@ class OrderServiceTest {
     @BeforeEach
     void init(){
         jsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "order");
-        requestVO = jsonReaderUtil.getObject("/OrderRequestWithPrdCartCup.json", OrderRequestVO.class);
+        requestVO = jsonReaderUtil.getObject("/OrderRequest.json", OrderRequestVO.class);
         requestVO.setOrdNo("O"+ LocalDateTimeUtil.toStringYearToSeconds(LocalDateTime.now()));
 
     }
@@ -57,7 +57,7 @@ class OrderServiceTest {
 
     @Test
     void order_with_point_test(){
-        OrderRequestVO requestVO = jsonReaderUtil.getObject("/OrderRequestWithPoint.json", OrderRequestVO.class);
+        OrderRequestVO requestVO = jsonReaderUtil.getObject("/OrderRequestWithPrdCartCup.json", OrderRequestVO.class);
         requestVO.setOrdNo("O"+ LocalDateTimeUtil.toStringYearToSeconds(LocalDateTime.now()));
         orderService.order(requestVO);
     }

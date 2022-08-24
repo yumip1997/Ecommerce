@@ -9,6 +9,7 @@
             od.rfnd_bnk_ck,
             od.rfnd_acct_no,
             od.rfnd_acct_own_nm,
+            od.ord_email,
             #{clmNo} as clmNo,
             #{cnclReqAmt} as cnclReqAmt,
             py.pay_no,
@@ -28,11 +29,12 @@
             og.goods_nm
         from op_ord_base od inner join op_pay_info py on od.ord_no = py.ord_no
                             inner join op_goods_info og on od.ord_no = og.ord_no
-        where 1 = 1
+                            where 1 = 1
             and od.ord_no = #{ordNo}
             and (
                 (pay_prgs_scd = '10' and pay_cmt_dtime is null) or
                 (pay_prgs_scd = '20' and pay_cmt_dtime is not null)
             )
+            limit 1
     </select>
 </mapper>

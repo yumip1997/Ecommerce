@@ -13,6 +13,7 @@
                                 ORD_SELL_NO,
                                 ORD_ADDR,
                                 ORD_ADDR_DTL,
+                                ORD_EMAIL,
                                 RFND_BNK_CK,
                                 RFND_ACCT_NO,
                                 RFND_ACCT_OWN_NM,
@@ -30,6 +31,7 @@
                 #{ordSellNo},
                 #{ordAddr},
                 #{ordAddrDtl},
+                #{ordEmail},
                 #{rfndBnkCk},
                 #{rfndAcctNo},
                 #{rfndAcctOwnNm},
@@ -276,5 +278,10 @@
                 </foreach>
     </insert>
 
+    <update id="updateOpClmInfoList"></update>
+
+    <update id="updateOpOrdBnfInfoList"></update>
+
+    <update id="updateOpOrdCostInfoList"></update>
 
 </mapper>

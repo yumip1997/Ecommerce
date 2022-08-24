@@ -26,4 +26,10 @@ public interface OrdTrxMapper {
 
     void insertOpOrdBnfRelInfoList(List<OpOrdBnfRelInfo> opOrdBnfRelInfoList);
 
+    void updateOpClmInfoList(List<OpClmInfo> opClmInfoList);
+
+    void updateOpOrdBnfInfoList(List<OpOrdBnfInfo> opOrdBnfInfoList);
+
+    void updateOpOrdCostInfoList(List<OpOrdCostInfo> opOrdCostInfoList);
+
 }

@@ -28,10 +28,11 @@ public class OrderBasicVO {
     private String ordAddr;
     @NotEmpty
     private String ordAddrDtl;
+    @NotEmpty
+    private String ordEmail;
     private String rfndBnkCk;
     private String rfndAcctNo;
     private String rfndAcctOwnNm;
-    private String ordEmail;
 
     public OpOrdBase toOpOrdBase(String ordNo){
         return OpOrdBase.builder()
@@ -43,6 +44,7 @@ public class OrderBasicVO {
                 .ordSellNo(this.getOrdSellNo())
                 .ordAddr(this.getOrdAddr())
                 .ordAddrDtl(this.getOrdAddrDtl())
+                .ordEmail(this.getOrdEmail())
                 .rfndBnkCk(this.getRfndBnkCk())
                 .rfndAcctNo(this.getRfndAcctNo())
                 .rfndAcctOwnNm(this.getRfndAcctOwnNm())

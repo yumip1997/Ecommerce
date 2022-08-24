@@ -22,6 +22,7 @@ public class OpOrdBase extends BaseModel {
     private String ordSellNo;
     private String ordAddr;
     private String ordAddrDtl;
+    private String ordEmail;
     private String rfndBnkCk;
     private String rfndAcctNo;
     private String rfndAcctOwnNm;
