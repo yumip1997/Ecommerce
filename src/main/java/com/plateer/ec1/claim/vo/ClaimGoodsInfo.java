@@ -139,6 +139,12 @@ public class ClaimGoodsInfo implements Cloneable{
                 .collect(Collectors.toList());
     }
 
+    public OpClmInfo convertOpClmInfo(){
+        OpClmInfo opClmInfo = new OpClmInfo();
+        BeanUtils.copyProperties(this, opClmInfo);
+        return opClmInfo;
+    }
+
 
     @Override
     public ClaimGoodsInfo clone() {
