@@ -1,8 +1,6 @@
 package com.plateer.ec1.claim.creator;
 
-import com.plateer.ec1.claim.enums.ClaimException;
-import com.plateer.ec1.claim.enums.define.ClaimDefine;
-import com.plateer.ec1.common.excpetion.custom.DataCreationException;
+import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.plateer.ec1.claim.enums.define.ClaimDefine.*;
+import static com.plateer.ec1.claim.enums.ClaimBusiness.*;
 import static java.util.stream.Collectors.*;
 
 @RequiredArgsConstructor
@@ -22,21 +20,21 @@ public enum OpBnfUpdateCreator implements ClaimCreator<List<OpOrdBnfInfo>, List<
     BNF_APPLY(e ->
             OpOrdBnfInfo.builder()
                     .ordBnfNo(e.getOrdBnfNo())
-                    .ordCnclBnfAmt(e.getAplyAmt())
+                    .ordCnclBnfAmt(0)
                     .build()
             , Collections.singletonList(GRW)),
     BNF_CANCEL(e ->
             OpOrdBnfInfo.builder()
                     .ordBnfNo(e.getOrdBnfNo())
-                    .ordCnclBnfAmt(0)
+                    .ordCnclBnfAmt(e.getAplyAmt())
                     .build()
             , Arrays.asList(GCC, MCA, GRA));
 
     private final Function<OrderBenefitBaseVO, OpOrdBnfInfo> bnfUpdateFunc;
-    private final List<ClaimDefine> groups;
+    private final List<ClaimBusiness> groups;
 
     @Override
-    public List<ClaimDefine> groupingClaim() {
+    public List<ClaimBusiness> getTypes() {
         return this.groups;
     }
 
@@ -58,9 +56,9 @@ public enum OpBnfUpdateCreator implements ClaimCreator<List<OpOrdBnfInfo>, List<
                 .collect(toList());
     }
 
-    public static List<OpBnfUpdateCreator> getCreators(ClaimDefine claimDefine){
+    public static List<OpBnfUpdateCreator> getCreators(ClaimBusiness claimBusiness){
         return Arrays.stream(OpBnfUpdateCreator.values())
-                .filter(e -> e.hasClaimDefine(claimDefine))
+                .filter(e -> e.hasClaimDefine(claimBusiness))
                 .collect(toList());
     }
 }

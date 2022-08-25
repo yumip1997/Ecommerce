@@ -1,6 +1,5 @@
 package com.plateer.ec1.order.vo.base;
 
-import com.plateer.ec1.claim.enums.define.OpBnfBase;
 import com.plateer.ec1.claim.validation.groups.Claim;
 import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
@@ -59,14 +58,6 @@ public class OrderBenefitBaseVO implements Cloneable{
                 .build();
     }
 
-    public OpOrdBnfRelInfo toInsertOpOrdBnfRelInfo(OpBnfBase opBnfBase, String clmNo){
-        return opBnfBase.getOpOrdBnfRelInfo(this, clmNo);
-    }
-
-    public OpOrdBnfInfo toUpdateOpOrdBnfInfo(OpBnfBase opBnfBase){
-        return opBnfBase.getOpOrdBnfInfo(this);
-    }
-
     public CupIssVO toCupIssVO(String mbrNo){
         return CupIssVO.builder()
                 .mbrNo(mbrNo)
@@ -78,12 +69,6 @@ public class OrderBenefitBaseVO implements Cloneable{
         OpOrdBnfRelInfo opOrdBnfRelInfo = new OpOrdBnfRelInfo();
         BeanUtils.copyProperties(this, opOrdBnfRelInfo);
         return opOrdBnfRelInfo;
-    }
-
-    public <T> OpOrdBnfInfo convertOpOrdBnfInfo(){
-        OpOrdBnfInfo opOrdBnfInfo = new OpOrdBnfInfo();
-        BeanUtils.copyProperties(this, opOrdBnfInfo);
-        return opOrdBnfInfo;
     }
 
     @Override

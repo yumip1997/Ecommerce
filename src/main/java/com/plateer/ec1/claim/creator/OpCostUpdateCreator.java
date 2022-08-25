@@ -1,6 +1,6 @@
 package com.plateer.ec1.claim.creator;
 
-import com.plateer.ec1.claim.enums.define.ClaimDefine;
+import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.claim.vo.ClaimDeliveryInfo;
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import com.plateer.ec1.order.enums.OPT0005Code;
@@ -12,8 +12,8 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.plateer.ec1.claim.enums.define.ClaimDefine.GEW;
-import static com.plateer.ec1.claim.enums.define.ClaimDefine.GRW;
+import static com.plateer.ec1.claim.enums.ClaimBusiness.GEW;
+import static com.plateer.ec1.claim.enums.ClaimBusiness.GRW;
 
 @RequiredArgsConstructor
 public enum OpCostUpdateCreator implements ClaimCreator<List<OpOrdCostInfo>, List<ClaimDeliveryInfo>> {
@@ -28,10 +28,10 @@ public enum OpCostUpdateCreator implements ClaimCreator<List<OpOrdCostInfo>, Lis
     }, Arrays.asList(GRW, GEW));
 
     private final Function<ClaimDeliveryInfo, OpOrdCostInfo> opCostUpdateFunc;
-    private final List<ClaimDefine> groups;
+    private final List<ClaimBusiness> groups;
 
     @Override
-    public List<ClaimDefine> groupingClaim() {
+    public List<ClaimBusiness> getTypes() {
         return this.groups;
     }
 
@@ -42,9 +42,9 @@ public enum OpCostUpdateCreator implements ClaimCreator<List<OpOrdCostInfo>, Lis
                 .collect(Collectors.toList());
     }
 
-    public static List<OpCostUpdateCreator> getCreators(ClaimDefine claimDefine){
+    public static List<OpCostUpdateCreator> getCreators(ClaimBusiness claimBusiness){
         return Arrays.stream(OpCostUpdateCreator.values())
-                .filter(e -> e.hasClaimDefine(claimDefine))
+                .filter(e -> e.hasClaimDefine(claimBusiness))
                 .collect(Collectors.toList());
     }
 }

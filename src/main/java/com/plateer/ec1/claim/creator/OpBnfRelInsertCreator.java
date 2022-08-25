@@ -1,6 +1,6 @@
 package com.plateer.ec1.claim.creator;
 
-import com.plateer.ec1.claim.enums.define.ClaimDefine;
+import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.order.enums.OPT0005Code;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.plateer.ec1.claim.enums.define.ClaimDefine.*;
+import static com.plateer.ec1.claim.enums.ClaimBusiness.*;
 
 @RequiredArgsConstructor
 public enum OpBnfRelInsertCreator implements ClaimCreator<List<OpOrdBnfRelInfo>, List<OrderBenefitBaseVO>> {
@@ -31,10 +31,10 @@ public enum OpBnfRelInsertCreator implements ClaimCreator<List<OpOrdBnfRelInfo>,
     }, Arrays.asList(GCC, MCA, GRA));
 
     private final Function<OrderBenefitBaseVO, OpOrdBnfRelInfo> bnfRelInsertFunc;
-    private final List<ClaimDefine> groups;
+    private final List<ClaimBusiness> groups;
 
     @Override
-    public List<ClaimDefine> groupingClaim() {
+    public List<ClaimBusiness> getTypes() {
         return this.groups;
     }
 
@@ -45,9 +45,9 @@ public enum OpBnfRelInsertCreator implements ClaimCreator<List<OpOrdBnfRelInfo>,
                 .collect(Collectors.toList());
     }
 
-    public static List<OpBnfRelInsertCreator> getCreators(ClaimDefine claimDefine){
+    public static List<OpBnfRelInsertCreator> getCreators(ClaimBusiness claimBusiness){
         return Arrays.stream(OpBnfRelInsertCreator.values())
-                .filter(e -> e.hasClaimDefine(claimDefine))
+                .filter(e -> e.hasClaimDefine(claimBusiness))
                 .collect(Collectors.toList());
     }
 }

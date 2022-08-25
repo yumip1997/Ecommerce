@@ -1,12 +1,12 @@
 package com.plateer.ec1.claim.creator;
 
-import com.plateer.ec1.claim.enums.define.ClaimDefine;
+import com.plateer.ec1.claim.enums.ClaimBusiness;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static com.plateer.ec1.claim.enums.define.ClaimDefine.*;
+import static com.plateer.ec1.claim.enums.ClaimBusiness.*;
 
 public class ClaimNumberCreator implements ClaimCreator<String, Supplier<String>> {
 
@@ -16,8 +16,10 @@ public class ClaimNumberCreator implements ClaimCreator<String, Supplier<String>
         return claimNumberCreator;
     }
 
+    private ClaimNumberCreator(){}
+
     @Override
-    public List<ClaimDefine> groupingClaim() {
+    public List<ClaimBusiness> getTypes() {
         return Arrays.asList(GCC, MCA, GRA, GRW);
     }
 

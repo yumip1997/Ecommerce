@@ -1,4 +1,4 @@
-package com.plateer.ec1.claim.enums.define;
+package com.plateer.ec1.claim.enums;
 
 import com.plateer.ec1.order.enums.OPT0004Code;
 import lombok.Getter;

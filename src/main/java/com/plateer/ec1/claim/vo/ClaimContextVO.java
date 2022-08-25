@@ -1,17 +1,19 @@
 package com.plateer.ec1.claim.vo;
 
-import com.plateer.ec1.claim.enums.define.ClaimDefine;
-import com.plateer.ec1.claim.strategy.after.ClaimAfterStrategy;
-import com.plateer.ec1.claim.strategy.validator.ClaimValidator;
+import com.plateer.ec1.claim.enums.ClaimBusiness;
+import com.plateer.ec1.claim.externals.ExternalIFCallHelper;
+import com.plateer.ec1.claim.validation.validator.ClaimValidator;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @Builder
 public class ClaimContextVO {
 
-    private ClaimDefine claimDefine;
-    private ClaimValidator claimValidator;
-    private ClaimAfterStrategy claimAfterStrategy;
+    private ClaimBusiness claimBusiness;
+    private List<ClaimValidator> validatorList;
+    private List<ExternalIFCallHelper> ifCallHelperList;
 
 }

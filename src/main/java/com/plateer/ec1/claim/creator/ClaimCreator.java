@@ -1,21 +1,18 @@
 package com.plateer.ec1.claim.creator;
 
-import com.plateer.ec1.claim.enums.define.ClaimDefine;
-import com.plateer.ec1.claim.validation.groups.Claim;
-import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
+import com.plateer.ec1.claim.enums.ClaimBusiness;
+import com.plateer.ec1.common.factory.MultiValueCustomFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public interface ClaimCreator<T, U> {
-
-    List<ClaimDefine> groupingClaim();
+public interface ClaimCreator<T, U> extends MultiValueCustomFactory<ClaimBusiness> {
 
     T create(U u);
 
-    default boolean hasClaimDefine(ClaimDefine claimDefine) {
-        return this.groupingClaim().stream()
-                .anyMatch(e -> e == claimDefine);
+    default boolean hasClaimDefine(ClaimBusiness claimBusiness) {
+        return this.getTypes().stream()
+                .anyMatch(e -> e == claimBusiness);
     }
 
     static <T, U> List<U> create(List<T> list, List<? extends ClaimCreator<List<U>, List<T>>> creators) {

@@ -1,6 +1,6 @@
 package com.plateer.ec1.claim.creator;
 
-import com.plateer.ec1.claim.enums.define.ClaimDefine;
+import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.claim.vo.ClaimGoodsInfo;
 import com.plateer.ec1.common.model.order.OpClmInfo;
 import com.plateer.ec1.order.enums.OPT0004Code;
@@ -14,7 +14,7 @@ import java.util.function.IntUnaryOperator;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static com.plateer.ec1.claim.enums.define.ClaimDefine.*;
+import static com.plateer.ec1.claim.enums.ClaimBusiness.*;
 import static com.plateer.ec1.order.enums.OPT0003Code.*;
 import static com.plateer.ec1.order.enums.OPT0013Code.DELIVERY;
 import static com.plateer.ec1.order.enums.OPT0013Code.RETRIEVE;
@@ -51,10 +51,10 @@ public enum OpClmInsertCreator implements ClaimCreator<OpClmInfo, ClaimGoodsInfo
     private final String dvRctCcd;
     private final IntUnaryOperator dvpGrpOperator;
     private final Supplier<LocalDateTime> cmtDtimeSupplier;
-    private final List<ClaimDefine> groups;
+    private final List<ClaimBusiness> groups;
 
     @Override
-    public List<ClaimDefine> groupingClaim() {
+    public List<ClaimBusiness> getTypes() {
         return this.groups;
     }
 
@@ -70,9 +70,9 @@ public enum OpClmInsertCreator implements ClaimCreator<OpClmInfo, ClaimGoodsInfo
         return clone.convertOpClmInfo();
     }
 
-    public static List<OpClmInsertCreator> getCreators(ClaimDefine claimDefine){
+    public static List<OpClmInsertCreator> getCreators(ClaimBusiness claimBusiness){
         return Arrays.stream(OpClmInsertCreator.values())
-                .filter(e -> e.hasClaimDefine(claimDefine))
+                .filter(e -> e.hasClaimDefine(claimBusiness))
                 .collect(Collectors.toList());
     }
 
