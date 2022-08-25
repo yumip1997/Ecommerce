@@ -8,6 +8,7 @@ import com.plateer.ec1.common.model.order.OpClmInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
+import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.vo.req.PaymentCancelReqVO;
@@ -131,6 +132,13 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
                 .ordNo(this.getOrdNo())
                 .cnclReqAmt(this.cnclReqAmt)
                 .build();
+    }
+
+    public List<OrderBenefitBaseVO> getOrderBenefitBaseVOList(){
+        return this.getClaimGoodsInfoList().stream()
+                .map(ClaimGoodsInfo::getBenefitBaseVOList)
+                .flatMap(List::stream)
+                .collect(toList());
     }
 
     public boolean isWithdrawalReq(){

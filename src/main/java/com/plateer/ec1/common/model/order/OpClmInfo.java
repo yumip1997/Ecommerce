@@ -41,4 +41,5 @@ public class OpClmInfo extends BaseModel {
         return this.ordGoodsNo + this.ordItemNo;
     }
 
+
 }

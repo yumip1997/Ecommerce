@@ -5,7 +5,6 @@ import com.plateer.ec1.claim.vo.ClaimGoodsInfo;
 import com.plateer.ec1.common.model.order.OpClmInfo;
 import com.plateer.ec1.order.enums.OPT0004Code;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -16,14 +15,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.plateer.ec1.claim.enums.define.ClaimDefine.*;
-import static com.plateer.ec1.claim.enums.define.ClaimDefine.GCC;
 import static com.plateer.ec1.order.enums.OPT0003Code.*;
 import static com.plateer.ec1.order.enums.OPT0013Code.DELIVERY;
 import static com.plateer.ec1.order.enums.OPT0013Code.RETRIEVE;
 
-//TODO 삭제예정
 @RequiredArgsConstructor
-public enum OpClmInsertCreator implements ClaimGroups<List<OpClmInfo>, ClaimGoodsInfo> {
+public enum OpClmInsertCreator implements ClaimCreator<OpClmInfo, ClaimGoodsInfo> {
 
 
     GENERAL_ORDER_CANCEL(CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, DELIVERY.code, IntUnaryOperator.identity(), LocalDateTime::now
@@ -62,17 +59,7 @@ public enum OpClmInsertCreator implements ClaimGroups<List<OpClmInfo>, ClaimGood
     }
 
     @Override
-    public List<OpClmInfo> create(ClaimDefine claimDefine, ClaimGoodsInfo claimGoodsInfo) {
-        List<OpClmInfo> collect = Arrays.stream(OpClmInsertCreator.values())
-                .filter(e -> e.hasClaimDefine(claimDefine))
-                .map(e -> e.creatOpClmInfo(claimGoodsInfo))
-                .collect(Collectors.toList());
-
-        setProcSeq(collect);
-        return collect;
-    }
-
-    private OpClmInfo creatOpClmInfo(ClaimGoodsInfo claimGoodsInfo) {
+    public OpClmInfo create(ClaimGoodsInfo claimGoodsInfo) {
         ClaimGoodsInfo clone = claimGoodsInfo.clone();
         clone.setOrdClmTpCd(this.ordClmTpCd);
         clone.setOrdPrgsScd(this.ordPrgsScd);
@@ -83,17 +70,10 @@ public enum OpClmInsertCreator implements ClaimGroups<List<OpClmInfo>, ClaimGood
         return clone.convertOpClmInfo();
     }
 
-    private boolean hasClaimDefine(ClaimDefine claimDefine) {
-        return this.groupingClaim().stream()
-                .anyMatch(e -> e == claimDefine);
-    }
-
-    private List<OpClmInfo> setProcSeq(List<OpClmInfo> opClmInfoList) {
-        for (int i = 0; i < opClmInfoList.size(); i++) {
-            OpClmInfo opClmInfo = opClmInfoList.get(i);
-            opClmInfo.setProcSeq(opClmInfo.getProcSeq() + (i + 1));
-        }
-        return opClmInfoList;
+    public static List<OpClmInsertCreator> getCreators(ClaimDefine claimDefine){
+        return Arrays.stream(OpClmInsertCreator.values())
+                .filter(e -> e.hasClaimDefine(claimDefine))
+                .collect(Collectors.toList());
     }
 
 }

@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderBenefitBaseVO {
+public class OrderBenefitBaseVO implements Cloneable{
 
     @NotEmpty(groups = Claim.class)
     private String ordNo;
@@ -73,4 +74,24 @@ public class OrderBenefitBaseVO {
                 .build();
     }
 
+    public <T> OpOrdBnfRelInfo convertOpOrdBnfRelInfo(){
+        OpOrdBnfRelInfo opOrdBnfRelInfo = new OpOrdBnfRelInfo();
+        BeanUtils.copyProperties(this, opOrdBnfRelInfo);
+        return opOrdBnfRelInfo;
+    }
+
+    public <T> OpOrdBnfInfo convertOpOrdBnfInfo(){
+        OpOrdBnfInfo opOrdBnfInfo = new OpOrdBnfInfo();
+        BeanUtils.copyProperties(this, opOrdBnfInfo);
+        return opOrdBnfInfo;
+    }
+
+    @Override
+    public OrderBenefitBaseVO clone() {
+        try {
+            return (OrderBenefitBaseVO) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

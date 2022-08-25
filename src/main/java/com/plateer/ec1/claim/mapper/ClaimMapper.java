@@ -14,6 +14,6 @@ public interface ClaimMapper {
 
     List<ClaimView> getClaimViewList(List<ClaimGoodsInfo> claimGoodsInfoList);
 
-    ClaimGoodsInfo getOrgOpClm(ClaimRequestVO claimRequestVO);
+    List<ClaimGoodsInfo> getOrgOpClmList(List<ClaimGoodsInfo> claimGoodsInfoList);
 
 }

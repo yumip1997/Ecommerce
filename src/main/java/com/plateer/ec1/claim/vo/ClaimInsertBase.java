@@ -20,4 +20,18 @@ public class ClaimInsertBase {
 
     private List<OpOrdBnfRelInfo> opOrdBnfRelInfoList;
 
+    public void setClmNo(String clmNo){
+        for (OpClmInfo opClmInfo : opClmInfoList) {
+            opClmInfo.setClmNo(clmNo);
+        }
+
+        for (OpOrdCostInfo opOrdCostInfo : opOrdCostInfoList) {
+            opOrdCostInfo.setClmNo(clmNo);
+        }
+
+        for (OpOrdBnfRelInfo opOrdBnfRelInfo : opOrdBnfRelInfoList) {
+            opOrdBnfRelInfo.setClmNo(clmNo);
+        }
+    }
+
 }

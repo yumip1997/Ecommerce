@@ -27,12 +27,17 @@
                 )
             </foreach>
     </select>
-    <select id="getOrgOpClm" resultType="com.plateer.ec1.claim.vo.ClaimGoodsInfo">
+
+    <select id="getOrgOpClmList" resultType="com.plateer.ec1.claim.vo.ClaimGoodsInfo">
         select *
         from op_clm_info clm
-        where clm.ord_no = #{ordNo}
-                and clm.ord_seq = #{ordSeq}
-                and clm.proc_seq = #{orgProcSeq}
-                and clm.ord_clm_tp_cd = 'O'
+        where
+            <foreach collection="list" item="item" separator="or">
+                (
+                    clm.ord_no = #{item.ordNo}
+                    and clm.ord_seq =  #{item.ordSeq}
+                    and clm.proc_seq = #{item.procSeq}
+                )
+    </foreach>
     </select>
 </mapper>
