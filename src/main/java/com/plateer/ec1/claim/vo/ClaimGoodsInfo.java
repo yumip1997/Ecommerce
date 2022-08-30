@@ -1,6 +1,7 @@
 package com.plateer.ec1.claim.vo;
 
 import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.order.enums.OPT0004Code;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.Getter;
@@ -69,10 +70,18 @@ public class ClaimGoodsInfo implements Cloneable{
         return opClmInfo;
     }
 
+    public String getOrdNoDvGrpNo(){
+        return this.ordNo + this.dvGrpNo;
+    }
+
+    public String getOrdNoOrdSeqProcSeq(){
+        return this.ordNo + this.ordSeq + this.procSeq;
+    }
 
     @Override
     public ClaimGoodsInfo clone() {
         try {
+            //TODO LIST 생성하기
             return (ClaimGoodsInfo) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

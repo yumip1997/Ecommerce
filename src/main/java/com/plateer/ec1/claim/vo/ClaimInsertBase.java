@@ -1,7 +1,7 @@
 package com.plateer.ec1.claim.vo;
 
-import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,12 +25,12 @@ public class ClaimInsertBase {
             opClmInfo.setClmNo(clmNo);
         }
 
-        for (OpOrdCostInfo opOrdCostInfo : opOrdCostInfoList) {
-            opOrdCostInfo.setClmNo(clmNo);
-        }
-
         for (OpOrdBnfRelInfo opOrdBnfRelInfo : opOrdBnfRelInfoList) {
             opOrdBnfRelInfo.setClmNo(clmNo);
+        }
+
+        for (OpOrdCostInfo opOrdCostInfo : opOrdCostInfoList) {
+            opOrdCostInfo.setClmNo(clmNo);
         }
     }
 
