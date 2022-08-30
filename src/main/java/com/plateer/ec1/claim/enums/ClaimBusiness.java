@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.plateer.ec1.claim.enums.ValidOrdPrgs.*;
 import static com.plateer.ec1.order.enums.OPT0001Code.ECOUPON;
@@ -19,26 +21,25 @@ import static com.plateer.ec1.order.enums.OPT0003Code.*;
 public enum ClaimBusiness {
 
     //일반상품주문취소완료
-    GCC(GENERAL, toList(CANCEL.code), BY_ORDER_COMPLETE),
+    GCC(GENERAL, toSet(CANCEL.code), BY_ORDER_COMPLETE),
     //모바일쿠폰주문취소접수
-    MCA(ECOUPON, toList(CANCEL.code), IN_ORDER_COMPLETE),
+    MCA(ECOUPON, toSet(CANCEL.code), IN_ORDER_COMPLETE),
     //모바일쿠폰주문취소완료
-    MCC(ECOUPON, toList(CANCEL.code), IN_CANCEL_REQUEST),
+    MCC(ECOUPON, toSet(CANCEL.code), IN_CANCEL_REQUEST),
 
     //반품접수
-    GRA(GENERAL, toList(RETURN_ACCEPT.code), IN_DELIVERY_COMPLETE),
+    GRA(GENERAL, toSet(RETURN_ACCEPT.code), IN_DELIVERY_COMPLETE),
     //반품철회
-    GRW(GENERAL, toList(RETURN_WITHDRAWAL.code), IN_RETURN_ACCEPT),
+    GRW(GENERAL, toSet(RETURN_WITHDRAWAL.code), IN_RETURN_ACCEPT),
 
     //교환접수
-    GEA(GENERAL, toList(RETURN_ACCEPT.code, ORDER.code), IN_DELIVERY_COMPLETE),
+    GEA(GENERAL, toSet(EXCHANGE_ACCEPT.code), IN_DELIVERY_COMPLETE),
     //교환철회
-    GEW(GENERAL, toList(RETURN_WITHDRAWAL.code, CANCEL.code), IN_EXCHANGE_ACCEPT);
+    GEW(GENERAL, toSet(RETURN_WITHDRAWAL.code, CANCEL.code), IN_EXCHANGE_ACCEPT);
 
     private final OPT0001Code prdType;
-    private final List<String> ordClmTypes;
+    private final Set<String> ordClmTypes;
     private final ValidOrdPrgs validOrdPrgs;
-
     public static ClaimBusiness of(ClaimRequestVO requestVO){
         return Arrays.stream(ClaimBusiness.values())
                 .filter(define -> define.isMatchPrdClaimType(requestVO))
@@ -46,10 +47,9 @@ public enum ClaimBusiness {
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessage.NOT_VALID_CODE.msg));
     }
 
-    //TODO 더 좋은 방법 생각해보기
     private boolean isMatchPrdClaimType(ClaimRequestVO req){
-        return this.prdType.code.equals(req.getPrdType())
-                && req.getOrdClmReqTypes().containsAll(this.ordClmTypes)
+        return req.getPrdType().equals(this.prdType.code)
+                && this.ordClmTypes.containsAll(req.getOrdClmReqTypes())
                 && req.getOrdPrsgList().stream().allMatch(this.validOrdPrgs::isContains);
     }
 
@@ -57,7 +57,7 @@ public enum ClaimBusiness {
         return this.prdType.code;
     }
 
-    private static List<String> toList(String... codes) {
-        return Arrays.asList(codes);
+    private static Set<String> toSet(String... codes) {
+        return new HashSet<>(Arrays.asList(codes));
     }
 }
