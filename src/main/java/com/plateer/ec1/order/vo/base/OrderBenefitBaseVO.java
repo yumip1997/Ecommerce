@@ -27,6 +27,7 @@ public class OrderBenefitBaseVO implements Cloneable{
     private Long ordSeq;
     @NotNull(groups = Claim.class)
     private Long procSeq;
+    private String aplyCcd;
     @NotNull(groups = Claim.class)
     private Long prmNo;
     @NotNull(groups = Claim.class)
@@ -56,6 +57,42 @@ public class OrderBenefitBaseVO implements Cloneable{
                 .aplyCnclCcd(OPT0005Code.APPLY.getCode())
                 .aplyAmt(this.aplyAmt)
                 .build();
+    }
+
+    public OpOrdBnfInfo toOpOrdBnfRelInfoZeroOrdCnclBnfAmt(){
+        return OpOrdBnfInfo.builder()
+                .ordBnfNo(this.getOrdBnfNo())
+                .ordCnclBnfAmt(0)
+                .build();
+    }
+
+    public OpOrdBnfInfo toOpOrdBnfRelInfoUpdatedOrdCnclBnfAmt(){
+        return OpOrdBnfInfo.builder()
+                .ordBnfNo(this.getOrdBnfNo())
+                .ordCnclBnfAmt(this.getAplyAmt())
+                .build();
+    }
+
+    public OpOrdBnfInfo toOrdBnfInoOfReverseCnclBnfAmt(){
+        return OpOrdBnfInfo.builder()
+                .ordBnfNo(this.getOrdBnfNo())
+                .ordCnclBnfAmt(reverseCnlBnfAmt())
+                .build();
+    }
+    
+    private int reverseCnlBnfAmt(){
+        return OPT0005Code.APPLY.code.equals(this.aplyCcd) ? 0 : this.aplyAmt;
+    }
+    
+    public OpOrdBnfRelInfo toOpOrdBnfRelInfoOfReverseAplyCcd(){
+        OpOrdBnfRelInfo opOrdBnfRelInfo = convertOpOrdBnfRelInfo();
+        opOrdBnfRelInfo.setProcSeq(opOrdBnfRelInfo.getProcSeq() + 1);
+        opOrdBnfRelInfo.setAplyCnclCcd(reverseAplyCnclCcd());
+        return opOrdBnfRelInfo;
+    }
+
+    private String reverseAplyCnclCcd(){
+        return OPT0005Code.APPLY.code.equals(this.aplyCcd) ? OPT0005Code.CANCEL.code : OPT0005Code.APPLY.code;
     }
 
     public CupIssVO toCupIssVO(String mbrNo){

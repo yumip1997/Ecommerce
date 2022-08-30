@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -49,6 +50,8 @@ public class ClaimContext {
     }
 
     private void validate(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness, List<ClaimValidator> claimValidatorList) {
+       if(CollectionUtils.isEmpty(claimValidatorList)) return;
+
         List<ClaimView> claimViewList = claimMapper.getClaimViewList(claimRequestVO.getClaimGoodsInfoList());
 
         ClaimValidationVO validationVO = ClaimValidationVO.builder()
@@ -69,6 +72,8 @@ public class ClaimContext {
     }
 
     private void callExternalIF(ClaimRequestVO claimRequestVO, List<ExternalIFCallHelper> ifCallHelperList) {
+        if(CollectionUtils.isEmpty(ifCallHelperList)) return;
+
         for (ExternalIFCallHelper externalIFCallHelper : ifCallHelperList) {
             externalIFCallHelper.call(claimRequestVO);
         }

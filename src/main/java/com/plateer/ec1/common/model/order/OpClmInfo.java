@@ -41,5 +41,7 @@ public class OpClmInfo extends BaseModel {
         return this.ordGoodsNo + this.ordItemNo;
     }
 
-
+    public String getOrdNoOrdSeqOrgProcSeq(){
+        return this.getOrdNo() + this.getOrdSeq() + this.getOrgProcSeq();
+    }
 }
