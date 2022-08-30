@@ -40,8 +40,8 @@ public enum OpBnfUpdateCreator implements ClaimCreator<List<OpOrdBnfInfo>, List<
     }
 
     public List<OpOrdBnfInfo> sumOrdCnlBnfAmtByOrdBnfNo(List<OpOrdBnfInfo> opOrdBnfInfoList) {
-        Map<String, Integer> mapOfSumCnclAmtByBnfNo = opOrdBnfInfoList.stream()
-                .collect(groupingBy(OpOrdBnfInfo::getOrdBnfNo, summingInt(OpOrdBnfInfo::getOrdCnclBnfAmt)));
+        Map<String, Long> mapOfSumCnclAmtByBnfNo = opOrdBnfInfoList.stream()
+                .collect(groupingBy(OpOrdBnfInfo::getOrdBnfNo, summingLong(OpOrdBnfInfo::getOrdCnclBnfAmt)));
 
         return mapOfSumCnclAmtByBnfNo.entrySet().stream()
                 .map(e -> OpOrdBnfInfo.of(e.getKey(), e.getValue()))

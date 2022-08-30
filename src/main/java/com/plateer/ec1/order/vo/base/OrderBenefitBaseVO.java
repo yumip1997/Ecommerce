@@ -27,14 +27,14 @@ public class OrderBenefitBaseVO implements Cloneable{
     private Long ordSeq;
     @NotNull(groups = Claim.class)
     private Long procSeq;
-    private String aplyCcd;
+    private String apyCnclCcd;
     @NotNull(groups = Claim.class)
     private Long prmNo;
     @NotNull(groups = Claim.class)
     private Long cpnIssNo;
     private String cpnKndCd;
     private int degrCcd;
-    private int aplyAmt;
+    private long aplyAmt;
 
     public OpOrdBnfInfo toOpOrdBnfInfo(String bnfNo){
         return OpOrdBnfInfo.builder()
@@ -59,20 +59,6 @@ public class OrderBenefitBaseVO implements Cloneable{
                 .build();
     }
 
-    public OpOrdBnfInfo toOpOrdBnfRelInfoZeroOrdCnclBnfAmt(){
-        return OpOrdBnfInfo.builder()
-                .ordBnfNo(this.getOrdBnfNo())
-                .ordCnclBnfAmt(0)
-                .build();
-    }
-
-    public OpOrdBnfInfo toOpOrdBnfRelInfoUpdatedOrdCnclBnfAmt(){
-        return OpOrdBnfInfo.builder()
-                .ordBnfNo(this.getOrdBnfNo())
-                .ordCnclBnfAmt(this.getAplyAmt())
-                .build();
-    }
-
     public OpOrdBnfInfo toOrdBnfInoOfReverseCnclBnfAmt(){
         return OpOrdBnfInfo.builder()
                 .ordBnfNo(this.getOrdBnfNo())
@@ -80,8 +66,8 @@ public class OrderBenefitBaseVO implements Cloneable{
                 .build();
     }
     
-    private int reverseCnlBnfAmt(){
-        return OPT0005Code.APPLY.code.equals(this.aplyCcd) ? 0 : this.aplyAmt;
+    private long reverseCnlBnfAmt(){
+        return OPT0005Code.APPLY.code.equals(this.apyCnclCcd) ? 0 : this.aplyAmt;
     }
     
     public OpOrdBnfRelInfo toOpOrdBnfRelInfoOfReverseAplyCcd(){
@@ -92,7 +78,7 @@ public class OrderBenefitBaseVO implements Cloneable{
     }
 
     private String reverseAplyCnclCcd(){
-        return OPT0005Code.APPLY.code.equals(this.aplyCcd) ? OPT0005Code.CANCEL.code : OPT0005Code.APPLY.code;
+        return OPT0005Code.APPLY.code.equals(this.apyCnclCcd) ? OPT0005Code.CANCEL.code : OPT0005Code.APPLY.code;
     }
 
     public CupIssVO toCupIssVO(String mbrNo){

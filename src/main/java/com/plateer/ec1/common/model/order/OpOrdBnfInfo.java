@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 public class OpOrdBnfInfo extends BaseModel {
 
     private String ordBnfNo;
-    private Integer ordBnfAmt;
+    private long ordBnfAmt;
     private long prmNo;
     private long cpnIssNo;
-    private int ordCnclBnfAmt;
+    private long ordCnclBnfAmt;
     private int degrCcd;
     private LocalDateTime sysRegDtime;
     private String sysRegrId;
@@ -24,7 +24,7 @@ public class OpOrdBnfInfo extends BaseModel {
     private String sysModrId;
     private String cpnKndCd;
 
-    public static OpOrdBnfInfo of(String ordBnfNo, int ordCnclBnfAmt){
+    public static OpOrdBnfInfo of(String ordBnfNo, long ordCnclBnfAmt){
         return OpOrdBnfInfo.builder()
                 .ordBnfNo(ordBnfNo)
                 .ordCnclBnfAmt(ordCnclBnfAmt)

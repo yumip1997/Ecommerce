@@ -6,7 +6,7 @@
     {
       "ordCstNo" : "1000011",
       "dvGrpNo" : "1",
-      "aplyCcd" : "20",
+      "aplyCcd" : "10",
       "ordNo" : "O20220822105556",
       "dvAmtTpCd" : "10",
       "orgDvAmt" : 0,
@@ -18,7 +18,7 @@
     {
       "ordCstNo" : "1000012",
       "dvGrpNo" : "2",
-      "aplyCcd" : "20",
+      "aplyCcd" : "10",
       "ordNo" : "O20220822105556",
       "dvAmtTpCd" : "10",
       "orgDvAmt" : 0,
