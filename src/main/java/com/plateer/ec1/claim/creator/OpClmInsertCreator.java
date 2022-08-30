@@ -35,9 +35,9 @@ public enum OpClmInsertCreator implements ClaimCreator<OpClmInfo, ClaimGoodsInfo
     RTN_WTD(RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, RETRIEVE.code, IntUnaryOperator.identity(), LocalDateTime::now
             , Collections.singletonList(GRW)),
 
-    EX_ACP_RTV(EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code, RETRIEVE.code, (dvp) -> dvp + 1, () -> null,
+    EX_ACP_RTV(RETURN_ACCEPT.code, OPT0004Code.RETURN_ACCEPT.code, RETRIEVE.code, (dvp) -> dvp + 1, () -> null,
             Collections.singletonList(GEA)),
-    EX_ACP_DV(EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code, DELIVERY.code, (dvp) -> dvp + 1, () -> null,
+    EX_ACP_DV(RETURN_ACCEPT.code, OPT0004Code.RETURN_ACCEPT.code, DELIVERY.code, (dvp) -> dvp + 2, () -> null,
             Collections.singletonList(GEA)),
 
     EX_WTD_RTV(RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, RETRIEVE.code, IntUnaryOperator.identity(), LocalDateTime::now,
