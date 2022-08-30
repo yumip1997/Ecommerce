@@ -17,17 +17,9 @@ import static java.util.stream.Collectors.*;
 @RequiredArgsConstructor
 public enum OpBnfUpdateCreator implements ClaimCreator<List<OpOrdBnfInfo>, List<OrderBenefitBaseVO>> {
 
-    BNF_APPLY(e ->
-            OpOrdBnfInfo.builder()
-                    .ordBnfNo(e.getOrdBnfNo())
-                    .ordCnclBnfAmt(0)
-                    .build()
+    BNF_APPLY(OrderBenefitBaseVO::toOrdBnfInoOfReverseCnclBnfAmt
             , Collections.singletonList(GRW)),
-    BNF_CANCEL(e ->
-            OpOrdBnfInfo.builder()
-                    .ordBnfNo(e.getOrdBnfNo())
-                    .ordCnclBnfAmt(e.getAplyAmt())
-                    .build()
+    BNF_CANCEL(OrderBenefitBaseVO::toOrdBnfInoOfReverseCnclBnfAmt
             , Arrays.asList(GCC, MCA, GRA));
 
     private final Function<OrderBenefitBaseVO, OpOrdBnfInfo> bnfUpdateFunc;
@@ -49,14 +41,14 @@ public enum OpBnfUpdateCreator implements ClaimCreator<List<OpOrdBnfInfo>, List<
 
     public List<OpOrdBnfInfo> sumOrdCnlBnfAmtByOrdBnfNo(List<OpOrdBnfInfo> opOrdBnfInfoList) {
         Map<String, Integer> mapOfSumCnclAmtByBnfNo = opOrdBnfInfoList.stream()
-                        .collect(groupingBy(OpOrdBnfInfo::getOrdBnfNo, summingInt(OpOrdBnfInfo::getOrdCnclBnfAmt)));
+                .collect(groupingBy(OpOrdBnfInfo::getOrdBnfNo, summingInt(OpOrdBnfInfo::getOrdCnclBnfAmt)));
 
         return mapOfSumCnclAmtByBnfNo.entrySet().stream()
                 .map(e -> OpOrdBnfInfo.of(e.getKey(), e.getValue()))
                 .collect(toList());
     }
 
-    public static List<OpBnfUpdateCreator> getCreators(ClaimBusiness claimBusiness){
+    public static List<OpBnfUpdateCreator> getCreators(ClaimBusiness claimBusiness) {
         return Arrays.stream(OpBnfUpdateCreator.values())
                 .filter(e -> e.hasClaimDefine(claimBusiness))
                 .collect(toList());

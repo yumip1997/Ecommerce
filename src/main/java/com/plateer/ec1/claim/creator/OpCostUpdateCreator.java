@@ -3,17 +3,18 @@ package com.plateer.ec1.claim.creator;
 import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.claim.vo.ClaimDeliveryInfo;
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
+import com.plateer.ec1.delivery.enums.DVP0002Code;
 import com.plateer.ec1.order.enums.OPT0005Code;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.plateer.ec1.claim.enums.ClaimBusiness.GEW;
-import static com.plateer.ec1.claim.enums.ClaimBusiness.GRW;
+import static com.plateer.ec1.claim.enums.ClaimBusiness.*;
 
 @RequiredArgsConstructor
 public enum OpCostUpdateCreator implements ClaimCreator<List<OpOrdCostInfo>, List<ClaimDeliveryInfo>> {

@@ -23,26 +23,26 @@ import static com.plateer.ec1.order.enums.OPT0013Code.RETRIEVE;
 public enum OpClmInsertCreator implements ClaimCreator<OpClmInfo, ClaimGoodsInfo> {
 
 
-    GENERAL_ORDER_CANCEL(CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, DELIVERY.code, IntUnaryOperator.identity(), LocalDateTime::now
+    GNL_ORD_CNL(CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, DELIVERY.code, IntUnaryOperator.identity(), LocalDateTime::now
             , Collections.singletonList(GCC)),
-    ORDER_CANCEL_REQUEST(CANCEL.code, OPT0004Code.CANCEL_REQUEST.code, DELIVERY.code, IntUnaryOperator.identity(), () -> null
+    ORL_CNL_REQ(CANCEL.code, OPT0004Code.CANCEL_REQUEST.code, DELIVERY.code, IntUnaryOperator.identity(), () -> null
             , Collections.singletonList(MCA)),
-    ORDER_CANCEL_COMPLETE(CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, DELIVERY.code, IntUnaryOperator.identity(), LocalDateTime::now
+    ORD_CNL_CMT(CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, DELIVERY.code, IntUnaryOperator.identity(), LocalDateTime::now
             , Collections.singletonList(MCC)),
 
-    RETURN_ACCEPT_RETV(RETURN_ACCEPT.code, OPT0004Code.RETURN_ACCEPT.code, RETRIEVE.code, (dvp) -> dvp + 1, () -> null
+    RTN_APT(RETURN_ACCEPT.code, OPT0004Code.RETURN_ACCEPT.code, RETRIEVE.code, (dvp) -> dvp + 1, () -> null
             , Collections.singletonList(GRA)),
-    RETURN_WITHDRAWAL_RETV(RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, RETRIEVE.code, IntUnaryOperator.identity(), LocalDateTime::now
+    RTN_WTD(RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, RETRIEVE.code, IntUnaryOperator.identity(), LocalDateTime::now
             , Collections.singletonList(GRW)),
 
-    EXCHANGE_ACCEPT_REVT(EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code, RETRIEVE.code, (dvp) -> dvp + 1, () -> null,
+    EX_ACP_RTV(EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code, RETRIEVE.code, (dvp) -> dvp + 1, () -> null,
             Collections.singletonList(GEA)),
-    EXCHANGE_ACCEPT_DV(EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code, DELIVERY.code, (dvp) -> dvp + 1, () -> null,
+    EX_ACP_DV(EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code, DELIVERY.code, (dvp) -> dvp + 1, () -> null,
             Collections.singletonList(GEA)),
 
-    EXCHANGE_WITHDRAWAL_REVT(RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, RETRIEVE.code, IntUnaryOperator.identity(), LocalDateTime::now,
+    EX_WTD_RTV(RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, RETRIEVE.code, IntUnaryOperator.identity(), LocalDateTime::now,
             Collections.singletonList(GEW)),
-    EXCAHNGE_WITHDRWAL_DV(RETURN_WITHDRAWAL.code, OPT0004Code.RETURN_WITHDRAWAL.code, RETRIEVE.code, IntUnaryOperator.identity(), LocalDateTime::now,
+    EX_WTD_DV(CANCEL.code, OPT0004Code.CANCEL_COMPLETE.code, DELIVERY.code, IntUnaryOperator.identity(), LocalDateTime::now,
             Collections.singletonList(GEW));
 
 

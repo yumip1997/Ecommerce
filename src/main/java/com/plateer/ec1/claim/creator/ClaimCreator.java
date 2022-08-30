@@ -22,4 +22,15 @@ public interface ClaimCreator<T, U> extends MultiValueCustomFactory<ClaimBusines
                 .collect(Collectors.toList());
     }
 
+    static <T, U> List<U> create(T obj, List<? extends ClaimCreator<List<U>, T>> creators) {
+        return creators.stream()
+                .map(c -> c.create(obj))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
+    default List<ClaimCreator<?,?>> getCreatorList(){
+        return null;
+    }
+
 }

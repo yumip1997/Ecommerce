@@ -11,8 +11,10 @@ import com.plateer.ec1.order.vo.OrdClmCreationVO;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -36,6 +38,7 @@ public class ClaimDataCreator {
     public ClaimInsertBase createClaimInsertBase(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness) {
         ClaimInsertBase claimInsertBase = ClaimInsertBase.builder()
                 .opClmInfoList(createInsertOpClmInfoList(claimRequestVO, claimBusiness))
+                .opOrdCostInfoList(creatInsertOpOrdCostInfo(claimRequestVO, claimBusiness))
                 .opOrdBnfRelInfoList(createInsertOpOrdBnfRelInfoList(claimRequestVO, claimBusiness))
                 .build();
 
@@ -57,11 +60,20 @@ public class ClaimDataCreator {
 
         return opClmInfoList;
     }
+    
+    private List<OpOrdCostInfo> creatInsertOpOrdCostInfo(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
+        List<ClaimDeliveryInfo> claimDeliveryInfoList = claimRequestVO.getClaimDeliveryInfoList();
+        if(CollectionUtils.isEmpty(claimDeliveryInfoList)) return Collections.emptyList();
+
+        List<OpCostInsertCreator> creators = OpCostInsertCreator.getCreators(claimBusiness);
+        return ClaimCreator.create(claimRequestVO, creators);
+    }
 
     private List<OpOrdBnfRelInfo> createInsertOpOrdBnfRelInfoList(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
         List<OrderBenefitBaseVO> orderBenefitBaseVOList = claimRequestVO.getOrderBenefitBaseVOList();
+        if(CollectionUtils.isEmpty(orderBenefitBaseVOList)) return Collections.emptyList();
+        
         List<OpBnfRelInsertCreator> creators = OpBnfRelInsertCreator.getCreators(claimBusiness);
-
         return ClaimCreator.create(orderBenefitBaseVOList, creators);
     }
 
@@ -78,7 +90,7 @@ public class ClaimDataCreator {
         return ClaimUpdateBase.builder()
                 .opClmInfoList(createUpdateOpClmInfoList(claimRequestVO, claimBusiness))
                 .opOrdCostInfoList(createUpdateOpCostList(claimRequestVO, claimBusiness))
-                .opOrdBnfInfoList(createOpOrdBnfInoList(claimRequestVO, claimBusiness))
+                .opOrdBnfInfoList(createUpdateOpOrdBnfInfoList(claimRequestVO, claimBusiness))
                 .build();
     }
 
@@ -95,16 +107,19 @@ public class ClaimDataCreator {
         return ClaimCreator.create(list, creators);
     }
 
-    private List<OpOrdBnfInfo> createOpOrdBnfInoList(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
+    private List<OpOrdBnfInfo> createUpdateOpOrdBnfInfoList(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
         List<OrderBenefitBaseVO> orderBenefitBaseVOList = claimRequestVO.getOrderBenefitBaseVOList();
+        if(CollectionUtils.isEmpty(orderBenefitBaseVOList)) return Collections.emptyList();
+
         List<OpBnfUpdateCreator> creators = OpBnfUpdateCreator.getCreators(claimBusiness);
         return ClaimCreator.create(orderBenefitBaseVOList, creators);
     }
 
     private List<OpOrdCostInfo> createUpdateOpCostList(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
         List<ClaimDeliveryInfo> claimDeliveryInfoList = claimRequestVO.getClaimDeliveryInfoList();
-        List<OpCostUpdateCreator> creators = OpCostUpdateCreator.getCreators(claimBusiness);
+        if(CollectionUtils.isEmpty(claimDeliveryInfoList)) return Collections.emptyList();
 
+        List<OpCostUpdateCreator> creators = OpCostUpdateCreator.getCreators(claimBusiness);
         return ClaimCreator.create(claimDeliveryInfoList, creators);
     }
 

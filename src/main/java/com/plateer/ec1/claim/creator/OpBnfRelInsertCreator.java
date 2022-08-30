@@ -2,7 +2,6 @@ package com.plateer.ec1.claim.creator;
 
 import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
-import com.plateer.ec1.order.enums.OPT0005Code;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import lombok.RequiredArgsConstructor;
 
@@ -17,18 +16,10 @@ import static com.plateer.ec1.claim.enums.ClaimBusiness.*;
 @RequiredArgsConstructor
 public enum OpBnfRelInsertCreator implements ClaimCreator<List<OpOrdBnfRelInfo>, List<OrderBenefitBaseVO>> {
 
-    BNF_REL_APPLY((e) -> {
-        OpOrdBnfRelInfo opOrdBnfRelInfo = e.convertOpOrdBnfRelInfo();
-        opOrdBnfRelInfo.setProcSeq(e.getProcSeq() + 1);
-        opOrdBnfRelInfo.setAplyCnclCcd(OPT0005Code.APPLY.code);
-        return opOrdBnfRelInfo;
-    }, Collections.singletonList(GRW)),
-    BNF_REL_CANCEL((e) -> {
-        OpOrdBnfRelInfo opOrdBnfRelInfo = e.convertOpOrdBnfRelInfo();
-        opOrdBnfRelInfo.setProcSeq(e.getProcSeq() + 1);
-        opOrdBnfRelInfo.setAplyCnclCcd(OPT0005Code.APPLY.code);
-        return opOrdBnfRelInfo;
-    }, Arrays.asList(GCC, MCA, GRA));
+    BNF_REL_APPLY(OrderBenefitBaseVO::toOpOrdBnfRelInfoOfReverseAplyCcd
+            , Collections.singletonList(GRW)),
+    BNF_REL_CANCEL(OrderBenefitBaseVO::toOpOrdBnfRelInfoOfReverseAplyCcd
+            , Arrays.asList(GCC, MCA, GRA));
 
     private final Function<OrderBenefitBaseVO, OpOrdBnfRelInfo> bnfRelInsertFunc;
     private final List<ClaimBusiness> groups;
