@@ -278,10 +278,39 @@
                 </foreach>
     </insert>
 
-    <update id="updateOpClmInfoList"></update>
+    <update id="updateOpClmInfoList">
+        <foreach collection="list" item="item" separator=";">
+            update op_clm_info
+                set
+                    <if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(item.cnclCnt)">cncl_cnt = #{item.cnclCnt},</if>
+                    <if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(item.rtgsCnt)">rtgs_cnt = #{item.rtgsCnt},</if>
+                    <if test="@org.apache.commons.lang3.ObjectUtils@isNotEmpty(item.ordClmCmtDtime)">ord_clm_cmt_dtime = #{item.ordClmCmtDtime},</if>
+                    sys_mod_dtime = now(),
+                    sys_modr_id = #{item.loginId}
+            where ord_no = #{item.ordNo}
+                    and ord_seq = #{item.ordSeq}
+                    and proc_seq = #{item.procSeq}
+        </foreach>
+    </update>
 
-    <update id="updateOpOrdBnfInfoList"></update>
+    <update id="updateOpOrdBnfInfoList">
+        <foreach collection="list" item="item" separator=";">
+        update op_ord_bnf_info
+            set ord_cncl_bnf_amt = #{item.ordCnclBnfAmt},
+                sys_mod_dtime = now(),
+                sys_modr_id = #{item.loginId}
+        where ord_bnf_no = #{item.ordBnfNo}
+        </foreach>
+    </update>
 
-    <update id="updateOpOrdCostInfoList"></update>
+    <update id="updateOpOrdCostInfoList">
+        <foreach collection="list" item="item"  separator=";">
+            update op_ord_cost_info
+            set cncl_dv_amt = #{item.cnclDvAmt},
+                sys_mod_dtime = now(),
+                sys_modr_id = #{item.loginId}
+            where ord_cst_no = #{item.ordCstNo}
+        </foreach>
+    </update>
 
 </mapper>
