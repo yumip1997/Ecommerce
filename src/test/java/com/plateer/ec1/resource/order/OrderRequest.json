@@ -66,7 +66,7 @@
   ],
   "payInfoVOList" : [
     {
-      "payAmount" : "58000",
+      "payAmount" : "19000",
       "bankCode" : "03",
       "depositorName" : "박유미",
       "paymentType" : "inicis",
