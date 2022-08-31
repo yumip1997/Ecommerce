@@ -2,7 +2,7 @@ package com.plateer.ec1.claim.creator;
 
 import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.claim.vo.ClaimDeliveryInfo;
-import com.plateer.ec1.claim.vo.ClaimRequestVO;
+import com.plateer.ec1.claim.vo.ClaimView;
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import lombok.RequiredArgsConstructor;
 
@@ -15,19 +15,19 @@ import java.util.stream.Collectors;
 import static com.plateer.ec1.claim.enums.ClaimBusiness.*;
 
 @RequiredArgsConstructor
-public enum OpCostInsertCreator implements ClaimCreator<List<OpOrdCostInfo>, ClaimRequestVO>{
+public enum OpCostInsertCreator implements ClaimCreator<List<OpOrdCostInfo>, ClaimView>{
 
     CNL_CREATOR(Arrays.asList(GCC, MCA)){
         @Override
-        public List<OpOrdCostInfo> create(ClaimRequestVO claimRequestVO) {
-            return claimRequestVO.getClaimDeliveryInfoList().stream()
+        public List<OpOrdCostInfo> create(ClaimView claimView) {
+            return claimView.getClaimDeliveryInfoList().stream()
                     .map(ClaimDeliveryInfo::toOpOrdCostInfoOfCancel)
                     .collect(Collectors.toList());
         }
     },
     EX_APT_CREATOR(Collections.singletonList(GEA)){
         @Override
-        public List<OpOrdCostInfo> create(ClaimRequestVO req) {
+        public List<OpOrdCostInfo> create(ClaimView req) {
             return req.getClaimDeliveryInfoList().stream()
                     .map(e -> {
                         int dvGrpNo = e.getDvGrpNoOfCreatedClm(req.getMapByOrdNoDvGrpNo(), req.getMapByOrdNoOrdSeqOrgProcSeq());
@@ -37,7 +37,7 @@ public enum OpCostInsertCreator implements ClaimCreator<List<OpOrdCostInfo>, Cla
     },
     RETURN_APT_CREATOR(Collections.singletonList(GRA)){
         @Override
-        public List<OpOrdCostInfo> create(ClaimRequestVO req) {
+        public List<OpOrdCostInfo> create(ClaimView req) {
             List<OpOrdCostInfo> opOrdCostInfoList = new ArrayList<>();
 
             List<ClaimDeliveryInfo> claimDeliveryInfoList = req.getClaimDeliveryInfoList();

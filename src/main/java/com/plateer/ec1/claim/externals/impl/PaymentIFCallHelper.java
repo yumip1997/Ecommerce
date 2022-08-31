@@ -2,7 +2,7 @@ package com.plateer.ec1.claim.externals.impl;
 
 import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.claim.externals.ExternalIFCallHelper;
-import com.plateer.ec1.claim.vo.ClaimRequestVO;
+import com.plateer.ec1.claim.vo.ClaimView;
 import com.plateer.ec1.payment.service.PayService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,8 +17,8 @@ public class PaymentIFCallHelper implements ExternalIFCallHelper {
     private final PayService payService;
 
     @Override
-    public void call(ClaimRequestVO claimRequestVO) {
-        payService.cancel(claimRequestVO.toPaymentCancelReqVO());
+    public void call(ClaimView claimView) {
+        payService.cancel(claimView.toPaymentCancelReqVO());
     }
 
     @Override

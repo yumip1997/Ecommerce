@@ -1,6 +1,5 @@
 package com.plateer.ec1.order.vo.base;
 
-import com.plateer.ec1.claim.validation.groups.Claim;
 import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.order.enums.OPT0005Code;
@@ -11,26 +10,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderBenefitBaseVO implements Cloneable{
 
-    @NotEmpty(groups = Claim.class)
     private String ordNo;
     private String ordBnfNo;
-    @NotNull(groups = Claim.class)
     private Long ordSeq;
-    @NotNull(groups = Claim.class)
     private Long procSeq;
-    private String apyCnclCcd;
-    @NotNull(groups = Claim.class)
+    private String aplyCnclCcd;
     private Long prmNo;
-    @NotNull(groups = Claim.class)
     private Long cpnIssNo;
     private String cpnKndCd;
     private int degrCcd;
@@ -67,7 +58,7 @@ public class OrderBenefitBaseVO implements Cloneable{
     }
     
     private long reverseCnlBnfAmt(){
-        return OPT0005Code.APPLY.code.equals(this.apyCnclCcd) ? 0 : this.aplyAmt;
+        return OPT0005Code.APPLY.code.equals(this.aplyCnclCcd) ? 0 : this.aplyAmt;
     }
     
     public OpOrdBnfRelInfo toOpOrdBnfRelInfoOfReverseAplyCcd(){
@@ -78,7 +69,7 @@ public class OrderBenefitBaseVO implements Cloneable{
     }
 
     private String reverseAplyCnclCcd(){
-        return OPT0005Code.APPLY.code.equals(this.apyCnclCcd) ? OPT0005Code.CANCEL.code : OPT0005Code.APPLY.code;
+        return OPT0005Code.APPLY.code.equals(this.aplyCnclCcd) ? OPT0005Code.CANCEL.code : OPT0005Code.APPLY.code;
     }
 
     public CupIssVO toCupIssVO(String mbrNo){

@@ -5,25 +5,87 @@
         select concat('C', to_char(now(), 'YYYYMMDD'), nextval('nextval_clm_no'))
     </select>
 
-    <select id="getClaimViewList" resultType="com.plateer.ec1.claim.vo.ClaimView">
-        select clm.ord_no,
-               clm.clm_no,
-               clm.ord_goods_no,
-               clm.ord_item_no,
-               clm.ord_seq,
-               clm.proc_seq,
-               clm.ord_clm_tp_cd,
-               clm.dv_rvt_ccd,
-               clm.ord_prgs_scd,
-               gd.goods_sell_tp_cd
-        from op_clm_info clm inner join op_goods_info gd
-            on clm.ord_no = gd.ord_no and clm.ord_goods_no = gd.ord_goods_no and clm.ord_item_no = gd.ord_item_no
-        where
-            <foreach collection="list" item="item" separator="or">
-                (
-                    clm.ord_no = #{item.ordNo}
-                    and clm.ord_seq =  #{item.ordSeq}
-                    and clm.proc_seq = #{item.procSeq}
+    <resultMap id="claimViewMap" type="claimView">
+        <result column="cncl_req_amt" property="cnclReqAmt"/>
+        <result column="payment_type" property="paymentType" />
+        <result column="mbr_no" property="mbrNo" />
+        <collection property="claimDeliveryInfoList" autoMapping="true" ofType="claimDeliveryInfo" >
+            <id column="ord_cst_no" property="ordCstNo"/>
+        </collection>
+        <collection property="claimGoodsInfoList" autoMapping="true" ofType="claimGoodsInfo" >
+            <id column="ord_no" property="ordNo" />
+            <id column="ord_seq" property="ordSeq" />
+            <id column="proc_seq" property="procSeq"/>
+            <collection property="benefitBaseVOList" ofType="orderBenefitBaseVO" autoMapping="true"/>
+        </collection>
+    </resultMap>
+
+    <select id="getClaimView" parameterType="claimRequestVO" resultMap="claimViewMap">
+        with cst_req as (
+            <foreach collection="claimDeliveryInfoList" item="item" separator="union all">
+                select
+                    #{item.ordCstNo, jdbcType=VARCHAR} as ord_cst_no,
+                    #{item.reqDvPlcTpCd, jdbcType=VARCHAR} as req_dv_plc_tp_cd,
+                    #{item.reqImtnRsnCcd, jdbcType=VARCHAR} as req_imtn_rsn_ccd
+            </foreach>
+        ), cst as (
+            select
+                cst_req.*,
+                cst.dv_grp_no,
+                cst.org_ord_cst_no,
+                cst.clm_no,
+                cst.ord_no,
+                cst.dv_amt_tp_cd,
+                cst.org_dv_amt,
+                cst.dv_bnf_amt,
+                cst.aply_dv_amt,
+                cst.imtn_rsn_ccd,
+                cst.dv_plc_tp_cd,
+                cst.cncl_dv_amt
+            from op_ord_cost_info cst inner join cst_req on cst.ord_cst_no = cst_req.ord_cst_no
+        )
+        select
+            #{cnclReqAmt} as cncl_req_amt,
+            #{paymentType} as payment_type,
+            #{mbrNo} as mbr_no,
+            cst.*,
+            clm.ord_no,
+            clm.ord_goods_no,
+            clm.ord_item_no,
+            clm.ord_seq,
+            clm.proc_seq,
+            clm.ord_clm_tp_cd,
+            clm.ord_prgs_scd,
+            clm.dv_rvt_ccd,
+            clm.ord_amt,
+            clm.ord_cnt,
+            clm.cncl_cnt,
+            clm.rtgs_cnt,
+            clm.dv_grp_no,
+            clm.ord_clm_req_dtime,
+            clm.ord_clm_acpt_dtime,
+            clm.ord_clm_cmt_dtime,
+            clm.clm_no,
+            clm.org_proc_seq,
+            gd.goods_sell_tp_cd,
+            brl.ord_no,
+            brl.ord_bnf_no,
+            brl.ord_no,
+            brl.proc_seq,
+            brl.aply_cncl_ccd,
+            brl.aply_amt,
+            bnf.prm_no,
+            bnf.cpn_iss_no,
+            bnf.cpn_knd_cd,
+            bnf.degr_ccd
+        from op_clm_info clm inner join op_goods_info gd on clm.ord_no = gd.ord_no and clm.ord_goods_no = gd.ord_goods_no and clm.ord_item_no = gd.ord_item_no
+            left join op_ord_bnf_rel_info brl on clm.ord_no = brl.ord_no and clm.ord_seq = brl.ord_seq and clm.proc_seq = brl.proc_seq
+            left join op_ord_bnf_info bnf on brl.ord_bnf_no = bnf.ord_bnf_no
+            inner join cst on clm.ord_no = cst.ord_no and clm.dv_grp_no = cst.dv_grp_no
+        where <foreach collection="claimGoodsInfoList" item="item" separator="or">
+                (       clm.ord_no = #{item.ordNo}
+                        and clm.ord_seq =  #{item.ordSeq}
+                        and clm.proc_seq = #{item.procSeq}
                 )
             </foreach>
     </select>
@@ -36,7 +98,7 @@
                 (
                     clm.ord_no = #{item.ordNo}
                     and clm.ord_seq =  #{item.ordSeq}
-                    and clm.proc_seq = #{item.procSeq}
+                    and clm.org_proc_seq = #{item.procSeq}
                 )
     </foreach>
     </select>

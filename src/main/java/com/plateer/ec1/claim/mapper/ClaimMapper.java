@@ -12,7 +12,7 @@ public interface ClaimMapper {
 
     String getClaimNo();
 
-    List<ClaimView> getClaimViewList(List<ClaimGoodsInfo> claimGoodsInfoList);
+    ClaimView getClaimView(ClaimRequestVO claimRequestVO);
 
     List<ClaimGoodsInfo> getOrgOpClmList(List<ClaimGoodsInfo> claimGoodsInfoList);
 

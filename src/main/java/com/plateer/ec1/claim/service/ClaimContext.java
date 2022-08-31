@@ -29,35 +29,35 @@ public class ClaimContext {
 
     @LogTrace
     @Transactional
-    public void doClaim(ClaimRequestVO claimRequestVO, ClaimContextVO claimContextVO){
+    public void doClaim(ClaimRequestVO claimRequestVO, ClaimContextVO claimContextVO) {
         Long logSeq = ordClmMntService.insertOrderHistory(claimRequestVO);
         OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO = new OrdClmCreationVO<>();
 
-        try{
-            validate(claimRequestVO, claimContextVO.getClaimBusiness(), claimContextVO.getValidatorList());
+        try {
+            ClaimView claimView = claimMapper.getClaimView(claimRequestVO);
 
-            creationVO = create(claimRequestVO);
+            validate(claimView, claimContextVO.getClaimBusiness(), claimContextVO.getValidatorList());
+
+            creationVO = create(claimRequestVO, claimView);
 
             claimDataManipulator.manipulateClaimData(creationVO.getInsertData(), creationVO.getUpdateData());
 
-            callExternalIF(claimRequestVO, claimContextVO.getIfCallHelperList());
-        }catch (Exception e){
+            callExternalIF(claimView, claimContextVO.getIfCallHelperList());
+        } catch (Exception e) {
             creationVO.setException(e);
             throw e;
-        }finally {
+        } finally {
             ordClmMntService.updateOrderHistory(logSeq, creationVO);
         }
     }
 
-    private void validate(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness, List<ClaimValidator> claimValidatorList) {
-       if(CollectionUtils.isEmpty(claimValidatorList)) return;
-
-        List<ClaimView> claimViewList = claimMapper.getClaimViewList(claimRequestVO.getClaimGoodsInfoList());
+    private void validate(ClaimView claimView, ClaimBusiness claimBusiness, List<ClaimValidator> claimValidatorList) {
+        if (CollectionUtils.isEmpty(claimValidatorList)) return;
 
         ClaimValidationVO validationVO = ClaimValidationVO.builder()
                 .prdType(claimBusiness.getPrdTypeStr())
                 .validOrdPrgs(claimBusiness.getValidOrdPrgs())
-                .claimViewList(claimViewList)
+                .claimView(claimView)
                 .build();
 
         for (ClaimValidator validator : claimValidatorList) {
@@ -66,16 +66,16 @@ public class ClaimContext {
 
     }
 
-    private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> create(ClaimRequestVO claimRequestVO){
+    private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> create(ClaimRequestVO claimRequestVO, ClaimView claimView) {
         ClaimDataCreator claimDataCreator = ClaimDataCreator.of(claimMapper);
-        return claimDataCreator.createOrdClmCreationVO(claimRequestVO);
+        return claimDataCreator.createOrdClmCreationVO(claimRequestVO, claimView);
     }
 
-    private void callExternalIF(ClaimRequestVO claimRequestVO, List<ExternalIFCallHelper> ifCallHelperList) {
-        if(CollectionUtils.isEmpty(ifCallHelperList)) return;
+    private void callExternalIF(ClaimView claimView, List<ExternalIFCallHelper> ifCallHelperList) {
+        if (CollectionUtils.isEmpty(ifCallHelperList)) return;
 
         for (ExternalIFCallHelper externalIFCallHelper : ifCallHelperList) {
-            externalIFCallHelper.call(claimRequestVO);
+            externalIFCallHelper.call(claimView);
         }
     }
 

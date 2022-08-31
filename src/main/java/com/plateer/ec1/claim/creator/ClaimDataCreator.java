@@ -27,29 +27,30 @@ public class ClaimDataCreator {
         return new ClaimDataCreator(claimMapper);
     }
 
-    public OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> createOrdClmCreationVO(ClaimRequestVO claimRequestVO){
+    //TODO FACTORY에서 꺼내오는 거로 변경 예정
+    public OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> createOrdClmCreationVO(ClaimRequestVO claimRequestVO, ClaimView claimView){
         ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
         return OrdClmCreationVO.<ClaimInsertBase, ClaimUpdateBase>builder()
-                .insertData(createClaimInsertBase(claimRequestVO.clone(), claimBusiness))
-                .updateData(createClaimUpdateBase(claimRequestVO.clone(), claimBusiness))
+                .insertData(createClaimInsertBase(claimView.clone(), claimBusiness))
+                .updateData(createClaimUpdateBase(claimView.clone(), claimBusiness))
                 .build();
     }
 
-    public ClaimInsertBase createClaimInsertBase(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness) {
+    public ClaimInsertBase createClaimInsertBase(ClaimView claimView, ClaimBusiness claimBusiness) {
         ClaimInsertBase claimInsertBase = ClaimInsertBase.builder()
-                .opClmInfoList(createInsertOpClmInfoList(claimRequestVO, claimBusiness))
-                .opOrdCostInfoList(creatInsertOpOrdCostInfo(claimRequestVO, claimBusiness))
-                .opOrdBnfRelInfoList(createInsertOpOrdBnfRelInfoList(claimRequestVO, claimBusiness))
+                .opClmInfoList(createInsertOpClmInfoList(claimView, claimBusiness))
+                .opOrdCostInfoList(creatInsertOpOrdCostInfo(claimView, claimBusiness))
+                .opOrdBnfRelInfoList(createInsertOpOrdBnfRelInfoList(claimView, claimBusiness))
                 .build();
 
         return setUpClmNo(claimInsertBase, claimBusiness);
     }
 
-    private List<OpClmInfo> createInsertOpClmInfoList(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
+    private List<OpClmInfo> createInsertOpClmInfoList(ClaimView claimView, ClaimBusiness claimBusiness){
         List<OpClmInsertCreator> creators = OpClmInsertCreator.getCreators(claimBusiness);
         List<OpClmInfo> opClmInfoList = new ArrayList<>();
 
-        for (ClaimGoodsInfo claimGoodsInfo : claimRequestVO.getClaimGoodsInfoList()) {
+        for (ClaimGoodsInfo claimGoodsInfo : claimView.getClaimGoodsInfoList()) {
             for (int i=0; i < creators.size(); i++) {
                 OpClmInsertCreator creator = creators.get(i);
                 OpClmInfo opClmInfo = creator.create(claimGoodsInfo);
@@ -61,16 +62,16 @@ public class ClaimDataCreator {
         return opClmInfoList;
     }
     
-    private List<OpOrdCostInfo> creatInsertOpOrdCostInfo(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
-        List<ClaimDeliveryInfo> claimDeliveryInfoList = claimRequestVO.getClaimDeliveryInfoList();
+    private List<OpOrdCostInfo> creatInsertOpOrdCostInfo(ClaimView claimView, ClaimBusiness claimBusiness){
+        List<ClaimDeliveryInfo> claimDeliveryInfoList = claimView.getClaimDeliveryInfoList();
         if(CollectionUtils.isEmpty(claimDeliveryInfoList)) return Collections.emptyList();
 
         List<OpCostInsertCreator> creators = OpCostInsertCreator.getCreators(claimBusiness);
-        return ClaimCreator.create(claimRequestVO, creators);
+        return ClaimCreator.create(claimView, creators);
     }
 
-    private List<OpOrdBnfRelInfo> createInsertOpOrdBnfRelInfoList(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
-        List<OrderBenefitBaseVO> orderBenefitBaseVOList = claimRequestVO.getOrderBenefitBaseVOList();
+    private List<OpOrdBnfRelInfo> createInsertOpOrdBnfRelInfoList(ClaimView claimView, ClaimBusiness claimBusiness){
+        List<OrderBenefitBaseVO> orderBenefitBaseVOList = claimView.getOrderBenefitBaseVOList();
         if(CollectionUtils.isEmpty(orderBenefitBaseVOList)) return Collections.emptyList();
         
         List<OpBnfRelInsertCreator> creators = OpBnfRelInsertCreator.getCreators(claimBusiness);
@@ -86,20 +87,20 @@ public class ClaimDataCreator {
         return claimInsertBase;
     }
 
-    public ClaimUpdateBase createClaimUpdateBase(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
+    public ClaimUpdateBase createClaimUpdateBase(ClaimView claimView, ClaimBusiness claimBusiness){
         return ClaimUpdateBase.builder()
-                .opClmInfoList(createUpdateOpClmInfoList(claimRequestVO, claimBusiness))
-                .opOrdCostInfoList(createUpdateOpCostList(claimRequestVO, claimBusiness))
-                .opOrdBnfInfoList(createUpdateOpOrdBnfInfoList(claimRequestVO, claimBusiness))
+                .opClmInfoList(createUpdateOpClmInfoList(claimView, claimBusiness))
+                .opOrdCostInfoList(createUpdateOpCostList(claimView, claimBusiness))
+                .opOrdBnfInfoList(createUpdateOpOrdBnfInfoList(claimView, claimBusiness))
                 .build();
     }
 
-    private List<OpClmInfo> createUpdateOpClmInfoList(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
-        List<ClaimGoodsInfo> list = new ArrayList<>(claimRequestVO.getClaimGoodsInfoList());
+    private List<OpClmInfo> createUpdateOpClmInfoList(ClaimView claimView, ClaimBusiness claimBusiness){
+        List<ClaimGoodsInfo> list = new ArrayList<>(claimView.getClaimGoodsInfoList());
 
         //철회일 경우 원 주문까지 update 해야 하기에 원 주문 조회
         if(claimBusiness == ClaimBusiness.GEW || claimBusiness == ClaimBusiness.GRW){
-            List<ClaimGoodsInfo> orgOpClmList = claimMapper.getOrgOpClmList(claimRequestVO.getClaimGoodsInfoList());
+            List<ClaimGoodsInfo> orgOpClmList = claimMapper.getOrgOpClmList(claimView.getClaimGoodsInfoList());
             list.addAll(orgOpClmList);
         }
 
@@ -107,16 +108,16 @@ public class ClaimDataCreator {
         return ClaimCreator.create(list, creators);
     }
 
-    private List<OpOrdBnfInfo> createUpdateOpOrdBnfInfoList(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
-        List<OrderBenefitBaseVO> orderBenefitBaseVOList = claimRequestVO.getOrderBenefitBaseVOList();
+    private List<OpOrdBnfInfo> createUpdateOpOrdBnfInfoList(ClaimView claimView, ClaimBusiness claimBusiness){
+        List<OrderBenefitBaseVO> orderBenefitBaseVOList = claimView.getOrderBenefitBaseVOList();
         if(CollectionUtils.isEmpty(orderBenefitBaseVOList)) return Collections.emptyList();
 
         List<OpBnfUpdateCreator> creators = OpBnfUpdateCreator.getCreators(claimBusiness);
         return ClaimCreator.create(orderBenefitBaseVOList, creators);
     }
 
-    private List<OpOrdCostInfo> createUpdateOpCostList(ClaimRequestVO claimRequestVO, ClaimBusiness claimBusiness){
-        List<ClaimDeliveryInfo> claimDeliveryInfoList = claimRequestVO.getClaimDeliveryInfoList();
+    private List<OpOrdCostInfo> createUpdateOpCostList(ClaimView claimView, ClaimBusiness claimBusiness){
+        List<ClaimDeliveryInfo> claimDeliveryInfoList = claimView.getClaimDeliveryInfoList();
         if(CollectionUtils.isEmpty(claimDeliveryInfoList)) return Collections.emptyList();
 
         List<OpCostUpdateCreator> creators = OpCostUpdateCreator.getCreators(claimBusiness);
