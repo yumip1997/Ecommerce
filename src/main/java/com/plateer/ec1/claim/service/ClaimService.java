@@ -3,7 +3,6 @@ package com.plateer.ec1.claim.service;
 import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.claim.factory.ClaimValidatorFactory;
 import com.plateer.ec1.claim.factory.ExternalIFCallHelperFactory;
-import com.plateer.ec1.claim.validation.groups.Claim;
 import com.plateer.ec1.claim.vo.ClaimContextVO;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
@@ -22,9 +21,8 @@ public class ClaimService {
     private final ClaimValidatorFactory claimValidatorFactory;
     private final ClaimContext claimContext;
 
-    //TODO 필수 값 체크 VALIDATION 수정 예정
     @LogTrace
-    @Validated(Claim.class)
+    @Validated
     public void claim(@Valid ClaimRequestVO claimRequestVO){
         claimContext.doClaim(claimRequestVO, getClaimContextVO(claimRequestVO));
     }

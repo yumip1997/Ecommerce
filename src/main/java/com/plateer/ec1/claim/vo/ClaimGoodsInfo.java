@@ -1,10 +1,11 @@
 package com.plateer.ec1.claim.vo;
 
 import com.plateer.ec1.common.model.order.OpClmInfo;
-import com.plateer.ec1.order.enums.OPT0004Code;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
@@ -19,31 +20,26 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClaimGoodsInfo implements Cloneable{
 
     @NotEmpty
     private String ordNo;
-    @NotEmpty
     private String ordGoodsNo;
-    @NotEmpty
     private String ordItemNo;
     @NotNull
     private Integer ordSeq;
     @NotNull
     private Integer procSeq;
-    @NotEmpty
     private String ordClmTpCd;
     @NotEmpty
     private String ordPrgsScd;
-    @NotEmpty
     private String dvRvtCcd;
-    @NotNull
     private Long ordAmt;
-    @NotNull
     private Integer ordCnt;
     private int cnclCnt;
     private int rtgsCnt;
-    @NotNull
     private Integer dvGrpNo;
     private LocalDateTime ordClmReqDtime;
     private LocalDateTime ordClmAcptDtime;
@@ -52,10 +48,10 @@ public class ClaimGoodsInfo implements Cloneable{
     private String clmDtlRsnTt;
     private String clmNo;
     private int orgProcSeq;
+    private String goodsSellTpCd;
+    private List<OrderBenefitBaseVO> benefitBaseVOList;
 
-    private int cnclReqCnt;
-    private List<@Valid OrderBenefitBaseVO> benefitBaseVOList;
-
+    //TODO 장바구니 부분취소 일 때 emptyList 반환하도록 수정 예정
     public List<CupIssVO> toCupIssVOList(String mbrNo){
         return Optional.ofNullable(this.getBenefitBaseVOList())
                 .orElse(Collections.emptyList())

@@ -26,12 +26,10 @@ public class ClaimDeliveryInfo implements Cloneable{
 
     @NotEmpty
     private String ordCstNo;
-    @NotNull
     private Long dvGrpNo;
     private String aplyCcd;
     private String orgOrdCstNo;
     private String clmNo;
-    @NotEmpty
     private String ordNo;
     private String dvAmtTpCd;
     private Long orgDvAmt;
