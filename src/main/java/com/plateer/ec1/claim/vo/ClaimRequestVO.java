@@ -11,7 +11,6 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -29,13 +28,23 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
     private String mbrNo;
     @NotEmpty
     private List<@Valid ClaimGoodsInfo> claimGoodsInfoList;
-
-    private List<ClaimDeliveryInfo> claimDeliveryInfoList;
+    @NotNull
+    private List<@Valid ClaimDeliveryCostInfo> claimDeliveryCostInfoList;
 
     public List<String> getOrdPrsgList(){
         return this.claimGoodsInfoList.stream()
                 .map(ClaimGoodsInfo::getOrdPrgsScd)
                 .collect(toList());
+    }
+
+    public ClaimView toClaimView(List<ClaimGoodsInfo> claimGoodsInfoList, List<ClaimDeliveryCostInfo> claimDeliveryCostInfoList){
+        return ClaimView.builder()
+                .cnclReqAmt(this.cnclReqAmt)
+                .paymentType(this.paymentType)
+                .mbrNo(this.mbrNo)
+                .claimGoodsInfoList(claimGoodsInfoList)
+                .claimDeliveryCostInfoList(claimDeliveryCostInfoList)
+                .build();
     }
 
     @Override

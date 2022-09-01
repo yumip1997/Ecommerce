@@ -1,5 +1,6 @@
 package com.plateer.ec1.claim.mapper;
 
+import com.plateer.ec1.claim.vo.ClaimDeliveryCostInfo;
 import com.plateer.ec1.claim.vo.ClaimGoodsInfo;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
 import com.plateer.ec1.claim.vo.ClaimView;
@@ -12,7 +13,9 @@ public interface ClaimMapper {
 
     String getClaimNo();
 
-    ClaimView getClaimView(ClaimRequestVO claimRequestVO);
+    List<ClaimGoodsInfo> getClaimGoodsWithBnfList(List<ClaimGoodsInfo> claimGoodsInfoList);
+
+    List<ClaimDeliveryCostInfo> getClaimDeliveryCostInfoList(List<ClaimDeliveryCostInfo> claimDeliveryCostInfoList);
 
     List<ClaimGoodsInfo> getOrgOpClmList(List<ClaimGoodsInfo> claimGoodsInfoList);
 

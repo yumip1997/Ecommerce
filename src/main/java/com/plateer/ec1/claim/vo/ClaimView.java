@@ -6,10 +6,7 @@ import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.vo.req.PaymentCancelReqVO;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ClaimView extends OrderClaimBaseVO implements Cloneable{
 
     private Long cnclReqAmt;
@@ -28,7 +26,7 @@ public class ClaimView extends OrderClaimBaseVO implements Cloneable{
     private String mbrNo;
 
     private List<ClaimGoodsInfo> claimGoodsInfoList;
-    private List<ClaimDeliveryInfo> claimDeliveryInfoList;
+    private List<ClaimDeliveryCostInfo> claimDeliveryCostInfoList;
 
     private List<OpClmInfo> createdOpClmInfoList;
     private Map<String, List<ClaimGoodsInfo>> mapByOrdNoDvGrpNo;

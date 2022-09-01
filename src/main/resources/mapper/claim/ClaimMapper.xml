@@ -5,50 +5,15 @@
         select concat('C', to_char(now(), 'YYYYMMDD'), nextval('nextval_clm_no'))
     </select>
 
-    <resultMap id="claimViewMap" type="claimView">
-        <result column="cncl_req_amt" property="cnclReqAmt"/>
-        <result column="payment_type" property="paymentType" />
-        <result column="mbr_no" property="mbrNo" />
-        <collection property="claimDeliveryInfoList" autoMapping="true" ofType="claimDeliveryInfo" >
-            <id column="ord_cst_no" property="ordCstNo"/>
-        </collection>
-        <collection property="claimGoodsInfoList" autoMapping="true" ofType="claimGoodsInfo" >
-            <id column="ord_no" property="ordNo" />
-            <id column="ord_seq" property="ordSeq" />
-            <id column="proc_seq" property="procSeq"/>
-            <collection property="benefitBaseVOList" ofType="orderBenefitBaseVO" autoMapping="true"/>
-        </collection>
+    <resultMap id="claimGoodsWithBnfMap" type="claimGoodsInfo" autoMapping="true">
+        <id column="ord_no" property="ordNo" />
+        <id column="ord_seq" property="ordSeq" />
+        <id column="proc_seq" property="procSeq"/>
+        <collection property="benefitBaseVOList" ofType="orderBenefitBaseVO" autoMapping="true" notNullColumn="ord_bnf_no" />
     </resultMap>
 
-    <select id="getClaimView" parameterType="claimRequestVO" resultMap="claimViewMap">
-        with cst_req as (
-            <foreach collection="claimDeliveryInfoList" item="item" separator="union all">
-                select
-                    #{item.ordCstNo, jdbcType=VARCHAR} as ord_cst_no,
-                    #{item.reqDvPlcTpCd, jdbcType=VARCHAR} as req_dv_plc_tp_cd,
-                    #{item.reqImtnRsnCcd, jdbcType=VARCHAR} as req_imtn_rsn_ccd
-            </foreach>
-        ), cst as (
-            select
-                cst_req.*,
-                cst.dv_grp_no,
-                cst.org_ord_cst_no,
-                cst.clm_no,
-                cst.ord_no,
-                cst.dv_amt_tp_cd,
-                cst.org_dv_amt,
-                cst.dv_bnf_amt,
-                cst.aply_dv_amt,
-                cst.imtn_rsn_ccd,
-                cst.dv_plc_tp_cd,
-                cst.cncl_dv_amt
-            from op_ord_cost_info cst inner join cst_req on cst.ord_cst_no = cst_req.ord_cst_no
-        )
+    <select id="getClaimGoodsWithBnfList" resultMap="claimGoodsWithBnfMap">
         select
-            #{cnclReqAmt} as cncl_req_amt,
-            #{paymentType} as payment_type,
-            #{mbrNo} as mbr_no,
-            cst.*,
             clm.ord_no,
             clm.ord_goods_no,
             clm.ord_item_no,
@@ -81,13 +46,36 @@
         from op_clm_info clm inner join op_goods_info gd on clm.ord_no = gd.ord_no and clm.ord_goods_no = gd.ord_goods_no and clm.ord_item_no = gd.ord_item_no
             left join op_ord_bnf_rel_info brl on clm.ord_no = brl.ord_no and clm.ord_seq = brl.ord_seq and clm.proc_seq = brl.proc_seq
             left join op_ord_bnf_info bnf on brl.ord_bnf_no = bnf.ord_bnf_no
-            inner join cst on clm.ord_no = cst.ord_no and clm.dv_grp_no = cst.dv_grp_no
-        where <foreach collection="claimGoodsInfoList" item="item" separator="or">
+        where <foreach collection="list" item="item" separator="or">
                 (       clm.ord_no = #{item.ordNo}
                         and clm.ord_seq =  #{item.ordSeq}
                         and clm.proc_seq = #{item.procSeq}
                 )
             </foreach>
+    </select>
+
+    <select id="getClaimDeliveryCostInfoList" resultType="claimDeliveryCostInfo">
+        with dvp_cst_req as (
+            <foreach collection="list" item="item" separator="union all">
+                select
+                    #{item.ordCstNo, jdbcType=VARCHAR} as ord_cst_no,
+                    #{item.dvPlcTpCd, jdbcType=VARCHAR} as dv_plc_tp_cd,
+                    #{item.imtnRsnCcd, jdbcType=VARCHAR} as imtn_rsn_ccd
+            </foreach>
+        )
+        select
+            dvp_cst_req.*,
+            cst.dv_grp_no,
+            cst.aply_ccd,
+            cst.org_ord_cst_no,
+            cst.clm_no,
+            cst.ord_no,
+            cst.dv_amt_tp_cd,
+            cst.org_dv_amt,
+            cst.dv_bnf_amt,
+            cst.aply_dv_amt,
+            cst.cncl_dv_amt
+        from op_ord_cost_info cst inner join dvp_cst_req on cst.ord_cst_no = dvp_cst_req.ord_cst_no
     </select>
 
     <select id="getOrgOpClmList" resultType="com.plateer.ec1.claim.vo.ClaimGoodsInfo">

@@ -1,7 +1,6 @@
 package com.plateer.ec1.claim.vo;
 
 import com.plateer.ec1.common.model.order.OpClmInfo;
-import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import com.plateer.ec1.delivery.enums.DVP0002Code;
 import com.plateer.ec1.order.enums.OPT0005Code;
@@ -9,10 +8,8 @@ import com.plateer.ec1.order.enums.OPT0006Code;
 import com.plateer.ec1.order.enums.OPT0008Code;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.MultiValueMap;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +19,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClaimDeliveryInfo implements Cloneable{
+public class ClaimDeliveryCostInfo implements Cloneable{
 
     @NotEmpty
     private String ordCstNo;
@@ -36,17 +33,14 @@ public class ClaimDeliveryInfo implements Cloneable{
     private Long dvBnfAmt;
     private Long aplyDvAmt;
     private String imtnRsnCcd;
+    @NotEmpty
     private String dvPlcTpCd;
     private Long cnclDvAmt;
-    @NotEmpty
-    private String reqDvPlcTpCd;
-    @NotEmpty
-    private String reqImtnRsnCcd;
 
     @Override
-    public ClaimDeliveryInfo clone() {
+    public ClaimDeliveryCostInfo clone() {
         try {
-            return (ClaimDeliveryInfo) super.clone();
+            return (ClaimDeliveryCostInfo) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
@@ -70,11 +64,11 @@ public class ClaimDeliveryInfo implements Cloneable{
     }
 
     public boolean isCompanyImtnRsnCcd(){
-        return OPT0008Code.COMPANY.code.equals(this.getReqImtnRsnCcd());
+        return OPT0008Code.COMPANY.code.equals(this.getImtnRsnCcd());
     }
 
     public boolean isCustomerImtnRsnCcd(){
-        return OPT0008Code.CUSTOMER.code.equals(this.getReqImtnRsnCcd());
+        return OPT0008Code.CUSTOMER.code.equals(this.getImtnRsnCcd());
     }
 
     public boolean isCustomerDeliveryPaid(){
@@ -86,11 +80,11 @@ public class ClaimDeliveryInfo implements Cloneable{
     }
 
     public boolean isDeliveryPaid(){
-        return DVP0002Code.PAY_ON_DELIVERY.code.equals(this.getReqDvPlcTpCd());
+        return DVP0002Code.PAY_ON_DELIVERY.code.equals(this.getDvPlcTpCd());
     }
 
     public OpOrdCostInfo toOpOrdCostInfoOfCancel(){
-        ClaimDeliveryInfo clone = this.clone();
+        ClaimDeliveryCostInfo clone = this.clone();
         clone.setAplyCcd(OPT0005Code.CANCEL.code);
         clone.setOrdCstNo(clone.getOrdCstNo());
         return clone.convertOpOrdCostInfo();

@@ -16,6 +16,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -34,7 +37,7 @@ public class ClaimContext {
         OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO = new OrdClmCreationVO<>();
 
         try {
-            ClaimView claimView = claimMapper.getClaimView(claimRequestVO);
+            ClaimView claimView = getClaimView(claimRequestVO);
 
             validate(claimView, claimContextVO.getClaimBusiness(), claimContextVO.getValidatorList());
 
@@ -51,6 +54,16 @@ public class ClaimContext {
         }
     }
 
+    private ClaimView getClaimView(ClaimRequestVO claimRequestVO){
+        List<ClaimGoodsInfo> claimGoodsInfoWithBnf = claimMapper.getClaimGoodsWithBnfList(claimRequestVO.getClaimGoodsInfoList());
+
+        List<ClaimDeliveryCostInfo> reqDvCstList = claimRequestVO.getClaimDeliveryCostInfoList();
+        List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ?
+                Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
+        
+        return claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
+    }
+
     private void validate(ClaimView claimView, ClaimBusiness claimBusiness, List<ClaimValidator> claimValidatorList) {
         if (CollectionUtils.isEmpty(claimValidatorList)) return;
 
@@ -63,7 +76,6 @@ public class ClaimContext {
         for (ClaimValidator validator : claimValidatorList) {
             validator.validate(validationVO);
         }
-
     }
 
     private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> create(ClaimRequestVO claimRequestVO, ClaimView claimView) {
