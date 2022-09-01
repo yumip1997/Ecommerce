@@ -58,7 +58,7 @@ public class OrderBenefitBaseVO implements Cloneable{
     }
     
     private long reverseCnlBnfAmt(){
-        return OPT0005Code.APPLY.code.equals(this.aplyCnclCcd) ? 0 : this.aplyAmt;
+        return OPT0005Code.APPLY.code.equals(this.aplyCnclCcd) ? this.aplyAmt : 0;
     }
     
     public OpOrdBnfRelInfo toOpOrdBnfRelInfoOfReverseAplyCcd(){
