@@ -1,7 +1,7 @@
 {
   "ordNo" : "202207261",
   "orderBasicVO" : {
-    "mbrNo" : "123",
+    "mbrNo" : "test01",
     "ordTpCd" : "10",
     "ordSysCcd" : "FO",
     "ordNm" : "박유미",

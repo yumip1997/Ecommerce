@@ -6,19 +6,23 @@
   "cnclReqAmt" : 7200,
   "claimDeliveryCostInfoList" : [
     {
-      "ordCstNo" : "1000069",
+      "ordCstNo" : "1000070",
+      "dvPlcTpCd" : "10"
+    },
+    {
+      "ordCstNo" : "1000071",
       "dvPlcTpCd" : "10"
     }
   ],
   "claimGoodsInfoList" : [
     {
-      "ordNo" : "O20220901101136",
+      "ordNo" : "O20220901162722",
       "ordSeq" : "1",
       "procSeq" : "1",
       "ordPrgsScd" : "10"
     },
     {
-      "ordNo" : "O20220901101136",
+      "ordNo" : "O20220901162722",
       "ordSeq" : "2",
       "procSeq" : "1",
       "ordPrgsScd" : "10"
