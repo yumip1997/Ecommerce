@@ -57,6 +57,13 @@ class OrderServiceTest {
 
     @Test
     void order_with_point_test(){
+        OrderRequestVO requestVO = jsonReaderUtil.getObject("/OrderRequestWithPoint.json", OrderRequestVO.class);
+        requestVO.setOrdNo("O"+ LocalDateTimeUtil.toStringYearToSeconds(LocalDateTime.now()));
+        orderService.order(requestVO);
+    }
+
+    @Test
+    void order_with_cup_test(){
         OrderRequestVO requestVO = jsonReaderUtil.getObject("/OrderRequestWithPrdCartCup.json", OrderRequestVO.class);
         requestVO.setOrdNo("O"+ LocalDateTimeUtil.toStringYearToSeconds(LocalDateTime.now()));
         orderService.order(requestVO);
