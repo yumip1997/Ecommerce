@@ -69,7 +69,7 @@
             group by ord_no
         )
         select
-            pay_sum = clm_sum + cst_sum - bnf_sum
+            pay_sum = clm_sum + cst_sum - coalesce(bnf_sum, 0)
         from pay inner join clm_cst on pay.ord_no = clm_cst.ord_no
                  left join bnf on bnf.ord_no = clm_cst.ord_no
         where pay.ord_no = #{ordNo}
