@@ -4,6 +4,7 @@ import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,6 +33,8 @@ public enum OpBnfUpdateCreator implements ClaimCreator<List<OpOrdBnfInfo>, List<
 
     @Override
     public List<OpOrdBnfInfo> create(List<OrderBenefitBaseVO> orderBenefitBaseVOS) {
+        if(CollectionUtils.isEmpty(orderBenefitBaseVOS)) return Collections.emptyList();
+
         List<OpOrdBnfInfo> OpOrdBnfInfoListPerOpOrdBnfNo = orderBenefitBaseVOS.stream()
                 .map(this.bnfUpdateFunc)
                 .collect(toList());

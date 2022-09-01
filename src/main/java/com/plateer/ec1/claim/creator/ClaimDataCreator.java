@@ -27,7 +27,6 @@ public class ClaimDataCreator {
         return new ClaimDataCreator(claimMapper);
     }
 
-    //TODO FACTORY에서 꺼내오는 거로 변경 예정
     public OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> createOrdClmCreationVO(ClaimRequestVO claimRequestVO, ClaimView claimView){
         ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
         return OrdClmCreationVO.<ClaimInsertBase, ClaimUpdateBase>builder()
@@ -63,8 +62,8 @@ public class ClaimDataCreator {
     }
     
     private List<OpOrdCostInfo> creatInsertOpOrdCostInfo(ClaimView claimView, ClaimBusiness claimBusiness){
-        List<ClaimDeliveryInfo> claimDeliveryInfoList = claimView.getClaimDeliveryInfoList();
-        if(CollectionUtils.isEmpty(claimDeliveryInfoList)) return Collections.emptyList();
+        List<ClaimDeliveryCostInfo> claimDeliveryCostInfoList = claimView.getClaimDeliveryCostInfoList();
+        if(CollectionUtils.isEmpty(claimDeliveryCostInfoList)) return Collections.emptyList();
 
         List<OpCostInsertCreator> creators = OpCostInsertCreator.getCreators(claimBusiness);
         return ClaimCreator.create(claimView, creators);
@@ -117,11 +116,11 @@ public class ClaimDataCreator {
     }
 
     private List<OpOrdCostInfo> createUpdateOpCostList(ClaimView claimView, ClaimBusiness claimBusiness){
-        List<ClaimDeliveryInfo> claimDeliveryInfoList = claimView.getClaimDeliveryInfoList();
-        if(CollectionUtils.isEmpty(claimDeliveryInfoList)) return Collections.emptyList();
+        List<ClaimDeliveryCostInfo> claimDeliveryCostInfoList = claimView.getClaimDeliveryCostInfoList();
+        if(CollectionUtils.isEmpty(claimDeliveryCostInfoList)) return Collections.emptyList();
 
         List<OpCostUpdateCreator> creators = OpCostUpdateCreator.getCreators(claimBusiness);
-        return ClaimCreator.create(claimDeliveryInfoList, creators);
+        return ClaimCreator.create(claimDeliveryCostInfoList, creators);
     }
 
 
