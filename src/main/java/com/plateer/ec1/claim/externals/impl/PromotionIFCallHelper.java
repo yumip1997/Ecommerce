@@ -5,8 +5,10 @@ import com.plateer.ec1.claim.externals.ExternalIFCallHelper;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
 import com.plateer.ec1.claim.vo.ClaimView;
 import com.plateer.ec1.promotion.cupusecnl.service.CupUseCnlService;
+import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +21,9 @@ public class PromotionIFCallHelper implements ExternalIFCallHelper {
 
     @Override
     public void call(ClaimView claimView) {
+        List<CupIssVO> cupIssVOS = claimView.toCupIssVOList();
+        if(CollectionUtils.isEmpty(cupIssVOS)) return;
+
         cupUseCnlService.restoreCup(claimView.toCupIssVOList());
     }
 
