@@ -26,6 +26,7 @@ public class OrderBenefitBaseVO implements Cloneable{
     private String cpnKndCd;
     private int degrCcd;
     private long aplyAmt;
+    private long ordBnfAmt;
 
     public OpOrdBnfInfo toOpOrdBnfInfo(String bnfNo){
         return OpOrdBnfInfo.builder()
