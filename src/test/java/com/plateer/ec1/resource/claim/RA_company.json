@@ -1,0 +1,22 @@
+{
+  "prdType" : "10",
+  "ordClmReqTypes" : ["R"],
+  "paymentType" : "inicis",
+  "mbrNo" : "test01",
+  "cnclReqAmt" : 7200,
+  "claimDeliveryCostInfoList" : [
+    {
+      "ordCstNo" : "1000074",
+      "dvPlcTpCd" : "20",
+      "imtnRsnCcd" : "20"
+    }
+  ],
+  "claimGoodsInfoList" : [
+    {
+      "ordNo" : "O20220901165311",
+      "ordSeq" : "1",
+      "procSeq" : "1",
+      "ordPrgsScd" : "50"
+    }
+  ]
+}
