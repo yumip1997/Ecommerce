@@ -29,10 +29,8 @@ public enum OpCostInsertCreator implements ClaimCreator<List<OpOrdCostInfo>, Cla
         @Override
         public List<OpOrdCostInfo> create(ClaimView req) {
             return req.getClaimDeliveryCostInfoList().stream()
-                    .map(e -> {
-                        int dvGrpNo = e.getDvGrpNoOfCreatedClm(req.getMapByOrdNoDvGrpNo(), req.getMapByOrdNoOrdSeqOrgProcSeq());
-                        return e.toOpOrdCostInfoExchange(dvGrpNo);
-                    }).collect(Collectors.toList());
+                    .map(ClaimDeliveryCostInfo::toOpOrdCostInfoExchange)
+                    .collect(Collectors.toList());
         }
     },
     RETURN_APT_CREATOR(Collections.singletonList(GRA)){
@@ -42,24 +40,22 @@ public enum OpCostInsertCreator implements ClaimCreator<List<OpOrdCostInfo>, Cla
 
             List<ClaimDeliveryCostInfo> claimDeliveryCostInfoList = req.getClaimDeliveryCostInfoList();
             for (ClaimDeliveryCostInfo claimDeliveryCostInfo : claimDeliveryCostInfoList) {
-                int dvGrpNo = claimDeliveryCostInfo.getDvGrpNoOfCreatedClm(req.getMapByOrdNoDvGrpNo(), req.getMapByOrdNoOrdSeqOrgProcSeq());
-
                 if(claimDeliveryCostInfo.isCompanyImtnRsnCcd()){
-                    List<OpOrdCostInfo> companyOpOrdCostInfoList = claimDeliveryCostInfo.toOpOrdCostInfoOfReturnCompany(dvGrpNo);
+                    List<OpOrdCostInfo> companyOpOrdCostInfoList = claimDeliveryCostInfo.toOpOrdCostInfoOfReturnCompany();
                     opOrdCostInfoList.addAll(companyOpOrdCostInfoList);
                     continue;
                 }
 
                 //고객사유 착불(환불금액 < 반품비)
                 if(claimDeliveryCostInfo.isCustomerDeliveryPaid()){
-                    OpOrdCostInfo opOrdCostInfo = claimDeliveryCostInfo.toOpOrdCostInfoOfReturnCustomerPayOnDelivery(dvGrpNo);
+                    OpOrdCostInfo opOrdCostInfo = claimDeliveryCostInfo.toOpOrdCostInfoOfReturnCustomerPayOnDelivery();
                     opOrdCostInfoList.add(opOrdCostInfo);
                     continue;
                 }
 
                 //고객사유 착불x(환불금액 >= 반품비)
                 if(claimDeliveryCostInfo.isCustomerNotDeliveryPaid()){
-                    OpOrdCostInfo opOrdCostInfo = claimDeliveryCostInfo.toOpOrdCostInfoOfReturnCustomerNotPayOnDelivery(dvGrpNo);
+                    OpOrdCostInfo opOrdCostInfo = claimDeliveryCostInfo.toOpOrdCostInfoOfReturnCustomerNotPayOnDelivery();
                     opOrdCostInfoList.add(opOrdCostInfo);
                 }
             }
@@ -67,7 +63,6 @@ public enum OpCostInsertCreator implements ClaimCreator<List<OpOrdCostInfo>, Cla
             return opOrdCostInfoList;
         }
     };
-
 
     private final List<ClaimBusiness> groups;
 

@@ -52,17 +52,6 @@ public class ClaimDeliveryCostInfo implements Cloneable{
         return opOrdCostInfo;
     }
 
-    public int getDvGrpNoOfCreatedClm(Map<String, List<ClaimGoodsInfo>> mapByOrdNoDvGrpNo, Map<String, List<OpClmInfo>> mapByOrdNoOrdSeqOrgProcSeq){
-        List<OpClmInfo> createdClmByDvGrp = getCreatedClmByDvGrp(mapByOrdNoDvGrpNo, mapByOrdNoOrdSeqOrgProcSeq);
-        return createdClmByDvGrp.get(0).getDvGrpNo();
-    }
-
-    private List<OpClmInfo> getCreatedClmByDvGrp(Map<String, List<ClaimGoodsInfo>> mapByOrdNoDvGrpNo, Map<String, List<OpClmInfo>> mapByOrdNoOrdSeqOrgProcSeq){
-        List<ClaimGoodsInfo> claimGoodsInfos = mapByOrdNoDvGrpNo.get(this.getOrdNo() + this.getDvGrpNo());
-        ClaimGoodsInfo claimGoodsInfo = claimGoodsInfos.get(0);
-        return mapByOrdNoOrdSeqOrgProcSeq.get(claimGoodsInfo.getOrdNoOrdSeqProcSeq());
-    }
-
     public boolean isCompanyImtnRsnCcd(){
         return OPT0008Code.COMPANY.code.equals(this.getImtnRsnCcd());
     }
@@ -90,10 +79,10 @@ public class ClaimDeliveryCostInfo implements Cloneable{
         return clone.convertOpOrdCostInfo();
     }
 
-    public OpOrdCostInfo toOpOrdCostInfoExchange(int dvGrpNo){
+    public OpOrdCostInfo toOpOrdCostInfoExchange(){
         return OpOrdCostInfo.builder()
-                .ordNo(this.getOrdNo())
-                .dvGrpNo(dvGrpNo)
+                .ordNo(this.ordNo)
+                .dvGrpNo(this.dvGrpNo + 1)
                 .dvAmtTpCd(OPT0006Code.EXCHANGE_FEE.code)
                 .aplyDvAmt(0)
                 .cnclDvAmt(0)
@@ -105,10 +94,10 @@ public class ClaimDeliveryCostInfo implements Cloneable{
                 .build();
     }
 
-    public OpOrdCostInfo toOpOrdCostInfoOfReturnCustomerPayOnDelivery(int dvGrpNo){
+    public OpOrdCostInfo toOpOrdCostInfoOfReturnCustomerPayOnDelivery(){
         return OpOrdCostInfo.builder()
                 .ordNo(this.ordNo)
-                .dvGrpNo(dvGrpNo)
+                .dvGrpNo(this.dvGrpNo + 1)
                 .aplyCcd(OPT0005Code.APPLY.code)
                 .dvAmtTpCd(OPT0006Code.RETURN_FEE.code)
                 .aplyDvAmt(0)
@@ -120,10 +109,10 @@ public class ClaimDeliveryCostInfo implements Cloneable{
                 .build();
     }
 
-    public OpOrdCostInfo toOpOrdCostInfoOfReturnCustomerNotPayOnDelivery(int dvGrpNo){
+    public OpOrdCostInfo toOpOrdCostInfoOfReturnCustomerNotPayOnDelivery(){
         return OpOrdCostInfo.builder()
                 .ordNo(this.ordNo)
-                .dvGrpNo(dvGrpNo)
+                .dvGrpNo(this.dvGrpNo + 1)
                 .aplyCcd(OPT0005Code.APPLY.code)
                 .dvAmtTpCd(OPT0006Code.RETURN_FEE.code)
                 .aplyDvAmt(3000)
@@ -135,10 +124,10 @@ public class ClaimDeliveryCostInfo implements Cloneable{
                 .build();
     }
 
-    public List<OpOrdCostInfo> toOpOrdCostInfoOfReturnCompany(int dvGrpNo){
+    public List<OpOrdCostInfo> toOpOrdCostInfoOfReturnCompany(){
         OpOrdCostInfo apply = OpOrdCostInfo.builder()
                 .ordNo(this.ordNo)
-                .dvGrpNo(dvGrpNo)
+                .dvGrpNo(this.dvGrpNo + 1)
                 .aplyCcd(OPT0005Code.APPLY.code)
                 .dvAmtTpCd(OPT0006Code.RETURN_FEE.code)
                 .aplyDvAmt(0)
@@ -162,7 +151,6 @@ public class ClaimDeliveryCostInfo implements Cloneable{
                 .dvPlcTpCd(this.dvPlcTpCd)
                 .imtnRsnCcd(this.imtnRsnCcd)
                 .dvPlcTpCd(DVP0002Code.FREE.code)
-                .imtnRsnCcd(OPT0008Code.COMPANY.code)
                 .build();
 
         return Arrays.asList(apply, orgOrdDvCancel);
