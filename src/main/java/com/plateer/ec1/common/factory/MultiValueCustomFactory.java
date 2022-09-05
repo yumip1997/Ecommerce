@@ -6,4 +6,8 @@ public interface MultiValueCustomFactory<T> {
 
     List<T> getTypes();
 
+    default boolean hasType(T t){
+        return getTypes().contains(t);
+    }
+
 }
