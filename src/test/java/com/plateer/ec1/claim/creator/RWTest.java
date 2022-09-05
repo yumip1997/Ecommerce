@@ -20,11 +20,12 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class RATest {
+public class RWTest {
 
     @Autowired
     private ClaimMapper claimMapper;
@@ -38,8 +39,8 @@ public class RATest {
     }
 
     @Test
-    public void return_accpet_customer_test(){
-        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/RA_customer.json", ClaimRequestVO.class);
+    public void return_withdrawal_company_test(){
+        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/RW_company.json", ClaimRequestVO.class);
         List<ClaimGoodsInfo> claimGoodsInfoWithBnf = claimMapper.getClaimGoodsWithBnfList(claimRequestVO.getClaimGoodsInfoList());
 
         List<ClaimDeliveryCostInfo> reqDvCstList = claimRequestVO.getClaimDeliveryCostInfoList();
@@ -53,8 +54,8 @@ public class RATest {
 
         List<OpClmInfo> opClmInfoList = insertData.getOpClmInfoList();
         for (OpClmInfo opClmInfo : opClmInfoList) {
-            assertThat(opClmInfo.getOrdClmTpCd()).isEqualTo(OPT0003Code.RETURN_ACCEPT.code);
-            assertThat(opClmInfo.getOrdPrgsScd()).isEqualTo(OPT0004Code.RETURN_ACCEPT.code);
+            assertThat(opClmInfo.getOrdClmTpCd()).isEqualTo(OPT0003Code.RETURN_WITHDRAWAL.code);
+            assertThat(opClmInfo.getOrdPrgsScd()).isEqualTo(OPT0004Code.RETURN_WITHDRAWAL.code);
             assertThat(opClmInfo.getDvRvtCcd()).isEqualTo(OPT0013Code.RETRIEVE.code);
             assertThat(opClmInfo.getClmNo()).isNotNull();
         }
@@ -62,76 +63,21 @@ public class RATest {
         List<OpOrdCostInfo> opOrdCostInfoList = insertData.getOpOrdCostInfoList();
         if(opOrdCostInfoList != null){
             for (OpOrdCostInfo opOrdCostInfo : opOrdCostInfoList) {
-                assertThat(opOrdCostInfo.getClmNo()).isNotNull();
-                assertThat(opOrdCostInfo.getDvAmtTpCd()).isEqualTo(OPT0006Code.RETURN_FEE.code);
-                assertThat(opOrdCostInfo.getAplyDvAmt()).isEqualTo(3000L);
-                assertThat(opOrdCostInfo.getOrgDvAmt()).isEqualTo(3000L);
-                assertThat(opOrdCostInfo.getOrgDvAmt()).isEqualTo(3000L);
-                assertThat(opOrdCostInfo.getAplyCcd()).isEqualTo(OPT0005Code.APPLY.code);
-                assertThat(opOrdCostInfo.getDvPlcTpCd()).isEqualTo(DVP0002Code.PAY.code);
-                assertThat(opOrdCostInfo.getImtnRsnCcd()).isEqualTo(OPT0008Code.CUSTOMER.code);
-            }
-        }
-
-        List<OpOrdBnfRelInfo> opOrdBnfRelInfoList = insertData.getOpOrdBnfRelInfoList();
-        if(opOrdBnfRelInfoList != null){
-            for (OpOrdBnfRelInfo opOrdBnfRelInfo : opOrdBnfRelInfoList) {
-                assertThat(opOrdBnfRelInfo.getAplyCnclCcd()).isEqualTo(OPT0005Code.CANCEL.code);
-            }
-        }
-
-        List<OpClmInfo> updateOpClmInfoList = updateData.getOpClmInfoList();
-        for (OpClmInfo opClmInfo : updateOpClmInfoList) {
-            assertThat(opClmInfo.getRtgsCnt()).isNotZero();
-        }
-
-        List<OpOrdBnfInfo> opOrdBnfInfoList = updateData.getOpOrdBnfInfoList();
-        if(opOrdBnfInfoList != null){
-            for (OpOrdBnfInfo opOrdBnfInfo : opOrdBnfInfoList) {
-                assertThat(opOrdBnfInfo.getOrdCnclBnfAmt()).isNotZero();
-            }
-        }
-    }
-
-    @Test
-    public void return_accpet_company_test(){
-        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/RA_company.json", ClaimRequestVO.class);
-        List<ClaimGoodsInfo> claimGoodsInfoWithBnf = claimMapper.getClaimGoodsWithBnfList(claimRequestVO.getClaimGoodsInfoList());
-
-        List<ClaimDeliveryCostInfo> reqDvCstList = claimRequestVO.getClaimDeliveryCostInfoList();
-        List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
-
-        ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(ClaimBusiness.of(claimRequestVO), claimView);
-
-        ClaimInsertBase insertData = ordClmCreationVO.getInsertData();
-        ClaimUpdateBase updateData = ordClmCreationVO.getUpdateData();
-
-        List<OpClmInfo> opClmInfoList = insertData.getOpClmInfoList();
-        for (OpClmInfo opClmInfo : opClmInfoList) {
-            assertThat(opClmInfo.getOrdClmTpCd()).isEqualTo(OPT0003Code.RETURN_ACCEPT.code);
-            assertThat(opClmInfo.getOrdPrgsScd()).isEqualTo(OPT0004Code.RETURN_ACCEPT.code);
-            assertThat(opClmInfo.getDvRvtCcd()).isEqualTo(OPT0013Code.RETRIEVE.code);
-            assertThat(opClmInfo.getClmNo()).isNotNull();
-        }
-
-        List<OpOrdCostInfo> opOrdCostInfoList = insertData.getOpOrdCostInfoList();
-        if(opOrdCostInfoList != null){
-            for (OpOrdCostInfo opOrdCostInfo : opOrdCostInfoList) {
-                if(OPT0005Code.APPLY.code.equals(opOrdCostInfo.getAplyCcd())){
+                //원 접수건에 대한 취소 ROW
+                if(OPT0005Code.CANCEL.code.equals(opOrdCostInfo.getAplyCcd())){
                     assertThat(opOrdCostInfo.getClmNo()).isNotNull();
                     assertThat(opOrdCostInfo.getDvAmtTpCd()).isEqualTo(OPT0006Code.RETURN_FEE.code);
                     assertThat(opOrdCostInfo.getAplyDvAmt()).isEqualTo(0L);
                     assertThat(opOrdCostInfo.getOrgDvAmt()).isEqualTo(3000L);
                     assertThat(opOrdCostInfo.getDvBnfAmt()).isEqualTo(3000L);
-                    assertThat(opOrdCostInfo.getAplyCcd()).isEqualTo(OPT0005Code.APPLY.code);
+                    assertThat(opOrdCostInfo.getAplyCcd()).isEqualTo(OPT0005Code.CANCEL.code);
                     assertThat(opOrdCostInfo.getDvPlcTpCd()).isEqualTo(DVP0002Code.PAY.code);
                     assertThat(opOrdCostInfo.getImtnRsnCcd()).isEqualTo(OPT0008Code.COMPANY.code);
-                }else{
+                }else{ //원 배송비 환불에 대한 적용 ROW
                     assertThat(opOrdCostInfo.getClmNo()).isNotNull();
                     assertThat(opOrdCostInfo.getOrgOrdCstNo()).isNotNull();
                     assertThat(opOrdCostInfo.getDvAmtTpCd()).isEqualTo(OPT0006Code.DV_FEE.code);
-                    assertThat(opOrdCostInfo.getAplyCcd()).isEqualTo(OPT0005Code.CANCEL.code);
+                    assertThat(opOrdCostInfo.getAplyCcd()).isEqualTo(OPT0005Code.APPLY.code);
                     assertThat(opOrdCostInfo.getDvPlcTpCd()).isEqualTo(DVP0002Code.FREE.code);
                 }
             }
@@ -140,19 +86,112 @@ public class RATest {
         List<OpOrdBnfRelInfo> opOrdBnfRelInfoList = insertData.getOpOrdBnfRelInfoList();
         if(opOrdBnfRelInfoList != null){
             for (OpOrdBnfRelInfo opOrdBnfRelInfo : opOrdBnfRelInfoList) {
-                assertThat(opOrdBnfRelInfo.getAplyCnclCcd()).isEqualTo(OPT0005Code.CANCEL.code);
+                assertThat(opOrdBnfRelInfo.getAplyCnclCcd()).isEqualTo(OPT0005Code.APPLY.code);
             }
         }
 
         List<OpClmInfo> updateOpClmInfoList = updateData.getOpClmInfoList();
         for (OpClmInfo opClmInfo : updateOpClmInfoList) {
-            assertThat(opClmInfo.getRtgsCnt()).isNotZero();
+            ClaimGoodsInfo claimGoodsInfo = getClaimGoodsInfo(opClmInfo, claimView.getClaimGoodsInfoList());
+            if(claimGoodsInfo != null){
+                //접수 건에 대해 취소 수량
+                assertThat(opClmInfo.getCnclCnt()).isEqualTo(claimGoodsInfo.getOrdCnt());
+            }else{
+                //새로 조회한 원 주문 건에 대해 반품 수량 0
+                assertThat(opClmInfo.getRtgsCnt()).isZero();
+            }
+
+        }
+
+        //반품 접수건에 대한 취소 배송비
+        List<OpOrdCostInfo> updateOpOrdCost = updateData.getOpOrdCostInfoList();
+        for (OpOrdCostInfo opOrdCostInfo : updateOpOrdCost) {
+            assertThat(opOrdCostInfo.getCnclDvAmt()).isEqualTo(0L);
         }
 
         List<OpOrdBnfInfo> opOrdBnfInfoList = updateData.getOpOrdBnfInfoList();
         if(opOrdBnfInfoList != null){
             for (OpOrdBnfInfo opOrdBnfInfo : opOrdBnfInfoList) {
-                assertThat(opOrdBnfInfo.getOrdCnclBnfAmt()).isNotZero();
+                assertThat(opOrdBnfInfo.getOrdCnclBnfAmt()).isZero();
+            }
+        }
+    }
+
+    private ClaimGoodsInfo getClaimGoodsInfo(OpClmInfo opClmInfo, List<ClaimGoodsInfo> claimGoodsInfoList){
+        return claimGoodsInfoList.stream()
+                .filter(e -> e.getOrdNo().equals(opClmInfo.getOrdNo()) && e.getOrdSeq().equals(opClmInfo.getOrdSeq()) && e.getProcSeq().equals(opClmInfo.getProcSeq()))
+                .findFirst()
+                .orElse(null);
+    }
+    @Test
+    public void return_withdrawal_customer_test(){
+        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/RW_customer.json", ClaimRequestVO.class);
+        List<ClaimGoodsInfo> claimGoodsInfoWithBnf = claimMapper.getClaimGoodsWithBnfList(claimRequestVO.getClaimGoodsInfoList());
+
+        List<ClaimDeliveryCostInfo> reqDvCstList = claimRequestVO.getClaimDeliveryCostInfoList();
+        List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
+
+        ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(ClaimBusiness.of(claimRequestVO), claimView);
+
+        ClaimInsertBase insertData = ordClmCreationVO.getInsertData();
+        ClaimUpdateBase updateData = ordClmCreationVO.getUpdateData();
+
+        List<OpClmInfo> opClmInfoList = insertData.getOpClmInfoList();
+        for (OpClmInfo opClmInfo : opClmInfoList) {
+            assertThat(opClmInfo.getOrdClmTpCd()).isEqualTo(OPT0003Code.RETURN_WITHDRAWAL.code);
+            assertThat(opClmInfo.getOrdPrgsScd()).isEqualTo(OPT0004Code.RETURN_WITHDRAWAL.code);
+            assertThat(opClmInfo.getDvRvtCcd()).isEqualTo(OPT0013Code.RETRIEVE.code);
+            assertThat(opClmInfo.getClmNo()).isNotNull();
+        }
+
+        List<OpOrdCostInfo> opOrdCostInfoList = insertData.getOpOrdCostInfoList();
+        if(opOrdCostInfoList != null){
+            for (OpOrdCostInfo opOrdCostInfo : opOrdCostInfoList) {
+                //원 접수건에 대한 취소 ROW
+                if(OPT0005Code.CANCEL.code.equals(opOrdCostInfo.getAplyCcd())){
+                    assertThat(opOrdCostInfo.getClmNo()).isNotNull();
+                    assertThat(opOrdCostInfo.getDvAmtTpCd()).isEqualTo(OPT0006Code.RETURN_FEE.code);
+                    assertThat(opOrdCostInfo.getAplyDvAmt()).isEqualTo(3000L);
+                    assertThat(opOrdCostInfo.getOrgDvAmt()).isEqualTo(3000L);
+                    assertThat(opOrdCostInfo.getDvBnfAmt()).isEqualTo(0L);
+                    assertThat(opOrdCostInfo.getAplyCcd()).isEqualTo(OPT0005Code.CANCEL.code);
+                    assertThat(opOrdCostInfo.getDvPlcTpCd()).isEqualTo(DVP0002Code.PAY.code);
+                    assertThat(opOrdCostInfo.getImtnRsnCcd()).isEqualTo(OPT0008Code.CUSTOMER.code);
+                }
+            }
+        }
+
+        List<OpOrdBnfRelInfo> opOrdBnfRelInfoList = insertData.getOpOrdBnfRelInfoList();
+        if(opOrdBnfRelInfoList != null){
+            for (OpOrdBnfRelInfo opOrdBnfRelInfo : opOrdBnfRelInfoList) {
+                assertThat(opOrdBnfRelInfo.getAplyCnclCcd()).isEqualTo(OPT0005Code.APPLY.code);
+            }
+        }
+
+        List<OpClmInfo> updateOpClmInfoList = updateData.getOpClmInfoList();
+        for (OpClmInfo opClmInfo : updateOpClmInfoList) {
+            ClaimGoodsInfo claimGoodsInfo = getClaimGoodsInfo(opClmInfo, claimView.getClaimGoodsInfoList());
+            if(claimGoodsInfo != null){
+                //접수 건에 대해 취소 수량
+                assertThat(opClmInfo.getCnclCnt()).isEqualTo(claimGoodsInfo.getOrdCnt());
+            }else{
+                //새로 조회한 원 주문 건에 대해 반품 수량 0
+                assertThat(opClmInfo.getRtgsCnt()).isZero();
+            }
+
+        }
+
+        //반품 접수건에 대한 취소 배송비
+        List<OpOrdCostInfo> updateOpOrdCost = updateData.getOpOrdCostInfoList();
+        for (OpOrdCostInfo opOrdCostInfo : updateOpOrdCost) {
+            assertThat(opOrdCostInfo.getCnclDvAmt()).isEqualTo(0L);
+        }
+
+        List<OpOrdBnfInfo> opOrdBnfInfoList = updateData.getOpOrdBnfInfoList();
+        if(opOrdBnfInfoList != null){
+            for (OpOrdBnfInfo opOrdBnfInfo : opOrdBnfInfoList) {
+                assertThat(opOrdBnfInfo.getOrdCnclBnfAmt()).isZero();
             }
         }
     }

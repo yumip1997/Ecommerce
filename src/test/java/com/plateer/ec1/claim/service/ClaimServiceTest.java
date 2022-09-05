@@ -32,6 +32,19 @@ class ClaimServiceTest {
     @Test
     public void gnr_partial_test(){
         ClaimRequestVO object = jsonReaderUtil.getObject("/ClaimRequestPartialCnlGeneral.json", ClaimRequestVO.class);
+        claimService.claim(object);
+    }
+
+    @Test
+    public void return_company_test(){
+        ClaimRequestVO object = jsonReaderUtil.getObject("/RA_company.json", ClaimRequestVO.class);
+        claimService.claim(object);
+    }
+
+    @Test
+    public void return_customer_test(){
+        ClaimRequestVO object = jsonReaderUtil.getObject("/RA_customer.json", ClaimRequestVO.class);
+        claimService.claim(object);
     }
 
 }

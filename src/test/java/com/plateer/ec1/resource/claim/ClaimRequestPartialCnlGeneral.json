@@ -1,16 +1,20 @@
 {
   "prdType" : "10",
   "ordClmReqTypes" : ["C"],
-  "paymentType" : "inicis",
+  "paymentType" : "point",
   "mbrNo" : "test01",
+  "ordNo" : "O20220905161743",
   "cnclReqAmt" : 7200,
-  "claimDeliveryCostInfoList" : [],
+  "claimDeliveryCostInfoList" : [  {
+    "ordCstNo" : "1000103",
+    "dvPlcTpCd" : "10"
+  }],
   "claimGoodsInfoList" : [
     {
-      "ordNo" : "O20220901101136",
+      "ordNo" : "O20220905161743",
       "ordSeq" : "1",
       "procSeq" : "1",
-      "ordPrgsScd" : "10"
+      "ordPrgsScd" : "20"
     }
   ]
 }
