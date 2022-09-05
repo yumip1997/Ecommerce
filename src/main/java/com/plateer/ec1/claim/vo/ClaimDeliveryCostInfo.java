@@ -19,7 +19,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClaimDeliveryCostInfo implements Cloneable{
+public class ClaimDeliveryCostInfo implements Cloneable {
 
     @NotEmpty
     private String ordCstNo;
@@ -46,40 +46,44 @@ public class ClaimDeliveryCostInfo implements Cloneable{
         }
     }
 
-    public OpOrdCostInfo convertOpOrdCostInfo(){
+    public OpOrdCostInfo convertOpOrdCostInfo() {
         OpOrdCostInfo opOrdCostInfo = new OpOrdCostInfo();
         BeanUtils.copyProperties(this, opOrdCostInfo);
         return opOrdCostInfo;
     }
 
-    public boolean isCompanyImtnRsnCcd(){
+    private String reverseAplyCnclCcd(){
+        return OPT0005Code.APPLY.code.equals(this.getAplyCcd()) ? OPT0005Code.CANCEL.code : OPT0005Code.APPLY.code;
+    }
+
+    public boolean isCompanyImtnRsnCcd() {
         return OPT0008Code.COMPANY.code.equals(this.getImtnRsnCcd());
     }
 
-    public boolean isCustomerImtnRsnCcd(){
+    public boolean isCustomerImtnRsnCcd() {
         return OPT0008Code.CUSTOMER.code.equals(this.getImtnRsnCcd());
     }
 
-    public boolean isCustomerDeliveryPaid(){
+    public boolean isCustomerDeliveryPaid() {
         return isCustomerImtnRsnCcd() && isDeliveryPaid();
-     }
+    }
 
-    public boolean isCustomerNotDeliveryPaid(){
+    public boolean isCustomerNotDeliveryPaid() {
         return isCustomerImtnRsnCcd() && !isDeliveryPaid();
     }
 
-    public boolean isDeliveryPaid(){
+    public boolean isDeliveryPaid() {
         return DVP0002Code.PAY_ON_DELIVERY.code.equals(this.getDvPlcTpCd());
     }
 
-    public OpOrdCostInfo toOpOrdCostInfoOfCancel(){
+    public OpOrdCostInfo toOpOrdCostInfoOfCancel() {
         ClaimDeliveryCostInfo clone = this.clone();
-        clone.setAplyCcd(OPT0005Code.CANCEL.code);
+        clone.setAplyCcd(clone.reverseAplyCnclCcd());
         clone.setOrdCstNo(clone.getOrdCstNo());
         return clone.convertOpOrdCostInfo();
     }
 
-    public OpOrdCostInfo toOpOrdCostInfoExchange(){
+    public OpOrdCostInfo toOpOrdCostInfoExchange() {
         return OpOrdCostInfo.builder()
                 .ordNo(this.ordNo)
                 .dvGrpNo(this.dvGrpNo + 1)
@@ -94,7 +98,7 @@ public class ClaimDeliveryCostInfo implements Cloneable{
                 .build();
     }
 
-    public OpOrdCostInfo toOpOrdCostInfoOfReturnCustomerPayOnDelivery(){
+    public OpOrdCostInfo toOpOrdCostInfoOfReturnCustomerPayOnDelivery() {
         return OpOrdCostInfo.builder()
                 .ordNo(this.ordNo)
                 .dvGrpNo(this.dvGrpNo + 1)
@@ -109,7 +113,7 @@ public class ClaimDeliveryCostInfo implements Cloneable{
                 .build();
     }
 
-    public OpOrdCostInfo toOpOrdCostInfoOfReturnCustomerNotPayOnDelivery(){
+    public OpOrdCostInfo toOpOrdCostInfoOfReturnCustomerNotPayOnDelivery() {
         return OpOrdCostInfo.builder()
                 .ordNo(this.ordNo)
                 .dvGrpNo(this.dvGrpNo + 1)
@@ -124,7 +128,7 @@ public class ClaimDeliveryCostInfo implements Cloneable{
                 .build();
     }
 
-    public List<OpOrdCostInfo> toOpOrdCostInfoOfReturnCompany(){
+    public List<OpOrdCostInfo> toOpOrdCostInfoOfReturnCompany() {
         OpOrdCostInfo apply = OpOrdCostInfo.builder()
                 .ordNo(this.ordNo)
                 .dvGrpNo(this.dvGrpNo + 1)
@@ -149,7 +153,6 @@ public class ClaimDeliveryCostInfo implements Cloneable{
                 .dvBnfAmt(this.dvBnfAmt)
                 .orgOrdCstNo(this.ordCstNo)
                 .dvPlcTpCd(this.dvPlcTpCd)
-                .imtnRsnCcd(this.imtnRsnCcd)
                 .dvPlcTpCd(DVP0002Code.FREE.code)
                 .build();
 

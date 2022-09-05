@@ -14,6 +14,8 @@ import java.util.List;
 @Builder
 public class ClaimInsertBase {
 
+    private String clmNo;
+
     private List<OpClmInfo> opClmInfoList;
 
     private List<OpOrdCostInfo> opOrdCostInfoList;
@@ -21,6 +23,7 @@ public class ClaimInsertBase {
     private List<OpOrdBnfRelInfo> opOrdBnfRelInfoList;
 
     public void setClmNo(String clmNo){
+
         for (OpClmInfo opClmInfo : opClmInfoList) {
             opClmInfo.setClmNo(clmNo);
         }
