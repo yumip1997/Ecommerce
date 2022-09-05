@@ -17,7 +17,7 @@ import static com.plateer.ec1.claim.enums.ClaimBusiness.*;
 @RequiredArgsConstructor
 public enum OpCostInsertCreator implements ClaimCreator<List<OpOrdCostInfo>, ClaimView>{
 
-    CNL_CREATOR(Arrays.asList(GCC, MCA)){
+    CNL_APlY_CREATOR(Arrays.asList(GCC, MCA, GRW)){
         @Override
         public List<OpOrdCostInfo> create(ClaimView claimView) {
             return claimView.getClaimDeliveryCostInfoList().stream()
@@ -73,7 +73,7 @@ public enum OpCostInsertCreator implements ClaimCreator<List<OpOrdCostInfo>, Cla
 
     public static List<OpCostInsertCreator> getCreators(ClaimBusiness claimBusiness){
         return Arrays.stream(OpCostInsertCreator.values())
-                .filter(e -> e.hasClaimDefine(claimBusiness))
+                .filter(e -> e.hasType(claimBusiness))
                 .collect(Collectors.toList());
     }
 }

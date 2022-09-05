@@ -43,7 +43,7 @@ public enum OpCostUpdateCreator implements ClaimCreator<List<OpOrdCostInfo>, Lis
 
     public static List<OpCostUpdateCreator> getCreators(ClaimBusiness claimBusiness){
         return Arrays.stream(OpCostUpdateCreator.values())
-                .filter(e -> e.hasClaimDefine(claimBusiness))
+                .filter(e -> e.hasType(claimBusiness))
                 .collect(Collectors.toList());
     }
 }

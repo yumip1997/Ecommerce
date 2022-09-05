@@ -38,7 +38,7 @@ public enum OpBnfRelInsertCreator implements ClaimCreator<List<OpOrdBnfRelInfo>,
 
     public static List<OpBnfRelInsertCreator> getCreators(ClaimBusiness claimBusiness){
         return Arrays.stream(OpBnfRelInsertCreator.values())
-                .filter(e -> e.hasClaimDefine(claimBusiness))
+                .filter(e -> e.hasType(claimBusiness))
                 .collect(Collectors.toList());
     }
 }

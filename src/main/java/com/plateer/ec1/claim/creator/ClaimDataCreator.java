@@ -27,11 +27,13 @@ public class ClaimDataCreator {
         return new ClaimDataCreator(claimMapper);
     }
 
-    public OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> createOrdClmCreationVO(ClaimRequestVO claimRequestVO, ClaimView claimView){
-        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
+    public OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> createOrdClmCreationVO(ClaimBusiness claimBusiness, ClaimView claimView){
+        ClaimInsertBase claimInsertBase = createClaimInsertBase(claimView.clone(), claimBusiness);
         return OrdClmCreationVO.<ClaimInsertBase, ClaimUpdateBase>builder()
-                .insertData(createClaimInsertBase(claimView.clone(), claimBusiness))
+                .insertData(claimInsertBase)
                 .updateData(createClaimUpdateBase(claimView.clone(), claimBusiness))
+                .clmNo(claimInsertBase.getOpClmInfoList().get(0).getClmNo())
+                .ordNo(claimInsertBase.getOpClmInfoList().get(0).getOrdNo())
                 .build();
     }
 
@@ -79,7 +81,7 @@ public class ClaimDataCreator {
 
     private ClaimInsertBase setUpClmNo(ClaimInsertBase claimInsertBase, ClaimBusiness claimBusiness){
         ClaimNumberCreator claimNumberCreator = ClaimNumberCreator.of();
-        if(!claimNumberCreator.hasClaimDefine(claimBusiness)) return claimInsertBase;
+        if(!claimNumberCreator.hasType(claimBusiness)) return claimInsertBase;
 
         String claimNo = claimNumberCreator.create(claimMapper::getClaimNo);
         claimInsertBase.setClmNo(claimNo);

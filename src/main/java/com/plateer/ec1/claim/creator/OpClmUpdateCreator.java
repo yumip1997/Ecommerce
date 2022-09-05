@@ -77,7 +77,7 @@ public enum OpClmUpdateCreator implements ClaimCreator<List<OpClmInfo>, List<Cla
 
     public static List<OpClmUpdateCreator> getCreators(ClaimBusiness claimBusiness) {
         return Arrays.stream(OpClmUpdateCreator.values())
-                .filter(e -> e.hasClaimDefine(claimBusiness))
+                .filter(e -> e.hasType(claimBusiness))
                 .collect(Collectors.toList());
     }
 

@@ -72,7 +72,7 @@ public enum OpClmInsertCreator implements ClaimCreator<OpClmInfo, ClaimGoodsInfo
 
     public static List<OpClmInsertCreator> getCreators(ClaimBusiness claimBusiness){
         return Arrays.stream(OpClmInsertCreator.values())
-                .filter(e -> e.hasClaimDefine(claimBusiness))
+                .filter(e -> e.hasType(claimBusiness))
                 .collect(Collectors.toList());
     }
 
