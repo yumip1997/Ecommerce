@@ -87,7 +87,7 @@
                 (
                     clm.ord_no = #{item.ordNo}
                     and clm.ord_seq =  #{item.ordSeq}
-                    and clm.org_proc_seq = #{item.procSeq}
+                    and clm.proc_seq = #{item.orgProcSeq}
                 )
     </foreach>
     </select>
