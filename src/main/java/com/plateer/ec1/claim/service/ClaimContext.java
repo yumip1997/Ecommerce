@@ -2,7 +2,8 @@ package com.plateer.ec1.claim.service;
 
 import com.plateer.ec1.claim.creator.ClaimDataCreator;
 import com.plateer.ec1.claim.enums.ClaimBusiness;
-import com.plateer.ec1.claim.externals.ExternalIFCallHelper;
+import com.plateer.ec1.claim.externals.PaymentIFCallHelper;
+import com.plateer.ec1.claim.externals.PromotionIFCallHelper;
 import com.plateer.ec1.claim.manipulator.ClaimDataManipulator;
 import com.plateer.ec1.claim.mapper.ClaimMapper;
 import com.plateer.ec1.claim.validation.validator.ClaimValidator;
@@ -10,16 +11,17 @@ import com.plateer.ec1.claim.vo.*;
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.order.service.OrdClmMntService;
 import com.plateer.ec1.order.vo.OrdClmCreationVO;
+import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
+import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +31,8 @@ public class ClaimContext {
     private final ClaimMapper claimMapper;
     private final OrdClmMntService ordClmMntService;
     private final ClaimDataManipulator claimDataManipulator;
+    private final PaymentIFCallHelper paymentIFCallHelper;
+    private final PromotionIFCallHelper promotionIFCallHelper;
 
     @LogTrace
     @Transactional
@@ -41,11 +45,11 @@ public class ClaimContext {
 
             validate(claimView, claimContextVO.getClaimBusiness(), claimContextVO.getValidatorList());
 
-            creationVO = create(claimRequestVO, claimView);
+            creationVO = create(claimContextVO.getClaimBusiness(), claimView);
 
             claimDataManipulator.manipulateClaimData(creationVO.getInsertData(), creationVO.getUpdateData());
 
-            callExternalIF(claimView, claimContextVO.getIfCallHelperList());
+            callExternalIF(claimContextVO.getClaimBusiness(), claimRequestVO, creationVO);
         } catch (Exception e) {
             creationVO.setException(e);
             throw e;
@@ -67,28 +71,32 @@ public class ClaimContext {
     private void validate(ClaimView claimView, ClaimBusiness claimBusiness, List<ClaimValidator> claimValidatorList) {
         if (CollectionUtils.isEmpty(claimValidatorList)) return;
 
-        ClaimValidationVO validationVO = ClaimValidationVO.builder()
-                .prdType(claimBusiness.getPrdTypeStr())
-                .validOrdPrgs(claimBusiness.getValidOrdPrgs())
-                .claimView(claimView)
-                .build();
-
+        ClaimValidationVO claimValidationVO = claimView.toClaimValidationVO(claimBusiness);
         for (ClaimValidator validator : claimValidatorList) {
-            validator.validate(validationVO);
+            validator.validate(claimValidationVO);
         }
     }
 
-    private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> create(ClaimRequestVO claimRequestVO, ClaimView claimView) {
+    private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> create(ClaimBusiness claimBusiness, ClaimView claimView) {
         ClaimDataCreator claimDataCreator = ClaimDataCreator.of(claimMapper);
-        return claimDataCreator.createOrdClmCreationVO(claimRequestVO, claimView);
+        return claimDataCreator.createOrdClmCreationVO(claimBusiness, claimView);
     }
 
-    private void callExternalIF(ClaimView claimView, List<ExternalIFCallHelper> ifCallHelperList) {
-        if (CollectionUtils.isEmpty(ifCallHelperList)) return;
-
-        for (ExternalIFCallHelper externalIFCallHelper : ifCallHelperList) {
-            externalIFCallHelper.call(claimView);
-        }
+    private void callExternalIF(ClaimBusiness claimBusiness, ClaimRequestVO claimRequestVO, OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO) {
+        callPaymentIF(claimBusiness, claimRequestVO, creationVO.getClmNo());
+        callPromotionIF(claimBusiness, claimRequestVO, creationVO.getUpdateData());
     }
 
+    private void callPaymentIF(ClaimBusiness claimBusiness, ClaimRequestVO claimRequestVO, String clmNo){
+        if(!paymentIFCallHelper.hasType(claimBusiness)) return;
+
+        paymentIFCallHelper.call(claimRequestVO.toPaymentCancelReqVO(clmNo));
+    }
+
+    private void callPromotionIF(ClaimBusiness claimBusiness, ClaimRequestVO claimRequestVO, ClaimUpdateBase claimUpdateBase){
+        if(!promotionIFCallHelper.hasType(claimBusiness)) return;
+
+        List<CupIssVO> cupIssVOList = claimRequestVO.toCupIssVOList(claimUpdateBase.getRestoreCpnIssNoList());
+        promotionIFCallHelper.call(cupIssVOList);
+    }
 }
