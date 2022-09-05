@@ -54,6 +54,8 @@ public class OrderBenefitBaseVO implements Cloneable{
     public OpOrdBnfInfo toOrdBnfInoOfReverseCnclBnfAmt(){
         return OpOrdBnfInfo.builder()
                 .ordBnfNo(this.getOrdBnfNo())
+                .cpnIssNo(this.cpnIssNo)
+                .ordBnfAmt(this.ordBnfAmt)
                 .ordCnclBnfAmt(reverseCnlBnfAmt())
                 .build();
     }

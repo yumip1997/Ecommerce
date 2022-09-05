@@ -11,11 +11,18 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class OrdClmCreationVO<T,U> extends OrderClaimBaseVO {
 
     private T insertData;
     private U updateData;
     private Exception exception;
+
+    @Builder
+    public OrdClmCreationVO(T insertData, U updateData, Exception e, String ordNo, String clmNo){
+        super(ordNo, clmNo);
+        this.insertData = insertData;
+        this.updateData = updateData;
+        this.exception = e;
+    }
 
 }
