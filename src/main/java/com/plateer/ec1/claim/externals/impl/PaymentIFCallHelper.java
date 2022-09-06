@@ -31,7 +31,7 @@ public class PaymentIFCallHelper implements ExternalIFCallHelper {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void call(ClaimRequestVO claimRequestVO, OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO) {
-        PaymentCancelReqVO paymentCancelReqVO = claimRequestVO.toPaymentCancelReqVO(claimRequestVO.getClmNo());
+        PaymentCancelReqVO paymentCancelReqVO = claimRequestVO.toPaymentCancelReqVO(creationVO.getClmNo());
         payService.cancel(paymentCancelReqVO);
     }
 }
