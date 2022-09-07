@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.payment.mapper.PaymentMapper">
+
     <select id="getOrderPayInfo" resultType="com.plateer.ec1.payment.vo.OrderPayInfoVO">
         select
             od.ord_no,
@@ -29,12 +30,14 @@
             og.goods_nm
         from op_ord_base od inner join op_pay_info py on od.ord_no = py.ord_no
                             inner join op_goods_info og on od.ord_no = og.ord_no
-                            where 1 = 1
-            and od.ord_no = #{ordNo}
-            and (
+
+        where  od.ord_no = #{ordNo}
+          and py.org_pay_no is null
+          and (
                 (pay_prgs_scd = '10' and pay_cmt_dtime is null) or
                 (pay_prgs_scd = '20' and pay_cmt_dtime is not null)
             )
-            limit 1
+        order by py.sys_reg_dtime desc
+        limit 1
     </select>
 </mapper>

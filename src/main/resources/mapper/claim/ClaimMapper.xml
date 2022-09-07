@@ -91,4 +91,49 @@
                 )
     </foreach>
     </select>
+
+    <sql id="sql_org_pay">
+        select ord_no,
+               pay_amt,
+               rfnd_avl_amt
+        from op_pay_info
+        where pay_ccd = '10'
+          and pay_prgs_scd = '20'
+          and org_pay_no is null
+          and ord_no = #{ordNo}
+        order by sys_reg_dtime desc
+        limit 1
+    </sql>
+
+    <select id="verifyRfndAvlAmt" resultType="java.lang.Boolean">
+        with ord_sum as(
+            <include refid="com.plateer.ec1.order.mapper.OrderMapper.sql_ord_amt_sum" />
+        ),cst_sum as(
+            <include refid="com.plateer.ec1.order.mapper.OrderMapper.sql_cst_amt_sum" />
+        ), bnf_sum as(
+            <include refid="com.plateer.ec1.order.mapper.OrderMapper.sql_bnf_amt_sum" />
+        ), pay as (
+            <include refid="sql_org_pay" />
+        )
+        select rfnd_avl_amt = ord_sum.sum + coalesce(bnf_sum.sum, 0) + coalesce(cst_sum.sum, 0)
+        from pay inner join ord_sum on pay.ord_no = ord_sum.ord_no
+                 left join cst_sum on ord_sum.ord_no = cst_sum.ord_no
+                 left join bnf_sum on cst_sum.ord_no = bnf_sum.ord_no
+    </select>
+
+    <select id="getCnclAmtByOrdNoClmNo" resultType="long">
+        with ord_sum as(
+            <include refid="com.plateer.ec1.order.mapper.OrderMapper.sql_ord_amt_sum" />
+        ),cst_sum as(
+            <include refid="com.plateer.ec1.order.mapper.OrderMapper.sql_cst_amt_sum" />
+        ), bnf_sum as(
+            <include refid="com.plateer.ec1.order.mapper.OrderMapper.sql_bnf_amt_sum" />
+        ), pay as (
+            <include refid="sql_org_pay" />
+        )
+        select pay.pay_amt  - (ord_sum.sum + coalesce(bnf_sum.sum, 0) + coalesce(cst_sum.sum, 0))
+        from pay inner join ord_sum on pay.ord_no = ord_sum.ord_no
+                 left join cst_sum on ord_sum.ord_no = cst_sum.ord_no
+                 left join bnf_sum on cst_sum.ord_no = bnf_sum.ord_no
+    </select>
 </mapper>

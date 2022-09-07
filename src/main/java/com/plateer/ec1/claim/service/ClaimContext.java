@@ -6,6 +6,7 @@ import com.plateer.ec1.claim.externals.ExternalIFCallHelper;
 import com.plateer.ec1.claim.manipulator.ClaimDataManipulator;
 import com.plateer.ec1.claim.mapper.ClaimMapper;
 import com.plateer.ec1.claim.validation.validator.ClaimValidator;
+import com.plateer.ec1.claim.validation.verifier.AmountVerifier;
 import com.plateer.ec1.claim.vo.*;
 import com.plateer.ec1.common.aop.log.annotation.LogTrace;
 import com.plateer.ec1.order.service.OrdClmMntService;
@@ -44,6 +45,8 @@ public class ClaimContext {
             claimDataManipulator.manipulateClaimData(creationVO.getInsertData(), creationVO.getUpdateData());
 
             callExternalIF(claimRequestVO, creationVO, claimContextVO.getCallHelperList());
+
+            verifyAmount(claimRequestVO, creationVO, claimContextVO.getVerifierList());
         } catch (Exception e) {
             creationVO.setException(e);
             throw e;
@@ -76,12 +79,19 @@ public class ClaimContext {
         return claimDataCreator.createOrdClmCreationVO(claimBusiness, claimView);
     }
 
-
     private void callExternalIF(ClaimRequestVO claimRequestVO, OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO, List<ExternalIFCallHelper> callHelperList) {
        if(CollectionUtils.isEmpty(callHelperList)) return;
 
-        for (ExternalIFCallHelper externalIFCallHelper : callHelperList) {
-            externalIFCallHelper.call(claimRequestVO, creationVO);
+       for (ExternalIFCallHelper externalIFCallHelper : callHelperList) {
+           externalIFCallHelper.call(claimRequestVO, creationVO);
+       }
+    }
+
+    private void verifyAmount(ClaimRequestVO claimRequestVO, OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO, List<AmountVerifier> verifierList) {
+        if(CollectionUtils.isEmpty(verifierList)) return;
+
+        for (AmountVerifier amountVerifier : verifierList) {
+            amountVerifier.verifyAmount(claimRequestVO, creationVO);
         }
     }
 

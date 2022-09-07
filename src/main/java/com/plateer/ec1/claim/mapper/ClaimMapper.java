@@ -19,4 +19,8 @@ public interface ClaimMapper {
 
     List<ClaimGoodsInfo> getOrgOpClmList(List<ClaimGoodsInfo> claimGoodsInfoList);
 
+    Boolean verifyRfndAvlAmt(String ordNo);
+
+    long getCnclAmtByOrdNoClmNo(String ordNo);
+
 }

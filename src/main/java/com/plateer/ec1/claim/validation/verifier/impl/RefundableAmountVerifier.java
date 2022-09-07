@@ -19,20 +19,20 @@ import static com.plateer.ec1.claim.enums.ClaimBusiness.*;
 
 @Component
 @RequiredArgsConstructor
-public class CancelAmountVerifier implements AmountVerifier {
+public class RefundableAmountVerifier implements AmountVerifier {
 
     private final ClaimMapper claimMapper;
 
     @Override
     public List<ClaimBusiness> getTypes() {
-        return Arrays.asList(MCA, GRA, GEA, GEW);
+        return Arrays.asList(GCC, MCC, GRW, GEW);
     }
 
     @Override
     public void verifyAmount(ClaimRequestVO claimRequestVO, OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO) {
-        long cnclAmtByOrdNoClmNo = claimMapper.getCnclAmtByOrdNoClmNo(creationVO.getOrdNo());
+        Boolean isValid = claimMapper.verifyRfndAvlAmt(creationVO.getOrdNo());
 
-        if(cnclAmtByOrdNoClmNo != claimRequestVO.getCnclReqAmt()){
+        if(isValid == null || !isValid){
             throw new BusinessException(OrderException.INVALID_AMT.msg);
         }
     }
