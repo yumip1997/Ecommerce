@@ -3,17 +3,18 @@
   "ordClmReqTypes" : ["R"],
   "paymentType" : "point",
   "mbrNo" : "test01",
-  "cnclReqAmt" : 7200,
+  "cnclReqAmt" : 4200,
+  "ordNo" : "O20220907134641",
   "claimDeliveryCostInfoList" : [
     {
-      "ordCstNo" : "1000081",
+      "ordCstNo" : "1000103",
       "dvPlcTpCd" : "10",
       "imtnRsnCcd" : "10"
     }
   ],
   "claimGoodsInfoList" : [
     {
-      "ordNo" : "O20220905105315",
+      "ordNo" : "O20220907134641",
       "ordSeq" : "1",
       "procSeq" : "1",
       "ordPrgsScd" : "50"

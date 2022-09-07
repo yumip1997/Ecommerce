@@ -47,4 +47,16 @@ class ClaimServiceTest {
         claimService.claim(object);
     }
 
+    @Test
+    public void return_withdrawal_company_test(){
+        ClaimRequestVO object = jsonReaderUtil.getObject("/RW_company.json", ClaimRequestVO.class);
+        claimService.claim(object);
+    }
+
+    @Test
+    public void return_withdrawal_customer_test(){
+        ClaimRequestVO object = jsonReaderUtil.getObject("/RW_customer.json", ClaimRequestVO.class);
+        claimService.claim(object);
+    }
+
 }
