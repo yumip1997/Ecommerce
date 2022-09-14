@@ -4,8 +4,7 @@ import com.plateer.ec1.claim.enums.ClaimException;
 import com.plateer.ec1.claim.enums.ValidOrdPrgs;
 import com.plateer.ec1.common.excpetion.custom.ValidationException;
 import lombok.Builder;
-
-import java.util.List;
+import org.springframework.util.CollectionUtils;
 
 @Builder
 public class ClaimValidationVO {
@@ -14,6 +13,12 @@ public class ClaimValidationVO {
     private ValidOrdPrgs validOrdPrgs;
 
     private ClaimView claimView;
+
+    public void isNotEmptyClaimGoodsInfo(){
+        if(CollectionUtils.isEmpty(claimView.getClaimGoodsInfoList())){
+            throw new ValidationException(ClaimException.NOT_FOUND_CLAIM.MSG);
+        }
+    }
 
     public void isValidProductType() {
         for (ClaimGoodsInfo claimGoodsInfo : claimView.getClaimGoodsInfoList()) {

@@ -16,7 +16,7 @@ public class OrderClaimBaseVO {
 
     @NotEmpty
     private String ordNo;
-    @NotEmpty(groups = ClaimGroups.GnlOrdCnl.class)
+    @NotEmpty(groups = ClaimGroups.MCoupOrdCnlCmt.class)
     private String clmNo;
 
 }

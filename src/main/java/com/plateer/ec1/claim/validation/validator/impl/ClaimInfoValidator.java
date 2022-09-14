@@ -20,6 +20,7 @@ public class ClaimInfoValidator implements ClaimValidator {
 
     @Override
     public void validate(ClaimValidationVO validationVO) {
+        validationVO.isNotEmptyClaimGoodsInfo();
         validationVO.isValidProductType();
         validationVO.isValidOrdPrgsScd();
     }
