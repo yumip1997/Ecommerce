@@ -1,5 +1,6 @@
 package com.plateer.ec1.claim.vo;
 
+import com.plateer.ec1.claim.validation.annotation.ClaimReqValid;
 import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
 import com.plateer.ec1.payment.enums.PaymentType;
 import com.plateer.ec1.payment.vo.req.PaymentCancelReqVO;
@@ -17,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ClaimReqValid
 public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
 
     @NotEmpty
@@ -31,7 +33,6 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
     private String mbrNo;
     @NotEmpty
     private List<@Valid ClaimGoodsInfo> claimGoodsInfoList;
-    @NotNull
     private List<@Valid ClaimDeliveryCostInfo> claimDeliveryCostInfoList;
 
     public List<String> getOrdPrsgList(){
@@ -44,6 +45,8 @@ public class ClaimRequestVO extends OrderClaimBaseVO implements Cloneable{
         return ClaimView.builder()
                 .claimGoodsInfoList(claimGoodsInfoList)
                 .claimDeliveryCostInfoList(claimDeliveryCostInfoList)
+                .ordNo(this.getOrdNo())
+                .clmNo(this.getClmNo())
                 .build();
     }
 

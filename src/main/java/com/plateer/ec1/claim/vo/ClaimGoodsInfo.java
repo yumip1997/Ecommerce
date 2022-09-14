@@ -1,22 +1,19 @@
 package com.plateer.ec1.claim.vo;
 
 import com.plateer.ec1.common.model.order.OpClmInfo;
+import com.plateer.ec1.order.enums.OPT0003Code;
+import com.plateer.ec1.order.enums.OPT0004Code;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
-import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -51,27 +48,42 @@ public class ClaimGoodsInfo implements Cloneable{
     private String goodsSellTpCd;
     private List<OrderBenefitBaseVO> benefitBaseVOList;
 
-    //TODO 장바구니 부분취소 일 때 emptyList 반환하도록 수정 예정
-    public List<CupIssVO> toCupIssVOList(String mbrNo){
-        return Optional.ofNullable(this.getBenefitBaseVOList())
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(e -> e.toCupIssVO(mbrNo))
-                .collect(Collectors.toList());
-    }
-
     public OpClmInfo convertOpClmInfo(){
         OpClmInfo opClmInfo = new OpClmInfo();
         BeanUtils.copyProperties(this, opClmInfo);
         return opClmInfo;
     }
 
-    public String getOrdNoDvGrpNo(){
-        return this.ordNo + this.dvGrpNo;
+    private OpClmInfo toUpdateOpClmInfo(){
+        return OpClmInfo.builder().ordNo(this.ordNo)
+                .ordSeq(this.ordSeq)
+                .procSeq(this.procSeq)
+                .build();
     }
 
-    public String getOrdNoOrdSeqProcSeq(){
-        return this.ordNo + this.ordSeq + this.procSeq;
+    public OpClmInfo toOpClmInfoOfCancelCnt(){
+        OpClmInfo opClmInfo = toUpdateOpClmInfo();
+        opClmInfo.setCnclCnt(this.ordCnt);
+        return opClmInfo;
+    }
+
+    public OpClmInfo toOpClmInfoOfRtgsCnt(){
+        OpClmInfo opClmInfo = toUpdateOpClmInfo();
+        opClmInfo.setRtgsCnt(this.ordCnt);
+        return opClmInfo;
+    }
+
+    public OpClmInfo toOpClmInfoOfZeroRtgsCnt(){
+        OpClmInfo opClmInfo = toUpdateOpClmInfo();
+        opClmInfo.setRtgsCnt(0);
+        return opClmInfo;
+    }
+
+    public OpClmInfo toOpClmInfoCancelComplete(){
+        OpClmInfo opClmInfo = toUpdateOpClmInfo();
+        opClmInfo.setOrdPrgsScd(OPT0004Code.CANCEL_COMPLETE.code);
+        opClmInfo.setOrdClmCmtDtime(LocalDateTime.now());
+        return opClmInfo;
     }
 
     @Override

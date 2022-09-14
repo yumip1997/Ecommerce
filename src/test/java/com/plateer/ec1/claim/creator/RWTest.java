@@ -1,6 +1,7 @@
 package com.plateer.ec1.claim.creator;
 
 import com.plateer.ec1.claim.enums.ClaimBusiness;
+import com.plateer.ec1.claim.factory.ClaimDataCreatorFactory;
 import com.plateer.ec1.claim.mapper.ClaimMapper;
 import com.plateer.ec1.claim.vo.*;
 import com.plateer.ec1.common.model.order.OpClmInfo;
@@ -20,7 +21,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,13 +29,15 @@ public class RWTest {
 
     @Autowired
     private ClaimMapper claimMapper;
-    private ClaimDataCreator claimDataCreator;
+    @Autowired
+    private ClaimDataCreatorManager claimDataCreator;
+    @Autowired
+    private ClaimDataCreatorFactory claimDataCreatorFactory;
     private JsonReaderUtil jsonReaderUtil;
 
     @BeforeEach
     void init(){
         jsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "claim");
-        claimDataCreator = new ClaimDataCreator(claimMapper);
     }
 
     @Test
@@ -47,7 +49,8 @@ public class RWTest {
         List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
 
         ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(ClaimBusiness.of(claimRequestVO), claimView);
+        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
 
         ClaimInsertBase insertData = ordClmCreationVO.getInsertData();
         ClaimUpdateBase updateData = ordClmCreationVO.getUpdateData();
@@ -132,7 +135,8 @@ public class RWTest {
         List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
 
         ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(ClaimBusiness.of(claimRequestVO), claimView);
+        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
 
         ClaimInsertBase insertData = ordClmCreationVO.getInsertData();
         ClaimUpdateBase updateData = ordClmCreationVO.getUpdateData();

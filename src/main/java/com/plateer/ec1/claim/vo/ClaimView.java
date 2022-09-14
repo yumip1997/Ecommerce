@@ -16,11 +16,18 @@ import static java.util.stream.Collectors.toList;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ClaimView extends OrderClaimBaseVO implements Cloneable{
 
     private List<ClaimGoodsInfo> claimGoodsInfoList;
     private List<ClaimDeliveryCostInfo> claimDeliveryCostInfoList;
+
+    @Builder
+    public ClaimView(List<ClaimGoodsInfo> claimGoodsInfoList, List<ClaimDeliveryCostInfo> claimDeliveryCostInfoList,
+                     String ordNo, String clmNo){
+        super(ordNo, clmNo);
+        this.claimGoodsInfoList = claimGoodsInfoList;
+        this.claimDeliveryCostInfoList = claimDeliveryCostInfoList;
+    }
 
     public List<OrderBenefitBaseVO> getOrderBenefitBaseVOList(){
         return this.getClaimGoodsInfoList().stream()

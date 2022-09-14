@@ -1,5 +1,6 @@
 package com.plateer.ec1.claim.vo;
 
+import com.plateer.ec1.claim.validation.groups.ClaimGroups;
 import com.plateer.ec1.common.model.order.OpClmInfo;
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import com.plateer.ec1.delivery.enums.DVP0002Code;
@@ -32,6 +33,8 @@ public class ClaimDeliveryCostInfo implements Cloneable {
     private Long orgDvAmt;
     private Long dvBnfAmt;
     private Long aplyDvAmt;
+    @NotEmpty(groups = {ClaimGroups.GnlRtrnAcpt.class ,ClaimGroups.GnlRtrnWtdwl.class
+                        ,ClaimGroups.GnlExchAcpt.class ,ClaimGroups.GnlExchWtdwl.class})
     private String imtnRsnCcd;
     @NotEmpty
     private String dvPlcTpCd;
@@ -53,7 +56,11 @@ public class ClaimDeliveryCostInfo implements Cloneable {
     }
 
     private String reverseAplyCnclCcd(){
-        return OPT0005Code.APPLY.code.equals(this.getAplyCcd()) ? OPT0005Code.CANCEL.code : OPT0005Code.APPLY.code;
+        return isApply() ? OPT0005Code.CANCEL.code : OPT0005Code.APPLY.code;
+    }
+
+    public boolean isApply(){
+        return OPT0005Code.APPLY.code.equals(this.aplyCcd);
     }
 
     public boolean isCompanyImtnRsnCcd() {
@@ -74,6 +81,13 @@ public class ClaimDeliveryCostInfo implements Cloneable {
 
     public boolean isDeliveryPaid() {
         return DVP0002Code.PAY_ON_DELIVERY.code.equals(this.getDvPlcTpCd());
+    }
+
+    public OpOrdCostInfo toUpdateCnclDvAmtOpOrdCostInfo(){
+        return OpOrdCostInfo.builder()
+                .ordCstNo(this.ordCstNo)
+                .cnclDvAmt(this.aplyDvAmt)
+                .build();
     }
 
     public OpOrdCostInfo toOpOrdCostInfoOfCancel() {

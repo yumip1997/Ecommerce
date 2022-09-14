@@ -1,6 +1,7 @@
 package com.plateer.ec1.claim.creator;
 
 import com.plateer.ec1.claim.enums.ClaimBusiness;
+import com.plateer.ec1.claim.factory.ClaimDataCreatorFactory;
 import com.plateer.ec1.claim.mapper.ClaimMapper;
 import com.plateer.ec1.claim.vo.*;
 import com.plateer.ec1.common.model.order.OpClmInfo;
@@ -8,8 +9,6 @@ import com.plateer.ec1.common.model.order.OpOrdBnfInfo;
 import com.plateer.ec1.common.model.order.OpOrdBnfRelInfo;
 import com.plateer.ec1.common.model.order.OpOrdCostInfo;
 import com.plateer.ec1.common.utils.JsonReaderUtil;
-import com.plateer.ec1.delivery.enums.DVP0001Code;
-import com.plateer.ec1.delivery.enums.DVP0002Code;
 import com.plateer.ec1.order.enums.*;
 import com.plateer.ec1.order.vo.OrdClmCreationVO;
 import com.plateer.ec1.resource.TestConstants;
@@ -29,13 +28,15 @@ class ClaimDataCreatorTest {
 
     @Autowired
     private ClaimMapper claimMapper;
-    private ClaimDataCreator claimDataCreator;
+    @Autowired
+    private ClaimDataCreatorManager claimDataCreator;
+    @Autowired
+    private ClaimDataCreatorFactory claimDataCreatorFactory;
     private JsonReaderUtil jsonReaderUtil;
 
     @BeforeEach
     void init(){
         jsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "claim");
-        claimDataCreator = new ClaimDataCreator(claimMapper);
     }
 
     void gnr_cnl_test(OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO){
@@ -89,7 +90,8 @@ class ClaimDataCreatorTest {
         List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
 
         ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(ClaimBusiness.of(claimRequestVO), claimView);
+        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
         gnr_cnl_test(ordClmCreationVO);
     }
 
@@ -102,7 +104,8 @@ class ClaimDataCreatorTest {
         List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
 
         ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(ClaimBusiness.of(claimRequestVO), claimView);
+        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
         gnr_cnl_test(ordClmCreationVO);
     }
 
@@ -115,7 +118,8 @@ class ClaimDataCreatorTest {
         List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
 
         ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(ClaimBusiness.of(claimRequestVO), claimView);
+        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
         gnr_cnl_test(ordClmCreationVO);
     }
 
@@ -128,7 +132,8 @@ class ClaimDataCreatorTest {
         List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
 
         ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(ClaimBusiness.of(claimRequestVO), claimView);
+        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
         gnr_cnl_test(ordClmCreationVO);
     }
 
