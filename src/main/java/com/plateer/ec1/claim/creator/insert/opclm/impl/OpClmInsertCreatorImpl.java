@@ -25,7 +25,6 @@ import static com.plateer.ec1.order.enums.OPT0013Code.RETRIEVE;
 @RequiredArgsConstructor
 public enum OpClmInsertCreatorImpl implements OpClmInsertCreator {
 
-
     GNL_ORD_CNL(toList(CANCEL.code), toList(OPT0004Code.CANCEL_COMPLETE.code), toList(DELIVERY.code), IntUnaryOperator.identity(), LocalDateTime::now
                 , Collections.singletonList(GCC)),
     ORL_CNL_REQ(toList(CANCEL.code), toList(OPT0004Code.CANCEL_REQUEST.code), toList(DELIVERY.code), IntUnaryOperator.identity(), () -> null
@@ -36,13 +35,13 @@ public enum OpClmInsertCreatorImpl implements OpClmInsertCreator {
     RTRN_WTDWL(toList(RETURN_WITHDRAWAL.code), toList(OPT0004Code.RETURN_WITHDRAWAL.code), toList(RETRIEVE.code), IntUnaryOperator.identity(), LocalDateTime::now
                 , Collections.singletonList(GRW)),
 
-    EX_ACPT(toList(RETURN_ACCEPT.code, RETURN_ACCEPT.code), toList(OPT0004Code.RETURN_ACCEPT.code, OPT0004Code.RETURN_ACCEPT.code)
+    EX_ACPT(toList(EXCHANGE_ACCEPT.code, EXCHANGE_ACCEPT.code), toList(OPT0004Code.EXCHANGE_ACCEPT.code, OPT0004Code.EXCHANGE_ACCEPT.code)
             , toList(RETRIEVE.code, DELIVERY.code), (dvp) -> dvp + 1, () -> null
             , Collections.singletonList(GEA)),
     EX_WTDW(
             toList(RETURN_WITHDRAWAL.code, CANCEL.code), toList(OPT0004Code.RETURN_WITHDRAWAL.code, OPT0004Code.CANCEL_COMPLETE.code)
             , toList(RETRIEVE.code, DELIVERY.code), IntUnaryOperator.identity(), LocalDateTime::now
-            , Collections.singletonList(GEA));
+            , Collections.singletonList(GEW));
 
 
     private final List<String> ordClmTpCdList;
@@ -72,7 +71,7 @@ public enum OpClmInsertCreatorImpl implements OpClmInsertCreator {
             clone.setOrdClmTpCd(ordClmTpCdList.get(i));
             clone.setOrdPrgsScd(ordPrgsScdList.get(i));
             clone.setDvRvtCcd(dvRctCcdList.get(i));
-            clone.setDvGrpNo(dvpGrpOperator.applyAsInt(clone.getDvGrpNo()) + i);
+            clone.setDvGrpNo(dvpGrpOperator.applyAsInt(clone.getDvGrpNo()) + (i+1));
             clone.setOrdClmCmtDtime(cmtDtimeSupplier.get());
             opClmInfoList.add(clone.convertOpClmInfo());
         }

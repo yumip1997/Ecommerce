@@ -24,6 +24,6 @@ public class ClaimNumberCreator implements MultiValueCustomFactory<ClaimBusiness
 
     @Override
     public List<ClaimBusiness> getTypes() {
-        return Arrays.asList(GCC, MCA, GRA, GRW);
+        return Arrays.asList(GCC, MCA, GRA, GEA, GRW);
     }
 }

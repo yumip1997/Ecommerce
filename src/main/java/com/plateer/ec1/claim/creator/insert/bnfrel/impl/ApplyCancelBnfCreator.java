@@ -25,6 +25,6 @@ public class ApplyCancelBnfCreator implements OpBnfRelInsertCreator {
 
     @Override
     public List<ClaimBusiness> getTypes() {
-        return Arrays.asList(GCC, MCA, GRA, GEA, GRW);
+        return Arrays.asList(GCC, MCA, GRA, GRW);
     }
 }

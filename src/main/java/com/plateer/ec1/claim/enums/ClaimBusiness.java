@@ -1,6 +1,5 @@
 package com.plateer.ec1.claim.enums;
 
-import com.plateer.ec1.claim.validation.groups.ClaimGroups;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
 import com.plateer.ec1.common.excpetion.ExceptionMessage;
 import com.plateer.ec1.order.enums.OPT0001Code;
@@ -12,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.plateer.ec1.claim.enums.ValidOrdPrgs.*;
+import static com.plateer.ec1.claim.validation.groups.ClaimGroups.*;
 import static com.plateer.ec1.order.enums.OPT0001Code.ECOUPON;
 import static com.plateer.ec1.order.enums.OPT0001Code.GENERAL;
 import static com.plateer.ec1.order.enums.OPT0003Code.*;
@@ -21,21 +21,21 @@ import static com.plateer.ec1.order.enums.OPT0003Code.*;
 public enum ClaimBusiness {
 
     //일반상품주문취소완료
-    GCC(GENERAL, toSet(CANCEL.code), BY_ORDER_COMPLETE, ClaimGroups.GnlOrdCnl.class),
+    GCC(GENERAL, toSet(CANCEL.code), BY_ORDER_COMPLETE, GnlOrdCnl.class),
     //모바일쿠폰주문취소접수
-    MCA(ECOUPON, toSet(CANCEL.code), IN_ORDER_COMPLETE, ClaimGroups.MCupOrdCnlAcpt.class),
+    MCA(ECOUPON, toSet(CANCEL.code), IN_ORDER_COMPLETE, MCupOrdCnlAcpt.class),
     //모바일쿠폰주문취소완료
-    MCC(ECOUPON, toSet(CANCEL.code), IN_CANCEL_REQUEST, ClaimGroups.MCoupOrdCnlCmt.class),
+    MCC(ECOUPON, toSet(CANCEL.code), IN_CANCEL_REQUEST, MCoupOrdCnlCmt.class),
 
     //반품접수
-    GRA(GENERAL, toSet(RETURN_ACCEPT.code), IN_DELIVERY_COMPLETE, ClaimGroups.GnlRtrnAcpt.class),
+    GRA(GENERAL, toSet(RETURN_ACCEPT.code), IN_DELIVERY_COMPLETE, GnlRtrnAcpt.class),
     //반품철회
-    GRW(GENERAL, toSet(RETURN_WITHDRAWAL.code), IN_RETURN_ACCEPT, ClaimGroups.GnlRtrnWtdwl.class),
+    GRW(GENERAL, toSet(RETURN_WITHDRAWAL.code), IN_RETURN_ACCEPT, GnlRtrnWtdwl.class),
 
     //교환접수
-    GEA(GENERAL, toSet(EXCHANGE_ACCEPT.code), IN_DELIVERY_COMPLETE, ClaimGroups.GnlExchAcpt.class),
+    GEA(GENERAL, toSet(EXCHANGE_ACCEPT.code), IN_DELIVERY_COMPLETE, GnlExchAcpt.class),
     //교환철회
-    GEW(GENERAL, toSet(RETURN_WITHDRAWAL.code, CANCEL.code), IN_EXCHANGE_ACCEPT, ClaimGroups.GnlExchWtdwl.class);
+    GEW(GENERAL, toSet(RETURN_WITHDRAWAL.code, CANCEL.code), IN_EXCHANGE_ACCEPT, GnlExchWtdwl.class);
 
     private final OPT0001Code prdType;
     private final Set<String> ordClmTypes;
