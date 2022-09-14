@@ -25,7 +25,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class RATest {
+public class ReturnAcceptTest {
 
     @Autowired
     private ClaimMapper claimMapper;
@@ -43,17 +43,10 @@ public class RATest {
     @Test
     public void return_accpet_customer_test(){
         ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/RA_customer.json", ClaimRequestVO.class);
-        List<ClaimGoodsInfo> claimGoodsInfoWithBnf = claimMapper.getClaimGoodsWithBnfList(claimRequestVO.getClaimGoodsInfoList());
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO = getCreationVO(claimRequestVO);
 
-        List<ClaimDeliveryCostInfo> reqDvCstList = claimRequestVO.getClaimDeliveryCostInfoList();
-        List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
-
-        ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
-
-        ClaimInsertBase insertData = ordClmCreationVO.getInsertData();
-        ClaimUpdateBase updateData = ordClmCreationVO.getUpdateData();
+        ClaimInsertBase insertData = creationVO.getInsertData();
+        ClaimUpdateBase updateData = creationVO.getUpdateData();
 
         List<OpClmInfo> opClmInfoList = insertData.getOpClmInfoList();
         for (OpClmInfo opClmInfo : opClmInfoList) {
@@ -100,17 +93,10 @@ public class RATest {
     @Test
     public void return_accpet_company_test(){
         ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/RA_company.json", ClaimRequestVO.class);
-        List<ClaimGoodsInfo> claimGoodsInfoWithBnf = claimMapper.getClaimGoodsWithBnfList(claimRequestVO.getClaimGoodsInfoList());
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO = getCreationVO(claimRequestVO);
 
-        List<ClaimDeliveryCostInfo> reqDvCstList = claimRequestVO.getClaimDeliveryCostInfoList();
-        List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
-
-        ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
-
-        ClaimInsertBase insertData = ordClmCreationVO.getInsertData();
-        ClaimUpdateBase updateData = ordClmCreationVO.getUpdateData();
+        ClaimInsertBase insertData = creationVO.getInsertData();
+        ClaimUpdateBase updateData = creationVO.getUpdateData();
 
         List<OpClmInfo> opClmInfoList = insertData.getOpClmInfoList();
         for (OpClmInfo opClmInfo : opClmInfoList) {
@@ -160,5 +146,16 @@ public class RATest {
                 assertThat(opOrdBnfInfo.getOrdCnclBnfAmt()).isNotZero();
             }
         }
+    }
+
+    private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> getCreationVO(ClaimRequestVO claimRequestVO){
+        List<ClaimGoodsInfo> claimGoodsInfoWithBnf = claimMapper.getClaimGoodsWithBnfList(claimRequestVO.getClaimGoodsInfoList());
+
+        List<ClaimDeliveryCostInfo> reqDvCstList = claimRequestVO.getClaimDeliveryCostInfoList();
+        List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
+
+        ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
+        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
+        return  claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
     }
 }

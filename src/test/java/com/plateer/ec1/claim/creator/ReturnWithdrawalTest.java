@@ -25,7 +25,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class RWTest {
+public class ReturnWithdrawalTest {
 
     @Autowired
     private ClaimMapper claimMapper;
@@ -120,12 +120,6 @@ public class RWTest {
         }
     }
 
-    private ClaimGoodsInfo getClaimGoodsInfo(OpClmInfo opClmInfo, List<ClaimGoodsInfo> claimGoodsInfoList){
-        return claimGoodsInfoList.stream()
-                .filter(e -> e.getOrdNo().equals(opClmInfo.getOrdNo()) && e.getOrdSeq().equals(opClmInfo.getOrdSeq()) && e.getProcSeq().equals(opClmInfo.getProcSeq()))
-                .findFirst()
-                .orElse(null);
-    }
     @Test
     public void return_withdrawal_customer_test(){
         ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/RW_customer.json", ClaimRequestVO.class);
@@ -198,5 +192,12 @@ public class RWTest {
                 assertThat(opOrdBnfInfo.getOrdCnclBnfAmt()).isZero();
             }
         }
+    }
+
+    private ClaimGoodsInfo getClaimGoodsInfo(OpClmInfo opClmInfo, List<ClaimGoodsInfo> claimGoodsInfoList){
+        return claimGoodsInfoList.stream()
+                .filter(e -> e.getOrdNo().equals(opClmInfo.getOrdNo()) && e.getOrdSeq().equals(opClmInfo.getOrdSeq()) && e.getProcSeq().equals(opClmInfo.getProcSeq()))
+                .findFirst()
+                .orElse(null);
     }
 }

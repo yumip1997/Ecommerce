@@ -24,7 +24,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class ClaimDataCreatorTest {
+class OrderCancelTest {
 
     @Autowired
     private ClaimMapper claimMapper;
@@ -39,7 +39,35 @@ class ClaimDataCreatorTest {
         jsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "claim");
     }
 
-    void gnr_cnl_test(OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO){
+    @Test
+    public void gnr_all_test(){
+        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/ClaimRequestAllCnclGeneral.json", ClaimRequestVO.class);
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO = getCreationVO(claimRequestVO);
+        gnr_cnl_test(creationVO);
+    }
+
+    @Test
+    public void gnr_partial_test(){
+        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/ClaimRequestPartialCnlGeneral.json", ClaimRequestVO.class);
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO = getCreationVO(claimRequestVO);
+        gnr_cnl_test(creationVO);
+    }
+
+    @Test
+    public void gnr_all_test_with_cup(){
+        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/ClaimRequestAllCnclGeneralWithCup.json", ClaimRequestVO.class);
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO = getCreationVO(claimRequestVO);
+        gnr_cnl_test(creationVO);
+    }
+
+    @Test
+    public void gnr_partial_test_with_cup(){
+        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/ClaimRequestPartialCnlGeneralWithCup.json", ClaimRequestVO.class);
+        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO = getCreationVO(claimRequestVO);
+        gnr_cnl_test(creationVO);
+    }
+
+    private void gnr_cnl_test(OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO){
         ClaimInsertBase insertData = ordClmCreationVO.getInsertData();
         ClaimUpdateBase updateData = ordClmCreationVO.getUpdateData();
 
@@ -81,9 +109,7 @@ class ClaimDataCreatorTest {
         }
     }
 
-    @Test
-    public void gnr_all_test(){
-        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/ClaimRequestAllCnclGeneral.json", ClaimRequestVO.class);
+    private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> getCreationVO(ClaimRequestVO claimRequestVO){
         List<ClaimGoodsInfo> claimGoodsInfoWithBnf = claimMapper.getClaimGoodsWithBnfList(claimRequestVO.getClaimGoodsInfoList());
 
         List<ClaimDeliveryCostInfo> reqDvCstList = claimRequestVO.getClaimDeliveryCostInfoList();
@@ -91,50 +117,7 @@ class ClaimDataCreatorTest {
 
         ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
         ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
-        gnr_cnl_test(ordClmCreationVO);
-    }
-
-    @Test
-    public void gnr_partial_test(){
-        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/ClaimRequestPartialCnlGeneral.json", ClaimRequestVO.class);
-        List<ClaimGoodsInfo> claimGoodsInfoWithBnf = claimMapper.getClaimGoodsWithBnfList(claimRequestVO.getClaimGoodsInfoList());
-
-        List<ClaimDeliveryCostInfo> reqDvCstList = claimRequestVO.getClaimDeliveryCostInfoList();
-        List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
-
-        ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
-        gnr_cnl_test(ordClmCreationVO);
-    }
-
-    @Test
-    public void gnr_all_test_with_cup(){
-        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/ClaimRequestAllCnclGeneralWithCup.json", ClaimRequestVO.class);
-        List<ClaimGoodsInfo> claimGoodsInfoWithBnf = claimMapper.getClaimGoodsWithBnfList(claimRequestVO.getClaimGoodsInfoList());
-
-        List<ClaimDeliveryCostInfo> reqDvCstList = claimRequestVO.getClaimDeliveryCostInfoList();
-        List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
-
-        ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
-        gnr_cnl_test(ordClmCreationVO);
-    }
-
-    @Test
-    public void gnr_partial_test_with_cup(){
-        ClaimRequestVO claimRequestVO = jsonReaderUtil.getObject("/ClaimRequestPartialCnlGeneralWithCup.json", ClaimRequestVO.class);
-        List<ClaimGoodsInfo> claimGoodsInfoWithBnf = claimMapper.getClaimGoodsWithBnfList(claimRequestVO.getClaimGoodsInfoList());
-
-        List<ClaimDeliveryCostInfo> reqDvCstList = claimRequestVO.getClaimDeliveryCostInfoList();
-        List<ClaimDeliveryCostInfo> deliveryCostInfoList = CollectionUtils.isEmpty(reqDvCstList) ? Collections.emptyList() : claimMapper.getClaimDeliveryCostInfoList(reqDvCstList);
-
-        ClaimView claimView = claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
-        ClaimBusiness claimBusiness = ClaimBusiness.of(claimRequestVO);
-        OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> ordClmCreationVO = claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
-        gnr_cnl_test(ordClmCreationVO);
+        return  claimDataCreator.createOrdClmCreationVO(claimView, claimBusiness, claimDataCreatorFactory.getCreators(claimBusiness));
     }
 
 }
