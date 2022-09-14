@@ -15,6 +15,7 @@ public class ClaimContextVO {
 
     private ClaimBusiness claimBusiness;
     private List<ClaimValidator> validatorList;
+    private ClaimCreatorVO claimCreatorVO;
     private List<ExternalIFCallHelper> callHelperList;
     private List<AmountVerifier> verifierList;
 
