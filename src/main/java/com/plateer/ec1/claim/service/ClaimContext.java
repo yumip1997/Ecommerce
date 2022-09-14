@@ -1,6 +1,6 @@
 package com.plateer.ec1.claim.service;
 
-import com.plateer.ec1.claim.creator.ClaimDataCreator;
+import com.plateer.ec1.claim.creator.ClaimDataCreatorManager;
 import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.claim.externals.ExternalIFCallHelper;
 import com.plateer.ec1.claim.manipulator.ClaimDataManipulator;
@@ -27,6 +27,7 @@ public class ClaimContext {
 
     private final ClaimMapper claimMapper;
     private final OrdClmMntService ordClmMntService;
+    private final ClaimDataCreatorManager claimDataCreatorManager;
     private final ClaimDataManipulator claimDataManipulator;
 
     @LogTrace
@@ -34,19 +35,20 @@ public class ClaimContext {
     public void doClaim(ClaimRequestVO claimRequestVO, ClaimContextVO claimContextVO) {
         Long logSeq = ordClmMntService.insertOrderHistory(claimRequestVO);
         OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO = new OrdClmCreationVO<>();
+        ClaimBusiness claimBusiness = claimContextVO.getClaimBusiness();
 
         try {
             ClaimView claimView = getClaimView(claimRequestVO);
 
-            validate(claimView, claimContextVO.getClaimBusiness(), claimContextVO.getValidatorList());
+            ClaimValidator.validateAll(claimView.toClaimValidationVO(claimBusiness), claimContextVO.getValidatorList());
 
-            creationVO = create(claimContextVO.getClaimBusiness(), claimView);
+            creationVO = claimDataCreatorManager.createOrdClmCreationVO(claimView, claimBusiness, claimContextVO.getClaimCreatorVO());
 
             claimDataManipulator.manipulateClaimData(creationVO.getInsertData(), creationVO.getUpdateData());
 
-            callExternalIF(claimRequestVO, creationVO, claimContextVO.getCallHelperList());
+            ExternalIFCallHelper.callAll(claimRequestVO, creationVO, claimContextVO.getCallHelperList());
 
-            verifyAmount(claimRequestVO, creationVO, claimContextVO.getVerifierList());
+            AmountVerifier.verifyAmountAll(claimRequestVO, creationVO, claimContextVO.getVerifierList());
         } catch (Exception e) {
             creationVO.setException(e);
             throw e;
@@ -64,35 +66,4 @@ public class ClaimContext {
         
         return claimRequestVO.toClaimView(claimGoodsInfoWithBnf, deliveryCostInfoList);
     }
-
-    private void validate(ClaimView claimView, ClaimBusiness claimBusiness, List<ClaimValidator> claimValidatorList) {
-        if (CollectionUtils.isEmpty(claimValidatorList)) return;
-
-        ClaimValidationVO claimValidationVO = claimView.toClaimValidationVO(claimBusiness);
-        for (ClaimValidator validator : claimValidatorList) {
-            validator.validate(claimValidationVO);
-        }
-    }
-
-    private OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> create(ClaimBusiness claimBusiness, ClaimView claimView) {
-        ClaimDataCreator claimDataCreator = ClaimDataCreator.of(claimMapper);
-        return claimDataCreator.createOrdClmCreationVO(claimBusiness, claimView);
-    }
-
-    private void callExternalIF(ClaimRequestVO claimRequestVO, OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO, List<ExternalIFCallHelper> callHelperList) {
-       if(CollectionUtils.isEmpty(callHelperList)) return;
-
-       for (ExternalIFCallHelper externalIFCallHelper : callHelperList) {
-           externalIFCallHelper.call(claimRequestVO, creationVO);
-       }
-    }
-
-    private void verifyAmount(ClaimRequestVO claimRequestVO, OrdClmCreationVO<ClaimInsertBase, ClaimUpdateBase> creationVO, List<AmountVerifier> verifierList) {
-        if(CollectionUtils.isEmpty(verifierList)) return;
-
-        for (AmountVerifier amountVerifier : verifierList) {
-            amountVerifier.verifyAmount(claimRequestVO, creationVO);
-        }
-    }
-
 }

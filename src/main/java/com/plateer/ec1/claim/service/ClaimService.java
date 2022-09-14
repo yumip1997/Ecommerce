@@ -2,6 +2,7 @@ package com.plateer.ec1.claim.service;
 
 import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.claim.factory.AmountVerifierFactory;
+import com.plateer.ec1.claim.factory.ClaimDataCreatorFactory;
 import com.plateer.ec1.claim.factory.ClaimValidatorFactory;
 import com.plateer.ec1.claim.factory.ExternalIFCallHelperFactory;
 import com.plateer.ec1.claim.vo.ClaimContextVO;
@@ -19,8 +20,9 @@ import javax.validation.Valid;
 public class ClaimService {
 
     private final ClaimValidatorFactory claimValidatorFactory;
-    private final AmountVerifierFactory amountVerifierFactory;
+    private final ClaimDataCreatorFactory claimDataCreatorFactory;
     private final ExternalIFCallHelperFactory callHelperFactory;
+    private final AmountVerifierFactory amountVerifierFactory;
     private final ClaimContext claimContext;
 
     @LogTrace
@@ -34,8 +36,10 @@ public class ClaimService {
         return ClaimContextVO.builder()
                 .claimBusiness(claimBusiness)
                 .validatorList(claimValidatorFactory.getValues(claimBusiness))
-                .verifierList(amountVerifierFactory.getValues(claimBusiness))
+                .claimCreatorVO(claimDataCreatorFactory.getCreators(claimBusiness))
                 .callHelperList(callHelperFactory.getValues(claimBusiness))
+                .verifierList(amountVerifierFactory.getValues(claimBusiness))
                 .build();
     }
+
 }
