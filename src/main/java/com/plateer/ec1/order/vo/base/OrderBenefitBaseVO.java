@@ -75,8 +75,9 @@ public class OrderBenefitBaseVO implements Cloneable{
         return OPT0005Code.APPLY.code.equals(this.aplyCnclCcd) ? OPT0005Code.CANCEL.code : OPT0005Code.APPLY.code;
     }
 
-    public CupIssVO toCupIssVO(String mbrNo){
+    public CupIssVO toCupIssVO(String ordNo, String mbrNo){
         return CupIssVO.builder()
+                .ordNo(ordNo)
                 .mbrNo(mbrNo)
                 .cpnIssNo(this.cpnIssNo)
                 .build();

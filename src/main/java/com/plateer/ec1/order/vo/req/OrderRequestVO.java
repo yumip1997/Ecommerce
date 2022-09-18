@@ -5,21 +5,21 @@ import com.plateer.ec1.order.vo.OrderBasicVO;
 import com.plateer.ec1.order.vo.OrderBenefitVO;
 import com.plateer.ec1.order.vo.OrderDeliveryVO;
 import com.plateer.ec1.order.vo.OrderProductVO;
+import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import com.plateer.ec1.order.vo.base.OrderClaimBaseVO;
 import com.plateer.ec1.order.vo.base.OrderProductBaseVO;
 import com.plateer.ec1.payment.enums.OPT0009Code;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.req.ApproveReqVO;
+import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.*;
+import org.springframework.util.CollectionUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -52,11 +52,14 @@ public class OrderRequestVO extends OrderClaimBaseVO implements Cloneable{
     private Map<String, OrderProductVO> orderProductVOMap;
 
     public List<OpOrdBnfInfo> toCartBnfInoList(Supplier<String> bnfNoSupplier){
-        return Optional.ofNullable(this.getOrderBenefitVOList())
-                .orElse(Collections.emptyList())
-                .stream()
+        return this.getCartBenefitVO().stream()
                 .map(e -> e.toOpOrdBnfInfo(bnfNoSupplier.get()))
                 .collect(Collectors.toList());
+    }
+
+    private List<OrderBenefitVO> getCartBenefitVO(){
+        return Optional.ofNullable(this.getOrderBenefitVOList())
+                .orElseGet(Collections::emptyList);
     }
 
     public boolean isContainsVacctPayment(){
@@ -108,6 +111,32 @@ public class OrderRequestVO extends OrderClaimBaseVO implements Cloneable{
                 .buyerName(orderBasicVO.getOrdNm())
                 .buyerEmail(orderBasicVO.getOrdEmail())
                 .build();
+    }
+
+    public List<CupIssVO> toCupIssVOList(){
+        List<CupIssVO> cupIssVOList = new ArrayList<>();
+        cupIssVOList.addAll(getProductCouponList());
+        cupIssVOList.addAll(getCartCouponList());
+        return cupIssVOList;
+    }
+
+    private List<CupIssVO> getProductCouponList(){
+        return this.getOrderProductVOList().stream()
+                .map(OrderProductVO::geOrderBenefitBaseVO)
+                .flatMap(List::stream)
+                .map(e -> e.toCupIssVO(this.getOrdNo(), this.getMbrNo()))
+                .collect(Collectors.toList());
+    }
+
+    private List<CupIssVO> getCartCouponList(){
+        return this.getCartBenefitVO().stream()
+                .map(e -> e.toCupIssVO(this.getOrdNo(), this.getMbrNo()))
+                .collect(Collectors.toList());
+    }
+
+    public String getMbrNo(){
+        OrderBasicVO orderBasicVO = this.getOrderBasicVO();
+        return orderBasicVO.getMbrNo();
     }
 
     @Override

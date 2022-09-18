@@ -22,38 +22,36 @@ public enum OrderValidator {
                     .andThen(OrderProductValidator.validateIsSelling)
                     .andThen(OrderProductValidator.validateGeneralPrd)
                     .andThen(OrderProductValidator.validateGeneralDelivery),
-            OrderDeliveryValidator.generalParamPredicate
+            OrderDeliveryValidator.validateGeneralParam
     ),
     BO_GENERAL(SystemType.BO.getCode(), OPT0001Code.GENERAL.code,
             OrderProductValidator.validateExistPrd
                     .andThen(OrderProductValidator.validateIsSelling)
                     .andThen(OrderProductValidator.validateGeneralPrd)
                     .andThen(OrderProductValidator.validateGeneralDelivery),
-            OrderDeliveryValidator.generalParamPredicate
+            OrderDeliveryValidator.validateGeneralParam
     ),
     FO_ECOUPON(SystemType.FO.getCode(), OPT0001Code.ECOUPON.code,
             OrderProductValidator.validateExistPrd
                     .andThen(OrderProductValidator.validateIsSelling)
                     .andThen(OrderProductValidator.validateECouponPrd)
                     .andThen(OrderProductValidator.validateECouponDelivery),
-            OrderDeliveryValidator.generalParamPredicate
-                    .and(OrderDeliveryValidator.eCouponParamPredicate)
-                    .and(OrderDeliveryValidator.eCoupondeliveryCntPredicate)
+            OrderDeliveryValidator.validateEcouponParam
+                    .andThen(OrderDeliveryValidator.validateEcouponCnt)
     ),
     BO_ECOUPON(SystemType.BO.getCode(), OPT0001Code.ECOUPON.code,
             OrderProductValidator.validateExistPrd
                     .andThen(OrderProductValidator.validateIsSelling)
                     .andThen(OrderProductValidator.validateECouponPrd)
                     .andThen(OrderProductValidator.validateECouponDelivery),
-            OrderDeliveryValidator.generalParamPredicate
-                    .and(OrderDeliveryValidator.eCouponParamPredicate)
-                    .and(OrderDeliveryValidator.eCoupondeliveryCntPredicate)
+            OrderDeliveryValidator.validateEcouponParam
+                    .andThen(OrderDeliveryValidator.validateEcouponCnt)
     );
 
     private final String systemTypeCode;
     private final String orderTypeCode;
     private final Consumer<ProductInfoVO> productInfoVOPredicate;
-    private final Predicate<OrderRequestVO> deliveryPredicate;
+    private final Consumer<OrderRequestVO> deliveryPredicate;
 
     public void isValid(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
         isValidOrderBasic(orderRequestVO);
@@ -62,20 +60,13 @@ public enum OrderValidator {
     }
 
     private void isValidOrderBasic(OrderRequestVO orderRequestVO){
-        boolean containsVacctPayment = orderRequestVO.isContainsVacctPayment();
-        if(!containsVacctPayment) return;
-
-        boolean isValid = OrderPaymentValidator.vacctPredicate.test(orderRequestVO.getOrderBasicVO());
-        if(!isValid){
-            throw new ValidationException(OrderException.INVALID_ORDER_TPYE.msg);
+        if(orderRequestVO.isContainsVacctPayment()){
+            OrderPaymentValidator.validateVacctParam.accept(orderRequestVO.getOrderBasicVO());
         }
     }
 
     private void isValidDelivery(OrderRequestVO orderRequestVO){
-        boolean isValid = deliveryPredicate.test(orderRequestVO);
-        if(!isValid){
-            throw new ValidationException(OrderException.INVALID_ORDER.msg);
-        }
+        deliveryPredicate.accept(orderRequestVO);
     }
 
     private void isValidOrdPrd(List<OrderProductView> orderProductViewList){

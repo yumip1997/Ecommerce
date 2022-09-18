@@ -9,7 +9,7 @@ import java.util.Optional;
 @Mapper
 public interface CupDwlMapper {
 
-    Optional<CupInfoVO> getCupDwlInfo(CupDwlRequestVO cupDwlRequestVO);
+    CupInfoVO getCupDwlInfo(CupDwlRequestVO cupDwlRequestVO);
 
-    Optional<CupInfoVO> getOfflineCupInfo(CupDwlRequestVO cupDwlRequestVO);
+    CupInfoVO getOfflineCupInfo(CupDwlRequestVO cupDwlRequestVO);
 }

@@ -1,29 +1,29 @@
 {
   "prdType" : "10",
   "ordClmReqTypes" : ["C"],
-  "paymentType" : "point",
-  "mbrNo" : "test01",
+  "paymentType" : "inicis",
+  "mbrNo" : "123",
   "cnclReqAmt" : 16200,
-  "ordNo" : "O20220907133734",
+  "ordNo" : "O20220918152227",
   "claimDeliveryCostInfoList" : [
     {
-      "ordCstNo" : "1000094",
+      "ordCstNo" : "1000127",
       "dvPlcTpCd" : "10"
     },
     {
-      "ordCstNo" : "1000095",
+      "ordCstNo" : "1000128",
       "dvPlcTpCd" : "10"
     }
   ],
   "claimGoodsInfoList" : [
     {
-      "ordNo" : "O20220907133734",
+      "ordNo" : "O20220918152227",
       "ordSeq" : "1",
       "procSeq" : "1",
       "ordPrgsScd" : "20"
     },
     {
-      "ordNo" : "O20220907133734",
+      "ordNo" : "O20220918152227",
       "ordSeq" : "2",
       "procSeq" : "1",
       "ordPrgsScd" : "20"

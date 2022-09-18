@@ -10,7 +10,7 @@ import java.util.Optional;
 @Mapper
 public interface CupInfoMapper {
 
-    Optional<CupInfoVO> getCupInfo(Long prmNo);
+    CupInfoVO getCupInfo(Long prmNo);
 
     List<CupInfoVO> getIssuedCupInfo(List<CupIssVO> cupIssVOList);
 

@@ -68,10 +68,12 @@ public enum OpClmInsertCreatorImpl implements OpClmInsertCreator {
         List<OpClmInfo> opClmInfoList = new ArrayList<>();
         for(int i=0;i<dvRctCcdList.size();i++){
             ClaimGoodsInfo clone = claimGoodsInfo.clone();
+            clone.setProcSeq(clone.getProcSeq() + (i+1));
+            clone.setOrgProcSeq(clone.getProcSeq());
             clone.setOrdClmTpCd(ordClmTpCdList.get(i));
             clone.setOrdPrgsScd(ordPrgsScdList.get(i));
             clone.setDvRvtCcd(dvRctCcdList.get(i));
-            clone.setDvGrpNo(dvpGrpOperator.applyAsInt(clone.getDvGrpNo()) + (i+1));
+            clone.setDvGrpNo(dvpGrpOperator.applyAsInt(clone.getDvGrpNo() + i));
             clone.setOrdClmCmtDtime(cmtDtimeSupplier.get());
             opClmInfoList.add(clone.convertOpClmInfo());
         }

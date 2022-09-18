@@ -13,6 +13,7 @@ import com.plateer.ec1.order.vo.OrderProductView;
 import com.plateer.ec1.order.vo.OrderVO;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.payment.service.PayService;
+import com.plateer.ec1.promotion.cupusecnl.service.CupUseCnlService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,7 @@ public class OrderContext {
     private final OrderMapper orderMapper;
     private final OrdClmMntService ordClmMntService;
     private final PayService payService;
+    private final CupUseCnlService cupUseCnlService;
     private final OrderDataManipulator orderDataManipulator;
 
     @LogTrace
@@ -43,9 +45,9 @@ public class OrderContext {
 
             creationVO = createData(orderRequestVO, orderProductViewList);
 
-            payService.approve(orderRequestVO.toApproveReqVO());
-
             orderDataManipulator.insertOrder(creationVO.getInsertData());
+
+            callExternalIF(orderRequestVO);
 
             validateAmount(orderRequestVO.getOrdNo());
         }catch (Exception e){
@@ -67,6 +69,11 @@ public class OrderContext {
     private OrdClmCreationVO<OrderVO, Object> createData(OrderRequestVO orderRequestVO, List<OrderProductView> orderProductViewList) {
         OrderDataCreator orderDataCreator = new OrderDataCreator(orderMapper);
         return orderDataCreator.create(orderRequestVO, orderProductViewList);
+    }
+
+    private void callExternalIF(OrderRequestVO orderRequestVO) {
+        payService.approve(orderRequestVO.toApproveReqVO());
+        cupUseCnlService.useCup(orderRequestVO.toCupIssVOList());
     }
 
     private void validateAmount(String ordNo) {

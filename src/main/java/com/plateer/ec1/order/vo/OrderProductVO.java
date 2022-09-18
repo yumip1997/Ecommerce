@@ -8,6 +8,7 @@ import com.plateer.ec1.order.enums.OPT0004Code;
 import com.plateer.ec1.order.enums.OPT0013Code;
 import com.plateer.ec1.order.vo.base.OrderBenefitBaseVO;
 import com.plateer.ec1.order.vo.base.OrderProductBaseVO;
+import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -70,10 +71,15 @@ public class OrderProductVO extends OrderProductBaseVO {
     }
 
     public List<OpOrdBnfInfo> toPrdBnfInoList(Supplier<String> bnfNoSupplier){
-        return Optional.ofNullable(this.getProductBenefits())
-                .orElse(Collections.emptyList())
+        return this.geOrderBenefitBaseVO()
                 .stream()
                 .map(e -> e.toOpOrdBnfInfo(bnfNoSupplier.get()))
                 .collect(Collectors.toList());
     }
+
+    public List<OrderBenefitBaseVO> geOrderBenefitBaseVO(){
+        return Optional.ofNullable(this.getProductBenefits())
+                .orElseGet(Collections::emptyList);
+    }
+
 }

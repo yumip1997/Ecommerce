@@ -9,11 +9,7 @@ import com.plateer.ec1.promotion.com.validator.CupInfoValidator;
 import com.plateer.ec1.promotion.com.vo.CupInfoVO;
 import com.plateer.ec1.promotion.cupusecnl.mapper.CupUseCnlTrxMapper;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
-import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupRestoreRequestVO;
-import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupUseRequestVO;
-import com.plateer.ec1.promotion.enums.PromotionException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -36,21 +31,25 @@ public class CupUseCnlService {
     @Transactional
     @Validated(CupUse.class)
     public void useCup(List<@Valid CupIssVO> cupUseRequestVOList){
-        List<CupInfoVO> issuedCupInfo = cupInfoMapper.getIssuedCupInfo(cupUseRequestVOList);
+        List<CupInfoVO> issuedCupInfoList = cupInfoMapper.getIssuedCupInfo(cupUseRequestVOList);
 
-        CupInfoValidator.validateCupUse(issuedCupInfo);
+        List<CupInfoVO> validCupList = issuedCupInfoList.stream()
+                .filter(CupInfoValidator::validateCupUse)
+                .collect(Collectors.toList());
 
-        cupUseCnlTrxMapper.updateCupUsed(getModelList(issuedCupInfo));
+        cupUseCnlTrxMapper.updateCupUsed(getModelList(validCupList));
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Validated(CupRestore.class)
     public void restoreCup(List<@Valid CupIssVO> cupRestoreRequestVOList){
-        List<CupInfoVO> issuedCupInfo = cupInfoMapper.getIssuedCupInfo(cupRestoreRequestVOList);
+        List<CupInfoVO> issuedCupInfList = cupInfoMapper.getIssuedCupInfo(cupRestoreRequestVOList);
 
-        CupInfoValidator.validateRestoreCup(issuedCupInfo);
+        List<CupInfoVO> validCupList = issuedCupInfList.stream()
+                .filter(CupInfoValidator::validateRestoreCup)
+                .collect(Collectors.toList());
 
-        cupUseCnlTrxMapper.insertOrgCup(getModelList(issuedCupInfo));
+        cupUseCnlTrxMapper.insertOrgCup(getModelList(validCupList));
     }
 
     private List<CcCpnIssueModel> getModelList(List<CupInfoVO> cupInfoVOList){
