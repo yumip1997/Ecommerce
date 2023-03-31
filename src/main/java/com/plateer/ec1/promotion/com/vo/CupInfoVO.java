@@ -1,13 +1,10 @@
 package com.plateer.ec1.promotion.com.vo;
 
-import com.plateer.ec1.common.excpetion.custom.BusinessException;
+import com.plateer.ec1.common.model.promotion.CcCpnIssueModel;
 import com.plateer.ec1.common.vo.BaseVO;
-import com.plateer.ec1.promotion.enums.PromotionException;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.util.ObjectUtils;
 
-import javax.print.attribute.standard.PrinterMakeAndModel;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -29,5 +26,14 @@ public class CupInfoVO extends BaseVO {
     private Long mbrCnt;
     private String mbrNo;
     private LocalDateTime cpnUseDt;
+
+    public CcCpnIssueModel toCcCpnIssueModel(String ordNo){
+        return CcCpnIssueModel.builder()
+                .cpnIssNo(this.cpnIssNo)
+                .mbrNo(this.mbrNo)
+                .prmNo(this.prmNo)
+                .ordNo(ordNo)
+                .build();
+    }
 
 }

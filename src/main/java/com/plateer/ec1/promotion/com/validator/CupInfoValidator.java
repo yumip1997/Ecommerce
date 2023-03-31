@@ -19,7 +19,7 @@ public class CupInfoValidator {
     }
 
     public static void validateDwlCup(CupInfoVO cupInfoVO) {
-        isExistCupInfoWithException(cupInfoVO);
+        isNotExistCupInfoWithException(cupInfoVO);
         isValidCupDwlPeriodWithException(cupInfoVO);
         isValidCntWithException(cupInfoVO);
     }
@@ -48,8 +48,8 @@ public class CupInfoValidator {
         return ObjectUtils.isNotEmpty(cupInfoVO.getCpnUseDt());
     }
 
-    public static void isExistCupInfoWithException(CupInfoVO cupInfoVO) {
-        if (isExistCup(cupInfoVO)) {
+    public static void isNotExistCupInfoWithException(CupInfoVO cupInfoVO) {
+        if (!isExistCup(cupInfoVO)) {
             throw new BusinessException(PromotionException.NOT_FIND_PRM.getMSG());
         }
     }
