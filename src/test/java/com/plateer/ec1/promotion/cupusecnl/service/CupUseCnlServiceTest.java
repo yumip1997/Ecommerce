@@ -71,7 +71,7 @@ class CupUseCnlServiceTest {
     @Test
     @DisplayName("쿠폰 복원이 완료된다.")
     void cup_iss_pass(){
-        CupIssVO cupIssVO = CupIssVO.builder().cpnIssNo(24L).mbrNo("123").build();
+        CupIssVO cupIssVO = CupIssVO.builder().cpnIssNo(22L).mbrNo("123").build();
         List<CupIssVO> cupIssVOS = Collections.singletonList(cupIssVO);
 
         cupUseCnlService.restoreCup(cupIssVOS);

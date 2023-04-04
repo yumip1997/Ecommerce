@@ -19,7 +19,7 @@ class PointServiceTest {
 
     @Test
     void save_test(){
-        PointVO pointVO = PointVO.builder().mbrNo("123").svUseAmt(200000L).svUseCcd("10").build();
+        PointVO pointVO = PointVO.builder().mbrNo("user01").svUseAmt(100000000L).svUseCcd("10").build();
         pointService.savePoint(pointVO);
     }
 

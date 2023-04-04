@@ -55,6 +55,10 @@ public class CupUseCnlService {
                 .filter(CupInfoValidator::validateRestoreCup)
                 .collect(Collectors.toList());
 
+        if(CollectionUtils.isEmpty(validCupList)){
+            return;
+        }
+
         String ordNo = cupRestoreRequestVOList.get(0).getOrdNo();
         cupUseCnlTrxMapper.insertOrgCup(getModelList(validCupList, ordNo));
     }

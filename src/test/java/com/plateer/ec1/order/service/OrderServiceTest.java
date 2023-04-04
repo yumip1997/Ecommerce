@@ -6,6 +6,7 @@ import com.plateer.ec1.common.excpetion.custom.PaymentException;
 import com.plateer.ec1.common.excpetion.custom.ValidationException;
 import com.plateer.ec1.common.utils.JsonReaderUtil;
 import com.plateer.ec1.common.utils.LocalDateTimeUtil;
+import com.plateer.ec1.order.mapper.OrderMapper;
 import com.plateer.ec1.order.vo.OrderBasicVO;
 import com.plateer.ec1.order.vo.OrderProductVO;
 import com.plateer.ec1.order.vo.req.OrderRequestVO;
@@ -27,6 +28,8 @@ class OrderServiceTest {
 
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private OrderMapper orderMapper;
     private JsonReaderUtil jsonReaderUtil;
     private OrderRequestVO requestVO;
 
@@ -34,7 +37,6 @@ class OrderServiceTest {
     void init(){
         jsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "order");
         requestVO = jsonReaderUtil.getObject("/OrderRequest.json", OrderRequestVO.class);
-        requestVO.setOrdNo("O"+ LocalDateTimeUtil.toStringYearToSeconds(LocalDateTime.now()));
 
     }
 
@@ -52,20 +54,21 @@ class OrderServiceTest {
 
     @Test
     void order_test(){
+        requestVO.setOrdNo(orderMapper.getOrdNo());
         orderService.order(requestVO);
     }
 
     @Test
     void order_with_point_test(){
         OrderRequestVO requestVO = jsonReaderUtil.getObject("/OrderRequestWithPoint.json", OrderRequestVO.class);
-        requestVO.setOrdNo("O"+ LocalDateTimeUtil.toStringYearToSeconds(LocalDateTime.now()));
+        requestVO.setOrdNo(orderMapper.getOrdNo());
         orderService.order(requestVO);
     }
 
     @Test
     void order_with_cup_test(){
         OrderRequestVO requestVO = jsonReaderUtil.getObject("/OrderRequestWithPrdCartCup.json", OrderRequestVO.class);
-        requestVO.setOrdNo("O"+ LocalDateTimeUtil.toStringYearToSeconds(LocalDateTime.now()));
+        requestVO.setOrdNo(orderMapper.getOrdNo());
         orderService.order(requestVO);
     }
 
