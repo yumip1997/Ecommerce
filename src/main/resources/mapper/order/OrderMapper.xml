@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.plateer.ec1.order.mapper.OrderMapper">
     <select id="getOrdNo" resultType="java.lang.String" flushCache="true" useCache="false">
-        select concat('C', to_char(now(), 'YYYYMMDD'), nextval('nextval_ord_no'))
+        select concat('O', to_char(now(), 'YYYYMMDD'), nextval('nextval_ord_no'))
     </select>
 
     <select id="getBnfNo" resultType="java.lang.String" flushCache="true" useCache="false">
