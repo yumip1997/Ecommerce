@@ -2,7 +2,7 @@ package com.plateer.ec1.claim.creator.number;
 
 import com.plateer.ec1.claim.enums.ClaimBusiness;
 import com.plateer.ec1.claim.mapper.ClaimMapper;
-import com.plateer.ec1.common.factory.MultiValueCustomFactory;
+import com.plateer.ec1.common.factory.StrategyTypes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ import static com.plateer.ec1.claim.enums.ClaimBusiness.GRW;
 
 @Component
 @RequiredArgsConstructor
-public class ClaimNumberCreator implements MultiValueCustomFactory<ClaimBusiness>{
+public class ClaimNumberCreator implements StrategyTypes<ClaimBusiness> {
 
     private final ClaimMapper claimMapper;
 

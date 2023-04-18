@@ -5,7 +5,6 @@ import com.plateer.ec1.claim.externals.ExternalIFCallHelper;
 import com.plateer.ec1.claim.vo.ClaimInsertBase;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
 import com.plateer.ec1.claim.vo.ClaimUpdateBase;
-import com.plateer.ec1.common.factory.MultiValueCustomFactory;
 import com.plateer.ec1.order.vo.OrdClmCreationVO;
 import com.plateer.ec1.promotion.cupusecnl.service.CupUseCnlService;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
