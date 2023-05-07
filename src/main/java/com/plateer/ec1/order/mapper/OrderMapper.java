@@ -9,6 +9,8 @@ import java.util.List;
 @Mapper
 public interface OrderMapper {
 
+    String getOrdNo();
+
     String getBnfNo();
 
     List<OrderProductView> getOrderProductView(List<OrderProductVO> orderProductVOList);

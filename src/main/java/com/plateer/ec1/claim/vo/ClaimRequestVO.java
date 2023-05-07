@@ -15,6 +15,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

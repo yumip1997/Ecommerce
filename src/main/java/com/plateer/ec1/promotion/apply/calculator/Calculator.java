@@ -1,6 +1,6 @@
 package com.plateer.ec1.promotion.apply.calculator;
 
-import com.plateer.ec1.common.factory.CustomFactory;
+import com.plateer.ec1.common.factory.StrategyType;
 import com.plateer.ec1.promotion.apply.vo.ApplicablePrmVO;
 import com.plateer.ec1.promotion.apply.vo.request.PrmRequestBaseVO;
 import com.plateer.ec1.promotion.apply.vo.response.ResponseBaseVO;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public interface Calculator extends CustomFactory<PrmTypeCode> {
+public interface Calculator extends StrategyType<PrmTypeCode> {
 
     ResponseBaseVO getCalculationData(PrmRequestBaseVO prmRequestBaseVO);
 

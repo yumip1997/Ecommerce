@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -31,13 +32,18 @@ public class CupUseCnlService {
     @Transactional
     @Validated(CupUse.class)
     public void useCup(List<@Valid CupIssVO> cupUseRequestVOList){
+        if(CollectionUtils.isEmpty(cupUseRequestVOList)){
+            return;
+        }
+
         List<CupInfoVO> issuedCupInfoList = cupInfoMapper.getIssuedCupInfo(cupUseRequestVOList);
 
         List<CupInfoVO> validCupList = issuedCupInfoList.stream()
                 .filter(CupInfoValidator::validateCupUse)
                 .collect(Collectors.toList());
 
-        cupUseCnlTrxMapper.updateCupUsed(getModelList(validCupList));
+        String ordNo = cupUseRequestVOList.get(0).getOrdNo();
+        cupUseCnlTrxMapper.updateCupUsed(getModelList(validCupList, ordNo));
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -49,12 +55,17 @@ public class CupUseCnlService {
                 .filter(CupInfoValidator::validateRestoreCup)
                 .collect(Collectors.toList());
 
-        cupUseCnlTrxMapper.insertOrgCup(getModelList(validCupList));
+        if(CollectionUtils.isEmpty(validCupList)){
+            return;
+        }
+
+        String ordNo = cupRestoreRequestVOList.get(0).getOrdNo();
+        cupUseCnlTrxMapper.insertOrgCup(getModelList(validCupList, ordNo));
     }
 
-    private List<CcCpnIssueModel> getModelList(List<CupInfoVO> cupInfoVOList){
+    private List<CcCpnIssueModel> getModelList(List<CupInfoVO> cupInfoVOList, String ordNo){
         return cupInfoVOList.stream()
-                .map(CcCpnIssueModel::convertModel)
+                .map(e -> e.toCcCpnIssueModel(ordNo))
                 .collect(Collectors.toList());
     }
 

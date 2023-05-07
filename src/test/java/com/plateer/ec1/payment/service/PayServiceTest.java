@@ -1,6 +1,9 @@
 package com.plateer.ec1.payment.service;
 
 import com.plateer.ec1.common.utils.JsonReaderUtil;
+import com.plateer.ec1.common.utils.LocalDateTimeUtil;
+import com.plateer.ec1.order.service.OrderService;
+import com.plateer.ec1.order.vo.req.OrderRequestVO;
 import com.plateer.ec1.payment.vo.OrderInfoVO;
 import com.plateer.ec1.payment.vo.PayInfoVO;
 import com.plateer.ec1.payment.vo.req.ApproveReqVO;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -22,6 +26,8 @@ class PayServiceTest {
 
     @Autowired
     private PayService payService;
+    @Autowired
+    private OrderService orderService;
     private JsonReaderUtil jsonReaderUtil;
 
     @BeforeEach
@@ -73,14 +79,28 @@ class PayServiceTest {
     @Test
     @DisplayName("입금 전 부분취소 테스트")
     void partial_cancel_before_deposit(){
+        JsonReaderUtil orderJsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "order");
+        OrderRequestVO orderReq = orderJsonReaderUtil.getObject("/OrderRequest.json", OrderRequestVO.class);
+        String ordNo = "O"+ LocalDateTimeUtil.toStringYearToSeconds(LocalDateTime.now());
+        orderReq.setOrdNo(ordNo);
+        orderService.order(orderReq);
+
         PaymentCancelReqVO object = jsonReaderUtil.getObject("/CancelPartialBefore.json", PaymentCancelReqVO.class);
+        object.setOrdNo(ordNo);
         payService.cancel(object);
     }
 
     @Test
     @DisplayName("입금 전 전체취소 테스트")
     void all_cancel_before_deposit(){
+        JsonReaderUtil orderJsonReaderUtil = new JsonReaderUtil(TestConstants.TEST_FILE_PATH + "order");
+        OrderRequestVO orderReq = orderJsonReaderUtil.getObject("/OrderRequest.json", OrderRequestVO.class);
+        String ordNo = "O"+ LocalDateTimeUtil.toStringYearToSeconds(LocalDateTime.now());
+        orderReq.setOrdNo(ordNo);
+        orderService.order(orderReq);
+
         PaymentCancelReqVO object = jsonReaderUtil.getObject("/CancelAllBefore.json", PaymentCancelReqVO.class);
+        object.setOrdNo(ordNo);
         payService.cancel(object);
     }
 

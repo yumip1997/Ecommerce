@@ -5,11 +5,11 @@ import com.plateer.ec1.claim.externals.ExternalIFCallHelper;
 import com.plateer.ec1.claim.vo.ClaimInsertBase;
 import com.plateer.ec1.claim.vo.ClaimRequestVO;
 import com.plateer.ec1.claim.vo.ClaimUpdateBase;
-import com.plateer.ec1.common.factory.MultiValueCustomFactory;
 import com.plateer.ec1.order.vo.OrdClmCreationVO;
 import com.plateer.ec1.promotion.cupusecnl.service.CupUseCnlService;
 import com.plateer.ec1.promotion.cupusecnl.vo.reqeust.CupIssVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -20,6 +20,7 @@ import static com.plateer.ec1.claim.enums.ClaimBusiness.*;
 
 @Component
 @RequiredArgsConstructor
+@Order(2)
 public class PromotionIFCallHelper implements ExternalIFCallHelper {
 
     private final CupUseCnlService cupUseCnlService;

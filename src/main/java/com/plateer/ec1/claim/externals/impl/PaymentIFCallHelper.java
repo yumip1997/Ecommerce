@@ -9,12 +9,13 @@ import com.plateer.ec1.order.vo.OrdClmCreationVO;
 import com.plateer.ec1.payment.service.PayService;
 import com.plateer.ec1.payment.vo.req.PaymentCancelReqVO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class PaymentIFCallHelper implements ExternalIFCallHelper {
 

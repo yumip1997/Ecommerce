@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FactoryTemplate<K,V extends CustomFactory<K>> {
+public abstract class AbstractFactory<K,V extends StrategyType<K>> {
 
     private final Map<K, V> map = new HashMap<>();
 
-    public FactoryTemplate(List<V> list){
+    public AbstractFactory(List<V> list){
         list.forEach(e -> map.put(e.getType(), e));
     }
 
